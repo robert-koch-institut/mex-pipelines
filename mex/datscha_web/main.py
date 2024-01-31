@@ -1,0 +1,124 @@
+from mex.common.cli import entrypoint
+from mex.common.ldap.extract import get_merged_ids_by_query_string
+from mex.common.ldap.transform import transform_ldap_persons_with_query_to_mex_persons
+from mex.common.models import (
+    ExtractedActivity,
+    ExtractedOrganizationalUnit,
+    ExtractedPrimarySource,
+)
+from mex.common.primary_source.transform import (
+    get_primary_sources_by_name,
+)
+from mex.common.types import OrganizationalUnitID, OrganizationID, PersonID
+from mex.datscha_web.extract import (
+    extract_datscha_web_items,
+    extract_datscha_web_organizations,
+    extract_datscha_web_source_contacts,
+)
+from mex.datscha_web.models.item import DatschaWebItem
+from mex.datscha_web.settings import DatschaWebSettings
+from mex.datscha_web.transform import (
+    transform_datscha_web_items_to_mex_activities,
+    transform_wikidata_organizations_to_extracted_organizations_with_query,
+)
+from mex.filters import filter_by_global_rules
+from mex.pipeline import asset, run_job_in_process
+from mex.sinks import load
+
+
+@asset(group_name="datscha_web", deps=["extracted_primary_source_mex"])
+def extracted_primary_source_datscha_web(
+    extracted_primary_sources: list[ExtractedPrimarySource],
+) -> ExtractedPrimarySource:
+    """Load and return Datscha Web primary source."""
+    (extracted_primary_source,) = get_primary_sources_by_name(
+        extracted_primary_sources, "datscha-web"
+    )
+    load([extracted_primary_source])
+    return extracted_primary_source
+
+
+@asset(group_name="datscha_web")
+def extracted_datscha_web_items(
+    extracted_primary_source_datscha_web: ExtractedPrimarySource,
+) -> list[DatschaWebItem]:
+    """Return extracted items from Datscha Web."""
+    datscha_web_items = extract_datscha_web_items()
+    return list(
+        filter_by_global_rules(
+            extracted_primary_source_datscha_web.stableTargetId, datscha_web_items
+        )
+    )
+
+
+@asset(group_name="datscha_web")
+def datscha_web_person_ids_by_query_string(
+    extracted_datscha_web_items: list[DatschaWebItem],
+    extracted_primary_source_ldap: ExtractedPrimarySource,
+    extracted_organizational_units: list[ExtractedOrganizationalUnit],
+) -> dict[str, list[PersonID]]:
+    """Extract Datscha Web contact persons from LDAP and return them by query string."""
+    ldap_source_contacts = list(
+        extract_datscha_web_source_contacts(extracted_datscha_web_items)
+    )
+    mex_source_contacts = transform_ldap_persons_with_query_to_mex_persons(
+        ldap_source_contacts,
+        extracted_primary_source_ldap,
+        extracted_organizational_units,
+    )
+    load(mex_source_contacts)
+
+    return get_merged_ids_by_query_string(
+        ldap_source_contacts, extracted_primary_source_ldap
+    )
+
+
+@asset(group_name="datscha_web")
+def datscha_web_organization_ids_by_query_string(
+    extracted_datscha_web_items: list[DatschaWebItem],
+    extracted_primary_source_wikidata: ExtractedPrimarySource,
+) -> dict[str, OrganizationID]:
+    """Extract organizations for Datscha Web from wikidata and group them by query."""
+    wikidata_organizations_by_query = extract_datscha_web_organizations(
+        extracted_datscha_web_items
+    )
+
+    extracted_organizations_by_query = (
+        transform_wikidata_organizations_to_extracted_organizations_with_query(
+            wikidata_organizations_by_query, extracted_primary_source_wikidata
+        )
+    )
+    load(extracted_organizations_by_query.values())
+
+    return {
+        query: OrganizationID(organization.stableTargetId)
+        for query, organization in extracted_organizations_by_query.items()
+    }
+
+
+@asset(group_name="datscha_web")
+def extract_datscha_web(
+    extracted_primary_source_datscha_web: ExtractedPrimarySource,
+    unit_stable_target_ids_by_synonym: dict[str, OrganizationalUnitID],
+    extracted_datscha_web_items: list[DatschaWebItem],
+    datscha_web_person_ids_by_query_string: dict[str, list[PersonID]],
+    datscha_web_organization_ids_by_query_string: dict[str, OrganizationID],
+) -> list[ExtractedActivity]:
+    """Transform Datscha Web to extracted sources and load them to the sinks."""
+    mex_sources = list(
+        transform_datscha_web_items_to_mex_activities(
+            extracted_datscha_web_items,
+            extracted_primary_source_datscha_web,
+            datscha_web_person_ids_by_query_string,
+            unit_stable_target_ids_by_synonym,
+            datscha_web_organization_ids_by_query_string,
+        )
+    )
+    load(mex_sources)
+    return mex_sources
+
+
+@entrypoint(DatschaWebSettings)
+def run() -> None:
+    """Run the datscha-web extractor job in-process."""
+    run_job_in_process("datscha_web")

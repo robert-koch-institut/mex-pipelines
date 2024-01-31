@@ -1,0 +1,122 @@
+accessRestriction:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - setValues:
+      - https://mex.rki.de/item/access-restriction-2
+    comment: restricted
+accrualPeriodicity:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - setValues:
+      - https://mex.rki.de/item/frequency-15
+    comment: daily
+contact:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - forValues:
+      - email@email.de
+      rule: Match value to using ldap extractor.
+contributingUnit:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - forValues:
+      - Abteilung
+      rule: Use value to match with identifier in /raw-data/organigram/organizational-units.json.
+description:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - setValues:
+      - language: de
+        value: "Echtzeitdaten der Routinedokumenation"
+documentation:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - setValues:
+      - language: en
+        title: Confluence
+        url: https://link.com
+externalPartner:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - forValues:
+      - Register
+      rule: Use value to match with wikidata extractor.
+keyword:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - setValues:
+      - language: de
+        value: keyword1
+    - setValues:
+      - language: de
+        value: keyword2
+meshId:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - setValues:
+      - http://id.nlm.nih.gov/mesh/D004636
+    comment: Emergency Service, Hospital
+publication:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - setValues:
+      - language: de
+        title: "Situationsreport"
+        url: https://link.com
+publisher:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - forValues:
+      - Robert Koch-Institut
+      rule: Assign 'stable target id' of organization-item with official name as given in forValues.
+resourceTypeGeneral:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - setValues:
+      - https://mex.rki.de/item/resource-type-general-1
+    comment: Public Health Fachdaten
+resourceTypeSpecific:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - setValues:
+      - language: de
+        value: Daten
+rights:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - setValues:
+      - language: de
+        value: 'Die Daten sind zweckgebunden und können nicht ohne Weiteres innerhalb des
+          RKI zur Nutzung zur Verfügung gestellt werden.'
+spatial:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - setValues:
+      - language: de
+        value: Deutschland
+stateOfDataProcessing:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - setValues:
+      - https://mex.rki.de/item/data-processing-state-2
+    comment: Sekundärdaten
+theme:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - setValues:
+      - https://mex.rki.de/item/theme-11
+    - setValues:
+      - https://mex.rki.de/item/theme-35
+    comment: Infektionskrankheiten.
+title:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - setValues:
+      - langauge: de
+        value: test_project
+unitInCharge:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - forValues:
+      - FG99
+      rule: Use value to match with identifier in /raw-data/organigram/organizational-units.json.

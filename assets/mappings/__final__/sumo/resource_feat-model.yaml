@@ -1,0 +1,67 @@
+accessRestriction:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - setValues:
+      - https://mex.rki.de/item/access-restriction-2
+    comment: restricted
+accrualPeriodicity:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - setValues:
+      - https://mex.rki.de/item/frequency-17
+    comment: irregular
+contact:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - forValues:
+      - email@email.de
+      rule: Use value to match with ldap extractor.
+contributingUnit:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - forValues:
+      - Abteilung
+      rule: Use value to match with identifier in /raw-data/organigram/organizational-units.json.
+keyword:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - setValues:
+      - language: de
+        value: keyword 1
+    - setValues:
+      - language: de
+        value: keyword 2
+meshId:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - setValues:
+      - http://id.nlm.nih.gov/mesh/D004636
+    comment: Emergency Service, Hospital
+resourceTypeGeneral:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - setValues:
+      - https://mex.rki.de/item/resource-type-general-1
+    comment: Public Health Fachdaten
+spatial:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - setValues:
+      - language: de
+        value: Deutschland
+theme:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - setValues:
+      - https://mex.rki.de/item/theme-35
+title:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - setValues:
+      - language: de
+        value: Syndrome
+unitInCharge:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - forValues:
+      - FG 99

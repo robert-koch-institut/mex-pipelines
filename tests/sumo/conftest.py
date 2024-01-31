@@ -1,0 +1,880 @@
+from unittest.mock import MagicMock
+from uuid import UUID
+
+import pytest
+from pytest import MonkeyPatch
+
+from mex.common.ldap.connector import LDAPConnector
+from mex.common.ldap.models.actor import LDAPActor
+from mex.common.ldap.models.person import LDAPPerson
+from mex.common.models import (
+    ExtractedActivity,
+    ExtractedContactPoint,
+    ExtractedPerson,
+    ExtractedResource,
+    ExtractedVariableGroup,
+)
+from mex.common.types import (
+    ContactPointID,
+    Identifier,
+    OrganizationalUnitID,
+    OrganizationID,
+    PrimarySourceID,
+    Text,
+    TextLanguage,
+)
+from mex.sumo.models.access_platform import SumoAccessPlatform
+from mex.sumo.models.activity import SumoActivity
+from mex.sumo.models.cc1_data_model_nokeda import Cc1DataModelNoKeda
+from mex.sumo.models.cc1_data_valuesets import Cc1DataValuesets
+from mex.sumo.models.cc2_aux_mapping import Cc2AuxMapping
+from mex.sumo.models.cc2_aux_model import Cc2AuxModel
+from mex.sumo.models.cc2_aux_valuesets import Cc2AuxValuesets
+from mex.sumo.models.cc2_feat_projection import Cc2FeatProjection
+from mex.sumo.models.resource_feat_model import ResourceFeatModel
+from mex.sumo.models.resource_nokeda import ResourceNokeda
+from mex.sumo.settings import SumoSettings
+
+
+@pytest.fixture(autouse=True)
+def settings() -> SumoSettings:
+    """Load the settings for this pytest session."""
+    return SumoSettings.get()
+
+
+@pytest.fixture
+def mocked_ldap(monkeypatch: MonkeyPatch) -> None:
+    """Mock the LDAP connector to return resolved actors."""
+    actors = [
+        LDAPActor(
+            sAMAccountName="ContactC",
+            objectGUID=UUID(int=4, version=4),
+            mail=["email@email.de", "contactc@rki.de"],
+        )
+    ]
+    monkeypatch.setattr(
+        LDAPConnector,
+        "__init__",
+        lambda self: setattr(self, "_connection", MagicMock()),
+    )
+    monkeypatch.setattr(
+        LDAPConnector, "get_functional_accounts", lambda *_, **__: iter(actors)
+    )
+    monkeypatch.setattr(
+        LDAPConnector,
+        "get_persons",
+        lambda *_, **__: iter(
+            [
+                LDAPPerson(
+                    employeeID="42",
+                    sn="Resolved",
+                    givenName="Roland",
+                    displayName="Resolved, Roland",
+                    objectGUID=UUID(int=4, version=4),
+                    department="PARENT-UNIT",
+                )
+            ]
+        ),
+    )
+
+
+@pytest.fixture
+def mex_actor_resources() -> ExtractedContactPoint:
+    """Return a dummy mex actor resource."""
+    return ExtractedContactPoint(
+        email="email@email.de",
+        hadPrimarySource=PrimarySourceID.generate(seed=42),
+        identifierInPrimarySource="contact point",
+    )
+
+
+@pytest.fixture
+def mex_actor_access_platform() -> ExtractedPerson:
+    """Return a dummy mex actor access platform."""
+    return ExtractedPerson(
+        familyName="Mustermann",
+        fullName="Erika Mustermann",
+        givenName="Erika",
+        hadPrimarySource=PrimarySourceID.generate(seed=42),
+        identifierInPrimarySource="access platform",
+    )
+
+
+@pytest.fixture
+def unit_merged_ids_by_synonym() -> dict[str, OrganizationalUnitID]:
+    """Return dummy merged ids for units for testing."""
+    return {
+        "MF4": OrganizationalUnitID.generate(seed=45),
+        "mf4": OrganizationalUnitID.generate(seed=45),
+        "FG32": OrganizationalUnitID.generate(seed=47),
+        "fg32": OrganizationalUnitID.generate(seed=47),
+        "FG99": OrganizationalUnitID.generate(seed=49),
+        "fg99": OrganizationalUnitID.generate(seed=49),
+        "FG 99": OrganizationalUnitID.generate(seed=49),
+    }
+
+
+@pytest.fixture
+def contact_merged_ids_by_emails():
+    """Return dummy merged ids for units for testing."""
+    return {"email@email.de": ContactPointID.generate(seed=51)}
+
+
+@pytest.fixture
+def organizations_stable_target_ids_by_synonym():
+    """Return dummy merged ids for units for testing."""
+    return {
+        "Register": OrganizationalUnitID.generate(seed=60),
+        "Dummy Associate": OrganizationalUnitID.generate(seed=61),
+        "Robert Koch-Institut": OrganizationalUnitID.generate(seed=62),
+    }
+
+
+@pytest.fixture
+def sumo_resources_feat() -> ResourceFeatModel:
+    """Return feat SumoResource."""
+    return ResourceFeatModel(
+        access_restriction=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {"setValues": ["https://mex.rki.de/item/access-restriction-2"]}
+                ],
+                "comment": "restricted",
+            }
+        ],
+        accrual_periodicity=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {"setValues": ["https://mex.rki.de/item/frequency-17"]}
+                ],
+                "comment": "irregular",
+            }
+        ],
+        contact=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {
+                        "forValues": ["email@email.de"],
+                        "rule": "Use value to match with ldap extractor.",
+                    }
+                ],
+            }
+        ],
+        contributing_unit=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {
+                        "forValues": ["MF4"],
+                        "rule": "Use value to match with identifier in /raw-data/organigram/organizational-units.json.",
+                    }
+                ],
+            }
+        ],
+        keyword=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {"setValues": [{"language": "de", "value": "keyword 1"}]},
+                    {"setValues": [{"language": "de", "value": "keyword 2"}]},
+                ],
+            }
+        ],
+        mesh_id=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [{"setValues": ["http://id.nlm.nih.gov/mesh/D004636"]}],
+                "comment": "Emergency Service, Hospital",
+            }
+        ],
+        resource_type_general=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {"setValues": ["https://mex.rki.de/item/resource-type-general-1"]}
+                ],
+                "comment": "Public Health Fachdaten",
+            }
+        ],
+        theme=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [{"setValues": ["https://mex.rki.de/item/theme-35"]}],
+            }
+        ],
+        title=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {"setValues": [{"language": "de", "value": "Syndrome"}]}
+                ],
+            }
+        ],
+        unit_in_charge=[
+            {"fieldInPrimarySource": "n/a", "mappingRules": [{"forValues": ["FG 99"]}]}
+        ],
+    )
+
+
+@pytest.fixture
+def sumo_resources_nokeda() -> ResourceNokeda:
+    """Return feat SumoResource."""
+    return ResourceNokeda(
+        access_restriction=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {"setValues": ["https://mex.rki.de/item/access-restriction-2"]}
+                ],
+                "comment": "restricted",
+            }
+        ],
+        accrual_periodicity=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {"setValues": ["https://mex.rki.de/item/frequency-15"]}
+                ],
+                "comment": "daily",
+            }
+        ],
+        contact=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {
+                        "forValues": ["email@email.de"],
+                        "rule": "Match value to using ldap extractor.",
+                    }
+                ],
+            }
+        ],
+        contributing_unit=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {
+                        "forValues": ["MF4"],
+                        "rule": "Use value to match with identifier in /raw-data/organigram/organizational-units.json.",
+                    }
+                ],
+            }
+        ],
+        description=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {
+                        "setValues": [
+                            {
+                                "language": "de",
+                                "value": "Echtzeitdaten der Routinedokumenation",
+                            }
+                        ]
+                    }
+                ],
+            }
+        ],
+        documentation=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {
+                        "setValues": [
+                            {
+                                "language": "en",
+                                "title": "Confluence",
+                                "url": "https://link.com",
+                            }
+                        ]
+                    }
+                ],
+            }
+        ],
+        external_partner=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {
+                        "forValues": ["Register"],
+                        "rule": "Use value to match with wikidata extractor.",
+                    }
+                ],
+            }
+        ],
+        keyword=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {"setValues": [{"language": "de", "value": "keyword1"}]},
+                    {"setValues": [{"language": "de", "value": "keyword2"}]},
+                ],
+            }
+        ],
+        mesh_id=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [{"setValues": ["http://id.nlm.nih.gov/mesh/D004636"]}],
+                "comment": "Emergency Service, Hospital",
+            }
+        ],
+        publication=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {
+                        "setValues": [
+                            {
+                                "language": "de",
+                                "title": "Situationsreport",
+                                "url": "https://link.com",
+                            }
+                        ]
+                    }
+                ],
+            }
+        ],
+        publisher=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {
+                        "forValues": ["Robert Koch-Institut"],
+                        "rule": "Assign 'stable target id' of organization-item with official name as given in forValues.",
+                    }
+                ],
+            }
+        ],
+        resource_type_general=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {"setValues": ["https://mex.rki.de/item/resource-type-general-1"]}
+                ],
+                "comment": "Public Health Fachdaten",
+            }
+        ],
+        resource_type_specific=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [{"setValues": [{"language": "de", "value": "Daten"}]}],
+            }
+        ],
+        rights=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {
+                        "setValues": [
+                            {
+                                "language": "de",
+                                "value": "Die Daten sind zweckgebunden und können nicht ohne Weiteres innerhalb des RKI zur Nutzung zur Verfügung gestellt werden.",
+                            }
+                        ]
+                    }
+                ],
+            }
+        ],
+        spatial=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {"setValues": [{"language": "de", "value": "Deutschland"}]}
+                ],
+            }
+        ],
+        state_of_data_processing=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {"setValues": ["https://mex.rki.de/item/data-processing-state-2"]}
+                ],
+                "comment": "Sekundärdaten",
+            }
+        ],
+        theme=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {"setValues": ["https://mex.rki.de/item/theme-11"]},
+                    {"setValues": ["https://mex.rki.de/item/theme-35"]},
+                ],
+                "comment": "Infektionskrankheiten.",
+            }
+        ],
+        title=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {"setValues": [{"language": "de", "value": "test_project"}]}
+                ],
+            }
+        ],
+        unit_in_charge=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {
+                        "forValues": ["FG99"],
+                        "rule": "Use value to match with identifier in /raw-data/organigram/organizational-units.json.",
+                    }
+                ],
+            }
+        ],
+    )
+
+
+@pytest.fixture
+def sumo_access_platform() -> SumoAccessPlatform:
+    """Return Sumo Access Platform."""
+    return SumoAccessPlatform(
+        title=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {"setValues": [{"language": "de", "value": "SUMO Datenbank"}]}
+                ],
+            }
+        ],
+        contact=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {
+                        "forValues": ["Roland Resolved"],
+                        "rule": "Match value using ldap extractor.",
+                    }
+                ],
+            }
+        ],
+        identifier_in_primary_source=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {"rule": "Use value as it " "is.", "setValues": ["sumo-db"]}
+                ],
+            }
+        ],
+        technical_accessibility=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {
+                        "setValues": [
+                            "https://mex.rki.de/item/technical-accessibility-1"
+                        ],
+                        "rule": "Match value using ldap extractor.",
+                    }
+                ],
+            }
+        ],
+        unit_in_charge=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {
+                        "forValues": ["mf4"],
+                        "rule": "Use value to match with identifier in /raw-data/organigram/organizational-units.json.",
+                    }
+                ],
+            }
+        ],
+    )
+
+
+@pytest.fixture
+def sumo_activity() -> SumoActivity:
+    """Return Sumo Activity."""
+    return SumoActivity(
+        abstract=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {"setValues": [{"language": "de", "value": "Dummy abstract."}]}
+                ],
+            }
+        ],
+        activity_type=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {"setValues": ["https://mex.rki.de/item/activity-type-3"]}
+                ],
+                "comment": "RKI-internes Projekt",
+            }
+        ],
+        contact=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {
+                        "forValues": ["email@email.de"],
+                        "rule": "Use value to match with ldap extractor.",
+                    }
+                ],
+            }
+        ],
+        documentation=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {
+                        "setValues": [
+                            {
+                                "language": "de",
+                                "title": "SUMO im internen RKI Confluence",
+                                "url": "https://url.url",
+                            }
+                        ]
+                    }
+                ],
+            }
+        ],
+        external_associate=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {
+                        "forValues": ["Dummy Associate"],
+                        "rule": "Use value to match with wikidata extractor.",
+                    }
+                ],
+            }
+        ],
+        identifier_in_primary_source=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [{"setValues": ["https://url.url"]}],
+            }
+        ],
+        involved_unit=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {
+                        "forValues": ["mf4"],
+                        "rule": "Use value to match with identifier in /raw-data/organigram/organizational-units.json.",
+                    }
+                ],
+            }
+        ],
+        publication=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {
+                        "setValues": [
+                            {
+                                "language": "de",
+                                "title": "Dummy title.",
+                                "url": "http://url.url",
+                            }
+                        ]
+                    },
+                    {
+                        "setValues": [
+                            {
+                                "language": "de",
+                                "title": "Dummy title.",
+                                "url": "https://url.url",
+                            }
+                        ]
+                    },
+                ],
+            }
+        ],
+        responsible_unit=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {
+                        "forValues": ["fg32"],
+                        "rule": "Use value to match with identifier in /raw-data/organigram/organizational-units.json.",
+                    }
+                ],
+            }
+        ],
+        short_name=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [{"setValues": [{"value": "SUMO"}]}],
+            }
+        ],
+        start=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [{"setValues": ["2018-07"]}],
+            }
+        ],
+        succeeds=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {
+                        "forValues": ["Dummy project"],
+                        "rule": "Ignore the value, the item is not in MEx.",
+                    }
+                ],
+            }
+        ],
+        theme=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {"setValues": ["https://mex.rki.de/item/theme-35"]},
+                    {"setValues": ["https://mex.rki.de/item/theme-11"]},
+                    {"setValues": ["https://mex.rki.de/item/theme-3"]},
+                    {"setValues": ["https://mex.rki.de/item/theme-36"]},
+                    {"setValues": ["https://mex.rki.de/item/theme-38"]},
+                ],
+                "comment": "dummy comment",
+            }
+        ],
+        title=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {
+                        "setValues": [
+                            {"language": "de", "value": "SUMO Notaufnahmesurveillance"}
+                        ]
+                    }
+                ],
+            }
+        ],
+        website=[
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {
+                        "setValues": [
+                            {
+                                "language": "de",
+                                "title": "Surveillance Monitor",
+                                "url": "https://url.url",
+                            }
+                        ]
+                    }
+                ],
+            }
+        ],
+    )
+
+
+@pytest.fixture
+def transformed_activity() -> ExtractedActivity:
+    """Return Sumo ExtractedActivity."""
+    return ExtractedActivity(
+        hadPrimarySource=PrimarySourceID("hBYPjIX6hKi4FtA5ES5i1a"),
+        identifierInPrimarySource="https://url.url",
+        abstract=[Text(value="Dummy abstract.", language=TextLanguage.DE)],
+        activityType=["https://mex.rki.de/item/activity-type-3"],
+        alternativeTitle=[],
+        contact=[OrganizationalUnitID("bFQoRhcVH5DHVf")],
+        documentation=[],
+        end=[],
+        externalAssociate=[OrganizationalUnitID("bFQoRhcVH5DHVp")],
+        funderOrCommissioner=[],
+        fundingProgram=[],
+        involvedPerson=[],
+        involvedUnit=[OrganizationalUnitID("bFQoRhcVH5DHU9")],
+        isPartOfActivity=[],
+        publication=[],
+        responsibleUnit=[OrganizationalUnitID("bFQoRhcVH5DHVb")],
+        shortName=[Text(value="SUMO", language=TextLanguage.DE)],
+        start=[],
+        succeeds=[],
+        theme=["https://mex.rki.de/item/theme-35"],
+        title=[Text(value="SUMO Notaufnahmesurveillance", language=TextLanguage.DE)],
+        website=[],
+    )
+
+
+@pytest.fixture
+def mex_resources_nokeda() -> ExtractedResource:
+    """Return Nokeda ExtractedResources."""
+    return ExtractedResource(
+        hadPrimarySource=UUID(int=5, version=4),
+        identifierInPrimarySource="test_project",
+        accessPlatform=[],
+        accessRestriction="https://mex.rki.de/item/access-restriction-2",
+        accrualPeriodicity="https://mex.rki.de/item/frequency-15",
+        contact=[UUID(int=5, version=4)],
+        contributingUnit=[UUID(int=5, version=4)],
+        description=["Echtzeitdaten der Routinedokumenation"],
+        externalPartner=[UUID(int=5, version=4)],
+        keyword=["keyword1", "keyword2"],
+        meshId=["http://id.nlm.nih.gov/mesh/D004636"],
+        publication=["Situationsreport"],
+        publisher=[OrganizationID("bFQoRhcVH5DHU6")],
+        resourceTypeGeneral=["https://mex.rki.de/item/resource-type-general-1"],
+        resourceTypeSpecific=["Daten"],
+        rights=[
+            "Die Daten sind zweckgebunden und können nicht ohne Weiteres innerhalb des RKI zur Nutzung zur Verfügung gestellt werden."
+        ],
+        spatial=["Deutschland"],
+        stateOfDataProcessing="https://mex.rki.de/item/data-processing-state-2",
+        theme=["https://mex.rki.de/item/theme-11"],
+        title=["test_project"],
+        unitInCharge=[OrganizationalUnitID.generate(seed=42)],
+    )
+
+
+@pytest.fixture
+def mex_resources_feat() -> ExtractedResource:
+    """Return feat ExtractedResources."""
+    return ExtractedResource(
+        hadPrimarySource=UUID(int=5, version=4),
+        identifierInPrimarySource="test_project",
+        accessRestriction="https://mex.rki.de/item/access-restriction-2",
+        accrualPeriodicity="https://mex.rki.de/item/frequency-17",
+        contact=[UUID(int=5, version=4)],
+        contributingUnit=[UUID(int=5, version=4)],
+        keyword=["keyword 1", "keyword 2"],
+        meshId=["http://id.nlm.nih.gov/mesh/D004636"],
+        resourceTypeGeneral=["https://mex.rki.de/item/resource-type-general-1"],
+        theme=["https://mex.rki.de/item/theme-1"],
+        title=["Syndrome"],
+        unitInCharge=[OrganizationalUnitID.generate(seed=42)],
+    )
+
+
+@pytest.fixture
+def cc1_data_model_nokeda() -> list[Cc1DataModelNoKeda]:
+    """Return data model nokeda variables."""
+    return [
+        Cc1DataModelNoKeda(
+            domain="Datenbereitstellung",
+            domain_en="data supply",
+            type_json="string",
+            element_description="shobidoo",
+            element_description_en="shobidoo_en",
+            variable_name="nokeda_edis_software",
+            element_label="Name des EDIS",
+            element_label_en="Name of EDIS",
+        )
+    ]
+
+
+@pytest.fixture
+def cc1_data_valuesets() -> list[Cc1DataValuesets]:
+    """Return data valuesets variables."""
+    return [
+        Cc1DataValuesets(
+            category_label_de="Herzstillstand (nicht traumatisch)",
+            sheet_name="nokeda_cedis",
+        )
+    ]
+
+
+@pytest.fixture
+def cc2_aux_mapping() -> list[Cc2AuxMapping]:
+    """Return aux mapping variables."""
+    return [
+        Cc2AuxMapping(variable_name_column=["0", "1", "2"], sheet_name="nokeda_age21"),
+        Cc2AuxMapping(
+            variable_name_column=["001", "002", "003"], sheet_name="nokeda_cedis"
+        ),
+    ]
+
+
+@pytest.fixture
+def cc2_aux_model() -> list[Cc2AuxModel]:
+    """Return aux model variables."""
+    return [
+        Cc2AuxModel(
+            depends_on_nokeda_variable="nokeda_age21",
+            domain="age",
+            element_description="the lowest age in the age group",
+            in_database_static=True,
+            variable_name="aux_age21_min",
+        ),
+        Cc2AuxModel(
+            depends_on_nokeda_variable="nokeda_cedis",
+            domain="disease",
+            element_description="Core groups as defined in the CEDIS reporting standard",
+            in_database_static=True,
+            variable_name="aux_cedis_group",
+        ),
+    ]
+
+
+@pytest.fixture
+def cc2_aux_valuesets() -> list[Cc2AuxValuesets]:
+    """Return aux valuesets variables."""
+    return [Cc2AuxValuesets(label_de="Kardiovaskulär", label_en="Cardiovascular")]
+
+
+@pytest.fixture
+def cc2_feat_projection() -> list[Cc2FeatProjection]:
+    """Return feat projection variables."""
+    return [
+        Cc2FeatProjection(
+            feature_domain="feat_syndrome",
+            feature_subdomain="RSV",
+            feature_abbr="1",
+            feature_name_en="respiratory syncytial virus, specific",
+            feature_name_de="Respiratorisches Syncytial-Virus, spezifisch",
+            feature_description="specific RSV-ICD-10 codes",
+        )
+    ]
+
+
+@pytest.fixture
+def mex_variable_groups_nokeda_aux() -> list[ExtractedVariableGroup]:
+    """Return nokeda variable groups."""
+    return [
+        ExtractedVariableGroup(
+            containedBy=Identifier.generate(seed=42),
+            hadPrimarySource=Identifier.generate(seed=42),
+            identifierInPrimarySource="age",
+            label=Text(value="age", language=TextLanguage.EN),
+        ),
+        ExtractedVariableGroup(
+            containedBy=Identifier.generate(seed=42),
+            hadPrimarySource=Identifier.generate(seed=42),
+            identifierInPrimarySource="disease",
+            label=Text(value="disease", language=TextLanguage.EN),
+        ),
+    ]
+
+
+@pytest.fixture
+def mex_variable_groups_model_nokeda() -> list[ExtractedVariableGroup]:
+    """Return nokeda variable groups."""
+    return [
+        ExtractedVariableGroup(
+            containedBy=Identifier.generate(seed=42),
+            hadPrimarySource=Identifier.generate(seed=42),
+            identifierInPrimarySource="Datenbereitstellung",
+            label={"value": "Datenbereitstellung"},
+        ),
+        ExtractedVariableGroup(
+            containedBy=Identifier.generate(seed=42),
+            hadPrimarySource=Identifier.generate(seed=42),
+            identifierInPrimarySource="age",
+            label={"value": "age"},
+        ),
+    ]
+
+
+@pytest.fixture
+def mex_variable_groups_model_feat() -> list[ExtractedVariableGroup]:
+    """Return model feat variable groups."""
+    return [
+        ExtractedVariableGroup(
+            containedBy=Identifier.generate(seed=42),
+            hadPrimarySource=Identifier.generate(seed=42),
+            identifierInPrimarySource="feat_syndrome RSV",
+            label={"value": "feat_syndrome RSV"},
+        ),
+        ExtractedVariableGroup(
+            containedBy=Identifier.generate(seed=42),
+            hadPrimarySource=Identifier.generate(seed=42),
+            identifierInPrimarySource="feat_syndrome RSV",
+            label={"value": "feat_syndrome RSV"},
+        ),
+    ]

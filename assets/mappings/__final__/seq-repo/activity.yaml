@@ -1,0 +1,6 @@
+theme:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - setValues:
+      - https://mex.rki.de/item/theme-11
+      - https://mex.rki.de/item/theme-34

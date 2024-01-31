@@ -1,0 +1,152 @@
+[tool.poetry]
+name = "mex-extractors"
+version = "0.15.0"
+description = "ETL pipelines for the RKI Metadata Exchange."
+authors = ["RKI MEx Team <mex@rki.de>"]
+readme = "README.md"
+license = "MIT"
+repository = "https://github.com/robert-koch-institut/mex-extractors"
+packages = [{ include = "mex" }]
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.13"
+beautifulsoup4 = "^4.12.3"
+dagster = "^1.6.2"
+dagster-postgres = "^0.22.2"
+dagster-webserver = "^1.6.2"
+faker = "^22.6.0"
+mex-common = { git = "https://github.com/robert-koch-institut/mex-common.git", rev = "0.19.1" }
+numpy = "^1.26.3"
+openpyxl = "^3.1.2"
+pandas = "^2.1.4"
+pydantic = "^2.6.0"
+pyodbc = "^5.0.1"
+pyyaml = "^6.0.1"
+requests = "^2.31.0"
+requests-ntlm = "^1.2.0"
+urllib3 = "^1.26.18"
+xlrd = "^2.0.1"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.12.1"
+click = "^8.1.7"
+ipdb = "^0.13.13"
+mypy = "^1.8.0"
+pandas-stubs = "^2.1.4"
+pytest = "^7.4.4"
+pytest-cov = "^4.1.0"
+ruff = "^0.1.15"
+sphinx = "^7.2.6"
+types-beautifulsoup4 = "^4.12.0"
+types-pytz = "^2023.4.0"
+types-pyyaml = "^6.0.12"
+types-requests = "^2.31.0"
+
+[tool.poetry.scripts]
+artificial = "mex.artificial.main:run"
+biospecimen = "mex.biospecimen.main:run"
+blueant = "mex.blueant.main:run"
+confluence-vvt = "mex.confluence_vvt.main:run"
+datscha-web = "mex.datscha_web.main:run"
+ff-projects = "mex.ff_projects.main:run"
+ifsg = "mex.ifsg.main:run"
+international-projects = "mex.international_projects.main:run"
+organigram = "mex.organigram.main:run"
+rdmo = "mex.rdmo.main:run"
+seq-repo = "mex.seq_repo.main:run"
+sumo = "mex.sumo.main:run"
+sync-persons = "mex.ldap.main:run"
+synopse = "mex.synopse.main:run"
+
+[tool.cruft]
+template = "https://github.com/robert-koch-institut/mex-template"
+skip = ["tests/conftest.py"]
+
+[tool.dagster]
+module_name = "mex"
+
+[tool.ipdb]
+context = 5
+
+[tool.mypy]
+python_version = "3.11"
+show_error_codes = true
+strict = true
+plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = "requests_ntlm.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["mex.*.transform", "mex.*.extract"]
+disable_error_code = ["arg-type", "call-arg"]
+
+[tool.pydantic-mypy]
+warn_untyped_fields = true
+
+[tool.pytest.ini_options]
+addopts = [
+    "--verbose",
+    "--cov",
+    "--no-cov-on-fail",
+    "--cov-report=term-missing:skip-covered",
+    "--cov-fail-under=95",
+    "--cov-branch",
+    "--pdbcls=IPython.terminal.debugger:TerminalPdb",
+]
+markers = "integration: mark a test as integration test"
+
+[tool.ruff]
+fix = true
+ignore = [
+    "D100",   # Allow missing module docstring for brevity
+    "D104",   # Allow missing package docstring for brevity
+    "D106",   # Allow missing nested class docstring (eg pydantic Config)
+    "D203",   # Disallow blank line before class docstring (inverse of D211)
+    "D213",   # Disallow multi-line docstring starting at second line (inverse of D212)
+    "D406",   # Allow section name ending with newline (google style compat)
+    "D407",   # Allow missing dashed underline after section (google style compat)
+    "D413",   # Allow missing blank line after last section (google style compat)
+    "N805",   # Allow first argument of a method to be non-self (pydantic compat)
+    "N815",   # Allow mixedCase variables in class scope (model compat)
+    "RUF012", # Allow mutable class attributes (pydantic compat)
+]
+select = [
+    "C90", # McCabe complexity checker
+    "D",   # Python docstring style checker
+    "E",   # Python code style errors
+    "ERA", # Commented-out code detector
+    "F",   # Pyflakes passive python checker
+    "I",   # Isort import utility
+    "N",   # Pep8 naming conventions
+    "RET", # Flake8 return statement checker
+    "RUF", # Ruff-specific rules
+    "S",   # Bandit automated security testing
+    "T10", # Flake8 debug statement checker
+    "T20", # Flake8 print statement checker
+    "W",   # Python code style warnings
+]
+show-fixes = true
+target-version = "py311"
+
+[tool.ruff.per-file-ignores]
+"tests/**" = [
+    "D101", # Allow missing docstring in public class for tests
+    "D102", # Allow missing docstring in public method for tests
+    "D103", # Allow missing docstring in public function for tests
+    "D107", # Allow missing docstring in `__init__` for tests
+    "E501", # Allow line too long in tests
+    "N807", # Allow mocking `__init__` for tests
+    "S101", # Allow use of `assert` in tests
+]
+
+[tool.ruff.isort]
+known-first-party = ["mex", "tests"]
+
+[tool.ruff.pydocstyle]
+convention = "google"
+
+[build-system]
+requires = ["poetry-core>=1.8.1"]
+build-backend = "poetry.core.masonry.api"
