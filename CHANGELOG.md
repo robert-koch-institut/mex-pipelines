@@ -9,7 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- configure open-code synchronization workflow
+
 ### Changes
+
+- update cruft template to latest version
 
 ### Deprecated
 
@@ -19,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
-## [0.15.0]
+## [0.15.0] - 2024-01-31
 
 ### Added
 
