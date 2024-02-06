@@ -1,4 +1,4 @@
-from typing import cast
+from typing import Any, cast
 from urllib.parse import urljoin
 
 from mex.common.connector import HTTPConnector
@@ -25,11 +25,33 @@ class DropApiConnector(HTTPConnector):
         self.url = urljoin(str(settings.drop_api_url), self.API_VERSION)
 
     def list_files(self, x_system: str) -> list[str]:
-        """Get available files for the x_system."""
+        """Get available files for the x_system.
+
+        Args:
+            x_system: name of the x_system to list the files for
+
+        Returns:
+            list of available filenames for the x_system
+        """
         return cast(
             list[str],
             self.request(
                 method="GET",
                 endpoint=f"/{x_system}/",
             ),
+        )
+
+    def get_file(self, x_system: str, file_id: str) -> dict[str, Any]:
+        """Get the content of a file from the x_system.
+
+        Args:
+            x_system: name of the x_system
+            file_id: name of the file
+
+        Returns:
+            content of the file
+        """
+        return self.request(
+            method="GET",
+            endpoint=f"/{x_system}/{file_id}",
         )
