@@ -2,9 +2,10 @@ import yaml
 from pydantic import BaseModel
 
 from mex.common.models.mapping import MAPPING_MODEL_BY_EXTRACTED_CLASS_NAME
+from mex.common.types import AssetsPath
 
 
-def get_mapping_model(path: str, model_type: type[BaseModel]) -> BaseModel:
+def get_mapping_model(path: AssetsPath, model_type: type[BaseModel]) -> BaseModel:
     """Return a mapping model with default values.
 
     Args:
