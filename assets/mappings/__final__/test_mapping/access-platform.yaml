@@ -28,7 +28,6 @@ unitInCharge:
     - forValues:
       - Abteilung
       rule: Use value to match with identifier in /raw-data/organigram/organizational-units.json.
-
 hadPrimarySource:
   - fieldInPrimarySource: n/a
     mappingRules:

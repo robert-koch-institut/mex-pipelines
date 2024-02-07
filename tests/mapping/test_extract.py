@@ -1,6 +1,6 @@
 from mex.common.models import ExtractedAccessPlatform
 from mex.common.types import AssetsPath, TechnicalAccessibility, TextLanguage
-from mex.mapping.connector import get_mapping_model
+from mex.mapping.extract import extract_mapping_model
 
 
 def test_get_mapping_model() -> None:
@@ -8,7 +8,7 @@ def test_get_mapping_model() -> None:
         "assets/mappings/__final__/test_mapping/access-platform.yaml"
     )
 
-    mapping_model = get_mapping_model(mapping_path, ExtractedAccessPlatform)
+    mapping_model = extract_mapping_model(mapping_path, ExtractedAccessPlatform)
 
     expected = {
         "identifier": [
