@@ -117,9 +117,11 @@ def transform_international_projects_source_to_extracted_activity(
         theme=get_theme_for_activity_or_topic(
             source.activity1, source.activity2, source.topic1, source.topic2
         ),
-        website=[]
-        if source.website in ("", "does not exist yet")
-        else [Link(url=source.website)],
+        website=(
+            []
+            if source.website in ("", "does not exist yet")
+            else [Link(url=source.website)]
+        ),
     )
 
 

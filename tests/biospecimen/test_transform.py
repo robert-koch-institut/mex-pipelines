@@ -76,7 +76,7 @@ def test_transform_biospecimen_resource_to_mex_resource(
             "https://mex.rki.de/item/theme-37",
         ],
         "title": [{"value": "test_titel"}],
-        "unitInCharge": [Identifier.generate(seed=42)]
+        "unitInCharge": [Identifier.generate(seed=42)],
         # created_in_context_of is None, therefore not displayed
     }
     assert mex_source.model_dump(exclude_none=True, exclude_defaults=True) == expected

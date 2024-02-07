@@ -174,9 +174,11 @@ def transform_synopse_variables_belonging_to_same_variable_group_to_mex_variable
             belongsTo=belongs_to.stableTargetId,
             codingSystem=variable.val_instrument,
             dataType=VARIABLE_DATA_TYPE_MAP[variable.datentyp],
-            description=Text(value=variable.originalfrage, language=TextLanguage("de"))
-            if variable.originalfrage
-            else [],
+            description=(
+                Text(value=variable.originalfrage, language=TextLanguage("de"))
+                if variable.originalfrage
+                else []
+            ),
             hadPrimarySource=extracted_primary_source.stableTargetId,
             identifierInPrimarySource=synopse_id,
             label=variable.varlabel or variable.varname,
@@ -340,13 +342,14 @@ def transform_synopse_data_to_mex_resources(
                 "https://mex.rki.de/item/access-restriction-2"
             ),
             contact=unit_in_charge,
-            contributingUnit=extracted_activity.involvedUnit
-            + extracted_activity.responsibleUnit
-            if extracted_activity
-            else None,
-            contributor=extracted_activity.involvedPerson
-            if extracted_activity
-            else None,
+            contributingUnit=(
+                extracted_activity.involvedUnit + extracted_activity.responsibleUnit
+                if extracted_activity
+                else None
+            ),
+            contributor=(
+                extracted_activity.involvedPerson if extracted_activity else None
+            ),
             created=created,
             description=description,
             documentation=documentation,
@@ -375,9 +378,9 @@ def transform_synopse_data_to_mex_resources(
             theme=Theme("https://mex.rki.de/item/theme-35"),
             title=Text(value=study.titel_datenset, language=TextLanguage("de")),
             unitInCharge=unit_in_charge,
-            wasGeneratedBy=extracted_activity.stableTargetId
-            if extracted_activity
-            else None,
+            wasGeneratedBy=(
+                extracted_activity.stableTargetId if extracted_activity else None
+            ),
         )
 
 
@@ -554,12 +557,12 @@ def transform_synopse_projects_to_mex_activities(
             unit_merged_ids_by_synonym,
         )
         if anschlussprojekt:
-            anschlussprojekt_by_activity_stable_target_id[
-                activity.stableTargetId
-            ] = anschlussprojekt
-        activity_stable_target_id_by_short_name[
-            activity.shortName[0].value
-        ] = activity.stableTargetId
+            anschlussprojekt_by_activity_stable_target_id[activity.stableTargetId] = (
+                anschlussprojekt
+            )
+        activity_stable_target_id_by_short_name[activity.shortName[0].value] = (
+            activity.stableTargetId
+        )
         activities.append(activity)
 
     # set succeeds
@@ -624,9 +627,11 @@ def transform_synopse_project_to_activity(
         activityType=ActivityType("https://mex.rki.de/item/activity-type-6"),
         contact=contact,
         documentation=documentation,
-        end=Timestamp(synopse_project.projektende)
-        if synopse_project.projektende
-        else None,
+        end=(
+            Timestamp(synopse_project.projektende)
+            if synopse_project.projektende
+            else None
+        ),
         externalAssociate=None,
         # TODO resolve organization from project.externe_partner
         funderOrCommissioner=None,
@@ -637,9 +642,11 @@ def transform_synopse_project_to_activity(
         involvedUnit=involved_units,
         responsibleUnit=responsible_unit,
         shortName=synopse_project.akronym_des_studientitels,
-        start=Timestamp(synopse_project.projektbeginn)
-        if synopse_project.projektbeginn
-        else None,
+        start=(
+            Timestamp(synopse_project.projektbeginn)
+            if synopse_project.projektbeginn
+            else None
+        ),
         theme=Theme("https://mex.rki.de/item/theme-35"),
         title=synopse_project.project_studientitel
         or synopse_project.akronym_des_studientitels,
