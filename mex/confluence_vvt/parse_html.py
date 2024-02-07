@@ -116,9 +116,9 @@ def get_row_data_for_all_rows(
             header_text = current_row_headers[0].get_text().strip()
 
             if not next_row_values and "Interne Vorgangsnummer" in header_text:
-                all_rows_data[
-                    INTERNE_VORGANGSNUMMER
-                ] = get_interne_vorgangsnummer_from_title(header_text)
+                all_rows_data[INTERNE_VORGANGSNUMMER] = (
+                    get_interne_vorgangsnummer_from_title(header_text)
+                )
 
             elif not next_row_values:
                 continue
