@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changes
 
 - update cruft template to latest version
+- update to pytest 8 and other minor/patch bumps
 
 ### Deprecated
 
