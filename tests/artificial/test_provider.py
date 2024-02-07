@@ -29,12 +29,15 @@ class DummyModel(BaseModel):
     is_optional: bool | None = None
     is_union: float | list[float]
     is_inner_union: list[float | int] = []
-    is_union_with_pattern: Annotated[
-        str,
-        Field(
-            pattern=r"^https://www\.wikidata\.org/entity/[PQ0-9]{2,64}$",
-        ),
-    ] | None = None
+    is_union_with_pattern: (
+        Annotated[
+            str,
+            Field(
+                pattern=r"^https://www\.wikidata\.org/entity/[PQ0-9]{2,64}$",
+            ),
+        ]
+        | None
+    ) = None
     is_nested_pattern: list[
         Annotated[
             str,

@@ -58,7 +58,9 @@ class DatschaWebItem(BaseRawData):
         None, alias="Datenübermittlung in Drittstaat"
     )
     name_des_drittstaats: str | None = Field(None, alias="Name des Drittstaats")
-    art_der_verarbeiteten_uebermittelten_oder_offengelegten_daten_in_drittstaat: str | None = Field(  # noqa: E501
+    art_der_verarbeiteten_uebermittelten_oder_offengelegten_daten_in_drittstaat: (
+        str | None
+    ) = Field(
         None,
         alias="Art der verarbeiteten (übermittelten/offengelegten) Daten in Drittstaat",
     )
