@@ -1,3 +1,5 @@
+from typing import Any
+
 from mex.common.models import (
     ExtractedAccessPlatform,
     ExtractedActivity,
@@ -9,10 +11,6 @@ from mex.common.types import (
     TextLanguage,
     Timestamp,
 )
-from mex.seq_repo.models.access_platform import SeqRepoAccessPlatform
-from mex.seq_repo.models.activity import SeqRepoActivity
-from mex.seq_repo.models.distribution import SeqRepoDistribution
-from mex.seq_repo.models.resource import SeqRepoResource
 from mex.seq_repo.models.source import SeqRepoSource
 from mex.seq_repo.transform import (
     transform_seq_repo_access_platform_to_extracted_access_platform,
@@ -25,7 +23,7 @@ from mex.seq_repo.transform import (
 def test_transform_seq_repo_activities_to_extracted_activities(
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
     seq_repo_latest_sources: dict[str, SeqRepoSource],
-    seq_repo_activity: SeqRepoActivity,
+    seq_repo_activity: dict[str, Any],
 ) -> None:
     expected = {
         "identifier": Joker(),
@@ -59,7 +57,7 @@ def test_transform_seq_repo_distribution_to_extracted_distribution(
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
     seq_repo_latest_sources: dict[str, SeqRepoSource],
     extracted_mex_access_platform: ExtractedAccessPlatform,
-    seq_repo_distribution: SeqRepoDistribution,
+    seq_repo_distribution: dict[str, Any],
 ) -> None:
     extracted_mex_distributions = list(
         (
@@ -98,7 +96,7 @@ def test_transform_seq_repo_resource_to_extracted_resource(
     seq_repo_latest_sources: dict[str, SeqRepoSource],
     extracted_mex_distribution_dict: dict[str, ExtractedDistribution],
     extracted_mex_activities_dict: dict[str, ExtractedActivity],
-    seq_repo_resource: SeqRepoResource,
+    seq_repo_resource: dict[str, Any],
 ) -> None:
     extracted_mex_resources = list(
         transform_seq_repo_resource_to_extracted_resource(
@@ -166,7 +164,7 @@ def test_transform_seq_repo_resource_to_extracted_resource(
 
 def test_transform_seq_repo_access_platform_to_extracted_access_platform(
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
-    seq_repo_access_platform: SeqRepoAccessPlatform,
+    seq_repo_access_platform: dict[str, Any],
 ) -> None:
     expected = {
         "identifier": Joker(),

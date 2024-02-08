@@ -20,3 +20,26 @@ title:
     - setValues:
       - "dummy-fastq-file"
     comment: "So there must be rules for titles."
+hadPrimarySource:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - rule: "dummy rule"
+identifier:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - rule: Assign identifier.
+identifierInPrimarySource:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+      - setValues:
+        - https://dummy.url.com/
+issued:
+  - fieldInPrimarySource: sequencing-date
+    examplesInPrimarySource:
+      - "2023-07-28"
+    mappingRules:
+      - rule: Use value as it is.
+stableTargetId:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - rule: Assign 'stable target id' of merged item.

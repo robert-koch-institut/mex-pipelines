@@ -1,6 +1,40 @@
+contact:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - forValues:
+      - fg99
+      rule: Hmm, where are the rules
 theme:
   - fieldInPrimarySource: n/a
     mappingRules:
     - setValues:
       - https://mex.rki.de/item/theme-11
       - https://mex.rki.de/item/theme-34
+hadPrimarySource:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - rule: "dummy rule"
+identifier:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - rule: Assign identifier.
+identifierInPrimarySource:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+      - setValues:
+        - https://dummy.url.com/
+stableTargetId:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - rule: Assign 'stable target id' of merged item.
+responsibleUnit:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - forValues:
+      - C1
+      rule: Use value to match with identifier in /raw-data/organigram/organizational-units.json.
+title:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - setValues:
+      - value: Sequence Data Repository
