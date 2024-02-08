@@ -1,3 +1,5 @@
+from typing import Any
+
 from mex.common.models import (
     ExtractedActivity,
     ExtractedContactPoint,
@@ -17,16 +19,12 @@ from mex.common.types import (
     TextLanguage,
     Timestamp,
 )
-from mex.sumo.models.access_platform import SumoAccessPlatform
-from mex.sumo.models.activity import SumoActivity
 from mex.sumo.models.cc1_data_model_nokeda import Cc1DataModelNoKeda
 from mex.sumo.models.cc1_data_valuesets import Cc1DataValuesets
 from mex.sumo.models.cc2_aux_mapping import Cc2AuxMapping
 from mex.sumo.models.cc2_aux_model import Cc2AuxModel
 from mex.sumo.models.cc2_aux_valuesets import Cc2AuxValuesets
 from mex.sumo.models.cc2_feat_projection import Cc2FeatProjection
-from mex.sumo.models.resource_feat_model import ResourceFeatModel
-from mex.sumo.models.resource_nokeda import ResourceNokeda
 from mex.sumo.transform import (
     get_contact_merged_ids_by_emails,
     get_contact_merged_ids_by_names,
@@ -68,7 +66,7 @@ def test_get_contact_merged_ids_by_names(
 def test_transform_resource_nokeda_to_mex_resource(
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
     unit_merged_ids_by_synonym: dict[str, OrganizationalUnitID],
-    sumo_resources_nokeda: ResourceNokeda,
+    sumo_resources_nokeda: dict[str, Any],
     extracted_organization_rki: ExtractedOrganization,
     transformed_activity: ExtractedActivity,
 ) -> None:
@@ -142,7 +140,7 @@ def test_transform_resource_nokeda_to_mex_resource(
 def test_transform_resource_feat_model_to_mex_resource(
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
     unit_merged_ids_by_synonym: dict[str, OrganizationalUnitID],
-    sumo_resources_feat: ResourceFeatModel,
+    sumo_resources_feat: dict[str, Any],
     mex_resources_nokeda: ExtractedResource,
     transformed_activity: ExtractedActivity,
 ) -> None:
@@ -415,7 +413,7 @@ def test_transform_feat_projection_variable_to_mex_variable(
 def test_transform_sumo_access_platform_to_mex_access_platform(
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
     unit_merged_ids_by_synonym: dict[str, OrganizationalUnitID],
-    sumo_access_platform: SumoAccessPlatform,
+    sumo_access_platform: dict[str, Any],
 ) -> None:
     person_id = Identifier.generate(seed=30)
     person_stable_target_ids_by_query_string = {
@@ -443,7 +441,7 @@ def test_transform_sumo_access_platform_to_mex_access_platform(
 
 
 def test_transform_sumo_activity_to_extracted_activity(
-    sumo_activity: SumoActivity,
+    sumo_activity: dict[str, Any],
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
     unit_merged_ids_by_synonym: dict[str, OrganizationalUnitID],
     contact_merged_ids_by_emails: dict[str, ContactPointID],

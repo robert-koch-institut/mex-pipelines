@@ -1,9 +1,12 @@
+from typing import Any
+
 from mex.common.cli import entrypoint
 from mex.common.ldap.transform import (
     transform_ldap_actors_to_mex_contact_points,
     transform_ldap_persons_with_query_to_mex_persons,
 )
 from mex.common.models import (
+    ExtractedAccessPlatform,
     ExtractedActivity,
     ExtractedOrganization,
     ExtractedOrganizationalUnit,
@@ -15,10 +18,11 @@ from mex.common.models import (
 from mex.common.primary_source.transform import (
     get_primary_sources_by_name,
 )
-from mex.common.types import ContactPointID, Email, OrganizationalUnitID
+from mex.common.types import AssetsPath, ContactPointID, Email, OrganizationalUnitID
 from mex.common.wikidata.transform import (
     transform_wikidata_organizations_to_extracted_organizations,
 )
+from mex.mapping.extract import extract_mapping_model
 from mex.pipeline import asset, run_job_in_process
 from mex.sinks import load
 from mex.sumo.extract import (
@@ -30,19 +34,13 @@ from mex.sumo.extract import (
     extract_cc2_feat_projection,
     extract_ldap_contact_points_by_emails,
     extract_ldap_contact_points_by_name,
-    extract_sumo_access_platform,
-    extract_sumo_activity,
     extract_sumo_organizations,
-    extract_sumo_resources_feat,
-    extract_sumo_resources_nokeda,
     get_organization_merged_id_by_query,
 )
 from mex.sumo.filter import filter_and_log_cc2_aux_model
 from mex.sumo.models.cc1_data_model_nokeda import Cc1DataModelNoKeda
 from mex.sumo.models.cc2_aux_model import Cc2AuxModel
 from mex.sumo.models.cc2_feat_projection import Cc2FeatProjection
-from mex.sumo.models.resource_feat_model import ResourceFeatModel
-from mex.sumo.models.resource_nokeda import ResourceNokeda
 from mex.sumo.settings import SumoSettings
 from mex.sumo.transform import (
     get_contact_merged_ids_by_emails,
@@ -80,7 +78,11 @@ def transformed_sumo_access_platform(
     extracted_primary_source_sumo: ExtractedPrimarySource,
 ) -> None:
     """Transform and load SUMO access platform and related LDAP actors."""
-    sumo_access_platform = extract_sumo_access_platform()
+    settings = SumoSettings.get()
+    sumo_access_platform = extract_mapping_model(
+        AssetsPath(settings.mapping_path / "access-platform.yaml"),
+        ExtractedAccessPlatform,
+    ).model_dump()
     ldap_contact_points_access_platform = extract_ldap_contact_points_by_name(
         sumo_access_platform
     )
@@ -107,8 +109,8 @@ def transformed_sumo_access_platform(
 
 @asset(group_name="sumo")
 def contact_merged_ids_by_emails_sumo(
-    extracted_resources_nokeda_sumo: ResourceNokeda,
-    extracted_resources_feat_sumo: ResourceFeatModel,
+    extracted_resources_nokeda_sumo: dict[str, Any],
+    extracted_resources_feat_sumo: dict[str, Any],
     extracted_primary_source_ldap: ExtractedPrimarySource,
 ) -> dict[Email, ContactPointID]:
     """Load contacts related to resources and return them by their e-mail addresses."""
@@ -133,7 +135,10 @@ def transformed_activity_sumo(
     extracted_primary_source_sumo: ExtractedPrimarySource,
 ) -> ExtractedActivity:
     """Extract, transform and load SUMO activity."""
-    sumo_activity = extract_sumo_activity()
+    settings = SumoSettings.get()
+    sumo_activity = extract_mapping_model(
+        AssetsPath(settings.mapping_path / "activity.yaml"), ExtractedActivity
+    ).model_dump()
     transformed_activity = transform_sumo_activity_to_extracted_activity(
         sumo_activity,
         unit_stable_target_ids_by_synonym,
@@ -145,15 +150,22 @@ def transformed_activity_sumo(
 
 
 @asset(group_name="sumo")
-def extracted_resources_nokeda_sumo() -> ResourceNokeda:
+def extracted_resources_nokeda_sumo() -> dict[str, Any]:
     """Extract Nokeda Resource from SUMO."""
-    return extract_sumo_resources_nokeda()
+    settings = SumoSettings.get()
+    return extract_mapping_model(
+        AssetsPath(settings.mapping_path / "resource_nokeda.yaml"), ExtractedResource
+    ).model_dump()
 
 
 @asset(group_name="sumo")
-def extracted_resources_feat_sumo() -> ResourceFeatModel:
+def extracted_resources_feat_sumo() -> dict[str, Any]:
     """Extract Resource feat from SUMO."""
-    return extract_sumo_resources_feat()
+    settings = SumoSettings.get()
+    return extract_mapping_model(
+        AssetsPath(settings.mapping_path / "resource_feat-model.yaml"),
+        ExtractedResource,
+    ).model_dump()
 
 
 @asset(group_name="sumo")
@@ -181,7 +193,7 @@ def extracted_cc2_feat_projection() -> list[Cc2FeatProjection]:
 
 @asset(group_name="sumo")
 def organization_stable_target_id_by_query_sumo(
-    extracted_resources_nokeda_sumo: ResourceNokeda,
+    extracted_resources_nokeda_sumo: dict[str, Any],
     extracted_primary_source_wikidata: ExtractedPrimarySource,
 ) -> dict[str, str]:
     """Extract and load SUMO organizations and return them by stable target ids."""
@@ -199,7 +211,7 @@ def organization_stable_target_id_by_query_sumo(
 
 @asset(group_name="sumo")
 def transformed_resource_nokeda_sumo(
-    extracted_resources_nokeda_sumo: ResourceNokeda,
+    extracted_resources_nokeda_sumo: dict[str, Any],
     extracted_primary_source_sumo: ExtractedPrimarySource,
     unit_stable_target_ids_by_synonym: dict[str, OrganizationalUnitID],
     contact_merged_ids_by_emails_sumo: dict[Email, ContactPointID],
@@ -221,7 +233,7 @@ def transformed_resource_nokeda_sumo(
 
 @asset(group_name="sumo")
 def transformed_resource_feat_sumo(
-    extracted_resources_feat_sumo: ResourceFeatModel,
+    extracted_resources_feat_sumo: dict[str, Any],
     extracted_primary_source_sumo: ExtractedPrimarySource,
     unit_stable_target_ids_by_synonym: dict[str, OrganizationalUnitID],
     contact_merged_ids_by_emails_sumo: dict[Email, ContactPointID],
