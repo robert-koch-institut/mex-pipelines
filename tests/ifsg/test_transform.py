@@ -1,3 +1,5 @@
+from typing import Any
+
 from mex.common.models import (
     ExtractedOrganization,
     ExtractedPrimarySource,
@@ -11,8 +13,6 @@ from mex.common.types import (
     OrganizationalUnitID,
     TextLanguage,
 )
-from mex.ifsg.models.ifsg_resource import IFSGResource
-from mex.ifsg.models.ifsg_variable_group import IFSGVariableGroup
 from mex.ifsg.models.meta_catalogue2item import MetaCatalogue2Item
 from mex.ifsg.models.meta_catalogue2item2schema import MetaCatalogue2Item2Schema
 from mex.ifsg.models.meta_disease import MetaDisease
@@ -30,7 +30,7 @@ from mex.ifsg.transform import (
 
 
 def test_transform_resource_parent_to_mex_resource(
-    resource_parent: IFSGResource,
+    resource_parent: dict[str, Any],
     extracted_primary_sources_ifsg: ExtractedPrimarySource,
     unit_stable_target_ids: dict[str, OrganizationalUnitID],
 ) -> None:
@@ -75,7 +75,7 @@ def test_transform_resource_parent_to_mex_resource(
 
 
 def test_transform_resource_state_to_mex_resource(
-    resource_state: IFSGResource,
+    resource_state: dict[str, Any],
     extracted_ifsg_resource_parent: ExtractedResource,
     extracted_primary_sources_ifsg: ExtractedPrimarySource,
     unit_stable_target_ids: dict[str, OrganizationalUnitID],
@@ -138,7 +138,7 @@ def test_transform_resource_state_to_mex_resource(
 
 
 def test_get_instrument_tool_or_apparatus(
-    meta_disease: list[MetaDisease], resource_disease: list[IFSGResource]
+    meta_disease: list[MetaDisease], resource_disease: list[dict[str, Any]]
 ) -> None:
     instrument_tool_or_apparatus = get_instrument_tool_or_apparatus(
         meta_disease[0], resource_disease[0]
@@ -151,7 +151,7 @@ def test_get_instrument_tool_or_apparatus(
 
 
 def test_transform_resource_disease_to_mex_resource(
-    resource_disease: IFSGResource,
+    resource_disease: dict[str, Any],
     extracted_ifsg_resource_parent: ExtractedResource,
     extracted_ifsg_resource_state: list[ExtractedResource],
     meta_type: MetaType,
@@ -224,7 +224,7 @@ def test_transform_resource_disease_to_mex_resource(
 
 
 def test_transform_ifsg_data_to_mex_variable_group(
-    ifsg_variable_group: IFSGVariableGroup,
+    ifsg_variable_group: dict[str, Any],
     extracted_ifsg_resource_disease: list[ExtractedResource],
     extracted_primary_sources_ifsg: ExtractedPrimarySource,
     meta_field: list[MetaField],
@@ -251,7 +251,7 @@ def test_transform_ifsg_data_to_mex_variable_group(
 
 def test_transform_ifsg_data_to_mex_variable(
     meta_field: list[MetaField],
-    ifsg_variable_group: IFSGVariableGroup,
+    ifsg_variable_group: dict[str, Any],
     extracted_ifsg_resource_disease: list[ExtractedResource],
     extracted_ifsg_variable_group: list[ExtractedVariableGroup],
     extracted_primary_sources_ifsg: ExtractedPrimarySource,

@@ -1,3 +1,5 @@
+from typing import Any
+
 from mex.common.models import (
     ExtractedOrganization,
     ExtractedPrimarySource,
@@ -6,8 +8,6 @@ from mex.common.models import (
     ExtractedVariableGroup,
 )
 from mex.common.types import OrganizationalUnitID, ResourceID, Text
-from mex.ifsg.models.ifsg_resource import IFSGResource
-from mex.ifsg.models.ifsg_variable_group import IFSGVariableGroup
 from mex.ifsg.models.meta_catalogue2item import MetaCatalogue2Item
 from mex.ifsg.models.meta_catalogue2item2schema import MetaCatalogue2Item2Schema
 from mex.ifsg.models.meta_disease import MetaDisease
@@ -17,14 +17,14 @@ from mex.ifsg.models.meta_type import MetaType
 
 
 def transform_resource_parent_to_mex_resource(
-    resource_parent: IFSGResource,
+    resource_parent: dict[str, Any],
     extracted_primary_source: ExtractedPrimarySource,
     unit_stable_target_ids_by_synonym: dict[str, OrganizationalUnitID],
 ) -> ExtractedResource:
     """Transform resource parent to mex resource.
 
     Args:
-        resource_parent: IFSGResource
+        resource_parent: dict[str,Any]
         extracted_primary_source: ExtractedPrimarySource
         unit_stable_target_ids_by_synonym: mapping unit strings to OrganizationalUnitID
 
@@ -33,44 +33,44 @@ def transform_resource_parent_to_mex_resource(
         transform resource parent to ExtractedResource
     """
     return ExtractedResource(
-        accessRestriction=resource_parent.access_restriction[0]["mappingRules"][0][
+        accessRestriction=resource_parent["accessRestriction"][0]["mappingRules"][0][
             "setValues"
         ],
-        accrualPeriodicity=resource_parent.accrual_periodicity[0]["mappingRules"][0][
+        accrualPeriodicity=resource_parent["accrualPeriodicity"][0]["mappingRules"][0][
             "setValues"
         ],
-        alternativeTitle=resource_parent.alternative_title[0]["mappingRules"][0][
+        alternativeTitle=resource_parent["alternativeTitle"][0]["mappingRules"][0][
             "setValues"
         ],
         contact=unit_stable_target_ids_by_synonym[
-            resource_parent.contact[0]["mappingRules"][0]["forValues"][0]
+            resource_parent["contact"][0]["mappingRules"][0]["forValues"][0]
         ],
-        description=resource_parent.description[0]["mappingRules"][0]["setValues"],
+        description=resource_parent["description"][0]["mappingRules"][0]["setValues"],
         hadPrimarySource=extracted_primary_source.stableTargetId,
-        identifierInPrimarySource=resource_parent.identifier_in_primary_source[0][
+        identifierInPrimarySource=resource_parent["identifierInPrimarySource"][0][
             "mappingRules"
         ][0]["setValues"],
-        keyword=resource_parent.keyword[0]["mappingRules"][0]["setValues"],
-        language=resource_parent.language[0]["mappingRules"][0]["setValues"],
-        publication=resource_parent.publication[0]["mappingRules"][0]["setValues"],
-        resourceTypeGeneral=resource_parent.resource_type_general[0]["mappingRules"][0][
-            "setValues"
-        ],
-        resourceTypeSpecific=resource_parent.resource_type_specific[0]["mappingRules"][
+        keyword=resource_parent["keyword"][0]["mappingRules"][0]["setValues"],
+        language=resource_parent["language"][0]["mappingRules"][0]["setValues"],
+        publication=resource_parent["publication"][0]["mappingRules"][0]["setValues"],
+        resourceTypeGeneral=resource_parent["resourceTypeGeneral"][0]["mappingRules"][
             0
         ]["setValues"],
-        rights=resource_parent.rights[0]["mappingRules"][0]["setValues"],
-        spatial=resource_parent.spatial[0]["mappingRules"][0]["setValues"],
-        theme=resource_parent.theme[0]["mappingRules"][0]["setValues"],
-        title=resource_parent.title[0]["mappingRules"][0]["setValues"],
+        resourceTypeSpecific=resource_parent["resourceTypeSpecific"][0]["mappingRules"][
+            0
+        ]["setValues"],
+        rights=resource_parent["rights"][0]["mappingRules"][0]["setValues"],
+        spatial=resource_parent["spatial"][0]["mappingRules"][0]["setValues"],
+        theme=resource_parent["theme"][0]["mappingRules"][0]["setValues"],
+        title=resource_parent["title"][0]["mappingRules"][0]["setValues"],
         unitInCharge=unit_stable_target_ids_by_synonym[
-            resource_parent.unit_in_charge[0]["mappingRules"][0]["forValues"][0]
+            resource_parent["unitInCharge"][0]["mappingRules"][0]["forValues"][0]
         ],
     )
 
 
 def transform_resource_state_to_mex_resource(
-    resource_state: IFSGResource,
+    resource_state: dict[str, Any],
     extracted_ifsg_resource_parent: ExtractedResource,
     extracted_primary_source: ExtractedPrimarySource,
     unit_stable_target_ids_by_synonym: dict[str, OrganizationalUnitID],
@@ -78,7 +78,7 @@ def transform_resource_state_to_mex_resource(
     """Transform resource state to mex resource.
 
     Args:
-        resource_state: IFSGResource
+        resource_state: dict[str,Any]
         extracted_ifsg_resource_parent: ExtractedResource
         extracted_primary_source: ExtractedPrimarySource
         unit_stable_target_ids_by_synonym: mapping unit strings to OrganizationalUnitID
@@ -89,29 +89,29 @@ def transform_resource_state_to_mex_resource(
     """
     bundesland_meldedaten_by_bundesland_id = {
         value["forValues"][0]: value["setValues"][0]
-        for value in resource_state.alternative_title[0]["mappingRules"]
+        for value in resource_state["alternativeTitle"][0]["mappingRules"]
     }
     spatial_by_bundesland_id = None
-    if resource_state.spatial:
+    if resource_state["spatial"]:
         spatial_by_bundesland_id = {
             value["forValues"][0]: value["setValues"][0]
-            for value in resource_state.spatial[0]["mappingRules"]
+            for value in resource_state["spatial"][0]["mappingRules"]
         }
     title_by_bundesland_id = {
         value["forValues"][0]: value["setValues"][0]
-        for value in resource_state.title[0]["mappingRules"]
+        for value in resource_state["title"][0]["mappingRules"]
     }
 
     publication_by_id_bundesland = {
         value["forValues"][0]: value["setValues"][0]
-        for value in resource_state.publication[1]["mappingRules"]
+        for value in resource_state["publication"][1]["mappingRules"]
     }
     mex_resource_state: list[ExtractedResource] = []
     for (
         id_bundesland,
         bundesland_meldedaten,
     ) in bundesland_meldedaten_by_bundesland_id.items():
-        publication = resource_state.publication[0]["mappingRules"][0]["setValues"]
+        publication = resource_state["publication"][0]["mappingRules"][0]["setValues"]
         if id_bundesland in publication_by_id_bundesland.keys():
             publication.append(publication_by_id_bundesland[id_bundesland])
         spatial = []
@@ -122,34 +122,34 @@ def transform_resource_state_to_mex_resource(
             spatial = spatial_by_bundesland_id[id_bundesland]
         mex_resource_state.append(
             ExtractedResource(
-                accessRestriction=resource_state.access_restriction[0]["mappingRules"][
-                    0
-                ]["setValues"],
-                accrualPeriodicity=resource_state.accrual_periodicity[0][
+                accessRestriction=resource_state["accessRestriction"][0][
+                    "mappingRules"
+                ][0]["setValues"],
+                accrualPeriodicity=resource_state["accrualPeriodicity"][0][
                     "mappingRules"
                 ][0]["setValues"],
                 alternativeTitle=bundesland_meldedaten,
                 contact=unit_stable_target_ids_by_synonym[
-                    resource_state.contact[0]["mappingRules"][0]["forValues"][0]
+                    resource_state["contact"][0]["mappingRules"][0]["forValues"][0]
                 ],
                 hadPrimarySource=extracted_primary_source.stableTargetId,
                 identifierInPrimarySource=id_bundesland,
                 isPartOf=extracted_ifsg_resource_parent.stableTargetId,
-                keyword=resource_state.keyword[0]["mappingRules"][0]["setValues"],
-                language=resource_state.language[0]["mappingRules"][0]["setValues"],
+                keyword=resource_state["keyword"][0]["mappingRules"][0]["setValues"],
+                language=resource_state["language"][0]["mappingRules"][0]["setValues"],
                 publication=publication,
-                resourceTypeGeneral=resource_state.resource_type_general[0][
+                resourceTypeGeneral=resource_state["resourceTypeGeneral"][0][
                     "mappingRules"
                 ][0]["setValues"],
-                resourceTypeSpecific=resource_state.resource_type_specific[0][
+                resourceTypeSpecific=resource_state["resourceTypeSpecific"][0][
                     "mappingRules"
                 ][0]["setValues"],
-                rights=resource_state.rights[0]["mappingRules"][0]["setValues"],
+                rights=resource_state["rights"][0]["mappingRules"][0]["setValues"],
                 spatial=spatial,
-                theme=resource_state.theme[0]["mappingRules"][0]["setValues"],
+                theme=resource_state["theme"][0]["mappingRules"][0]["setValues"],
                 title=title_by_bundesland_id[id_bundesland],
                 unitInCharge=unit_stable_target_ids_by_synonym[
-                    resource_state.unit_in_charge[0]["mappingRules"][0]["forValues"][0]
+                    resource_state["unitInCharge"][0]["mappingRules"][0]["forValues"][0]
                 ],
             )
         )
@@ -157,20 +157,20 @@ def transform_resource_state_to_mex_resource(
 
 
 def get_instrument_tool_or_apparatus(
-    meta_disease: MetaDisease, resource_disease: IFSGResource
+    meta_disease: MetaDisease, resource_disease: dict[str, Any]
 ) -> list[Text]:
     """Calculate instrument_tool_or_apparatus for MetaDisease reference definitions.
 
     Args:
         meta_disease: MetaDisease
-        resource_disease: IFSGResource
+        resource_disease: dict[str,Any]
 
     Returns:
         instrument_tool_or_apparatus list
     """
     instrument_tool_or_apparatus_by_reference = {
         value["forValues"][0]: value["setValues"][0]
-        for value in resource_disease.instrument_tool_or_apparatus[0]["mappingRules"]
+        for value in resource_disease["instrumentToolOrApparatus"][0]["mappingRules"]
     }
     instrument_tool_or_apparatus: list[Text] = []
     if meta_disease.reference_def_a:
@@ -197,7 +197,7 @@ def get_instrument_tool_or_apparatus(
 
 
 def transform_resource_disease_to_mex_resource(
-    resource_disease: IFSGResource,
+    resource_disease: dict[str, Any],
     extracted_ifsg_resource_parent: ExtractedResource,
     extracted_ifsg_resource_state: list[ExtractedResource],
     meta_disease: list[MetaDisease],
@@ -210,7 +210,7 @@ def transform_resource_disease_to_mex_resource(
     """Transform resource disease to mex resource.
 
     Args:
-        resource_disease: IFSGResource
+        resource_disease: dict[str,Any]
         extracted_ifsg_resource_parent: ExtractedResource
         extracted_ifsg_resource_state: ExtractedResource
         meta_disease: MetaDisease
@@ -229,7 +229,7 @@ def transform_resource_disease_to_mex_resource(
     mex_resource_disease: list[ExtractedResource] = []
     bundesland_by_in_bundesland = {
         value["forValues"][0]: value["setValues"][0]
-        for value in resource_disease.spatial[1]["mappingRules"]
+        for value in resource_disease["spatial"][1]["mappingRules"]
     }
     stable_target_id_by_bundesland_id = {
         value.identifierInPrimarySource: value.stableTargetId
@@ -255,7 +255,7 @@ def transform_resource_disease_to_mex_resource(
 
 def transform_resource_disease_to_mex_resource_row(
     id_type: int,
-    resource_disease: IFSGResource,
+    resource_disease: dict[str, Any],
     extracted_ifsg_resource_parent: ExtractedResource,
     extracted_primary_source: ExtractedPrimarySource,
     stable_target_id_by_bundesland_id: dict[str, ResourceID],
@@ -269,7 +269,7 @@ def transform_resource_disease_to_mex_resource_row(
 
     Args:
         id_type: id_type of Resource row
-        resource_disease: IFSGResource
+        resource_disease: dict[str,Any]
         extracted_ifsg_resource_parent: ExtractedResource
         extracted_primary_source: ExtractedPrimarySource
         stable_target_id_by_bundesland_id: stable target id ti bundesland_id map
@@ -306,22 +306,22 @@ def transform_resource_disease_to_mex_resource_row(
 
     spatial = []
     if meta_disease_row.ifsg_bundesland == 0:
-        spatial = resource_disease.spatial[0]["mappingRules"][0]["setValues"]
+        spatial = resource_disease["spatial"][0]["mappingRules"][0]["setValues"]
     elif meta_disease_row.ifsg_bundesland == 1 and meta_disease_row.in_bundesland:
         for bundesland_id in meta_disease_row.in_bundesland.split(","):
             if bundesland_id in bundesland_by_in_bundesland.keys():
                 spatial.append(bundesland_by_in_bundesland[bundesland_id])
 
     return ExtractedResource(
-        accessRestriction=resource_disease.access_restriction[0]["mappingRules"][0][
+        accessRestriction=resource_disease["accessRestriction"][0]["mappingRules"][0][
             "setValues"
         ],
-        accrualPeriodicity=resource_disease.accrual_periodicity[0]["mappingRules"][0][
+        accrualPeriodicity=resource_disease["accrualPeriodicity"][0]["mappingRules"][0][
             "setValues"
         ],
         alternativeTitle=code_by_id_type[id_type],
         contact=unit_stable_target_ids_by_synonym[
-            resource_disease.contact[0]["mappingRules"][0]["forValues"][0]
+            resource_disease["contact"][0]["mappingRules"][0]["forValues"][0]
         ],
         hadPrimarySource=extracted_primary_source.stableTargetId,
         icd10code=[i for i in icd10code if i],
@@ -329,27 +329,27 @@ def transform_resource_disease_to_mex_resource_row(
         instrumentToolOrApparatus=instrument_tool_or_apparatus,
         isPartOf=is_part_of,
         keyword=keyword,
-        language=resource_disease.language[0]["mappingRules"][0]["setValues"],
-        publication=resource_disease.publication[0]["mappingRules"][0]["setValues"],
+        language=resource_disease["language"][0]["mappingRules"][0]["setValues"],
+        publication=resource_disease["publication"][0]["mappingRules"][0]["setValues"],
         publisher=extracted_organization_rki.stableTargetId,
-        resourceTypeGeneral=resource_disease.resource_type_general[0]["mappingRules"][
+        resourceTypeGeneral=resource_disease["resourceTypeGeneral"][0]["mappingRules"][
             0
         ]["setValues"],
-        resourceTypeSpecific=resource_disease.resource_type_specific[0]["mappingRules"][
-            0
-        ]["setValues"],
-        rights=resource_disease.rights[0]["mappingRules"][0]["setValues"],
+        resourceTypeSpecific=resource_disease["resourceTypeSpecific"][0][
+            "mappingRules"
+        ][0]["setValues"],
+        rights=resource_disease["rights"][0]["mappingRules"][0]["setValues"],
         spatial=spatial,
-        theme=resource_disease.theme[0]["mappingRules"][0]["setValues"],
+        theme=resource_disease["theme"][0]["mappingRules"][0]["setValues"],
         title=f"Meldedaten nach Infektionsschutzgesetz (IfSG) zu {name}",
         unitInCharge=unit_stable_target_ids_by_synonym[
-            resource_disease.unit_in_charge[0]["mappingRules"][0]["forValues"][0]
+            resource_disease["unitInCharge"][0]["mappingRules"][0]["forValues"][0]
         ],
     )
 
 
 def transform_ifsg_data_to_mex_variable_group(
-    resource_variable_group: IFSGVariableGroup,
+    resource_variable_group: dict[str, Any],
     extracted_ifsg_resource_disease: list[ExtractedResource],
     extracted_primary_source: ExtractedPrimarySource,
     meta_field: list[MetaField],
@@ -358,7 +358,7 @@ def transform_ifsg_data_to_mex_variable_group(
     """Transform ifsg data to mex VariableGroup.
 
     Args:
-        resource_variable_group: IFSGVariableGroup
+        resource_variable_group: dict[str,Any]
         extracted_ifsg_resource_disease: ExtractedResource disease list
         extracted_primary_source: ExtractedPrimarySource
         meta_field: MetaField list
@@ -380,7 +380,7 @@ def transform_ifsg_data_to_mex_variable_group(
     }
     label_by_statement_area_group = {
         row["forValues"][0]: row["setValues"][0]
-        for row in resource_variable_group.label[0]["mappingRules"]
+        for row in resource_variable_group["label"][0]["mappingRules"]
     }
     extracted_variable_groups = []
     for identifier_in_primary_source in identifier_in_primary_source_unique_list:
@@ -401,7 +401,7 @@ def transform_ifsg_data_to_mex_variable_group(
 
 def transform_ifsg_data_to_mex_variables(
     filtered_variables: list[MetaField],
-    ifsg_variable_group: IFSGVariableGroup,
+    ifsg_variable_group: dict[str, Any],
     extracted_ifsg_resource_disease: list[ExtractedResource],
     extracted_ifsg_variable_group: list[ExtractedVariableGroup],
     extracted_primary_sources_ifsg: ExtractedPrimarySource,
@@ -413,7 +413,7 @@ def transform_ifsg_data_to_mex_variables(
 
     Args:
         filtered_variables: MetaField list to transform into variables
-        ifsg_variable_group: IFSGVariableGroup
+        ifsg_variable_group: dict[str,Any]
         extracted_ifsg_resource_disease: ExtractedResource disease list
         extracted_ifsg_variable_group: variable group default values
         extracted_primary_sources_ifsg: ExtractedPrimarySource
@@ -429,7 +429,7 @@ def transform_ifsg_data_to_mex_variables(
     }
     label_by_statement_area_group = {
         row["forValues"][0]: row["setValues"][0]["value"]
-        for row in ifsg_variable_group.label[0]["mappingRules"]
+        for row in ifsg_variable_group["label"][0]["mappingRules"]
     }
     resource_disease_stable_target_id_by_id_type = {
         int(row.identifierInPrimarySource): row.stableTargetId
