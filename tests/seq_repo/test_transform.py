@@ -11,7 +11,7 @@ from mex.common.types import (
     TextLanguage,
     Timestamp,
 )
-from mex.seq_repo.models.source import SeqRepoSource
+from mex.seq_repo.model import SeqRepoSource
 from mex.seq_repo.transform import (
     transform_seq_repo_access_platform_to_extracted_access_platform,
     transform_seq_repo_activities_to_extracted_activities,

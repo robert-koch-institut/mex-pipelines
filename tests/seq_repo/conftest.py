@@ -14,7 +14,7 @@ from mex.common.primary_source.transform import (
     transform_seed_primary_sources_to_extracted_primary_sources,
 )
 from mex.seq_repo.filter import filter_sources_on_latest_sequencing_date
-from mex.seq_repo.models.source import SeqRepoSource
+from mex.seq_repo.model import SeqRepoSource
 from mex.seq_repo.settings import SeqRepoSettings
 from mex.seq_repo.transform import (
     transform_seq_repo_access_platform_to_extracted_access_platform,

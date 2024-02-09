@@ -1,7 +1,7 @@
 import json
 from typing import Generator
 
-from mex.seq_repo.models import (
+from mex.seq_repo.model import (
     SeqRepoSource,
 )
 from mex.seq_repo.settings import SeqRepoSettings

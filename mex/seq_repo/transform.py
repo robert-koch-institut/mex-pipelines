@@ -8,7 +8,7 @@ from mex.common.models import (
     ExtractedResource,
 )
 from mex.common.types import Identifier
-from mex.seq_repo.models.source import SeqRepoSource
+from mex.seq_repo.model import SeqRepoSource
 
 
 def transform_seq_repo_activities_to_extracted_activities(
