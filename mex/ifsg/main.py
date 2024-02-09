@@ -150,7 +150,7 @@ def resource_disease() -> dict[str, Any]:
     settings = IFSGSettings.get()
     return extract_mapping_model(
         settings.mapping_path / "resource_disease.yaml", ExtractedResource
-    ).model_dump()
+    )
 
 
 @asset(group_name="ifsg")
@@ -159,7 +159,7 @@ def resource_parent() -> dict[str, Any]:
     settings = IFSGSettings.get()
     return extract_mapping_model(
         settings.mapping_path / "resource_parent.yaml", ExtractedResource
-    ).model_dump()
+    )
 
 
 @asset(group_name="ifsg")
@@ -168,7 +168,7 @@ def resource_state() -> dict[str, Any]:
     settings = IFSGSettings.get()
     return extract_mapping_model(
         settings.mapping_path / "resource_state.yaml", ExtractedResource
-    ).model_dump()
+    )
 
 
 @asset(group_name="ifsg")
@@ -178,7 +178,7 @@ def ifsg_variable_group() -> dict[str, Any]:
     return extract_mapping_model(
         settings.mapping_path / "variable-group.yaml",
         ExtractedVariableGroup,
-    ).model_dump()
+    )
 
 
 @asset(group_name="ifsg")

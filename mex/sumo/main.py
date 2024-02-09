@@ -82,7 +82,7 @@ def transformed_sumo_access_platform(
     sumo_access_platform = extract_mapping_model(
         settings.mapping_path / "access-platform.yaml",
         ExtractedAccessPlatform,
-    ).model_dump()
+    )
     ldap_contact_points_access_platform = extract_ldap_contact_points_by_name(
         sumo_access_platform
     )
@@ -138,7 +138,7 @@ def transformed_activity_sumo(
     settings = SumoSettings.get()
     sumo_activity = extract_mapping_model(
         settings.mapping_path / "activity.yaml", ExtractedActivity
-    ).model_dump()
+    )
     transformed_activity = transform_sumo_activity_to_extracted_activity(
         sumo_activity,
         unit_stable_target_ids_by_synonym,
@@ -155,7 +155,7 @@ def extracted_resources_nokeda_sumo() -> dict[str, Any]:
     settings = SumoSettings.get()
     return extract_mapping_model(
         settings.mapping_path / "resource_nokeda.yaml", ExtractedResource
-    ).model_dump()
+    )
 
 
 @asset(group_name="sumo")
@@ -165,7 +165,7 @@ def extracted_resources_feat_sumo() -> dict[str, Any]:
     return extract_mapping_model(
         settings.mapping_path / "resource_feat-model.yaml",
         ExtractedResource,
-    ).model_dump()
+    )
 
 
 @asset(group_name="sumo")

@@ -64,7 +64,7 @@ def extracted_activity(
     settings = SeqRepoSettings.get()
     activity = extract_mapping_model(
         settings.mapping_path / "activity.yaml", ExtractedActivity
-    ).model_dump()
+    )
     mex_activities = transform_seq_repo_activities_to_extracted_activities(
         seq_repo_latest_source, activity, extracted_primary_source_seq_repo
     )
@@ -86,7 +86,7 @@ def extracted_access_platform(
     access_platform = extract_mapping_model(
         settings.mapping_path / "access-platform.yaml",
         ExtractedAccessPlatform,
-    ).model_dump()
+    )
     mex_access_platform = (
         transform_seq_repo_access_platform_to_extracted_access_platform(
             access_platform,
@@ -109,7 +109,7 @@ def extracted_distribution(
     distribution = extract_mapping_model(
         settings.mapping_path / "distribution.yaml",
         ExtractedDistribution,
-    ).model_dump()
+    )
     mex_distributions = transform_seq_repo_distribution_to_extracted_distribution(
         seq_repo_latest_source,
         distribution,
@@ -137,7 +137,7 @@ def seq_repo_resource(
     resource = extract_mapping_model(
         settings.mapping_path / "resource.yaml",
         ExtractedResource,
-    ).model_dump()
+    )
 
     mex_resources = transform_seq_repo_resource_to_extracted_resource(
         seq_repo_latest_source,

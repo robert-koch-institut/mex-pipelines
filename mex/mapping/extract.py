@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Any
 
 import yaml
 from pydantic import BaseModel
@@ -6,7 +7,7 @@ from pydantic import BaseModel
 from mex.common.models.mapping import MAPPING_MODEL_BY_EXTRACTED_CLASS_NAME
 
 
-def extract_mapping_model(path: Path, model_type: type[BaseModel]) -> BaseModel:
+def extract_mapping_model(path: Path, model_type: type[BaseModel]) -> dict[str, Any]:
     """Return a mapping model with default values.
 
     Args:
@@ -19,4 +20,4 @@ def extract_mapping_model(path: Path, model_type: type[BaseModel]) -> BaseModel:
     model = MAPPING_MODEL_BY_EXTRACTED_CLASS_NAME[model_type.__name__]
     with open(path, "r", encoding="utf-8") as f:
         yaml_model = yaml.safe_load(f)
-    return model.model_validate(yaml_model)
+    return model.model_validate(yaml_model).model_dump()
