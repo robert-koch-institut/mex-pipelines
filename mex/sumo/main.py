@@ -22,7 +22,7 @@ from mex.common.types import ContactPointID, Email, OrganizationalUnitID
 from mex.common.wikidata.transform import (
     transform_wikidata_organizations_to_extracted_organizations,
 )
-from mex.mapping.extract import extract_mapping_model
+from mex.mapping.extract import extract_mapping_data
 from mex.pipeline import asset, run_job_in_process
 from mex.sinks import load
 from mex.sumo.extract import (
@@ -79,7 +79,7 @@ def transformed_sumo_access_platform(
 ) -> None:
     """Transform and load SUMO access platform and related LDAP actors."""
     settings = SumoSettings.get()
-    sumo_access_platform = extract_mapping_model(
+    sumo_access_platform = extract_mapping_data(
         settings.mapping_path / "access-platform.yaml",
         ExtractedAccessPlatform,
     )
@@ -136,7 +136,7 @@ def transformed_activity_sumo(
 ) -> ExtractedActivity:
     """Extract, transform and load SUMO activity."""
     settings = SumoSettings.get()
-    sumo_activity = extract_mapping_model(
+    sumo_activity = extract_mapping_data(
         settings.mapping_path / "activity.yaml", ExtractedActivity
     )
     transformed_activity = transform_sumo_activity_to_extracted_activity(
@@ -153,7 +153,7 @@ def transformed_activity_sumo(
 def extracted_resources_nokeda_sumo() -> dict[str, Any]:
     """Extract Nokeda Resource from SUMO."""
     settings = SumoSettings.get()
-    return extract_mapping_model(
+    return extract_mapping_data(
         settings.mapping_path / "resource_nokeda.yaml", ExtractedResource
     )
 
@@ -162,7 +162,7 @@ def extracted_resources_nokeda_sumo() -> dict[str, Any]:
 def extracted_resources_feat_sumo() -> dict[str, Any]:
     """Extract Resource feat from SUMO."""
     settings = SumoSettings.get()
-    return extract_mapping_model(
+    return extract_mapping_data(
         settings.mapping_path / "resource_feat-model.yaml",
         ExtractedResource,
     )

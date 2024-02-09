@@ -7,7 +7,7 @@ from pydantic import BaseModel
 from mex.common.models.mapping import MAPPING_MODEL_BY_EXTRACTED_CLASS_NAME
 
 
-def extract_mapping_model(path: Path, model_type: type[BaseModel]) -> dict[str, Any]:
+def extract_mapping_data(path: Path, model_type: type[BaseModel]) -> dict[str, Any]:
     """Return a mapping model with default values.
 
     Args:
