@@ -11,7 +11,6 @@ from mex.common.models import (
 from mex.common.primary_source.transform import (
     get_primary_sources_by_name,
 )
-from mex.common.types import AssetsPath
 from mex.mapping.extract import extract_mapping_model
 from mex.pipeline import asset, run_job_in_process
 from mex.seq_repo.extract import (
@@ -64,7 +63,7 @@ def extracted_activity(
     """Extract activities from Seq-Repo."""
     settings = SeqRepoSettings.get()
     activity = extract_mapping_model(
-        AssetsPath(settings.mapping_path / "activity.yaml"), ExtractedActivity
+        settings.mapping_path / "activity.yaml", ExtractedActivity
     ).model_dump()
     mex_activities = transform_seq_repo_activities_to_extracted_activities(
         seq_repo_latest_source, activity, extracted_primary_source_seq_repo
@@ -85,7 +84,7 @@ def extracted_access_platform(
     """Extract access platform from Seq-Repo."""
     settings = SeqRepoSettings.get()
     access_platform = extract_mapping_model(
-        AssetsPath(settings.mapping_path / "access-platform.yaml"),
+        settings.mapping_path / "access-platform.yaml",
         ExtractedAccessPlatform,
     ).model_dump()
     mex_access_platform = (
@@ -108,7 +107,7 @@ def extracted_distribution(
     """Extract distribution from Seq-Repo."""
     settings = SeqRepoSettings.get()
     distribution = extract_mapping_model(
-        AssetsPath(settings.mapping_path / "distribution.yaml"),
+        settings.mapping_path / "distribution.yaml",
         ExtractedDistribution,
     ).model_dump()
     mex_distributions = transform_seq_repo_distribution_to_extracted_distribution(
@@ -136,7 +135,7 @@ def seq_repo_resource(
     """Extract resource from Seq-Repo."""
     settings = SeqRepoSettings.get()
     resource = extract_mapping_model(
-        AssetsPath(settings.mapping_path / "resource.yaml"),
+        settings.mapping_path / "resource.yaml",
         ExtractedResource,
     ).model_dump()
 

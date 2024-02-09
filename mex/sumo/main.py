@@ -18,7 +18,7 @@ from mex.common.models import (
 from mex.common.primary_source.transform import (
     get_primary_sources_by_name,
 )
-from mex.common.types import AssetsPath, ContactPointID, Email, OrganizationalUnitID
+from mex.common.types import ContactPointID, Email, OrganizationalUnitID
 from mex.common.wikidata.transform import (
     transform_wikidata_organizations_to_extracted_organizations,
 )
@@ -80,7 +80,7 @@ def transformed_sumo_access_platform(
     """Transform and load SUMO access platform and related LDAP actors."""
     settings = SumoSettings.get()
     sumo_access_platform = extract_mapping_model(
-        AssetsPath(settings.mapping_path / "access-platform.yaml"),
+        settings.mapping_path / "access-platform.yaml",
         ExtractedAccessPlatform,
     ).model_dump()
     ldap_contact_points_access_platform = extract_ldap_contact_points_by_name(
@@ -137,7 +137,7 @@ def transformed_activity_sumo(
     """Extract, transform and load SUMO activity."""
     settings = SumoSettings.get()
     sumo_activity = extract_mapping_model(
-        AssetsPath(settings.mapping_path / "activity.yaml"), ExtractedActivity
+        settings.mapping_path / "activity.yaml", ExtractedActivity
     ).model_dump()
     transformed_activity = transform_sumo_activity_to_extracted_activity(
         sumo_activity,
@@ -154,7 +154,7 @@ def extracted_resources_nokeda_sumo() -> dict[str, Any]:
     """Extract Nokeda Resource from SUMO."""
     settings = SumoSettings.get()
     return extract_mapping_model(
-        AssetsPath(settings.mapping_path / "resource_nokeda.yaml"), ExtractedResource
+        settings.mapping_path / "resource_nokeda.yaml", ExtractedResource
     ).model_dump()
 
 
@@ -163,7 +163,7 @@ def extracted_resources_feat_sumo() -> dict[str, Any]:
     """Extract Resource feat from SUMO."""
     settings = SumoSettings.get()
     return extract_mapping_model(
-        AssetsPath(settings.mapping_path / "resource_feat-model.yaml"),
+        settings.mapping_path / "resource_feat-model.yaml",
         ExtractedResource,
     ).model_dump()
 

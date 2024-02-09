@@ -10,7 +10,7 @@ from mex.common.models import (
 from mex.common.primary_source.transform import (
     get_primary_sources_by_name,
 )
-from mex.common.types import AssetsPath, OrganizationalUnitID
+from mex.common.types import OrganizationalUnitID
 from mex.ifsg.extract import (
     extract_sql_table,
 )
@@ -149,7 +149,7 @@ def resource_disease() -> dict[str, Any]:
     """Extract `resource_disease` default values."""
     settings = IFSGSettings.get()
     return extract_mapping_model(
-        AssetsPath(settings.mapping_path / "resource_disease.yaml"), ExtractedResource
+        settings.mapping_path / "resource_disease.yaml", ExtractedResource
     ).model_dump()
 
 
@@ -158,7 +158,7 @@ def resource_parent() -> dict[str, Any]:
     """Extract `resource_parent` default values."""
     settings = IFSGSettings.get()
     return extract_mapping_model(
-        AssetsPath(settings.mapping_path / "resource_parent.yaml"), ExtractedResource
+        settings.mapping_path / "resource_parent.yaml", ExtractedResource
     ).model_dump()
 
 
@@ -167,7 +167,7 @@ def resource_state() -> dict[str, Any]:
     """Extract `resource_state` default values."""
     settings = IFSGSettings.get()
     return extract_mapping_model(
-        AssetsPath(settings.mapping_path / "resource_state.yaml"), ExtractedResource
+        settings.mapping_path / "resource_state.yaml", ExtractedResource
     ).model_dump()
 
 
@@ -176,7 +176,7 @@ def ifsg_variable_group() -> dict[str, Any]:
     """Extract `IFSGVariableGroup` default values."""
     settings = IFSGSettings.get()
     return extract_mapping_model(
-        AssetsPath(settings.mapping_path / "variable-group.yaml"),
+        settings.mapping_path / "variable-group.yaml",
         ExtractedVariableGroup,
     ).model_dump()
 
