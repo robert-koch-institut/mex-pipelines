@@ -334,7 +334,7 @@ def ifsg_variable_group() -> dict[str, Any]:
                         "setValues": [
                             {
                                 "language": "de",
-                                "value": "Epidemiologische " "Informationen",
+                                "value": "Epidemiologische Informationen",
                             }
                         ],
                     },
@@ -347,13 +347,13 @@ def ifsg_variable_group() -> dict[str, Any]:
                     {
                         "forValues": ["Clinical"],
                         "setValues": [
-                            {"language": "de", "value": "Klinische " "Informationen"}
+                            {"language": "de", "value": "Klinische Informationen"}
                         ],
                     },
                     {
                         "forValues": ["Outbreak"],
                         "setValues": [
-                            {"language": "de", "value": "Informationen zum " "Ausbruch"}
+                            {"language": "de", "value": "Informationen zum Ausbruch"}
                         ],
                     },
                     {
@@ -365,13 +365,13 @@ def ifsg_variable_group() -> dict[str, Any]:
                     {
                         "forValues": ["Event"],
                         "setValues": [
-                            {"language": "de", "value": "Informationen zum " "Ereignis"}
+                            {"language": "de", "value": "Informationen zum Ereignis"}
                         ],
                     },
                     {
                         "forValues": ["General"],
                         "setValues": [
-                            {"language": "de", "value": "Administrative " "Angaben"}
+                            {"language": "de", "value": "Administrative Angaben"}
                         ],
                     },
                     {
@@ -417,7 +417,7 @@ def resource_parent() -> dict[str, Any]:
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
-                    {"setValues": [{"language": "de", "value": "IfSG " "Meldedaten"}]}
+                    {"setValues": [{"language": "de", "value": "IfSG Meldedaten"}]}
                 ],
             }
         ],
@@ -439,7 +439,7 @@ def resource_parent() -> dict[str, Any]:
                 "mappingRules": [
                     {
                         "setValues": [
-                            {"language": "de", "value": "Das " "Infektionsschutzgesetz"}
+                            {"language": "de", "value": "Das Infektionsschutzgesetz"}
                         ]
                     }
                 ],
@@ -449,7 +449,7 @@ def resource_parent() -> dict[str, Any]:
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
-                    {"rule": "Use value as " "indicated.", "setValues": ["ifsg-parent"]}
+                    {"rule": "Use value as indicated.", "setValues": ["ifsg-parent"]}
                 ],
             }
         ],
@@ -483,7 +483,7 @@ def resource_parent() -> dict[str, Any]:
                         "setValues": [
                             {
                                 "language": "de",
-                                "title": "Infektionsepidemiologisches " "Jahrbuch",
+                                "title": "Infektionsepidemiologisches Jahrbuch",
                                 "url": "https://www.rki.de/DE/Content/Infekt/Jahrbuch/jahrbuch_node.html",
                             }
                         ]
@@ -492,7 +492,7 @@ def resource_parent() -> dict[str, Any]:
                         "setValues": [
                             {
                                 "language": "de",
-                                "title": "Epidemiologisches " "Bulletin",
+                                "title": "Epidemiologisches Bulletin",
                                 "url": "https://www.rki.de/DE/Content/Infekt/EpidBull/epid_bull_node.html",
                             }
                         ]
@@ -617,14 +617,14 @@ def resource_state() -> list[dict[str, Any]]:
                             "setValues": [
                                 {
                                     "language": "de",
-                                    "value": "Meldedaten " "Schleswig-Holstein",
+                                    "value": "Meldedaten Schleswig-Holstein",
                                 }
                             ],
                         },
                         {
                             "forValues": ["02"],
                             "setValues": [
-                                {"language": "de", "value": "Meldedaten " "Hamburg"}
+                                {"language": "de", "value": "Meldedaten Hamburg"}
                             ],
                         },
                     ],
@@ -708,12 +708,12 @@ def resource_state() -> list[dict[str, Any]]:
                             "setValues": [
                                 {
                                     "language": "de",
-                                    "title": "Infektionsepidemiologisches " "Jahrbuch",
+                                    "title": "Infektionsepidemiologisches Jahrbuch",
                                     "url": "https://www.rki.de/DE/Content/Infekt/Jahrbuch/jahrbuch_node.html",
                                 },
                                 {
                                     "language": "de",
-                                    "title": "Epidemiologisches " "Bulletin",
+                                    "title": "Epidemiologisches Bulletin",
                                     "url": "https://www.rki.de/DE/Content/Infekt/EpidBull/epid_bull_node.html",
                                 },
                                 {
@@ -1076,14 +1076,14 @@ def resource_state() -> list[dict[str, Any]]:
                             "setValues": [
                                 {
                                     "language": "de",
-                                    "value": "Meldedaten " "Schleswig-Holstein",
+                                    "value": "Meldedaten Schleswig-Holstein",
                                 }
                             ],
                         },
                         {
                             "forValues": ["02"],
                             "setValues": [
-                                {"language": "de", "value": "Meldedaten " "Hamburg"}
+                                {"language": "de", "value": "Meldedaten Hamburg"}
                             ],
                         },
                     ],
@@ -1167,12 +1167,12 @@ def resource_state() -> list[dict[str, Any]]:
                             "setValues": [
                                 {
                                     "language": "de",
-                                    "title": "Infektionsepidemiologisches " "Jahrbuch",
+                                    "title": "Infektionsepidemiologisches Jahrbuch",
                                     "url": "https://www.rki.de/DE/Content/Infekt/Jahrbuch/jahrbuch_node.html",
                                 },
                                 {
                                     "language": "de",
-                                    "title": "Epidemiologisches " "Bulletin",
+                                    "title": "Epidemiologisches Bulletin",
                                     "url": "https://www.rki.de/DE/Content/Infekt/EpidBull/epid_bull_node.html",
                                 },
                                 {
@@ -1537,7 +1537,7 @@ def resource_disease() -> list[dict[str, Any]]:
                     "fieldInPrimarySource": "Code",
                     "locationInPrimarySource": "Meta.Disease",
                     "mappingRules": [
-                        {"rule": "Use value as it is. Do not " "assign a language."}
+                        {"rule": "Use value as it is. Do not assign a language."}
                     ],
                 }
             ],
@@ -1559,7 +1559,7 @@ def resource_disease() -> list[dict[str, Any]]:
                     "examplesInPrimarySource": ["102"],
                     "fieldInPrimarySource": "IdType",
                     "locationInPrimarySource": "Meta.Disease",
-                    "mappingRules": [{"rule": "Use value as it " "is."}],
+                    "mappingRules": [{"rule": "Use value as it is."}],
                 }
             ],
             "instrumentToolOrApparatus": [
@@ -1570,31 +1570,31 @@ def resource_disease() -> list[dict[str, Any]]:
                         {
                             "forValues": ["A=1"],
                             "setValues": [
-                                {"language": "de", "value": "Falldefinition " "A"}
+                                {"language": "de", "value": "Falldefinition A"}
                             ],
                         },
                         {
                             "forValues": ["B=1"],
                             "setValues": [
-                                {"language": "de", "value": "Falldefinition " "B"}
+                                {"language": "de", "value": "Falldefinition B"}
                             ],
                         },
                         {
                             "forValues": ["C=1"],
                             "setValues": [
-                                {"language": "de", "value": "Falldefinition " "C"}
+                                {"language": "de", "value": "Falldefinition C"}
                             ],
                         },
                         {
                             "forValues": ["D=1"],
                             "setValues": [
-                                {"language": "de", "value": "Falldefinition " "D"}
+                                {"language": "de", "value": "Falldefinition D"}
                             ],
                         },
                         {
                             "forValues": ["E=1"],
                             "setValues": [
-                                {"language": "de", "value": "Falldefinition " "E"}
+                                {"language": "de", "value": "Falldefinition E"}
                             ],
                         },
                     ],
@@ -1725,7 +1725,7 @@ def resource_disease() -> list[dict[str, Any]]:
                     "fieldInPrimarySource": "SpecimenName",
                     "locationInPrimarySource": "Meta.Disease",
                     "mappingRules": [
-                        {"rule": "Use value as it is. Use language " "detection."}
+                        {"rule": "Use value as it is. Use language detection."}
                     ],
                 },
             ],
@@ -1913,7 +1913,7 @@ def resource_disease() -> list[dict[str, Any]]:
                     "fieldInPrimarySource": "Code",
                     "locationInPrimarySource": "Meta.Disease",
                     "mappingRules": [
-                        {"rule": "Use value as it is. Do not " "assign a language."}
+                        {"rule": "Use value as it is. Do not assign a language."}
                     ],
                 }
             ],
@@ -1935,7 +1935,7 @@ def resource_disease() -> list[dict[str, Any]]:
                     "examplesInPrimarySource": ["102"],
                     "fieldInPrimarySource": "IdType",
                     "locationInPrimarySource": "Meta.Disease",
-                    "mappingRules": [{"rule": "Use value as it " "is."}],
+                    "mappingRules": [{"rule": "Use value as it is."}],
                 }
             ],
             "instrumentToolOrApparatus": [
@@ -1946,31 +1946,31 @@ def resource_disease() -> list[dict[str, Any]]:
                         {
                             "forValues": ["A=1"],
                             "setValues": [
-                                {"language": "de", "value": "Falldefinition " "A"}
+                                {"language": "de", "value": "Falldefinition A"}
                             ],
                         },
                         {
                             "forValues": ["B=1"],
                             "setValues": [
-                                {"language": "de", "value": "Falldefinition " "B"}
+                                {"language": "de", "value": "Falldefinition B"}
                             ],
                         },
                         {
                             "forValues": ["C=1"],
                             "setValues": [
-                                {"language": "de", "value": "Falldefinition " "C"}
+                                {"language": "de", "value": "Falldefinition C"}
                             ],
                         },
                         {
                             "forValues": ["D=1"],
                             "setValues": [
-                                {"language": "de", "value": "Falldefinition " "D"}
+                                {"language": "de", "value": "Falldefinition D"}
                             ],
                         },
                         {
                             "forValues": ["E=1"],
                             "setValues": [
-                                {"language": "de", "value": "Falldefinition " "E"}
+                                {"language": "de", "value": "Falldefinition E"}
                             ],
                         },
                     ],
@@ -2101,7 +2101,7 @@ def resource_disease() -> list[dict[str, Any]]:
                     "fieldInPrimarySource": "SpecimenName",
                     "locationInPrimarySource": "Meta.Disease",
                     "mappingRules": [
-                        {"rule": "Use value as it is. Use language " "detection."}
+                        {"rule": "Use value as it is. Use language detection."}
                     ],
                 },
             ],
