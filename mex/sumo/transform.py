@@ -86,7 +86,7 @@ def transform_resource_feat_model_to_mex_resource(
     """Transform ResourceFeatModel to ExtractedResource.
 
     Args:
-        extracted_sumo_resource_feat: dict[str,Any]
+        extracted_sumo_resource_feat: extracted_sumo_resource_feat default values
         extracted_primary_source: Extracted primary source
         unit_merged_ids_by_synonym: Mapping from synonyms to merged IDs of units
         contact_merged_ids_by_emails: Mapping from emails to merged IDs of contact
@@ -154,7 +154,7 @@ def transform_resource_nokeda_to_mex_resource(
     """Transform ResourceNokeda to ExtractedResource.
 
     Args:
-        extracted_sumo_resource_nokeda: dict[str.Any]
+        extracted_sumo_resource_nokeda: extracted_sumo_resource_nokeda default values
         extracted_primary_source: Extracted primary source
         unit_merged_ids_by_synonym: Mapping from synonyms to merged IDs of units
         contact_merged_ids_by_emails: Mapping from emails to merged IDs of contact
@@ -501,7 +501,7 @@ def transform_sumo_access_platform_to_mex_access_platform(
     """Transform sumo access platform info to ExtractedAccessPlatform.
 
     Args:
-        sumo_access_platform: dict[str,Any]
+        sumo_access_platform: sumo_access_platform default values
         unit_merged_ids_by_synonym: Mapping from synonyms to merged IDs of units
         person_stable_target_ids_by_query_string: Mapping from contact person query to
                                                   person stable target ID
@@ -549,7 +549,7 @@ def transform_sumo_activity_to_extracted_activity(
     """Transform sumo activity to ExtractedActivity.
 
     Args:
-        sumo_activity: SumoActivity instance
+        sumo_activity: sumo_activity default values
         unit_merged_ids_by_synonym: Mapping from synonyms to merged IDs of units
         contact_merged_ids_by_emails: Mapping from contact person query to
                                       person stable target ID

@@ -15,7 +15,7 @@ def extract_mapping_data(path: Path, model_type: type[BaseModel]) -> dict[str, A
         model_type: model type of BaseModel to be extracted
 
     Returns:
-        dict with mapping model
+        dict with mapping default value data from specified path
     """
     model = MAPPING_MODEL_BY_EXTRACTED_CLASS_NAME[model_type.__name__]
     with open(path, "r", encoding="utf-8") as f:

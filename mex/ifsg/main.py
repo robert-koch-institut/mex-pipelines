@@ -173,7 +173,7 @@ def resource_state() -> dict[str, Any]:
 
 @asset(group_name="ifsg")
 def ifsg_variable_group() -> dict[str, Any]:
-    """Extract `IFSGVariableGroup` default values."""
+    """Extract `ifsg_variable_group` default values."""
     settings = IFSGSettings.get()
     return extract_mapping_data(
         settings.mapping_path / "variable-group.yaml",
