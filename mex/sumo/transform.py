@@ -83,7 +83,7 @@ def transform_resource_feat_model_to_mex_resource(
     mex_resource_nokeda: ExtractedResource,
     transformed_activity: ExtractedActivity,
 ) -> ExtractedResource:
-    """Transform ResourceFeatModel to ExtractedResource.
+    """Transform extracted_sumo_resource_feat to ExtractedResource.
 
     Args:
         extracted_sumo_resource_feat: extracted_sumo_resource_feat default values
