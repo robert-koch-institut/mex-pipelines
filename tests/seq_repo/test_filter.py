@@ -1,5 +1,5 @@
 from mex.seq_repo.filter import filter_sources_on_latest_sequencing_date
-from mex.seq_repo.models.source import SeqRepoSource
+from mex.seq_repo.model import SeqRepoSource
 
 
 def test_filter_sources_on_latest_sequencing_date(

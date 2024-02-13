@@ -1,7 +1,6 @@
-from typing import Generator, Iterable
+from typing import Any, Generator, Iterable
 
 import numpy as np
-import yaml
 from pandas import ExcelFile
 
 from mex.common.identity import get_provider
@@ -12,16 +11,12 @@ from mex.common.ldap.transform import analyse_person_string
 from mex.common.models import ExtractedPrimarySource
 from mex.common.wikidata.extract import search_organization_by_label
 from mex.common.wikidata.models.organization import WikidataOrganization
-from mex.sumo.models.access_platform import SumoAccessPlatform
-from mex.sumo.models.activity import SumoActivity
 from mex.sumo.models.cc1_data_model_nokeda import Cc1DataModelNoKeda
 from mex.sumo.models.cc1_data_valuesets import Cc1DataValuesets
 from mex.sumo.models.cc2_aux_mapping import Cc2AuxMapping
 from mex.sumo.models.cc2_aux_model import Cc2AuxModel
 from mex.sumo.models.cc2_aux_valuesets import Cc2AuxValuesets
 from mex.sumo.models.cc2_feat_projection import Cc2FeatProjection
-from mex.sumo.models.resource_feat_model import ResourceFeatModel
-from mex.sumo.models.resource_nokeda import ResourceNokeda
 from mex.sumo.settings import SumoSettings
 
 
@@ -143,80 +138,8 @@ def extract_cc2_feat_projection() -> Generator[Cc2FeatProjection, None, None]:
         yield Cc2FeatProjection(**row)
 
 
-def extract_sumo_access_platform() -> SumoAccessPlatform:
-    """Extract Access Platform by loading `access-platform.yaml` from `mapping_path`.
-
-    Settings:
-        mapping_path: path to directory holding sumo mapping.
-
-    Returns:
-        Sumo Access Platform
-    """
-    settings = SumoSettings.get()
-    with open(
-        settings.mapping_path / "access-platform.yaml", "r", encoding="utf-8"
-    ) as f:
-        access_platform_info = yaml.safe_load(f)
-
-    return SumoAccessPlatform.model_validate(access_platform_info)
-
-
-def extract_sumo_activity() -> SumoActivity:
-    """Extract Sumo Activity by loading `activity.yaml` from `mapping_path`.
-
-    Settings:
-        mapping_path: path to directory holding sumo mapping.
-
-    Returns:
-        Sumo Activity
-    """
-    settings = SumoSettings.get()
-    with open(settings.mapping_path / "activity.yaml", "r", encoding="utf-8") as f:
-        activity = yaml.safe_load(f)
-
-    return SumoActivity.model_validate(activity)
-
-
-def extract_sumo_resources_nokeda() -> ResourceNokeda:
-    """Extract Resource by loading data from mapping/sumo/resource_nokeda.yaml.
-
-    Settings:
-        mapping_path: path to directory holding sumo mapping.
-
-    Returns:
-        Resource Nokeda
-    """
-    settings = SumoSettings.get()
-    with open(
-        settings.mapping_path / "resource_nokeda.yaml", "r", encoding="utf-8"
-    ) as f:
-        resource_nokeda = yaml.safe_load(f)
-
-    return ResourceNokeda.model_validate(resource_nokeda)
-
-
-def extract_sumo_resources_feat() -> ResourceFeatModel:
-    """Extract ResourceFeatModel from mapping/sumo/resource_feat-model.yaml.
-
-    Settings:
-        mapping_path: path to directory holding sumo mapping.
-
-    Returns:
-        Resource Feat Model
-    """
-    settings = SumoSettings.get()
-    with open(
-        settings.mapping_path / "resource_feat-model.yaml",
-        "r",
-        encoding="utf-8",
-    ) as f:
-        resource_feat_model = yaml.safe_load(f)
-
-    return ResourceFeatModel.model_validate(resource_feat_model)
-
-
 def extract_ldap_contact_points_by_emails(
-    extracted_resources: Iterable[ResourceNokeda | ResourceFeatModel],
+    extracted_resources: list[dict[str, Any]],
 ) -> Generator[LDAPActor, None, None]:
     """Extract contact points from ldap for email in resource contacts.
 
@@ -229,7 +152,7 @@ def extract_ldap_contact_points_by_emails(
     connector = LDAPConnector.get()
 
     emails = {
-        r.contact[0]["mappingRules"][0]["forValues"][0] for r in extracted_resources
+        r["contact"][0]["mappingRules"][0]["forValues"][0] for r in extracted_resources
     }
     return (
         actor for email in emails for actor in connector.get_functional_accounts(email)
@@ -237,7 +160,7 @@ def extract_ldap_contact_points_by_emails(
 
 
 def extract_ldap_contact_points_by_name(
-    sumo_access_platform: SumoAccessPlatform,
+    sumo_access_platform: dict[str, Any],
 ) -> Generator[LDAPPersonWithQuery, None, None]:
     """Extract contact points from ldap for contact name in Sumo access platform.
 
@@ -248,7 +171,7 @@ def extract_ldap_contact_points_by_name(
         Iterable of ldap persons with query
     """
     connector = LDAPConnector.get()
-    names = sumo_access_platform.contact[0]["mappingRules"][0]["forValues"]
+    names = sumo_access_platform["contact"][0]["mappingRules"][0]["forValues"]
     split_names = [
         split_name for name in names for split_name in analyse_person_string(name)
     ]
@@ -263,7 +186,7 @@ def extract_ldap_contact_points_by_name(
 
 
 def extract_sumo_organizations(
-    sumo_sumo_resource_nokeda: ResourceNokeda,
+    sumo_sumo_resource_nokeda: dict[str, Any],
 ) -> dict[str, WikidataOrganization]:
     """Search and extract sumo organization from wikidata.
 
@@ -274,9 +197,9 @@ def extract_sumo_organizations(
         Dict with organization label and WikidataOrganization
     """
     sumo_resource_organizations = {}
-    publisher = sumo_sumo_resource_nokeda.publisher[0]["mappingRules"][0]["forValues"][
-        0
-    ]
+    publisher = sumo_sumo_resource_nokeda["publisher"][0]["mappingRules"][0][
+        "forValues"
+    ][0]
     for label in [publisher]:
         if (
             label

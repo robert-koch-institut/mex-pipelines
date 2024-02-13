@@ -1,6 +1,6 @@
 from mex.common.models import ExtractedAccessPlatform
 from mex.common.types import AssetsPath, TechnicalAccessibility, TextLanguage
-from mex.mapping.extract import extract_mapping_model
+from mex.mapping.extract import extract_mapping_data
 
 
 def test_get_mapping_model() -> None:
@@ -8,81 +8,132 @@ def test_get_mapping_model() -> None:
         "assets/mappings/__final__/test_mapping/access-platform.yaml"
     )
 
-    mapping_model = extract_mapping_model(mapping_path, ExtractedAccessPlatform)
+    mapping_model = extract_mapping_data(mapping_path, ExtractedAccessPlatform)
 
     expected = {
         "identifier": [
             {
                 "fieldInPrimarySource": "n/a",
-                "mappingRules": [{"rule": "Assign identifier."}],
+                "locationInPrimarySource": None,
+                "examplesInPrimarySource": None,
+                "mappingRules": [
+                    {"forValues": None, "setValues": None, "rule": "Assign identifier."}
+                ],
+                "comment": None,
             }
         ],
         "hadPrimarySource": [
             {
                 "fieldInPrimarySource": "n/a",
+                "locationInPrimarySource": None,
+                "examplesInPrimarySource": None,
                 "mappingRules": [
                     {
-                        "rule": "Assign 'stable target id' of primary source with identifier 'nokeda' in /raw-data/primary-sources/primary-sources.json."
+                        "forValues": None,
+                        "setValues": None,
+                        "rule": "Assign 'stable target id' of primary source with identifier 'nokeda' in /raw-data/primary-sources/primary-sources.json.",
                     }
                 ],
+                "comment": None,
             }
         ],
         "identifierInPrimarySource": [
             {
                 "fieldInPrimarySource": "n/a",
+                "locationInPrimarySource": None,
+                "examplesInPrimarySource": None,
                 "mappingRules": [
-                    {"setValues": ["sumo-db"], "rule": "Use value as it is."}
+                    {
+                        "forValues": None,
+                        "setValues": ["sumo-db"],
+                        "rule": "Use value as it is.",
+                    }
                 ],
+                "comment": None,
             }
         ],
         "stableTargetId": [
             {
                 "fieldInPrimarySource": "n/a",
+                "locationInPrimarySource": None,
+                "examplesInPrimarySource": None,
                 "mappingRules": [
-                    {"rule": "Assign 'stable target id'  of merged item."}
+                    {
+                        "forValues": None,
+                        "setValues": None,
+                        "rule": "Assign 'stable target id'  of merged item.",
+                    }
                 ],
+                "comment": None,
             }
         ],
+        "alternativeTitle": None,
         "contact": [
             {
                 "fieldInPrimarySource": "n/a",
+                "locationInPrimarySource": None,
+                "examplesInPrimarySource": None,
                 "mappingRules": [
                     {
                         "forValues": ["Roland Resolved"],
+                        "setValues": None,
                         "rule": "Match value using ldap extractor.",
                     }
                 ],
+                "comment": None,
             }
         ],
+        "description": None,
+        "endpointDescription": None,
+        "endpointType": None,
+        "endpointURL": None,
+        "landingPage": None,
         "technicalAccessibility": [
             {
                 "fieldInPrimarySource": "n/a",
-                "mappingRules": [{"setValues": [TechnicalAccessibility["INTERNAL"]]}],
+                "locationInPrimarySource": None,
+                "examplesInPrimarySource": None,
+                "mappingRules": [
+                    {
+                        "forValues": None,
+                        "setValues": [TechnicalAccessibility["INTERNAL"]],
+                        "rule": None,
+                    }
+                ],
                 "comment": "internal",
             }
         ],
         "title": [
             {
                 "fieldInPrimarySource": "n/a",
+                "locationInPrimarySource": None,
+                "examplesInPrimarySource": None,
                 "mappingRules": [
                     {
+                        "forValues": None,
                         "setValues": [
                             {"value": "SUMO Datenbank", "language": TextLanguage.DE}
-                        ]
+                        ],
+                        "rule": None,
                     }
                 ],
+                "comment": None,
             }
         ],
         "unitInCharge": [
             {
                 "fieldInPrimarySource": "n/a",
+                "locationInPrimarySource": None,
+                "examplesInPrimarySource": None,
                 "mappingRules": [
                     {
                         "forValues": ["Abteilung"],
+                        "setValues": None,
                         "rule": "Use value to match with identifier in /raw-data/organigram/organizational-units.json.",
                     }
                 ],
+                "comment": None,
             }
         ],
     }
-    assert mapping_model.model_dump(exclude_defaults=True) == expected
+    assert mapping_model == expected

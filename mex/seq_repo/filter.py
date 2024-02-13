@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Iterable
 
-from mex.seq_repo.models.source import SeqRepoSource
+from mex.seq_repo.model import SeqRepoSource
 
 
 def filter_sources_on_latest_sequencing_date(

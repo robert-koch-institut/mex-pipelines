@@ -1,3 +1,29 @@
+identifier:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - rule: Assign identifier.
+hadPrimarySource:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+      - rule: "Assign 'stable target id' of primary source with identifier '...' in /raw-data/primary-sources/primary-sources.json."
+identifierInPrimarySource:
+- fieldInPrimarySource: IdType
+  locationInPrimarySource: Meta.Field
+  mappingRules:
+    - rule: "Construct identifier according to following schema: IdType_StatementAreaGroup, e.g. 101_Clinical."
+  comment: "Create variable groups for each IdType. Example: IdType=101 (Adenovirus) has variable groups Clinical and Labor."
+- fieldInPrimarySource: 'StatementAreaGroup="Epi|Technical|Clinical|Outbreak|Patient|AdditionalAttributes|NULL|Event|General|Labor|Address"'
+  locationInPrimarySource: Meta.Field
+  mappingRules:
+  - rule: "Construct identifier according to following schema: IdType_StatementAreaGroup, e.g. 101_Clinical."
+  - forValues:
+    - "NULL"
+    - "AdditionalAttributes"
+    rule: "See /mappings/../ifsg/variable-group_entity-filter."
+stableTargetId:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - rule: Assign 'stable target id' of merged item.
 accessRestriction:
   - fieldInPrimarySource: n/a
     mappingRules:

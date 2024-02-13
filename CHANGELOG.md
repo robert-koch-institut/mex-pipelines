@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - configure open-code synchronization workflow
-- add mapping connector
+- add mapping connector and integrate into ifsg, seq-repo and sumo
 
 ### Changes
 

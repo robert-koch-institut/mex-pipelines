@@ -1,3 +1,5 @@
+from typing import Any
+
 from mex.common.cli import entrypoint
 from mex.common.models import (
     ExtractedOrganization,
@@ -10,10 +12,6 @@ from mex.common.primary_source.transform import (
 )
 from mex.common.types import OrganizationalUnitID
 from mex.ifsg.extract import (
-    extract_ifsg_variable_group,
-    extract_resource_disease,
-    extract_resource_parent,
-    extract_resource_state,
     extract_sql_table,
 )
 from mex.ifsg.filter import (
@@ -23,8 +21,6 @@ from mex.ifsg.filter import (
     filter_variables,
     get_max_id_schema,
 )
-from mex.ifsg.models.ifsg_resource import IFSGResource
-from mex.ifsg.models.ifsg_variable_group import IFSGVariableGroup
 from mex.ifsg.models.meta_catalogue2item import MetaCatalogue2Item
 from mex.ifsg.models.meta_catalogue2item2schema import MetaCatalogue2Item2Schema
 from mex.ifsg.models.meta_disease import MetaDisease
@@ -41,6 +37,7 @@ from mex.ifsg.transform import (
     transform_resource_parent_to_mex_resource,
     transform_resource_state_to_mex_resource,
 )
+from mex.mapping.extract import extract_mapping_data
 from mex.pipeline import asset, run_job_in_process
 from mex.sinks import load
 
@@ -148,32 +145,45 @@ def meta_type() -> list[MetaType]:
 
 
 @asset(group_name="ifsg")
-def resource_disease() -> IFSGResource:
+def resource_disease() -> dict[str, Any]:
     """Extract `resource_disease` default values."""
-    return extract_resource_disease()
+    settings = IFSGSettings.get()
+    return extract_mapping_data(
+        settings.mapping_path / "resource_disease.yaml", ExtractedResource
+    )
 
 
 @asset(group_name="ifsg")
-def resource_parent() -> IFSGResource:
+def resource_parent() -> dict[str, Any]:
     """Extract `resource_parent` default values."""
-    return extract_resource_parent()
+    settings = IFSGSettings.get()
+    return extract_mapping_data(
+        settings.mapping_path / "resource_parent.yaml", ExtractedResource
+    )
 
 
 @asset(group_name="ifsg")
-def resource_state() -> IFSGResource:
+def resource_state() -> dict[str, Any]:
     """Extract `resource_state` default values."""
-    return extract_resource_state()
+    settings = IFSGSettings.get()
+    return extract_mapping_data(
+        settings.mapping_path / "resource_state.yaml", ExtractedResource
+    )
 
 
 @asset(group_name="ifsg")
-def ifsg_variable_group() -> IFSGVariableGroup:
-    """Extract `IFSGVariableGroup` default values."""
-    return extract_ifsg_variable_group()
+def ifsg_variable_group() -> dict[str, Any]:
+    """Extract `ifsg_variable_group` default values."""
+    settings = IFSGSettings.get()
+    return extract_mapping_data(
+        settings.mapping_path / "variable-group.yaml",
+        ExtractedVariableGroup,
+    )
 
 
 @asset(group_name="ifsg")
 def extracted_ifsg_resource_parent(
-    resource_parent: IFSGResource,
+    resource_parent: dict[str, Any],
     extracted_primary_sources_ifsg: ExtractedPrimarySource,
     unit_stable_target_ids_by_synonym: dict[str, OrganizationalUnitID],
 ) -> ExtractedResource:
@@ -191,7 +201,7 @@ def extracted_ifsg_resource_parent(
 
 @asset(group_name="ifsg")
 def extracted_ifsg_resource_state(
-    resource_state: IFSGResource,
+    resource_state: dict[str, Any],
     extracted_ifsg_resource_parent: ExtractedResource,
     extracted_primary_sources_ifsg: ExtractedPrimarySource,
     unit_stable_target_ids_by_synonym: dict[str, OrganizationalUnitID],
@@ -210,7 +220,7 @@ def extracted_ifsg_resource_state(
 
 @asset(group_name="ifsg")
 def extracted_ifsg_resource_disease(
-    resource_disease: IFSGResource,
+    resource_disease: dict[str, Any],
     extracted_ifsg_resource_parent: ExtractedResource,
     extracted_ifsg_resource_state: list[ExtractedResource],
     meta_disease: list[MetaDisease],
@@ -239,7 +249,7 @@ def extracted_ifsg_resource_disease(
 
 @asset(group_name="ifsg")
 def extracted_ifsg_variable_group(
-    ifsg_variable_group: IFSGVariableGroup,
+    ifsg_variable_group: dict[str, Any],
     extracted_ifsg_resource_disease: list[ExtractedResource],
     extracted_primary_sources_ifsg: ExtractedPrimarySource,
     filtered_empty_statement_area_group: list[MetaField],
@@ -261,7 +271,7 @@ def extracted_ifsg_variable_group(
 @asset(group_name="ifsg")
 def extracted_ifsg_variable(
     filtered_variables: list[MetaField],
-    ifsg_variable_group: IFSGVariableGroup,
+    ifsg_variable_group: dict[str, Any],
     extracted_ifsg_resource_disease: list[ExtractedResource],
     extracted_ifsg_variable_group: list[ExtractedVariableGroup],
     extracted_primary_sources_ifsg: ExtractedPrimarySource,
