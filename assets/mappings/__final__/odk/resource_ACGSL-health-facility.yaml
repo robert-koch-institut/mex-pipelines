@@ -1,0 +1,137 @@
+# yaml-language-server: $schema=../../__schema__/ExtractedResource_MappingSchema.json
+
+identifier:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - rule: Assign identifier.
+hadPrimarySource:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - rule: Assign 'stable target id'
+identifierInPrimarySource:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - setValues:
+    - facility
+    rule: Set value as indicated.
+stableTargetId:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - rule: Assign 'stable target id' of merged item.
+accessRestriction:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - setValues:
+    - https://mex.rki.de/item/access-restriction-2
+    rule: Set value as indicated.
+contact:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - forValues:
+    - C1
+    rule: Match value 
+description:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - setValues:
+    - value: "This study aims "
+      language: en
+    rule: Set value as indicated.
+externalPartner:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - forValues:
+    - University of Conakry
+    - University of Sierra Leone College of Medicine and Allied Health Sciences
+    - Centre d'excellence en Afrique pour la Prévention et le Contrôle des Maladies Transmissibles (CEA-PCMT)
+    rule: Use values
+keyword:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - setValues:
+    - value: health facilities
+      language: en
+    rule: Set values as indicated.
+language:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - setValues:
+    - https://mex.rki.de/item/language-2
+    rule: Set values as indicated.
+  comment: Add https://mex.rki.de/item/language-3
+meshId:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - setValues:
+    - http://id.nlm.nih.gov/mesh/D000086382 #COVID-19
+    rule: Set values as indicated.
+method:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - setValues:
+    - value: interview
+      language: en
+    - value: Interview
+      language: de
+    rule: Set values as indicated.
+publisher:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - forValues:
+    - Robert Koch-Institut
+    rule: Use value to match with wikidata extractor.
+resourceTypeGeneral:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - setValues:
+    - https://mex.rki.de/item/resource-type-general-8
+    rule: Set value as indicated.
+rights:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - setValues:
+    - value: "Gesundheitsdaten sind besonders sensibel"
+      language: de
+    rule: Set value as indicated.
+spatial:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - setValues:
+    - value: Sierra Leone
+      language: en
+    rule: Set values as indicated.
+temporal:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - setValues:
+    - 2021-05-01 - 2021-12-31
+    rule: Set values as indicated.
+theme:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - setValues:
+    - https://mex.rki.de/item/theme-11
+    - https://mex.rki.de/item/theme-35
+    rule: Set values as indicated.
+title:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - setValues:
+    - value: Questionnaire 
+      language: en
+    - value: Fragebogen
+      language: en
+    rule: Set values as indicated.
+  comment: n/a
+unitInCharge:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - forValues:
+    - C1
+    rule: Match value with corresponding identifier using organigram extractor.
+wasGeneratedBy:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - forValues:
+    - C1
+    rule: Use value to match with identifierInPrimarySource in international projects. Assign stableTargetId of the matching item.

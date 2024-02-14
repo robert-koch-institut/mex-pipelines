@@ -1,0 +1,173 @@
+# yaml-language-server: $schema=../../__schema__/ExtractedResource_MappingSchema.json
+
+identifier:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - rule: Assign identifier.
+hadPrimarySource:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - rule: Assign 'stable target id' 
+identifierInPrimarySource:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - setValues:
+    - Wave
+    rule: Use value as it is.
+  comment: identifierInPrimarySource also for the corresponding activity extracted from international projects
+stableTargetId:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - rule: Assign 'stable target id' of merged item.
+accessRestriction:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - setValues:
+    - https://mex.rki.de/item/access-restriction-2
+    rule: Use value as it is.
+alternativeTitle:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - setValues:
+    - value: Questionnaire 
+      language: en
+    - value: Fragebogen 
+      language: de
+    rule: Set values as indicated.
+  comment: null
+contact:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - forValues:
+    - C1
+    rule: Match value with corresponding identifier using organigram extractor.
+contributingUnit:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - forValues:
+    - C1
+    rule: Match value with corresponding identifier using organigram extractor.
+description:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - setValues:
+    - value: The study is interested 
+      language: en
+    rule: Set value as indicated.
+externalPartner:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - forValues:
+    - "Ministry of Health "
+    - " Research Institute "
+    rule: Use value
+keyword:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - setValues:
+    - value: COVID-19
+    - value: Laboratory Diagnostics
+    - value: vaccine
+      language: en
+    rule: Set values as indicated.
+language:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - setValues:
+    - https://mex.rki.de/item/language-2
+    rule: Set value as indicated.
+meshId:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - setValues:
+    - http://id.nlm.nih.gov/mesh/D000086382 #COVID-19
+    rule: Set values as indicated.
+  comment: null
+method:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - setValues:
+    - value: interview
+      language: en
+    - value: Interview
+      language: de
+    rule: Set values as indicated.
+methodDescription:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - setValues:
+    - value: The study involves
+      language: en
+    rule: Set value as indicated.
+publisher:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - forValues:
+    - Robert Koch-Institut
+    rule: Use value to match with wikidata extractor.
+resourceTypeGeneral:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - setValues:
+    - https://mex.rki.de/item/resource-type-general-8
+    rule: Set value as indicated.
+rights:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - setValues:
+    - value: "Gesundheitsdaten sind besonders sensibel"
+      language: de
+    rule: Set value as indicated.
+sizeOfDataBasis:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - setValues:
+    - 2000 interviews
+    rule: Set value as indicated
+  comment: null
+spatial:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - setValues:
+    - value: Namibia
+      language: de
+    - value: Namibia
+      language: en
+    rule: Set values as indicated.
+  comment: null
+temporal:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - setValues:
+    - 2021-07-27 - 2021-12-31
+    rule: Set value as indicated.
+  comment: null
+theme:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - setValues:
+    - https://mex.rki.de/item/theme-11
+    - https://mex.rki.de/item/theme-35
+    rule: Set values as indicated.
+title:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - setValues:
+    - value: Questionnaire of the study "COVID-19 Emergency Support 3rd Wave Namibia (3rdWaveNAM)"
+      language: en
+    - value: Fragebogen der Studie "COVID-19 Emergency Support 3rd Wave Namibia (3rdWaveNAM)"
+      language: de
+    rule: Set values as indicated.
+unitInCharge:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - forValues:
+    - C1
+    rule: Match value with corresponding identifier using organigram extractor.
+wasGeneratedBy:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - forValues:
+    - Wave
+    rule: Use value 
+
