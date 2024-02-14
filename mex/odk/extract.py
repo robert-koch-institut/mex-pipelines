@@ -1,4 +1,4 @@
-from glob import glob
+from pathlib import Path
 
 from pandas import DataFrame, ExcelFile
 
@@ -18,8 +18,8 @@ def extract_odk_raw_data() -> list[ODKData]:
     """
     settings = ODKSettings.get()
     raw_data = []
-    for file in glob(str(settings.raw_data_path / "*.xlsx")):
-        file_name = file.split("\\")[-1].split(".")[0]
+    for file in Path(settings.raw_data_path).glob("*.xlsx"):
+
         xls = ExcelFile(file)
 
         choices_sheet = xls.parse(
@@ -37,7 +37,7 @@ def extract_odk_raw_data() -> list[ODKData]:
         hint = get_column_dict_by_pattern(survey_sheet, "hint")
         raw_data.append(
             ODKData(
-                file_name=file_name,
+                file_name=file.name,
                 hint=hint,
                 label_survey=label_survey,
                 label_choices=label_choices,

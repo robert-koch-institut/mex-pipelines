@@ -6,7 +6,7 @@ from mex.odk.extract import extract_odk_raw_data
 def test_extract_odk_raw_data() -> None:
     test = extract_odk_raw_data()
     expected = {
-        "file_name": "3rdWaveNAM_ZIG1_2_4_27072021",
+        "file_name": "3rdWaveNAM_ZIG1_2_4_27072021.xlsx",
         "hint": {
             "hint": [
                 nan,
