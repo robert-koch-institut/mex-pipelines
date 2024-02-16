@@ -1,6 +1,7 @@
 from numpy import nan
+from pandas import DataFrame
 
-from mex.odk.extract import extract_odk_raw_data
+from mex.odk.extract import extract_odk_raw_data, get_column_dict_by_pattern
 
 
 def test_extract_odk_raw_data() -> None:
@@ -201,3 +202,10 @@ def test_extract_odk_raw_data() -> None:
         ],
     }
     assert test[0].model_dump(exclude_defaults=True) == expected
+
+
+def test_get_column_dict_by_pattern() -> None:
+    result = get_column_dict_by_pattern(
+        DataFrame({"name": "a", "label1": "b", "label2": "c"}, index=[1]), "label"
+    )
+    assert result == {"label1": ["b"], "label2": ["c"]}
