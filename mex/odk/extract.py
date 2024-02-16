@@ -59,6 +59,6 @@ def get_column_dict_by_pattern(
         pattern: pattern to match column names
 
     Returns:
-    dictionary of mathing columns by column names
+        dictionary of mathing columns by column names
     """
     return {col: sheet[col].to_list() for col in sheet.columns if pattern in col}
