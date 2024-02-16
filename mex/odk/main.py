@@ -37,10 +37,10 @@ def odk_raw_data() -> list[ODKData]:
 def odk_resource_mappings() -> list[dict[str, Any]]:
     """Extract odk resource mappings."""
     settings = ODKSettings.get()
-    mappings = []
-    for file in Path(settings.mapping_path).glob("resource*"):
-        mappings.append(extract_mapping_data(file, ExtractedResource))
-    return mappings
+    return [
+        extract_mapping_data(file, ExtractedResource)
+        for file in Path(settings.mapping_path).glob("resource_*.yaml")
+    ]
 
 
 @entrypoint(ODKSettings)

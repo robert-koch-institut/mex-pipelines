@@ -11,7 +11,7 @@ def extract_odk_raw_data() -> list[ODKData]:
 
     Settings:
         raw_data_path: Path to the odk raw data,
-                  absolute or relative to `assets_dir`
+                       absolute or relative to `assets_dir`
 
     Returns:
         list of ODK data.
@@ -59,7 +59,6 @@ def get_column_dict_by_pattern(
         pattern: pattern to match column names
 
     Returns:
-    dictionary of mathing columns by column names
+        dictionary of mathing columns by column names
     """
-    col_list = [col for col in sheet.columns if pattern in col]
-    return {col: sheet[col].to_list() for col in col_list}
+    return {col: sheet[col].to_list() for col in sheet.columns if pattern in col}
