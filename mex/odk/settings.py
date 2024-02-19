@@ -18,7 +18,7 @@ class ODKSettings(Settings):
         ),
     )
     mapping_path: AssetsPath = Field(
-        AssetsPath("mappings/__final__/odk"),
+        AssetsPath("mappings/__final__/test_mapping"),
         description=(
             "Path to the directory with the odk mapping files containing the default "
             "values, absolute path or relative to `assets_dir`."
