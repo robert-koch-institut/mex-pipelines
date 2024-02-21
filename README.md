@@ -143,6 +143,11 @@ components of the MEx project are open-sourced under the same license as well.
 - `poetry run sync-persons` removes persons from MEx public API that are no longer in AD
 - based on ldap to MEx mapping commit f909b0d
 
+### odk extractor
+
+- `poetry run odk` extracts ODK survey data from excel files
+- based on odk to MEx mapping commit d6520d3
+
 ### organigram extractor
 
 - `poetry run organigram` extracts organizational units from JSON file
