@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - configure open-code synchronization workflow
 - add mapping connector and integrate into ifsg, seq-repo and sumo
+- add odk extract
 
 ### Changes
 
