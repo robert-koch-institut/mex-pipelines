@@ -586,7 +586,7 @@ def resource_parent() -> dict[str, Any]:
 
 
 @pytest.fixture
-def resource_state() -> list[dict[str, Any]]:
+def resource_states() -> list[dict[str, Any]]:
     return [
         {
             "accessRestriction": [
@@ -1510,7 +1510,7 @@ def resource_state() -> list[dict[str, Any]]:
 
 
 @pytest.fixture
-def resource_disease() -> list[dict[str, Any]]:
+def resource_diseases() -> list[dict[str, Any]]:
     return [
         {
             "accessRestriction": [

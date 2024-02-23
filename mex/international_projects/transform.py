@@ -89,17 +89,21 @@ def transform_international_projects_source_to_extracted_activity(
         else None
     )
 
-    all_funder_or_commissioner = []
+    all_funder_or_commissioner: list[MergedOrganizationIdentifier] = []
     if source.funding_source:
-        for fc in source.funding_source:
-            if wfc := funding_sources_stable_target_id_by_query.get(fc):
-                all_funder_or_commissioner.append(wfc)
+        all_funder_or_commissioner.extend(
+            wfc
+            for fc in source.funding_source
+            if (wfc := funding_sources_stable_target_id_by_query.get(fc))
+        )
 
-    all_partner_organizations = []
+    all_partner_organizations: list[MergedOrganizationIdentifier] = []
     if source.partner_organization:
-        for fc in source.partner_organization:
-            if wfc := partner_organizations_stable_target_id_by_query.get(fc):
-                all_partner_organizations.append(wfc)
+        all_partner_organizations.extend(
+            wfc
+            for fc in source.partner_organization
+            if (wfc := partner_organizations_stable_target_id_by_query.get(fc))
+        )
 
     return ExtractedActivity(
         title=source.full_project_name,

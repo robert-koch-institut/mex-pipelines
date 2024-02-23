@@ -75,21 +75,20 @@ def test_transform_resource_parent_to_mex_resource(
 
 
 def test_transform_resource_state_to_mex_resource(
-    resource_state: dict[str, Any],
+    resource_states: list[dict[str, Any]],
     extracted_ifsg_resource_parent: ExtractedResource,
     extracted_primary_sources_ifsg: ExtractedPrimarySource,
     unit_stable_target_ids: dict[str, MergedOrganizationalUnitIdentifier],
 ) -> None:
-    extracted_resources = []
-    for r in resource_state:
-        extracted_resources.append(
-            transform_resource_state_to_mex_resource(
-                r,
-                extracted_ifsg_resource_parent,
-                extracted_primary_sources_ifsg,
-                unit_stable_target_ids,
-            )
+    extracted_resources = [
+        transform_resource_state_to_mex_resource(
+            resource_state,
+            extracted_ifsg_resource_parent,
+            extracted_primary_sources_ifsg,
+            unit_stable_target_ids,
         )
+        for resource_state in resource_states
+    ]
     expected = {
         "identifier": Joker(),
         "hadPrimarySource": extracted_primary_sources_ifsg.stableTargetId,
@@ -151,30 +150,29 @@ def test_get_instrument_tool_or_apparatus(
 
 
 def test_transform_resource_disease_to_mex_resource(
-    resource_disease: dict[str, Any],
+    resource_diseases: list[dict[str, Any]],
     extracted_ifsg_resource_parent: ExtractedResource,
     extracted_ifsg_resource_state: list[ExtractedResource],
-    meta_type: MetaType,
-    meta_disease: MetaDisease,
+    meta_type: list[MetaType],
+    meta_disease: list[MetaDisease],
     extracted_primary_sources_ifsg: ExtractedPrimarySource,
     unit_stable_target_ids: dict[str, MergedOrganizationalUnitIdentifier],
     extracted_organization_rki: ExtractedOrganization,
 ) -> None:
-    extracted_resource = []
-    for r in resource_disease:
-        extracted_resource.append(
-            transform_resource_disease_to_mex_resource(
-                r,
-                extracted_ifsg_resource_parent,
-                extracted_ifsg_resource_state,
-                meta_disease,
-                meta_type,
-                [101, 102, 103],
-                extracted_primary_sources_ifsg,
-                unit_stable_target_ids,
-                extracted_organization_rki,
-            )
+    extracted_resource = [
+        transform_resource_disease_to_mex_resource(
+            resource_disease,
+            extracted_ifsg_resource_parent,
+            extracted_ifsg_resource_state,
+            meta_disease,
+            meta_type,
+            [101, 102, 103],
+            extracted_primary_sources_ifsg,
+            unit_stable_target_ids,
+            extracted_organization_rki,
         )
+        for resource_disease in resource_diseases
+    ]
     expected = {
         "identifier": Joker(),
         "hadPrimarySource": extracted_primary_sources_ifsg.stableTargetId,

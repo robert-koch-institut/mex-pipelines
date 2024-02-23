@@ -74,7 +74,7 @@ def ff_projects_person_ids_by_query_string(
     )
     load(extracted_persons)
     return {
-        str(query_string): [MergedPersonIdentifier(id) for id in merged_ids]
+        str(query_string): [MergedPersonIdentifier(id_) for id_ in merged_ids]
         for query_string, merged_ids in get_merged_ids_by_query_string(
             ff_projects_authors, extracted_primary_source_ldap
         ).items()
