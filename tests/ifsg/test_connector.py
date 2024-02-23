@@ -1,7 +1,6 @@
 import datetime
 from unittest.mock import MagicMock
 
-from pyodbc import Connection, Cursor
 from pytest import MonkeyPatch
 
 from mex.ifsg.connector import IFSGConnector
@@ -10,7 +9,7 @@ from mex.ifsg.models.meta_schema2type import MetaSchema2Type
 
 def test_parse_rows(monkeypatch: MonkeyPatch) -> None:
     def mocked_init(self: IFSGConnector) -> None:
-        cursor = MagicMock(spec=Cursor)
+        cursor = MagicMock()
         cursor.fetchall.return_value = [
             (
                 1,
@@ -26,7 +25,7 @@ def test_parse_rows(monkeypatch: MonkeyPatch) -> None:
             ),
         ]
         cursor.description = [["IdSchema"], ["IdType"], ["UpdatedAt"], ["ts"]]
-        self._connection = MagicMock(spec=Connection)
+        self._connection = MagicMock()
         self._connection.cursor.return_value.__enter__.return_value = cursor
 
     monkeypatch.setattr(IFSGConnector, "__init__", mocked_init)
