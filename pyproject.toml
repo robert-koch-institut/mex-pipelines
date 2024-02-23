@@ -15,7 +15,7 @@ dagster = "^1.6.3"
 dagster-postgres = "^0.22.3"
 dagster-webserver = "^1.6.3"
 faker = "^23.0.0"
-mex-common = { git = "https://github.com/robert-koch-institut/mex-common.git", rev = "0.19.3" }
+mex-common = { git = "https://github.com/robert-koch-institut/mex-common.git", rev = "feature/mx-1381-prep-rule-endpoint" }
 numpy = "^1.26.4"
 openpyxl = "^3.1.2"
 pandas = "^2.1.4"

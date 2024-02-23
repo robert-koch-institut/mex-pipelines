@@ -10,7 +10,7 @@ from mex.common.ldap.models.person import LDAPPersonWithQuery
 from mex.common.ldap.transform import analyse_person_string
 from mex.common.logging import watch
 from mex.common.models import ExtractedPrimarySource
-from mex.common.types import OrganizationID, Timestamp, TimestampPrecision
+from mex.common.types import MergedOrganizationIdentifier, Timestamp, TimestampPrecision
 from mex.common.wikidata.extract import search_organization_by_label
 from mex.common.wikidata.models.organization import WikidataOrganization
 from mex.international_projects.models.source import InternationalProjectsSource
@@ -179,7 +179,7 @@ def extract_international_projects_partner_organizations(
 def get_organization_merged_id_by_query(
     wikidata_organizations_by_query: dict[str, WikidataOrganization],
     wikidata_primary_source: ExtractedPrimarySource,
-) -> dict[str, OrganizationID]:
+) -> dict[str, MergedOrganizationIdentifier]:
     """Return a mapping from organizations to their stable target ID.
 
     There may be multiple entries per unit mapping to the same stable target ID.
@@ -199,8 +199,8 @@ def get_organization_merged_id_by_query(
             identifier_in_primary_source=wikidata_organization.identifier,
         )
         if identities:
-            organization_stable_target_id_by_query[query] = OrganizationID(
-                identities[0].stableTargetId
+            organization_stable_target_id_by_query[query] = (
+                MergedOrganizationIdentifier(identities[0].stableTargetId)
             )
 
     return organization_stable_target_id_by_query

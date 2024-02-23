@@ -7,7 +7,7 @@ from mex.common.models import ExtractedOrganizationalUnit, ExtractedPrimarySourc
 from mex.common.primary_source.transform import (
     get_primary_sources_by_name,
 )
-from mex.common.types import OrganizationalUnitID, PersonID
+from mex.common.types import MergedOrganizationalUnitIdentifier, MergedPersonIdentifier
 from mex.confluence_vvt.extract import (
     extract_confluence_vvt_authors,
     fetch_all_data_page_ids,
@@ -53,7 +53,7 @@ def extracted_confluence_vvt_person_ids_by_query_string(
     confluence_vvt_sources: list[ConfluenceVvtSource],
     extracted_organizational_units: list[ExtractedOrganizationalUnit],
     extracted_primary_source_ldap: ExtractedPrimarySource,
-) -> dict[str, list[PersonID]]:
+) -> dict[str, list[MergedPersonIdentifier]]:
     """Return mapping from query string to person IDs.
 
     Transforms and loads Confluence VVT persons along the way.
@@ -75,9 +75,11 @@ def extracted_confluence_vvt_person_ids_by_query_string(
 @asset(group_name="confluence_vvt")
 def extracted_confluence_vvt_sources(
     confluence_vvt_sources: list[ConfluenceVvtSource],
-    extracted_confluence_vvt_person_ids_by_query_string: dict[str, list[PersonID]],
+    extracted_confluence_vvt_person_ids_by_query_string: dict[
+        str, list[MergedPersonIdentifier]
+    ],
     extracted_primary_source_confluence_vvt: ExtractedPrimarySource,
-    unit_stable_target_ids_by_synonym: dict[str, OrganizationalUnitID],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
 ) -> None:
     """Transform and load Confluence VVT sources."""
     mex_sources = transform_confluence_vvt_sources_to_mex_sources(

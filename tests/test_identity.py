@@ -12,7 +12,7 @@ from mex.common.models import (
     ExtractedPrimarySource,
 )
 from mex.common.testing import Joker
-from mex.common.types import PrimarySourceID
+from mex.common.types import MergedPrimarySourceIdentifier
 from mex.identity import BackendIdentityProvider
 from mex.sinks import load
 
@@ -36,10 +36,10 @@ def test_assign_mocked(
     mocked_backend_identity_provider: requests.Session,
 ) -> None:
     mocked_data = {
-        "identifier": PrimarySourceID.generate(seed=962),
-        "hadPrimarySource": PrimarySourceID.generate(seed=961),
+        "identifier": MergedPrimarySourceIdentifier.generate(seed=962),
+        "hadPrimarySource": MergedPrimarySourceIdentifier.generate(seed=961),
         "identifierInPrimarySource": "test",
-        "stableTargetId": PrimarySourceID.generate(seed=963),
+        "stableTargetId": MergedPrimarySourceIdentifier.generate(seed=963),
     }
     mocked_response = Mock(spec=requests.Response)
     mocked_response.status_code = 200
@@ -48,7 +48,7 @@ def test_assign_mocked(
 
     provider = BackendIdentityProvider.get()
     identity_first = provider.assign(
-        had_primary_source=PrimarySourceID.generate(seed=961),
+        had_primary_source=MergedPrimarySourceIdentifier.generate(seed=961),
         identifier_in_primary_source="test",
     )
 
@@ -59,7 +59,7 @@ def test_assign_mocked(
     assert identity_first_assignment == mocked_data
 
     identity_second = provider.assign(
-        had_primary_source=PrimarySourceID.generate(seed=961),
+        had_primary_source=MergedPrimarySourceIdentifier.generate(seed=961),
         identifier_in_primary_source="test",
     )
     identity_second_assignment = identity_second.model_dump()
@@ -73,10 +73,10 @@ def test_fetch_mocked(
     mocked_data = {
         "items": [
             {
-                "identifier": PrimarySourceID.generate(seed=962),
-                "hadPrimarySource": PrimarySourceID.generate(seed=961),
+                "identifier": MergedPrimarySourceIdentifier.generate(seed=962),
+                "hadPrimarySource": MergedPrimarySourceIdentifier.generate(seed=961),
                 "identifierInPrimarySource": "test",
-                "stableTargetId": PrimarySourceID.generate(seed=963),
+                "stableTargetId": MergedPrimarySourceIdentifier.generate(seed=963),
             }
         ],
         "total": 1,
@@ -90,7 +90,7 @@ def test_fetch_mocked(
     provider = BackendIdentityProvider.get()
 
     contact_point = ExtractedContactPoint(
-        hadPrimarySource=PrimarySourceID.generate(seed=961),
+        hadPrimarySource=MergedPrimarySourceIdentifier.generate(seed=961),
         identifierInPrimarySource="test",
         email=["test@test.de"],
     )
@@ -135,20 +135,20 @@ def test_assign_identity() -> None:
     provider = BackendIdentityProvider.get()
     provider.assign.cache_clear()
     identity_first = provider.assign(
-        had_primary_source=PrimarySourceID.generate(seed=961),
+        had_primary_source=MergedPrimarySourceIdentifier.generate(seed=961),
         identifier_in_primary_source="test",
     )
     identity_first_assignment = identity_first.model_dump()
 
     assert identity_first_assignment == {
-        "hadPrimarySource": PrimarySourceID.generate(seed=961),
+        "hadPrimarySource": MergedPrimarySourceIdentifier.generate(seed=961),
         "identifierInPrimarySource": "test",
         "stableTargetId": Joker(),
         "identifier": Joker(),
     }
 
     identity_second = provider.assign(
-        had_primary_source=PrimarySourceID.generate(seed=961),
+        had_primary_source=MergedPrimarySourceIdentifier.generate(seed=961),
         identifier_in_primary_source="test",
     )
     identity_second_assignment = identity_second.model_dump()

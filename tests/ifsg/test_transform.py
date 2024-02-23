@@ -10,7 +10,7 @@ from mex.common.testing import Joker
 from mex.common.types import (
     Identifier,
     LinkLanguage,
-    OrganizationalUnitID,
+    MergedOrganizationalUnitIdentifier,
     TextLanguage,
 )
 from mex.ifsg.models.meta_catalogue2item import MetaCatalogue2Item
@@ -32,7 +32,7 @@ from mex.ifsg.transform import (
 def test_transform_resource_parent_to_mex_resource(
     resource_parent: dict[str, Any],
     extracted_primary_sources_ifsg: ExtractedPrimarySource,
-    unit_stable_target_ids: dict[str, OrganizationalUnitID],
+    unit_stable_target_ids: dict[str, MergedOrganizationalUnitIdentifier],
 ) -> None:
     extracted_resource = transform_resource_parent_to_mex_resource(
         resource_parent, extracted_primary_sources_ifsg, unit_stable_target_ids
@@ -78,7 +78,7 @@ def test_transform_resource_state_to_mex_resource(
     resource_state: dict[str, Any],
     extracted_ifsg_resource_parent: ExtractedResource,
     extracted_primary_sources_ifsg: ExtractedPrimarySource,
-    unit_stable_target_ids: dict[str, OrganizationalUnitID],
+    unit_stable_target_ids: dict[str, MergedOrganizationalUnitIdentifier],
 ) -> None:
     extracted_resources = []
     for r in resource_state:
@@ -157,7 +157,7 @@ def test_transform_resource_disease_to_mex_resource(
     meta_type: MetaType,
     meta_disease: MetaDisease,
     extracted_primary_sources_ifsg: ExtractedPrimarySource,
-    unit_stable_target_ids: dict[str, OrganizationalUnitID],
+    unit_stable_target_ids: dict[str, MergedOrganizationalUnitIdentifier],
     extracted_organization_rki: ExtractedOrganization,
 ) -> None:
     extracted_resource = []

@@ -14,12 +14,12 @@ from mex.common.models import (
     ExtractedVariableGroup,
 )
 from mex.common.types import (
-    ContactPointID,
     DataType,
     Email,
     Link,
-    OrganizationalUnitID,
-    PersonID,
+    MergedContactPointIdentifier,
+    MergedOrganizationalUnitIdentifier,
+    MergedPersonIdentifier,
     Text,
     TextLanguage,
 )
@@ -42,7 +42,7 @@ VARIABLE_DATA_TYPE_MAP = defaultdict(
 
 def get_contact_merged_ids_by_emails(
     mex_actor_resources: Iterable[ExtractedContactPoint],
-) -> dict[Email, ContactPointID]:
+) -> dict[Email, MergedContactPointIdentifier]:
     """Get merged id by emails lookup.
 
     Args:
@@ -52,7 +52,7 @@ def get_contact_merged_ids_by_emails(
         dict of contact merged ids by email
     """
     return {
-        Email(email.lower()): ContactPointID(actor.stableTargetId)
+        Email(email.lower()): MergedContactPointIdentifier(actor.stableTargetId)
         for actor in mex_actor_resources
         for email in actor.email
     }
@@ -60,7 +60,7 @@ def get_contact_merged_ids_by_emails(
 
 def get_contact_merged_ids_by_names(
     mex_actors_access_platform: Iterable[ExtractedPerson],
-) -> dict[str, PersonID]:
+) -> dict[str, MergedPersonIdentifier]:
     """Get merged id by name lookup.
 
     Args:
@@ -78,8 +78,8 @@ def get_contact_merged_ids_by_names(
 def transform_resource_feat_model_to_mex_resource(
     extracted_sumo_resource_feat: dict[str, Any],
     extracted_primary_source: ExtractedPrimarySource,
-    unit_merged_ids_by_synonym: dict[str, OrganizationalUnitID],
-    contact_merged_ids_by_emails: dict[Email, ContactPointID],
+    unit_merged_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
+    contact_merged_ids_by_emails: dict[Email, MergedContactPointIdentifier],
     mex_resource_nokeda: ExtractedResource,
     transformed_activity: ExtractedActivity,
 ) -> ExtractedResource:
@@ -146,8 +146,8 @@ def transform_resource_feat_model_to_mex_resource(
 def transform_resource_nokeda_to_mex_resource(
     extracted_sumo_resource_nokeda: dict[str, Any],
     extracted_primary_source: ExtractedPrimarySource,
-    unit_merged_ids_by_synonym: dict[str, OrganizationalUnitID],
-    contact_merged_ids_by_emails: dict[Email, ContactPointID],
+    unit_merged_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
+    contact_merged_ids_by_emails: dict[Email, MergedContactPointIdentifier],
     extracted_organization_rki: ExtractedOrganization,
     transformed_activity: ExtractedActivity,
 ) -> ExtractedResource:
@@ -494,8 +494,8 @@ def transform_feat_projection_variable_to_mex_variable(
 
 def transform_sumo_access_platform_to_mex_access_platform(
     sumo_access_platform: dict[str, Any],
-    unit_merged_ids_by_synonym: dict[str, OrganizationalUnitID],
-    person_stable_target_ids_by_query_string: dict[str, PersonID],
+    unit_merged_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
+    person_stable_target_ids_by_query_string: dict[str, MergedPersonIdentifier],
     extracted_primary_source: ExtractedPrimarySource,
 ) -> ExtractedAccessPlatform:
     """Transform sumo access platform info to ExtractedAccessPlatform.
@@ -542,8 +542,8 @@ def transform_sumo_access_platform_to_mex_access_platform(
 
 def transform_sumo_activity_to_extracted_activity(
     sumo_activity: dict[str, Any],
-    unit_merged_ids_by_synonym: dict[str, OrganizationalUnitID],
-    contact_merged_ids_by_emails: dict[Email, ContactPointID],
+    unit_merged_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
+    contact_merged_ids_by_emails: dict[Email, MergedContactPointIdentifier],
     extracted_primary_source: ExtractedPrimarySource,
 ) -> ExtractedActivity:
     """Transform sumo activity to ExtractedActivity.

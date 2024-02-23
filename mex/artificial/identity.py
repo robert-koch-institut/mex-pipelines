@@ -10,7 +10,7 @@ from mex.common.models import (
     MEX_PRIMARY_SOURCE_STABLE_TARGET_ID,
     ExtractedData,
 )
-from mex.common.types import PrimarySourceID
+from mex.common.types import MergedPrimarySourceIdentifier
 
 IdentityMap = dict[str, list[Identity]]
 
@@ -109,7 +109,9 @@ def create_identities(
             if primary_sources := identity_map["PrimarySource"]:
                 # pick a random primary source to "extract" the identity from
                 primary_source: Identity = faker.random_element(primary_sources)
-                primary_source_id = PrimarySourceID(primary_source.stableTargetId)
+                primary_source_id = MergedPrimarySourceIdentifier(
+                    primary_source.stableTargetId
+                )
             else:
                 # the first primary source is extracted from this placeholder ID
                 primary_source_id = MEX_PRIMARY_SOURCE_STABLE_TARGET_ID

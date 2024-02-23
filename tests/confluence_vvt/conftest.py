@@ -19,7 +19,7 @@ from mex.common.organigram.extract import (
 from mex.common.organigram.transform import (
     transform_organigram_units_to_organizational_units,
 )
-from mex.common.types import OrganizationalUnitID
+from mex.common.types import MergedOrganizationalUnitIdentifier
 from mex.confluence_vvt.connector import ConfluenceVvtConnector
 from mex.confluence_vvt.settings import ConfluenceVvtSettings
 
@@ -35,7 +35,7 @@ def settings() -> ConfluenceVvtSettings:
 @pytest.fixture
 def unit_merged_ids_by_synonym(
     extracted_primary_sources: dict[str, ExtractedPrimarySource]
-) -> dict[str, OrganizationalUnitID]:
+) -> dict[str, MergedOrganizationalUnitIdentifier]:
     """Return unit merged ids by synonym for organigram units."""
     organigram_units = extract_organigram_units()
     mex_organizational_units = transform_organigram_units_to_organizational_units(

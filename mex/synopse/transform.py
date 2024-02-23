@@ -16,14 +16,14 @@ from mex.common.models import (
 )
 from mex.common.types import (
     AccessRestriction,
-    ActivityID,
     ActivityType,
     DataType,
     Identifier,
     Language,
     Link,
-    OrganizationalUnitID,
-    ResourceID,
+    MergedActivityIdentifier,
+    MergedOrganizationalUnitIdentifier,
+    MergedResourceIdentifier,
     ResourceTypeGeneral,
     TechnicalAccessibility,
     Text,
@@ -77,7 +77,7 @@ def split_off_extended_data_use_variables(
 
 def transform_synopse_studies_into_access_platforms(
     synopse_studies: Iterable[SynopseStudy],
-    unit_merged_ids_by_synonym: dict[str, OrganizationalUnitID],
+    unit_merged_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     extracted_primary_source: ExtractedPrimarySource,
 ) -> Generator[ExtractedAccessPlatform, None, None]:
     """Transform synopse studies into access platforms.
@@ -117,7 +117,7 @@ def transform_synopse_studies_into_access_platforms(
 def transform_overviews_to_resource_lookup(
     study_overviews: Iterable[SynopseStudyOverview],
     study_resources: Iterable[ExtractedResource],
-) -> dict[str, list[ResourceID]]:
+) -> dict[str, list[MergedResourceIdentifier]]:
     """Transform overviews and resources into a resource ID lookup.
 
     Args:
@@ -131,13 +131,13 @@ def transform_overviews_to_resource_lookup(
         resource.identifierInPrimarySource: resource.stableTargetId
         for resource in study_resources
     }
-    resource_ids_by_synopse_id: dict[str, list[ResourceID]] = {}
+    resource_ids_by_synopse_id: dict[str, list[MergedResourceIdentifier]] = {}
     for study in study_overviews:
         if resource_id := resource_id_by_identifier_in_platform.get(
             f"{study.studien_id}-{study.ds_typ_id}-{study.titel_datenset}"
         ):
             resource_ids = resource_ids_by_synopse_id.setdefault(study.synopse_id, [])
-            resource_ids.append(ResourceID(resource_id))
+            resource_ids.append(MergedResourceIdentifier(resource_id))
         else:
             continue
     return resource_ids_by_synopse_id
@@ -572,7 +572,7 @@ def transform_synopse_projects_to_mex_activities(
         ):
             activity.succeeds = [
                 cast(
-                    ActivityID,
+                    MergedActivityIdentifier,
                     activity_stable_target_id_by_short_name[anschlussprojekt],
                 )
             ]

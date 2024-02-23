@@ -19,9 +19,9 @@ from mex.common.primary_source.transform import (
 from mex.common.types import (
     Link,
     LinkLanguage,
-    OrganizationalUnitID,
-    PrimarySourceID,
-    ResourceID,
+    MergedOrganizationalUnitIdentifier,
+    MergedPrimarySourceIdentifier,
+    MergedResourceIdentifier,
     Text,
     TextLanguage,
 )
@@ -171,9 +171,9 @@ def mocked_ifsg(
 
 
 @pytest.fixture
-def unit_stable_target_ids() -> dict[str, OrganizationalUnitID]:
+def unit_stable_target_ids() -> dict[str, MergedOrganizationalUnitIdentifier]:
     """Mock unit stable target ids."""
-    return {"FG99": OrganizationalUnitID.generate(seed=43)}
+    return {"FG99": MergedOrganizationalUnitIdentifier.generate(seed=43)}
 
 
 @pytest.fixture
@@ -2667,9 +2667,9 @@ def extracted_ifsg_resource_disease() -> list[ExtractedResource]:
 def extracted_ifsg_variable_group() -> list[ExtractedVariableGroup]:
     return [
         ExtractedVariableGroup(
-            hadPrimarySource=PrimarySourceID.generate(23),
+            hadPrimarySource=MergedPrimarySourceIdentifier.generate(23),
             identifierInPrimarySource="101_Epi",
-            containedBy=[ResourceID.generate(24)],
+            containedBy=[MergedResourceIdentifier.generate(24)],
             label=[
                 Text(value="Epidemiologische Informationen", language=TextLanguage.DE)
             ],

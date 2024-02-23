@@ -10,7 +10,7 @@ from mex.common.models import (
 from mex.common.primary_source.transform import (
     get_primary_sources_by_name,
 )
-from mex.common.types import OrganizationalUnitID
+from mex.common.types import MergedOrganizationalUnitIdentifier
 from mex.ifsg.extract import (
     extract_sql_table,
 )
@@ -185,7 +185,7 @@ def ifsg_variable_group() -> dict[str, Any]:
 def extracted_ifsg_resource_parent(
     resource_parent: dict[str, Any],
     extracted_primary_sources_ifsg: ExtractedPrimarySource,
-    unit_stable_target_ids_by_synonym: dict[str, OrganizationalUnitID],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
 ) -> ExtractedResource:
     """Extracted and loaded ifsg resource parent."""
     mex_resource_parent = transform_resource_parent_to_mex_resource(
@@ -204,7 +204,7 @@ def extracted_ifsg_resource_state(
     resource_state: dict[str, Any],
     extracted_ifsg_resource_parent: ExtractedResource,
     extracted_primary_sources_ifsg: ExtractedPrimarySource,
-    unit_stable_target_ids_by_synonym: dict[str, OrganizationalUnitID],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
 ) -> list[ExtractedResource]:
     """Extracted and loaded ifsg resource disease."""
     mex_resource_state = transform_resource_state_to_mex_resource(
@@ -227,7 +227,7 @@ def extracted_ifsg_resource_disease(
     meta_type: list[MetaType],
     id_types_of_diseases: list[int],
     extracted_primary_sources_ifsg: ExtractedPrimarySource,
-    unit_stable_target_ids_by_synonym: dict[str, OrganizationalUnitID],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     extracted_organization_rki: ExtractedOrganization,
 ) -> list[ExtractedResource]:
     """Extracted and loaded ifsg resource disease."""

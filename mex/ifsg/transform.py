@@ -7,7 +7,11 @@ from mex.common.models import (
     ExtractedVariable,
     ExtractedVariableGroup,
 )
-from mex.common.types import OrganizationalUnitID, ResourceID, Text
+from mex.common.types import (
+    MergedOrganizationalUnitIdentifier,
+    MergedResourceIdentifier,
+    Text,
+)
 from mex.ifsg.models.meta_catalogue2item import MetaCatalogue2Item
 from mex.ifsg.models.meta_catalogue2item2schema import MetaCatalogue2Item2Schema
 from mex.ifsg.models.meta_disease import MetaDisease
@@ -19,18 +23,18 @@ from mex.ifsg.models.meta_type import MetaType
 def transform_resource_parent_to_mex_resource(
     resource_parent: dict[str, Any],
     extracted_primary_source: ExtractedPrimarySource,
-    unit_stable_target_ids_by_synonym: dict[str, OrganizationalUnitID],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
 ) -> ExtractedResource:
     """Transform resource parent to mex resource.
 
     Args:
         resource_parent: resource_parent default values
         extracted_primary_source: ExtractedPrimarySource
-        unit_stable_target_ids_by_synonym: mapping unit strings to OrganizationalUnitID
+        unit_stable_target_ids_by_synonym: mapping unit synonyms to
+                                           MergedOrganizationalUnitIdentifier
 
     Returns:
-    transform resource parent to ExtractedResource
-        transform resource parent to ExtractedResource
+        resource parent transformed to ExtractedResource
     """
     return ExtractedResource(
         accessRestriction=resource_parent["accessRestriction"][0]["mappingRules"][0][
@@ -73,7 +77,7 @@ def transform_resource_state_to_mex_resource(
     resource_state: dict[str, Any],
     extracted_ifsg_resource_parent: ExtractedResource,
     extracted_primary_source: ExtractedPrimarySource,
-    unit_stable_target_ids_by_synonym: dict[str, OrganizationalUnitID],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
 ) -> list[ExtractedResource]:
     """Transform resource state to mex resource.
 
@@ -81,11 +85,11 @@ def transform_resource_state_to_mex_resource(
         resource_state: resource_state default values
         extracted_ifsg_resource_parent: ExtractedResource
         extracted_primary_source: ExtractedPrimarySource
-        unit_stable_target_ids_by_synonym: mapping unit strings to OrganizationalUnitID
-
+        unit_stable_target_ids_by_synonym: mapping unit synonyms to
+                                           MergedOrganizationalUnitIdentifier
 
     Returns:
-    transform resource state to ExtractedResource list
+        transform resource state to ExtractedResource list
     """
     bundesland_meldedaten_by_bundesland_id = {
         value["forValues"][0]: value["setValues"][0]
@@ -204,7 +208,7 @@ def transform_resource_disease_to_mex_resource(
     meta_type: list[MetaType],
     id_type_of_diseases: list[int],
     extracted_primary_source: ExtractedPrimarySource,
-    unit_stable_target_ids_by_synonym: dict[str, OrganizationalUnitID],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     extracted_organization_rki: ExtractedOrganization,
 ) -> list[ExtractedResource]:
     """Transform resource disease to mex resource.
@@ -217,9 +221,9 @@ def transform_resource_disease_to_mex_resource(
         meta_type: MetaType
         id_type_of_diseases: list of disease related id_types
         extracted_primary_source: ExtractedPrimarySource
-        unit_stable_target_ids_by_synonym: mapping unit strings to OrganizationalUnitID
+        unit_stable_target_ids_by_synonym: mapping unit synonyms to
+                                           MergedOrganizationalUnitIdentifier
         extracted_organization_rki: extracted organization for RKI
-
 
     Returns:
         transform resource disease to ExtractedResource list
@@ -258,11 +262,11 @@ def transform_resource_disease_to_mex_resource_row(
     resource_disease: dict[str, Any],
     extracted_ifsg_resource_parent: ExtractedResource,
     extracted_primary_source: ExtractedPrimarySource,
-    stable_target_id_by_bundesland_id: dict[str, ResourceID],
+    stable_target_id_by_bundesland_id: dict[str, MergedResourceIdentifier],
     meta_disease_row_by_id_type: dict[int, MetaDisease],
     bundesland_by_in_bundesland: dict[str, Text],
     code_by_id_type: dict[int, str],
-    unit_stable_target_ids_by_synonym: dict[str, OrganizationalUnitID],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     extracted_organization_rki: ExtractedOrganization,
 ) -> ExtractedResource:
     """Transform resource disease row to mex resource.
@@ -276,10 +280,9 @@ def transform_resource_disease_to_mex_resource_row(
         meta_disease_row_by_id_type: id type to meta disease row map
         bundesland_by_in_bundesland: in bundesland str to bundesland Text map
         code_by_id_type: id type to code map
-        unit_stable_target_ids_by_synonym: mapping unit strings to OrganizationalUnitID
+        unit_stable_target_ids_by_synonym: mapping unit synonyms to
+                                           MergedOrganizationalUnitIdentifier
         extracted_organization_rki: extracted organization for RKI
-
-
 
     Returns:
         transform resource disease row to ExtractedResource
@@ -358,14 +361,14 @@ def transform_ifsg_data_to_mex_variable_group(
     """Transform ifsg data to mex VariableGroup.
 
     Args:
-        ifsg_variable_group: ifsg_variable_group defaulte values
+        ifsg_variable_group: ifsg_variable_group default values
         extracted_ifsg_resource_disease: ExtractedResource disease list
         extracted_primary_source: ExtractedPrimarySource
         meta_field: MetaField list
         id_types_of_diseases: disease related id_types
 
     Returns:
-    transform resource parent to ExtractedResource
+        transform resource parent to ExtractedResource
     """
     identifier_in_primary_source_unique_list = set(
         [
@@ -413,7 +416,7 @@ def transform_ifsg_data_to_mex_variables(
 
     Args:
         filtered_variables: MetaField list to transform into variables
-        ifsg_variable_group: ifsg_variable_group defaulte values
+        ifsg_variable_group: ifsg_variable_group default values
         extracted_ifsg_resource_disease: ExtractedResource disease list
         extracted_ifsg_variable_group: variable group default values
         extracted_primary_sources_ifsg: ExtractedPrimarySource
@@ -422,7 +425,7 @@ def transform_ifsg_data_to_mex_variables(
         meta_item: MetaItem list
 
     Returns:
-    transform filtered variable to extracted variables
+        transform filtered variable to extracted variables
     """
     variable_group_stable_target_id_by_label = {
         row.label[0].value: row.stableTargetId for row in extracted_ifsg_variable_group

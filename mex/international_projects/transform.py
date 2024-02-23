@@ -6,9 +6,9 @@ from mex.common.models import ExtractedActivity, ExtractedPrimarySource
 from mex.common.types import (
     ActivityType,
     Link,
-    OrganizationalUnitID,
-    OrganizationID,
-    PersonID,
+    MergedOrganizationalUnitIdentifier,
+    MergedOrganizationIdentifier,
+    MergedPersonIdentifier,
     Theme,
 )
 from mex.international_projects.models.source import InternationalProjectsSource
@@ -44,10 +44,14 @@ ACTIVITY_TYPES_BY_FUNDING_TYPE = defaultdict(
 def transform_international_projects_source_to_extracted_activity(
     source: InternationalProjectsSource,
     extracted_primary_source: ExtractedPrimarySource,
-    person_stable_target_ids_by_query_string: dict[Hashable, list[PersonID]],
-    unit_stable_target_id_by_synonym: dict[str, OrganizationalUnitID],
-    funding_sources_stable_target_id_by_query: dict[str, OrganizationID],
-    partner_organizations_stable_target_id_by_query: dict[str, OrganizationID],
+    person_stable_target_ids_by_query_string: dict[
+        Hashable, list[MergedPersonIdentifier]
+    ],
+    unit_stable_target_id_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
+    funding_sources_stable_target_id_by_query: dict[str, MergedOrganizationIdentifier],
+    partner_organizations_stable_target_id_by_query: dict[
+        str, MergedOrganizationIdentifier
+    ],
 ) -> ExtractedActivity | None:
     """Transform international projects source to extracted activity.
 
@@ -129,10 +133,14 @@ def transform_international_projects_source_to_extracted_activity(
 def transform_international_projects_sources_to_extracted_activities(
     international_projects_sources: Iterable[InternationalProjectsSource],
     extracted_primary_source: ExtractedPrimarySource,
-    person_stable_target_ids_by_query_string: dict[Hashable, list[PersonID]],
-    unit_stable_target_id_by_synonym: dict[str, OrganizationalUnitID],
-    funding_sources_stable_target_id_by_query: dict[str, OrganizationID],
-    partner_organizations_stable_target_id_by_query: dict[str, OrganizationID],
+    person_stable_target_ids_by_query_string: dict[
+        Hashable, list[MergedPersonIdentifier]
+    ],
+    unit_stable_target_id_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
+    funding_sources_stable_target_id_by_query: dict[str, MergedOrganizationIdentifier],
+    partner_organizations_stable_target_id_by_query: dict[
+        str, MergedOrganizationIdentifier
+    ],
 ) -> Generator[ExtractedActivity, None, None]:
     """Transform international projects sources to extracted activity.
 
