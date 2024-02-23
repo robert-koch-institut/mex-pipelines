@@ -1,4 +1,4 @@
-﻿StudieID2,StudieID1,SymopseID,textbox5,textbox2,textbox24,textbox21,valInstrument,textbox14,textbox11,textbox17,Nachkomma,GenVar,IntVar,KeepVarname,KeepPUF,EHIS,textbox8,VarLevel,Katalog,Originalfrage,ValuelabelSet,textbox49,textbox51
+StudieID2,StudieID1,SymopseID,textbox5,textbox2,textbox24,textbox21,valInstrument,textbox14,textbox11,textbox17,Nachkomma,GenVar,IntVar,KeepVarname,KeepPUF,EHIS,textbox8,VarLevel,Katalog,Originalfrage,ValuelabelSet,textbox49,textbox51
 1122999,BBCCDD1,503,Krankheiten (1101),Lorem (110116),KLMNO_F4,Lorem Symptome: Halsschmerzen (1. Tag),,YY2002_Sym00,Zahl,3,0,False,False,True,False,0,Allgemeine Gesundheit (11),Nominal,,,JaTechnullWnKAFi,-95,Eingangsfrage wn/kA
 1122999,BBCCDD1,503,Krankheiten (1101),Lorem (110116),KLMNO_F4,Lorem Symptome: Halsschmerzen (1. Tag),,YY2002_Sym00,Zahl,3,0,False,False,True,False,0,Allgemeine Gesundheit (11),Nominal,,,JaTechnullWnKAFi,-96,Filterbed. fehlend
 1122999,BBCCDD1,503,Krankheiten (1101),Lorem (110116),KLMNO_F4,Lorem Symptome: Halsschmerzen (1. Tag),,YY2002_Sym00,Zahl,3,0,False,False,True,False,0,Allgemeine Gesundheit (11),Nominal,,,JaTechnullWnKAFi,-99,Keine Angabe

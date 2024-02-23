@@ -61,10 +61,9 @@ def _create_numeric_ids(
     # compile a list of model classes (each model class can appear multiple times)
     # by adding some models more often than others, we can influence the likelihood
     # of `random_choices` picking that class from the list of models
-    weighted_model_class_list: list[type[ExtractedData]] = []
-    for model, weight in weights.items():
-        for _ in range(weight):
-            weighted_model_class_list.append(model)
+    weighted_model_class_list = [
+        model for model, weight in weights.items() for _ in range(weight)
+    ]
     # pick a random selection of model classes from the weighted model class list
     choices = list(faker.random_choices(weighted_model_class_list, settings.count))
     # count the picks, but use at least 2 so we can fulfill required references

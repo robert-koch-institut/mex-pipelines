@@ -62,14 +62,14 @@ def mocked_confluence_vvt(monkeypatch: MonkeyPatch) -> None:
 @pytest.fixture
 def detail_page_data_html() -> str:
     """Return dummy detail page HTML."""
-    with open(TEST_DATA_DIR / "detail_page_data.html", "r", encoding="utf-8") as fh:
+    with open(TEST_DATA_DIR / "detail_page_data.html", encoding="utf-8") as fh:
         return fh.read()
 
 
 @pytest.fixture
 def detail_page_data_json(detail_page_data_html: str) -> dict[str, Any]:
     """Return dummy detail page JSON."""
-    with open(TEST_DATA_DIR / "detail_page_data.json", "r", encoding="utf-8") as fh:
+    with open(TEST_DATA_DIR / "detail_page_data.json", encoding="utf-8") as fh:
         detail_page = json.load(fh)
     detail_page["body"]["view"]["value"] = detail_page_data_html
     return cast(dict[str, Any], detail_page)
