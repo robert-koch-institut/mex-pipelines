@@ -137,10 +137,10 @@ def test_transform_resource_state_to_mex_resource(
 
 
 def test_get_instrument_tool_or_apparatus(
-    meta_disease: list[MetaDisease], resource_disease: list[dict[str, Any]]
+    meta_disease: list[MetaDisease], resource_diseases: list[dict[str, Any]]
 ) -> None:
     instrument_tool_or_apparatus = get_instrument_tool_or_apparatus(
-        meta_disease[0], resource_disease[0]
+        meta_disease[0], resource_diseases[0]
     )
     expected = [
         {"language": "de", "value": "Falldefinition B"},
