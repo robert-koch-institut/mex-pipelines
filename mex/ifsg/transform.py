@@ -230,7 +230,6 @@ def transform_resource_disease_to_mex_resource(
     """
     code_by_id_type = {m.id_type: m.code for m in meta_type}
     meta_disease_row_by_id_type = {m.id_type: m for m in meta_disease}
-    mex_resource_disease: list[ExtractedResource] = []
     bundesland_by_in_bundesland = {
         value["forValues"][0]: value["setValues"][0]
         for value in resource_disease["spatial"][1]["mappingRules"]
@@ -239,22 +238,21 @@ def transform_resource_disease_to_mex_resource(
         value.identifierInPrimarySource: value.stableTargetId
         for value in extracted_ifsg_resource_state
     }
-    for id_type in id_type_of_diseases:
-        mex_resource_disease.append(
-            transform_resource_disease_to_mex_resource_row(
-                id_type,
-                resource_disease,
-                extracted_ifsg_resource_parent,
-                extracted_primary_source,
-                stable_target_id_by_bundesland_id,
-                meta_disease_row_by_id_type,
-                bundesland_by_in_bundesland,
-                code_by_id_type,
-                unit_stable_target_ids_by_synonym,
-                extracted_organization_rki,
-            )
+    return [
+        transform_resource_disease_to_mex_resource_row(
+            id_type,
+            resource_disease,
+            extracted_ifsg_resource_parent,
+            extracted_primary_source,
+            stable_target_id_by_bundesland_id,
+            meta_disease_row_by_id_type,
+            bundesland_by_in_bundesland,
+            code_by_id_type,
+            unit_stable_target_ids_by_synonym,
+            extracted_organization_rki,
         )
-    return mex_resource_disease
+        for id_type in id_type_of_diseases
+    ]
 
 
 def transform_resource_disease_to_mex_resource_row(
@@ -295,8 +293,10 @@ def transform_resource_disease_to_mex_resource_row(
     )
     is_part_of = [extracted_ifsg_resource_parent.stableTargetId]
     if meta_disease_row.in_bundesland:
-        for bundesland_id in meta_disease_row.in_bundesland.split(","):
-            is_part_of.append(stable_target_id_by_bundesland_id[bundesland_id])
+        is_part_of.extend(
+            stable_target_id_by_bundesland_id[bundesland_id]
+            for bundesland_id in meta_disease_row.in_bundesland.split(",")
+        )
     keyword = [
         value
         for value in [
@@ -385,21 +385,19 @@ def transform_ifsg_data_to_mex_variable_group(
         row["forValues"][0]: row["setValues"][0]
         for row in ifsg_variable_group["label"][0]["mappingRules"]
     }
-    extracted_variable_groups = []
-    for identifier_in_primary_source in identifier_in_primary_source_unique_list:
-        extracted_variable_groups.append(
-            ExtractedVariableGroup(
-                hadPrimarySource=extracted_primary_source.stableTargetId,
-                identifierInPrimarySource=identifier_in_primary_source,
-                containedBy=extracted_ifsg_resource_disease_stable_target_id_by_id_type[
-                    identifier_in_primary_source.split("_")[0]
-                ],
-                label=label_by_statement_area_group[
-                    identifier_in_primary_source.split("_")[1]
-                ],
-            )
+    return [
+        ExtractedVariableGroup(
+            hadPrimarySource=extracted_primary_source.stableTargetId,
+            identifierInPrimarySource=identifier_in_primary_source,
+            containedBy=extracted_ifsg_resource_disease_stable_target_id_by_id_type[
+                identifier_in_primary_source.split("_")[0]
+            ],
+            label=label_by_statement_area_group[
+                identifier_in_primary_source.split("_")[1]
+            ],
         )
-    return extracted_variable_groups
+        for identifier_in_primary_source in identifier_in_primary_source_unique_list
+    ]
 
 
 def transform_ifsg_data_to_mex_variables(

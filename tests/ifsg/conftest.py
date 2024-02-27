@@ -3,7 +3,6 @@ from unittest.mock import MagicMock
 
 import pytest
 from pydantic import BaseModel
-from pyodbc import Connection, Cursor
 from pytest import MonkeyPatch
 
 from mex.common.models import (
@@ -156,9 +155,9 @@ def mocked_ifsg(
     """Mock IFSG connector."""
 
     def mocked_init(self: IFSGConnector) -> None:
-        cursor = MagicMock(spec=Cursor)
+        cursor = MagicMock()
         cursor.fetchone.return_value = ["mocked"]
-        self._connection = MagicMock(spec=Connection)
+        self._connection = MagicMock()
         self._connection.cursor.return_value.__enter__.return_value = cursor
 
     monkeypatch.setattr(IFSGConnector, "__init__", mocked_init)
@@ -586,7 +585,7 @@ def resource_parent() -> dict[str, Any]:
 
 
 @pytest.fixture
-def resource_state() -> list[dict[str, Any]]:
+def resource_states() -> list[dict[str, Any]]:
     return [
         {
             "accessRestriction": [
@@ -1510,7 +1509,7 @@ def resource_state() -> list[dict[str, Any]]:
 
 
 @pytest.fixture
-def resource_disease() -> list[dict[str, Any]]:
+def resource_diseases() -> list[dict[str, Any]]:
     return [
         {
             "accessRestriction": [

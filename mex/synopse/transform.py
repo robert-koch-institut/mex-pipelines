@@ -545,7 +545,7 @@ def transform_synopse_projects_to_mex_activities(
     # not yet be transformed
     for project in synopse_projects:
         anschlussprojekt = (
-            project.anschlussprojekt.rstrip("-Basiserhebung")
+            project.anschlussprojekt.removesuffix("-Basiserhebung")
             if project.anschlussprojekt == "KiGGS-Basiserhebung"
             else project.anschlussprojekt
         )
