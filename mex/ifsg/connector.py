@@ -28,7 +28,7 @@ class NoOpPyodbc:
 try:
     import pyodbc  # type: ignore[import-not-found]
 except ImportError:
-    pyodbc = NoOpPyodbc  # type: ignore[assignment]
+    pyodbc = NoOpPyodbc
 
 
 QUERY_BY_MODEL = {
