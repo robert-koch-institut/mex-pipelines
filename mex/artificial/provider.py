@@ -136,7 +136,9 @@ class IdentityProvider(BaseFakerProvider):
         """Return ID for random identity of given type (that is not excluded)."""
         if choices := [
             identity
-            for entity_type in re.findall(r"([A-Za-z]+)ID", str(inner_type))
+            for entity_type in re.findall(
+                r"Merged([A-Za-z]+)Identifier", str(inner_type)
+            )
             for identity in self._identities[entity_type]
             # avoid self-references by skipping excluded ids
             if identity.stableTargetId != exclude.stableTargetId
