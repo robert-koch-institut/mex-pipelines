@@ -12,7 +12,7 @@ identifierInPrimarySource:
 - fieldInPrimarySource: n/a
   mappingRules:
   - setValues:
-    - Lorem ipsum
+    - test_raw_data
     rule: Use value as it is.
   comment: identifierInPrimarySource also for the corresponding activity extracted from international projects
 stableTargetId:
@@ -168,6 +168,6 @@ wasGeneratedBy:
 - fieldInPrimarySource: n/a
   mappingRules:
   - forValues:
-    - sed
+    - testAAbr
     rule: Use value 
 
