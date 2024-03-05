@@ -27,7 +27,7 @@ def transform_seq_repo_activities_to_extracted_activities(
         Generator for ExtractedActivity
     """
     theme = seq_repo_activity["theme"][0]["mappingRules"][0]["setValues"]
-    for _, source in seq_repo_sources.items():
+    for source in seq_repo_sources.values():
         yield ExtractedActivity(
             contact=[
                 Identifier.generate()

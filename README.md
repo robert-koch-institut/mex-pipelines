@@ -138,11 +138,6 @@ components of the MEx project are open-sourced under the same license as well.
 - `poetry run international-projects` extracts sources from the international projects excel
 - based on international-projects to MEx mapping version a913b9e
 
-### ldap extractor
-
-- `poetry run sync-persons` removes persons from MEx public API that are no longer in AD
-- based on ldap to MEx mapping commit f909b0d
-
 ### odk extractor
 
 - `poetry run odk` extracts ODK survey data from excel files

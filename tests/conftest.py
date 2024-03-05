@@ -9,7 +9,7 @@ from pytest import MonkeyPatch
 from requests import Response
 
 from mex.common.models import ExtractedOrganization
-from mex.common.types import PrimarySourceID
+from mex.common.types import MergedPrimarySourceIdentifier
 from mex.common.wikidata.connector import (
     WikidataAPIConnector,
     WikidataQueryServiceConnector,
@@ -47,7 +47,7 @@ def wikidata_organization(
 def extracted_organization_rki() -> ExtractedOrganization:
     return ExtractedOrganization(
         identifierInPrimarySource="Robert Koch-Institut",
-        hadPrimarySource=PrimarySourceID.generate(123),
+        hadPrimarySource=MergedPrimarySourceIdentifier.generate(123),
         officialName=["Robert Koch-Institut"],
     )
 

@@ -1,7 +1,7 @@
 import pytest
 
 from mex.common.models import ExtractedPrimarySource
-from mex.common.types import PrimarySourceID
+from mex.common.types import MergedPrimarySourceIdentifier
 from mex.pipeline.organigram import (
     extracted_organizational_units,
     unit_stable_target_ids_by_synonym,
@@ -12,7 +12,7 @@ from mex.pipeline.organigram import (
 def extracted_primary_source_organigram() -> ExtractedPrimarySource:
     return ExtractedPrimarySource(
         identifierInPrimarySource="202",
-        hadPrimarySource=PrimarySourceID.generate(seed=20),
+        hadPrimarySource=MergedPrimarySourceIdentifier.generate(seed=20),
         title="organigram",
     )
 

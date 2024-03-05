@@ -8,7 +8,7 @@ from tests.confluence_vvt.conftest import TEST_DATA_DIR
 
 
 def test_get_row_data() -> None:
-    with open(TEST_DATA_DIR / "single_table_data.html", "r", encoding="utf-8") as f:
+    with open(TEST_DATA_DIR / "single_table_data.html", encoding="utf-8") as f:
         table = BeautifulSoup(f.read(), "html.parser")
 
     trs_table1 = table.find_all("tr")

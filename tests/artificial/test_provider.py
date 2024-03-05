@@ -14,7 +14,7 @@ from mex.common.types import (
     Email,
     Identifier,
     Link,
-    PrimarySourceID,
+    MergedPrimarySourceIdentifier,
     Text,
     TextLanguage,
     Timestamp,
@@ -132,7 +132,7 @@ def test_builder_provider_field_value(
 
 
 def test_builder_provider_field_value_reference(faker: Faker) -> None:
-    field = FieldInfo.from_annotation(PrimarySourceID)
+    field = FieldInfo.from_annotation(MergedPrimarySourceIdentifier)
     identity = Mock(stableTargetId="baaiaaaaaaaboi")
     reference = faker.field_value(field, identity)
 
@@ -164,7 +164,7 @@ def test_identity_provider_identities(faker: Faker) -> None:
     primary_sources = faker.identities(ExtractedPrimarySource)
     assert len(primary_sources) == 2
     assert primary_sources[0].model_dump() == {
-        "hadPrimarySource": PrimarySourceID("00000000000000"),
+        "hadPrimarySource": MergedPrimarySourceIdentifier("00000000000000"),
         "identifier": Joker(),
         "identifierInPrimarySource": "PrimarySource-2516530558",
         "stableTargetId": Joker(),
@@ -175,7 +175,7 @@ def test_identity_provider_reference(faker: Faker) -> None:
     identities = [identity for identity in faker.identities(ExtractedPrimarySource)]
 
     for identity in identities:
-        reference = faker.reference(PrimarySourceID, identity)
+        reference = faker.reference(MergedPrimarySourceIdentifier, identity)
         assert reference != identity.stableTargetId
         assert reference in [i.stableTargetId for i in identities]
 

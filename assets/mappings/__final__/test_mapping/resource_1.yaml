@@ -7,7 +7,7 @@ identifier:
 hadPrimarySource:
 - fieldInPrimarySource: n/a
   mappingRules:
-  - rule: Assign 'stable target id' 
+  - rule: Assign 'stable target id'
 identifierInPrimarySource:
 - fieldInPrimarySource: n/a
   mappingRules:
@@ -31,7 +31,7 @@ alternativeTitle:
   - setValues:
     - value: dolor
       language: en
-    - value: sit 
+    - value: sit
       language: de
     rule: Set values as indicated.
   comment: null
@@ -66,7 +66,7 @@ keyword:
   mappingRules:
   - setValues:
     - value: elitr
-    - value: sed 
+    - value: sed
     - value: diam
       language: en
     rule: Set values as indicated.
@@ -87,7 +87,7 @@ method:
 - fieldInPrimarySource: n/a
   mappingRules:
   - setValues:
-    - value: nonumy 
+    - value: nonumy
       language: en
     - value: eirmod
       language: de
@@ -122,7 +122,7 @@ sizeOfDataBasis:
 - fieldInPrimarySource: n/a
   mappingRules:
   - setValues:
-    - et dolore 
+    - et dolore
     rule: Set value as indicated
   comment: null
 spatial:
@@ -169,5 +169,4 @@ wasGeneratedBy:
   mappingRules:
   - forValues:
     - testAAbr
-    rule: Use value 
-
+    rule: Use value

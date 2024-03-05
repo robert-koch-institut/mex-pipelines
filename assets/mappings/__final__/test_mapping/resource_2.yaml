@@ -29,7 +29,7 @@ contact:
   mappingRules:
   - forValues:
     - C1
-    rule: Match value 
+    rule: Match value
 description:
 - fieldInPrimarySource: n/a
   mappingRules:
@@ -47,7 +47,7 @@ keyword:
 - fieldInPrimarySource: n/a
   mappingRules:
   - setValues:
-    - value: vero eos 
+    - value: vero eos
       language: en
     rule: Set values as indicated.
 language:
@@ -76,7 +76,7 @@ publisher:
 - fieldInPrimarySource: n/a
   mappingRules:
   - forValues:
-    - duo dolores 
+    - duo dolores
     rule: Use value to match with wikidata extractor.
 resourceTypeGeneral:
 - fieldInPrimarySource: n/a
@@ -115,9 +115,9 @@ title:
 - fieldInPrimarySource: n/a
   mappingRules:
   - setValues:
-    - value:  clita 
+    - value:  clita
       language: en
-    - value:  kasd 
+    - value:  kasd
       language: en
     rule: Set values as indicated.
   comment: n/a

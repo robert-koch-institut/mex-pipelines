@@ -2,7 +2,6 @@ import platform
 from subprocess import PIPE, STDOUT, Popen
 from typing import Any
 
-import pyodbc  # type: ignore
 from pydantic import BaseModel
 
 from mex.common.connector import BaseConnector
@@ -16,6 +15,21 @@ from mex.ifsg.models.meta_schema2field import MetaSchema2Field
 from mex.ifsg.models.meta_schema2type import MetaSchema2Type
 from mex.ifsg.models.meta_type import MetaType
 from mex.ifsg.settings import IFSGSettings
+
+
+class NoOpPyodbc:
+    """No-op pyodbc drop-in for when the libodbc dependency is not installed."""
+
+    def connect(self, _: str) -> None:  # pragma: no cover
+        """Create a new ODBC connection to a database."""
+        return
+
+
+try:
+    import pyodbc  # type: ignore[import-not-found]
+except ImportError:
+    pyodbc = NoOpPyodbc
+
 
 QUERY_BY_MODEL = {
     MetaCatalogue2Item: "SELECT * FROM SurvNet3Meta.Meta.Catalogue2Item",

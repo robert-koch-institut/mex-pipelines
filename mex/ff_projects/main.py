@@ -7,7 +7,11 @@ from mex.common.models import (
     ExtractedPrimarySource,
 )
 from mex.common.primary_source.transform import get_primary_sources_by_name
-from mex.common.types import OrganizationalUnitID, OrganizationID, PersonID
+from mex.common.types import (
+    MergedOrganizationalUnitIdentifier,
+    MergedOrganizationIdentifier,
+    MergedPersonIdentifier,
+)
 from mex.common.wikidata.transform import (
     transform_wikidata_organizations_to_extracted_organizations,
 )
@@ -42,7 +46,7 @@ def extracted_primary_source_ff_projects(
 @asset(group_name="ff_projects")
 def ff_projects_sources(
     extracted_primary_source_ff_projects: ExtractedPrimarySource,
-    unit_stable_target_ids_by_synonym: dict[str, OrganizationalUnitID],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
 ) -> list[FFProjectsSource]:
     """Extract FF Projects sources and filter out invalid items."""
     ff_projects_sources = extract_ff_projects_sources()
@@ -60,7 +64,7 @@ def ff_projects_person_ids_by_query_string(
     ff_projects_sources: list[FFProjectsSource],
     extracted_primary_source_ldap: ExtractedPrimarySource,
     extracted_organizational_units: list[ExtractedOrganizationalUnit],
-) -> dict[str, list[PersonID]]:
+) -> dict[str, list[MergedPersonIdentifier]]:
     """Extract authors for FF Projects from LDAP and group them by query."""
     ff_projects_authors = list(extract_ff_project_authors(ff_projects_sources))
     extracted_persons = transform_ldap_persons_with_query_to_mex_persons(
@@ -70,7 +74,7 @@ def ff_projects_person_ids_by_query_string(
     )
     load(extracted_persons)
     return {
-        str(query_string): [PersonID(id) for id in merged_ids]
+        str(query_string): [MergedPersonIdentifier(id_) for id_ in merged_ids]
         for query_string, merged_ids in get_merged_ids_by_query_string(
             ff_projects_authors, extracted_primary_source_ldap
         ).items()
@@ -81,7 +85,7 @@ def ff_projects_person_ids_by_query_string(
 def ff_projects_organization_ids_by_query_string(
     extracted_primary_source_wikidata: ExtractedPrimarySource,
     ff_projects_sources: list[FFProjectsSource],
-) -> dict[str, OrganizationID]:
+) -> dict[str, MergedOrganizationIdentifier]:
     """Extract organizations for FF Projects from wikidata and group them by query."""
     wikidata_organizations_by_query = extract_ff_projects_organizations(
         ff_projects_sources
@@ -101,9 +105,11 @@ def ff_projects_organization_ids_by_query_string(
 def extract_ff_projects(
     ff_projects_sources: list[FFProjectsSource],
     extracted_primary_source_ff_projects: ExtractedPrimarySource,
-    ff_projects_person_ids_by_query_string: dict[str, list[PersonID]],
-    unit_stable_target_ids_by_synonym: dict[str, OrganizationalUnitID],
-    ff_projects_organization_ids_by_query_string: dict[str, OrganizationID],
+    ff_projects_person_ids_by_query_string: dict[str, list[MergedPersonIdentifier]],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
+    ff_projects_organization_ids_by_query_string: dict[
+        str, MergedOrganizationIdentifier
+    ],
 ) -> list[ExtractedActivity]:
     """Transform FF Projects to extracted activities and load them to the sinks."""
     extracted_activities = [

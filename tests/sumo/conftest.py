@@ -16,11 +16,11 @@ from mex.common.models import (
     ExtractedVariableGroup,
 )
 from mex.common.types import (
-    ContactPointID,
     Identifier,
-    OrganizationalUnitID,
-    OrganizationID,
-    PrimarySourceID,
+    MergedContactPointIdentifier,
+    MergedOrganizationalUnitIdentifier,
+    MergedOrganizationIdentifier,
+    MergedPrimarySourceIdentifier,
     Text,
     TextLanguage,
 )
@@ -80,7 +80,7 @@ def mex_actor_resources() -> ExtractedContactPoint:
     """Return a dummy mex actor resource."""
     return ExtractedContactPoint(
         email="email@email.de",
-        hadPrimarySource=PrimarySourceID.generate(seed=42),
+        hadPrimarySource=MergedPrimarySourceIdentifier.generate(seed=42),
         identifierInPrimarySource="contact point",
     )
 
@@ -92,38 +92,38 @@ def mex_actor_access_platform() -> ExtractedPerson:
         familyName="Mustermann",
         fullName="Erika Mustermann",
         givenName="Erika",
-        hadPrimarySource=PrimarySourceID.generate(seed=42),
+        hadPrimarySource=MergedPrimarySourceIdentifier.generate(seed=42),
         identifierInPrimarySource="access platform",
     )
 
 
 @pytest.fixture
-def unit_merged_ids_by_synonym() -> dict[str, OrganizationalUnitID]:
+def unit_merged_ids_by_synonym() -> dict[str, MergedOrganizationalUnitIdentifier]:
     """Return dummy merged ids for units for testing."""
     return {
-        "MF4": OrganizationalUnitID.generate(seed=45),
-        "mf4": OrganizationalUnitID.generate(seed=45),
-        "FG32": OrganizationalUnitID.generate(seed=47),
-        "fg32": OrganizationalUnitID.generate(seed=47),
-        "FG99": OrganizationalUnitID.generate(seed=49),
-        "fg99": OrganizationalUnitID.generate(seed=49),
-        "FG 99": OrganizationalUnitID.generate(seed=49),
+        "MF4": MergedOrganizationalUnitIdentifier.generate(seed=45),
+        "mf4": MergedOrganizationalUnitIdentifier.generate(seed=45),
+        "FG32": MergedOrganizationalUnitIdentifier.generate(seed=47),
+        "fg32": MergedOrganizationalUnitIdentifier.generate(seed=47),
+        "FG99": MergedOrganizationalUnitIdentifier.generate(seed=49),
+        "fg99": MergedOrganizationalUnitIdentifier.generate(seed=49),
+        "FG 99": MergedOrganizationalUnitIdentifier.generate(seed=49),
     }
 
 
 @pytest.fixture
 def contact_merged_ids_by_emails():
     """Return dummy merged ids for units for testing."""
-    return {"email@email.de": ContactPointID.generate(seed=51)}
+    return {"email@email.de": MergedContactPointIdentifier.generate(seed=51)}
 
 
 @pytest.fixture
 def organizations_stable_target_ids_by_synonym():
     """Return dummy merged ids for units for testing."""
     return {
-        "Register": OrganizationalUnitID.generate(seed=60),
-        "Dummy Associate": OrganizationalUnitID.generate(seed=61),
-        "Robert Koch-Institut": OrganizationalUnitID.generate(seed=62),
+        "Register": MergedOrganizationalUnitIdentifier.generate(seed=60),
+        "Dummy Associate": MergedOrganizationalUnitIdentifier.generate(seed=61),
+        "Robert Koch-Institut": MergedOrganizationalUnitIdentifier.generate(seed=62),
     }
 
 
@@ -665,22 +665,22 @@ def sumo_activity() -> dict[str, Any]:
 def transformed_activity() -> ExtractedActivity:
     """Return Sumo ExtractedActivity."""
     return ExtractedActivity(
-        hadPrimarySource=PrimarySourceID("hBYPjIX6hKi4FtA5ES5i1a"),
+        hadPrimarySource=MergedPrimarySourceIdentifier("hBYPjIX6hKi4FtA5ES5i1a"),
         identifierInPrimarySource="https://url.url",
         abstract=[Text(value="Dummy abstract.", language=TextLanguage.DE)],
         activityType=["https://mex.rki.de/item/activity-type-3"],
         alternativeTitle=[],
-        contact=[OrganizationalUnitID("bFQoRhcVH5DHVf")],
+        contact=[MergedOrganizationalUnitIdentifier("bFQoRhcVH5DHVf")],
         documentation=[],
         end=[],
-        externalAssociate=[OrganizationalUnitID("bFQoRhcVH5DHVp")],
+        externalAssociate=[MergedOrganizationalUnitIdentifier("bFQoRhcVH5DHVp")],
         funderOrCommissioner=[],
         fundingProgram=[],
         involvedPerson=[],
-        involvedUnit=[OrganizationalUnitID("bFQoRhcVH5DHU9")],
+        involvedUnit=[MergedOrganizationalUnitIdentifier("bFQoRhcVH5DHU9")],
         isPartOfActivity=[],
         publication=[],
-        responsibleUnit=[OrganizationalUnitID("bFQoRhcVH5DHVb")],
+        responsibleUnit=[MergedOrganizationalUnitIdentifier("bFQoRhcVH5DHVb")],
         shortName=[Text(value="SUMO", language=TextLanguage.DE)],
         start=[],
         succeeds=[],
@@ -706,7 +706,7 @@ def mex_resources_nokeda() -> ExtractedResource:
         keyword=["keyword1", "keyword2"],
         meshId=["http://id.nlm.nih.gov/mesh/D004636"],
         publication=["Situationsreport"],
-        publisher=[OrganizationID("bFQoRhcVH5DHU6")],
+        publisher=[MergedOrganizationIdentifier("bFQoRhcVH5DHU6")],
         resourceTypeGeneral=["https://mex.rki.de/item/resource-type-general-1"],
         resourceTypeSpecific=["Daten"],
         rights=[
@@ -716,7 +716,7 @@ def mex_resources_nokeda() -> ExtractedResource:
         stateOfDataProcessing="https://mex.rki.de/item/data-processing-state-2",
         theme=["https://mex.rki.de/item/theme-11"],
         title=["test_project"],
-        unitInCharge=[OrganizationalUnitID.generate(seed=42)],
+        unitInCharge=[MergedOrganizationalUnitIdentifier.generate(seed=42)],
     )
 
 
@@ -735,7 +735,7 @@ def mex_resources_feat() -> ExtractedResource:
         resourceTypeGeneral=["https://mex.rki.de/item/resource-type-general-1"],
         theme=["https://mex.rki.de/item/theme-1"],
         title=["Syndrome"],
-        unitInCharge=[OrganizationalUnitID.generate(seed=42)],
+        unitInCharge=[MergedOrganizationalUnitIdentifier.generate(seed=42)],
     )
 
 

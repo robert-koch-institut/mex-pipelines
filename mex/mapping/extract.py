@@ -18,6 +18,6 @@ def extract_mapping_data(path: Path, model_type: type[BaseModel]) -> dict[str, A
         dict with mapping default value data from specified path
     """
     model = MAPPING_MODEL_BY_EXTRACTED_CLASS_NAME[model_type.__name__]
-    with open(path, "r", encoding="utf-8") as f:
+    with open(path, encoding="utf-8") as f:
         yaml_model = yaml.safe_load(f)
     return model.model_validate(yaml_model).model_dump()

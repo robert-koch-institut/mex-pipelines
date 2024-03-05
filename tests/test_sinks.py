@@ -13,7 +13,7 @@ from mex.sinks import load
 
 def test_load_multiple(monkeypatch: MonkeyPatch) -> None:
     settings = BaseSettings.get()
-    sinks = [Sink.BACKEND, Sink.PUBLIC, Sink.NDJSON]
+    sinks = [Sink.BACKEND, Sink.NDJSON]
     monkeypatch.setattr(settings, "sink", sinks)
 
     models = [
@@ -35,16 +35,13 @@ def test_load_multiple(monkeypatch: MonkeyPatch) -> None:
     ]
 
     post_to_backend_api = MagicMock(return_value=[m.identifier for m in models])
-    post_to_public_api = MagicMock(return_value=[m.identifier for m in models])
     write_ndjson = MagicMock(return_value=[m.identifier for m in models])
     monkeypatch.setattr(sinks_module, "post_to_backend_api", post_to_backend_api)
-    monkeypatch.setattr(sinks_module, "post_to_public_api", post_to_public_api)
     monkeypatch.setattr(sinks_module, "write_ndjson", write_ndjson)
 
     load(models)
 
     assert list(post_to_backend_api.call_args[0][0]) == models
-    assert list(post_to_public_api.call_args[0][0]) == models
     assert list(write_ndjson.call_args[0][0]) == models
 
 

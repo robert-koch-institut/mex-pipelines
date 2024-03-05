@@ -8,7 +8,7 @@ from mex.common.ldap.extract import get_merged_ids_by_employee_ids
 from mex.common.ldap.transform import transform_ldap_persons_to_mex_persons
 from mex.common.models import ExtractedOrganizationalUnit, ExtractedPrimarySource
 from mex.common.primary_source.transform import get_primary_sources_by_name
-from mex.common.types import OrganizationalUnitID, PersonID
+from mex.common.types import MergedOrganizationalUnitIdentifier, MergedPersonIdentifier
 from mex.filters import filter_by_global_rules
 from mex.pipeline import asset, run_job_in_process
 from mex.sinks import load
@@ -46,7 +46,7 @@ def blueant_project_leaders_by_employee_id(
     blueant_sources: list[BlueAntSource],
     extracted_primary_source_ldap: ExtractedPrimarySource,
     extracted_organizational_units: list[ExtractedOrganizationalUnit],
-) -> dict[str, list[PersonID]]:
+) -> dict[str, list[MergedPersonIdentifier]]:
     """Transform LDAP persons to mex-persons with stable target ID and group them by employee ID."""  # noqa: E501
     ldap_project_leaders = list(extract_blueant_project_leaders(blueant_sources))
     mex_project_leaders = transform_ldap_persons_to_mex_persons(
@@ -64,8 +64,8 @@ def blueant_project_leaders_by_employee_id(
 def extracted_blueant_activities(
     blueant_sources: list[BlueAntSource],
     extracted_primary_source_blueant: ExtractedPrimarySource,
-    blueant_project_leaders_by_employee_id: dict[str, list[PersonID]],
-    unit_stable_target_ids_by_synonym: dict[str, OrganizationalUnitID],
+    blueant_project_leaders_by_employee_id: dict[str, list[MergedPersonIdentifier]],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
 ) -> None:
     """Transform blueant sources to extracted activities and load them to the sinks."""
     extracted_activities = transform_blueant_sources_to_extracted_activities(

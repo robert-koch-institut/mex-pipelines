@@ -6,7 +6,7 @@ from mex.common.organigram.extract import (
 from mex.common.organigram.transform import (
     transform_organigram_units_to_organizational_units,
 )
-from mex.common.types import OrganizationalUnitID
+from mex.common.types import MergedOrganizationalUnitIdentifier
 from mex.pipeline import asset
 from mex.sinks import load
 
@@ -30,10 +30,10 @@ def extracted_organizational_units(
 @asset(group_name="default")
 def unit_stable_target_ids_by_synonym(
     extracted_organizational_units: list[ExtractedOrganizationalUnit],
-) -> dict[str, OrganizationalUnitID]:
+) -> dict[str, MergedOrganizationalUnitIdentifier]:
     """Group organizational units by their synonym."""
     return {
-        synonym: OrganizationalUnitID(merged_id)
+        synonym: MergedOrganizationalUnitIdentifier(merged_id)
         for synonym, merged_id in get_unit_merged_ids_by_synonyms(
             extracted_organizational_units
         ).items()
