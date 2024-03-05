@@ -8,7 +8,10 @@ from mex.common.models import (
     ExtractedVariableGroup,
 )
 from mex.common.primary_source.transform import get_primary_sources_by_name
-from mex.common.types import OrganizationalUnitID, OrganizationID
+from mex.common.types import (
+    MergedOrganizationalUnitIdentifier,
+    MergedOrganizationIdentifier,
+)
 from mex.mapping.extract import extract_mapping_data
 from mex.odk.extract import extract_odk_raw_data
 from mex.odk.model import ODKData
@@ -56,7 +59,7 @@ def odk_resource_mappings() -> list[dict[str, Any]]:
 def external_partner_and_publisher_by_label(
     odk_resource_mappings: list[dict[str, Any]],
     extracted_primary_source_wikidata: ExtractedPrimarySource,
-) -> dict[str, OrganizationID]:
+) -> dict[str, MergedOrganizationIdentifier]:
     """Extract wikidata for external partner and publisher, load to sinks and return."""
     return get_external_partner_and_publisher_by_label(
         odk_resource_mappings, extracted_primary_source_wikidata
@@ -66,9 +69,9 @@ def external_partner_and_publisher_by_label(
 @asset(group_name="odk")
 def extracted_resources_odk(
     odk_resource_mappings: list[dict[str, Any]],
-    unit_stable_target_ids_by_synonym: dict[str, OrganizationalUnitID],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     extracted_primary_source_international_projects: ExtractedPrimarySource,
-    external_partner_and_publisher_by_label: dict[str, OrganizationID],
+    external_partner_and_publisher_by_label: dict[str, MergedOrganizationIdentifier],
     extracted_primary_source_mex: ExtractedPrimarySource,
 ) -> list[ExtractedResource]:
     """Transform odk resources to mex resource, load to sinks and return."""

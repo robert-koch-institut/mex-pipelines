@@ -9,7 +9,7 @@ from mex.common.models import (
     ExtractedVariableGroup,
 )
 from mex.common.testing import Joker
-from mex.common.types import OrganizationalUnitID
+from mex.common.types import MergedOrganizationalUnitIdentifier
 from mex.odk.model import ODKData
 from mex.odk.transform import (
     get_external_partner_and_publisher_by_label,
@@ -22,7 +22,7 @@ from mex.odk.transform import (
 
 def test_transform_odk_resources_to_mex_resources(
     odk_resource_mappings: list[dict[str, Any]],
-    unit_stable_target_ids_by_synonym: dict[str, OrganizationalUnitID],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     external_partner_and_publisher_by_label: dict[str, ExtractedOrganization],
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
 ) -> None:

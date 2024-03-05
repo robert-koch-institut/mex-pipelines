@@ -7,7 +7,10 @@ from mex.common.models import (
     ExtractedVariable,
     ExtractedVariableGroup,
 )
-from mex.common.types import OrganizationalUnitID, OrganizationID
+from mex.common.types import (
+    MergedOrganizationalUnitIdentifier,
+    MergedOrganizationIdentifier,
+)
 from mex.common.wikidata.extract import search_organization_by_label
 from mex.common.wikidata.transform import (
     transform_wikidata_organizations_to_extracted_organizations,
@@ -18,9 +21,9 @@ from mex.sinks import load
 
 def transform_odk_resources_to_mex_resources(
     odk_resource_mappings: list[dict[str, Any]],
-    unit_stable_target_ids_by_synonym: dict[str, OrganizationalUnitID],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     extracted_primary_source_international_projects: ExtractedPrimarySource,
-    external_partner_and_publisher_by_label: dict[str, OrganizationID],
+    external_partner_and_publisher_by_label: dict[str, MergedOrganizationIdentifier],
     extracted_primary_source_mex: ExtractedPrimarySource,
 ) -> list[ExtractedResource]:
     """Transform odk resources to mex resources.
@@ -135,7 +138,7 @@ def transform_odk_resources_to_mex_resources(
 def get_external_partner_and_publisher_by_label(
     odk_resource_mappings: list[dict[str, Any]],
     extracted_primary_source_wikidata: ExtractedPrimarySource,
-) -> dict[str, OrganizationID]:
+) -> dict[str, MergedOrganizationIdentifier]:
     """Extract wikidata OrganizationIDs for external partners and publishers.
 
     Args:
@@ -155,16 +158,20 @@ def get_external_partner_and_publisher_by_label(
             for resource in odk_resource_mappings
         ]
     )
-    external_partner_and_publisher_by_label: dict[str, OrganizationID] = {}
+    external_partner_and_publisher_by_label: dict[str, MergedOrganizationIdentifier] = (
+        {}
+    )
     for label in labels:
         if organization := list(search_organization_by_label(label)):
-            external_partner_and_publisher_by_label[label] = OrganizationID(
-                next(
-                    transform_wikidata_organizations_to_extracted_organizations(
-                        organization,
-                        extracted_primary_source_wikidata,
-                    )
-                ).stableTargetId
+            external_partner_and_publisher_by_label[label] = (
+                MergedOrganizationIdentifier(
+                    next(
+                        transform_wikidata_organizations_to_extracted_organizations(
+                            organization,
+                            extracted_primary_source_wikidata,
+                        )
+                    ).stableTargetId
+                )
             )
             load(organization)
     return external_partner_and_publisher_by_label
@@ -185,21 +192,21 @@ def get_variable_groups_from_raw_data(
     for file in odk_raw_data:
         in_group = False
         group: list[dict[str, str]] = []
-        for i, type in enumerate(file.type):
+        for i, type_row in enumerate(file.type):
             name = file.name[i]
-            if isinstance(type, str) and isinstance(name, str):
-                if type in ["note", "today"]:
+            if isinstance(type_row, str) and isinstance(name, str):
+                if type_row in ["note", "today"]:
                     continue
-                if type == "begin_group":
+                if type_row == "begin_group":
                     in_group = True
                     group = []
                     group_name = name
-                elif type == "end_group":
+                elif type_row == "end_group":
                     in_group = False
                     variable_groups[group_name] = group
                 if in_group:
                     row_dict = {
-                        "type": type,
+                        "type": type_row,
                         "name": name,
                         "file_name": file.file_name,
                     }

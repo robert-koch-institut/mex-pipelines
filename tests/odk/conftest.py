@@ -16,10 +16,10 @@ from mex.common.primary_source.transform import (
 from mex.common.types import (
     AccessRestriction,
     Language,
-    OrganizationalUnitID,
-    OrganizationID,
-    PrimarySourceID,
-    ResourceID,
+    MergedOrganizationalUnitIdentifier,
+    MergedOrganizationIdentifier,
+    MergedPrimarySourceIdentifier,
+    MergedResourceIdentifier,
     ResourceTypeGeneral,
     Text,
     Theme,
@@ -70,9 +70,11 @@ def extracted_primary_source_international_projects() -> ExtractedPrimarySource:
 
 
 @pytest.fixture
-def unit_stable_target_ids_by_synonym() -> dict[str, OrganizationalUnitID]:
+def unit_stable_target_ids_by_synonym() -> (
+    dict[str, MergedOrganizationalUnitIdentifier]
+):
     """Mock unit stable target ids."""
-    return {"C1": OrganizationalUnitID.generate(seed=44)}
+    return {"C1": MergedOrganizationalUnitIdentifier.generate(seed=44)}
 
 
 @pytest.fixture
@@ -492,11 +494,13 @@ def odk_resource_mappings() -> list[dict[str, Any]]:
 
 
 @pytest.fixture
-def external_partner_and_publisher_by_label() -> dict[str, OrganizationID]:
+def external_partner_and_publisher_by_label() -> (
+    dict[str, MergedOrganizationIdentifier]
+):
     """Mocked external partne and publisher dict for OrganizationIDs."""
     return {
-        "invidunt": OrganizationalUnitID.generate(42),
-        "consetetur": OrganizationalUnitID.generate(43),
+        "invidunt": MergedOrganizationalUnitIdentifier.generate(42),
+        "consetetur": MergedOrganizationalUnitIdentifier.generate(43),
     }
 
 
@@ -512,10 +516,10 @@ def extracted_resources_odk() -> list[ExtractedResource]:
                 Text(value="dolor", language="en"),
                 Text(value="sit", language="de"),
             ],
-            contact=[OrganizationalUnitID.generate(42)],
-            contributingUnit=[OrganizationalUnitID.generate(43)],
+            contact=[MergedOrganizationalUnitIdentifier.generate(42)],
+            contributingUnit=[MergedOrganizationalUnitIdentifier.generate(43)],
             description=[Text(value="amet", language="en")],
-            externalPartner=[OrganizationalUnitID.generate(44)],
+            externalPartner=[MergedOrganizationalUnitIdentifier.generate(44)],
             keyword=[
                 Text(value="elitr", language=None),
                 Text(value="sed", language="en"),
@@ -546,7 +550,7 @@ def extracted_resources_odk() -> list[ExtractedResource]:
                 Text(value="aliquyam", language="en"),
                 Text(value="erat", language="de"),
             ],
-            unitInCharge=[OrganizationalUnitID.generate(45)],
+            unitInCharge=[MergedOrganizationalUnitIdentifier.generate(45)],
             entityType="ExtractedResource",
         )
     ]
@@ -842,9 +846,9 @@ def extracted_variable_groups_odk() -> list[ExtractedVariableGroup]:
     """Mocked odk mex variable groups."""
     return [
         ExtractedVariableGroup(
-            hadPrimarySource=PrimarySourceID.generate(50),
+            hadPrimarySource=MergedPrimarySourceIdentifier.generate(50),
             identifierInPrimarySource="gatekeeper",
-            containedBy=[ResourceID.generate(51)],
+            containedBy=[MergedResourceIdentifier.generate(51)],
             label=[
                 Text(value="Introduction of study to gatekeeper", language="en"),
                 Text(value="Introduction of study to gatekeeper", language="en"),
@@ -865,9 +869,9 @@ def extracted_variable_groups_odk() -> list[ExtractedVariableGroup]:
             entityType="ExtractedVariableGroup",
         ),
         ExtractedVariableGroup(
-            hadPrimarySource=PrimarySourceID.generate(52),
+            hadPrimarySource=MergedPrimarySourceIdentifier.generate(52),
             identifierInPrimarySource="selection",
-            containedBy=[ResourceID.generate(53)],
+            containedBy=[MergedResourceIdentifier.generate(53)],
             label=[
                 Text(value="Selection of respondent", language="en"),
                 Text(value="Selection of respondent", language="en"),
