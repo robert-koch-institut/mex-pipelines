@@ -59,7 +59,7 @@ def test_transform_odk_resources_to_mex_resources(
             {"value": "eirmod", "language": "de"},
         ],
         "methodDescription": [{"value": "tempor", "language": "en"}],
-        "publisher": ["bFQoRhcVH5DHU6"],
+        "publisher": [external_partner_and_publisher_by_label["invidunt"]],
         "resourceTypeGeneral": ["https://mex.rki.de/item/resource-type-general-8"],
         "rights": [{"value": "ut labore", "language": "de"}],
         "sizeOfDataBasis": "et dolore",
@@ -79,6 +79,16 @@ def test_transform_odk_resources_to_mex_resources(
         "unitInCharge": [unit_stable_target_ids_by_synonym["C1"]],
     }
     assert resources[0].model_dump(exclude_defaults=True) == expected
+
+    resources_without_organizations = transform_odk_resources_to_mex_resources(
+        odk_resource_mappings,
+        unit_stable_target_ids_by_synonym,
+        extracted_primary_sources["international-projects"],
+        {},
+        extracted_primary_sources["mex"],
+    )
+    assert resources_without_organizations[0].model_dump()["publisher"] == []
+    assert resources_without_organizations[0].model_dump()["externalPartner"] == []
 
 
 @pytest.mark.usefixtures(

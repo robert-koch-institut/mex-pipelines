@@ -317,7 +317,7 @@ def transform_odk_data_to_extracted_variables(
                 if "label" in column_name and isinstance(cell, str)
             ]
             if label == []:
-                continue  # TODO: address this in MX-1568
+                continue  # TODO: address empty label list in MX-1568
             value_set = []
             if isinstance(row["type"], str) and row["type"].startswith(
                 ("select_one", "select_multiple")
@@ -350,8 +350,8 @@ def get_value_set(type_cell: str, choice_sheet: ODKData) -> list[str]:
     Returns:
         list of value sets matched to type cell
     """
-    value_set_survey = type_cell.removeprefix("select_one").removeprefix(
-        "select_multiple"
+    value_set_survey = (
+        type_cell.removeprefix("select_one").removeprefix("select_multiple").strip()
     )
     label_choices = choice_sheet.label_choices
     list_name = choice_sheet.list_name
