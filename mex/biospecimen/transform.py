@@ -92,7 +92,7 @@ def transform_biospecimen_resource_to_mex_resource(
         else:
             documentation = None
         mesh_id = [
-            "http://id.nlm.nih.gov/mesh/" + id for id in resource.id_mesh_begriff
+            f"http://id.nlm.nih.gov/mesh/{id_}" for id_ in resource.id_mesh_begriff
         ]
         if resource.verwandte_publikation_doi:
             publication = resource.verwandte_publikation_doi

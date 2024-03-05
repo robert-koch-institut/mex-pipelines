@@ -18,7 +18,11 @@ from mex.common.models import (
 from mex.common.primary_source.transform import (
     get_primary_sources_by_name,
 )
-from mex.common.types import ContactPointID, Email, OrganizationalUnitID
+from mex.common.types import (
+    Email,
+    MergedContactPointIdentifier,
+    MergedOrganizationalUnitIdentifier,
+)
 from mex.common.wikidata.transform import (
     transform_wikidata_organizations_to_extracted_organizations,
 )
@@ -73,7 +77,7 @@ def extracted_primary_source_sumo(
 @asset(group_name="sumo")
 def transformed_sumo_access_platform(
     extracted_organizational_units: list[ExtractedOrganizationalUnit],
-    unit_stable_target_ids_by_synonym: dict[str, OrganizationalUnitID],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     extracted_primary_source_ldap: ExtractedPrimarySource,
     extracted_primary_source_sumo: ExtractedPrimarySource,
 ) -> None:
@@ -112,7 +116,7 @@ def contact_merged_ids_by_emails_sumo(
     extracted_resources_nokeda_sumo: dict[str, Any],
     extracted_resources_feat_sumo: dict[str, Any],
     extracted_primary_source_ldap: ExtractedPrimarySource,
-) -> dict[Email, ContactPointID]:
+) -> dict[Email, MergedContactPointIdentifier]:
     """Load contacts related to resources and return them by their e-mail addresses."""
     ldap_contact_points_resources = list(
         extract_ldap_contact_points_by_emails(
@@ -130,8 +134,8 @@ def contact_merged_ids_by_emails_sumo(
 
 @asset(group_name="sumo")
 def transformed_activity_sumo(
-    unit_stable_target_ids_by_synonym: dict[str, OrganizationalUnitID],
-    contact_merged_ids_by_emails_sumo: dict[Email, ContactPointID],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
+    contact_merged_ids_by_emails_sumo: dict[Email, MergedContactPointIdentifier],
     extracted_primary_source_sumo: ExtractedPrimarySource,
 ) -> ExtractedActivity:
     """Extract, transform and load SUMO activity."""
@@ -213,8 +217,8 @@ def organization_stable_target_id_by_query_sumo(
 def transformed_resource_nokeda_sumo(
     extracted_resources_nokeda_sumo: dict[str, Any],
     extracted_primary_source_sumo: ExtractedPrimarySource,
-    unit_stable_target_ids_by_synonym: dict[str, OrganizationalUnitID],
-    contact_merged_ids_by_emails_sumo: dict[Email, ContactPointID],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
+    contact_merged_ids_by_emails_sumo: dict[Email, MergedContactPointIdentifier],
     extracted_organization_rki: ExtractedOrganization,
     transformed_activity_sumo: ExtractedActivity,
 ) -> ExtractedResource:
@@ -235,8 +239,8 @@ def transformed_resource_nokeda_sumo(
 def transformed_resource_feat_sumo(
     extracted_resources_feat_sumo: dict[str, Any],
     extracted_primary_source_sumo: ExtractedPrimarySource,
-    unit_stable_target_ids_by_synonym: dict[str, OrganizationalUnitID],
-    contact_merged_ids_by_emails_sumo: dict[Email, ContactPointID],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
+    contact_merged_ids_by_emails_sumo: dict[Email, MergedContactPointIdentifier],
     transformed_resource_nokeda_sumo: ExtractedResource,
     transformed_activity_sumo: ExtractedActivity,
 ) -> ExtractedResource:

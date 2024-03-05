@@ -60,13 +60,11 @@ def test_transform_seq_repo_distribution_to_extracted_distribution(
     seq_repo_distribution: dict[str, Any],
 ) -> None:
     extracted_mex_distributions = list(
-        (
-            transform_seq_repo_distribution_to_extracted_distribution(
-                seq_repo_latest_sources,
-                seq_repo_distribution,
-                extracted_mex_access_platform,
-                extracted_primary_source_seq_repo,
-            )
+        transform_seq_repo_distribution_to_extracted_distribution(
+            seq_repo_latest_sources,
+            seq_repo_distribution,
+            extracted_mex_access_platform,
+            extracted_primary_source_seq_repo,
         )
     )
 

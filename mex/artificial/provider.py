@@ -13,10 +13,7 @@ from pydantic.fields import FieldInfo
 from mex.artificial.identity import IdentityMap
 from mex.artificial.settings import ArtificialSettings
 from mex.common.identity import Identity
-from mex.common.models import (
-    ExtractedData,
-    MExModel,
-)
+from mex.common.models import ExtractedData
 from mex.common.types import (
     TIMESTAMP_FORMATS_BY_PRECISION,
     UTC,
@@ -127,7 +124,7 @@ class IdentityProvider(BaseFakerProvider):
         super().__init__(factory)
         self._identities = identities
 
-    def identities(self, model: type[MExModel]) -> list[Identity]:
+    def identities(self, model: type[ExtractedData]) -> list[Identity]:
         """Return a list of identities for the given model class."""
         return self._identities[model.__name__.removeprefix("Extracted")]
 
@@ -139,7 +136,9 @@ class IdentityProvider(BaseFakerProvider):
         """Return ID for random identity of given type (that is not excluded)."""
         if choices := [
             identity
-            for entity_type in re.findall(r"([A-Za-z]+)ID", str(inner_type))
+            for entity_type in re.findall(
+                r"Merged([A-Za-z]+)Identifier", str(inner_type)
+            )
             for identity in self._identities[entity_type]
             # avoid self-references by skipping excluded ids
             if identity.stableTargetId != exclude.stableTargetId

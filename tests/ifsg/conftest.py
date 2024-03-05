@@ -3,7 +3,6 @@ from unittest.mock import MagicMock
 
 import pytest
 from pydantic import BaseModel
-from pyodbc import Connection, Cursor
 from pytest import MonkeyPatch
 
 from mex.common.models import (
@@ -19,9 +18,9 @@ from mex.common.primary_source.transform import (
 from mex.common.types import (
     Link,
     LinkLanguage,
-    OrganizationalUnitID,
-    PrimarySourceID,
-    ResourceID,
+    MergedOrganizationalUnitIdentifier,
+    MergedPrimarySourceIdentifier,
+    MergedResourceIdentifier,
     Text,
     TextLanguage,
 )
@@ -156,9 +155,9 @@ def mocked_ifsg(
     """Mock IFSG connector."""
 
     def mocked_init(self: IFSGConnector) -> None:
-        cursor = MagicMock(spec=Cursor)
+        cursor = MagicMock()
         cursor.fetchone.return_value = ["mocked"]
-        self._connection = MagicMock(spec=Connection)
+        self._connection = MagicMock()
         self._connection.cursor.return_value.__enter__.return_value = cursor
 
     monkeypatch.setattr(IFSGConnector, "__init__", mocked_init)
@@ -171,9 +170,9 @@ def mocked_ifsg(
 
 
 @pytest.fixture
-def unit_stable_target_ids() -> dict[str, OrganizationalUnitID]:
+def unit_stable_target_ids() -> dict[str, MergedOrganizationalUnitIdentifier]:
     """Mock unit stable target ids."""
-    return {"FG99": OrganizationalUnitID.generate(seed=43)}
+    return {"FG99": MergedOrganizationalUnitIdentifier.generate(seed=43)}
 
 
 @pytest.fixture
@@ -586,7 +585,7 @@ def resource_parent() -> dict[str, Any]:
 
 
 @pytest.fixture
-def resource_state() -> list[dict[str, Any]]:
+def resource_states() -> list[dict[str, Any]]:
     return [
         {
             "accessRestriction": [
@@ -1510,7 +1509,7 @@ def resource_state() -> list[dict[str, Any]]:
 
 
 @pytest.fixture
-def resource_disease() -> list[dict[str, Any]]:
+def resource_diseases() -> list[dict[str, Any]]:
     return [
         {
             "accessRestriction": [
@@ -2667,9 +2666,9 @@ def extracted_ifsg_resource_disease() -> list[ExtractedResource]:
 def extracted_ifsg_variable_group() -> list[ExtractedVariableGroup]:
     return [
         ExtractedVariableGroup(
-            hadPrimarySource=PrimarySourceID.generate(23),
+            hadPrimarySource=MergedPrimarySourceIdentifier.generate(23),
             identifierInPrimarySource="101_Epi",
-            containedBy=[ResourceID.generate(24)],
+            containedBy=[MergedResourceIdentifier.generate(24)],
             label=[
                 Text(value="Epidemiologische Informationen", language=TextLanguage.DE)
             ],

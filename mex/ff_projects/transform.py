@@ -4,9 +4,9 @@ from mex.common.exceptions import MExError
 from mex.common.models import ExtractedActivity, ExtractedPrimarySource
 from mex.common.types import (
     ActivityType,
-    OrganizationalUnitID,
-    OrganizationID,
-    PersonID,
+    MergedOrganizationalUnitIdentifier,
+    MergedOrganizationIdentifier,
+    MergedPersonIdentifier,
 )
 from mex.ff_projects.models.source import FFProjectsSource
 
@@ -68,9 +68,9 @@ def get_rki_az_types(rki_azs: str) -> list[ActivityType]:
 def transform_ff_projects_source_to_extracted_activity(
     ff_projects_source: FFProjectsSource,
     extracted_primary_source: ExtractedPrimarySource,
-    person_stable_target_ids_by_query_string: dict[str, list[PersonID]],
-    unit_stable_target_id_by_synonym: dict[str, OrganizationalUnitID],
-    organization_stable_target_id_by_synonyms: dict[str, OrganizationID],
+    person_stable_target_ids_by_query_string: dict[str, list[MergedPersonIdentifier]],
+    unit_stable_target_id_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
+    organization_stable_target_id_by_synonyms: dict[str, MergedOrganizationIdentifier],
 ) -> ExtractedActivity:
     """Transform FF Projects source to an extracted activity.
 

@@ -18,13 +18,15 @@ from mex.common.models import (
     ExtractedPrimarySource,
 )
 from mex.common.testing import Joker
-from mex.common.types import PrimarySourceID
+from mex.common.types import MergedPrimarySourceIdentifier
 
 
 def test_restore_identities() -> None:
     # assign a new dummy identity
     identity_provider = get_provider()
-    dummy_identity = identity_provider.assign(PrimarySourceID.generate(), "dummy")
+    dummy_identity = identity_provider.assign(
+        MergedPrimarySourceIdentifier.generate(), "dummy"
+    )
 
     # trash the current provider (simulating what happens between dagster assets)
     cast(MemoryIdentityProvider, identity_provider)._database.clear()

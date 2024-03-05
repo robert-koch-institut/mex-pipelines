@@ -9,7 +9,11 @@ from mex.common.models import (
 from mex.common.primary_source.transform import (
     get_primary_sources_by_name,
 )
-from mex.common.types import OrganizationalUnitID, OrganizationID, PersonID
+from mex.common.types import (
+    MergedOrganizationalUnitIdentifier,
+    MergedOrganizationIdentifier,
+    MergedPersonIdentifier,
+)
 from mex.datscha_web.extract import (
     extract_datscha_web_items,
     extract_datscha_web_organizations,
@@ -56,7 +60,7 @@ def datscha_web_person_ids_by_query_string(
     extracted_datscha_web_items: list[DatschaWebItem],
     extracted_primary_source_ldap: ExtractedPrimarySource,
     extracted_organizational_units: list[ExtractedOrganizationalUnit],
-) -> dict[str, list[PersonID]]:
+) -> dict[str, list[MergedPersonIdentifier]]:
     """Extract Datscha Web contact persons from LDAP and return them by query string."""
     ldap_source_contacts = list(
         extract_datscha_web_source_contacts(extracted_datscha_web_items)
@@ -77,7 +81,7 @@ def datscha_web_person_ids_by_query_string(
 def datscha_web_organization_ids_by_query_string(
     extracted_datscha_web_items: list[DatschaWebItem],
     extracted_primary_source_wikidata: ExtractedPrimarySource,
-) -> dict[str, OrganizationID]:
+) -> dict[str, MergedOrganizationIdentifier]:
     """Extract organizations for Datscha Web from wikidata and group them by query."""
     wikidata_organizations_by_query = extract_datscha_web_organizations(
         extracted_datscha_web_items
@@ -91,7 +95,7 @@ def datscha_web_organization_ids_by_query_string(
     load(extracted_organizations_by_query.values())
 
     return {
-        query: OrganizationID(organization.stableTargetId)
+        query: MergedOrganizationIdentifier(organization.stableTargetId)
         for query, organization in extracted_organizations_by_query.items()
     }
 
@@ -99,10 +103,12 @@ def datscha_web_organization_ids_by_query_string(
 @asset(group_name="datscha_web")
 def extract_datscha_web(
     extracted_primary_source_datscha_web: ExtractedPrimarySource,
-    unit_stable_target_ids_by_synonym: dict[str, OrganizationalUnitID],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     extracted_datscha_web_items: list[DatschaWebItem],
-    datscha_web_person_ids_by_query_string: dict[str, list[PersonID]],
-    datscha_web_organization_ids_by_query_string: dict[str, OrganizationID],
+    datscha_web_person_ids_by_query_string: dict[str, list[MergedPersonIdentifier]],
+    datscha_web_organization_ids_by_query_string: dict[
+        str, MergedOrganizationIdentifier
+    ],
 ) -> list[ExtractedActivity]:
     """Transform Datscha Web to extracted sources and load them to the sinks."""
     mex_sources = list(

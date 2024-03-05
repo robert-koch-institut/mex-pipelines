@@ -13,7 +13,7 @@ from mex.common.testing import Joker
 from mex.common.types import (
     Identifier,
     Link,
-    OrganizationalUnitID,
+    MergedOrganizationalUnitIdentifier,
     Text,
     TextLanguage,
     Timestamp,
@@ -101,7 +101,9 @@ def test_transform_synopse_studies_into_access_platforms(
     synopse_studies: list[SynopseStudy],
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
 ) -> None:
-    unit_merged_ids_by_synonym = {"FG 99": OrganizationalUnitID.generate(seed=234)}
+    unit_merged_ids_by_synonym = {
+        "FG 99": MergedOrganizationalUnitIdentifier.generate(seed=234)
+    }
     expected_access_platform_one = {
         "contact": [Identifier.generate(seed=234)],
         "hadPrimarySource": extracted_primary_sources["report-server"].stableTargetId,
@@ -477,7 +479,7 @@ def test_transform_synopse_data_regular_to_mex_resources(
         ],
         "language": ["https://mex.rki.de/item/language-1"],
         "publisher": [extracted_organization[0].stableTargetId],
-        # TODO add OrganizationID of Robert Koch-Institut
+        # TODO add MergedOrganizationIdentifier of Robert Koch-Institut
         "resourceTypeGeneral": ["https://mex.rki.de/item/resource-type-general-4"],
         "rights": [
             {
@@ -539,7 +541,7 @@ def test_transform_synopse_data_extended_data_use_to_mex_resources(
         "keyword": [{"language": TextLanguage.DE, "value": "Krankheiten allgemein"}],
         "language": ["https://mex.rki.de/item/language-1"],
         "publisher": [extracted_organization[0].stableTargetId],
-        # TODO add OrganizationID of Robert Koch-Institut
+        # TODO add MergedOrganizationIdentifier of Robert Koch-Institut
         "resourceTypeGeneral": ["https://mex.rki.de/item/resource-type-general-4"],
         "rights": [
             {
