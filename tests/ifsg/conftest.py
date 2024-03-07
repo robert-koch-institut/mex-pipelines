@@ -1,9 +1,8 @@
-from typing import TypeVar
+from typing import Any, TypeVar
 from unittest.mock import MagicMock
 
 import pytest
 from pydantic import BaseModel
-from pyodbc import Connection, Cursor
 from pytest import MonkeyPatch
 
 from mex.common.models import (
@@ -19,15 +18,13 @@ from mex.common.primary_source.transform import (
 from mex.common.types import (
     Link,
     LinkLanguage,
-    OrganizationalUnitID,
-    PrimarySourceID,
-    ResourceID,
+    MergedOrganizationalUnitIdentifier,
+    MergedPrimarySourceIdentifier,
+    MergedResourceIdentifier,
     Text,
     TextLanguage,
 )
 from mex.ifsg.connector import IFSGConnector
-from mex.ifsg.models.ifsg_resource import IFSGResource
-from mex.ifsg.models.ifsg_variable_group import IFSGVariableGroup
 from mex.ifsg.models.meta_catalogue2item import MetaCatalogue2Item
 from mex.ifsg.models.meta_catalogue2item2schema import MetaCatalogue2Item2Schema
 from mex.ifsg.models.meta_disease import MetaDisease
@@ -158,9 +155,9 @@ def mocked_ifsg(
     """Mock IFSG connector."""
 
     def mocked_init(self: IFSGConnector) -> None:
-        cursor = MagicMock(spec=Cursor)
+        cursor = MagicMock()
         cursor.fetchone.return_value = ["mocked"]
-        self._connection = MagicMock(spec=Connection)
+        self._connection = MagicMock()
         self._connection.cursor.return_value.__enter__.return_value = cursor
 
     monkeypatch.setattr(IFSGConnector, "__init__", mocked_init)
@@ -173,9 +170,9 @@ def mocked_ifsg(
 
 
 @pytest.fixture
-def unit_stable_target_ids() -> dict[str, OrganizationalUnitID]:
+def unit_stable_target_ids() -> dict[str, MergedOrganizationalUnitIdentifier]:
     """Mock unit stable target ids."""
-    return {"FG99": OrganizationalUnitID.generate(seed=43)}
+    return {"FG99": MergedOrganizationalUnitIdentifier.generate(seed=43)}
 
 
 @pytest.fixture
@@ -324,9 +321,9 @@ def meta_field() -> list[MetaField]:
 
 
 @pytest.fixture
-def ifsg_variable_group() -> IFSGVariableGroup:
-    return IFSGVariableGroup(
-        label=[
+def ifsg_variable_group() -> dict[str, Any]:
+    return {
+        "label": [
             {
                 "fieldInPrimarySource": 'StatementAreaGroup="Epi|Technical|Clinical|Outbreak|Patient|AdditionalAttributes|NULL|Event|General|Labor|Address"\'',
                 "locationInPrimarySource": "Meta.Field",
@@ -335,39 +332,87 @@ def ifsg_variable_group() -> IFSGVariableGroup:
                         "forValues": ["Epi"],
                         "setValues": [
                             {
-                                "value": "Epidemiologische Informationen",
                                 "language": "de",
+                                "value": "Epidemiologische Informationen",
                             }
+                        ],
+                    },
+                    {
+                        "forValues": ["Technical"],
+                        "setValues": [
+                            {"language": "de", "value": "Technische Angaben"}
+                        ],
+                    },
+                    {
+                        "forValues": ["Clinical"],
+                        "setValues": [
+                            {"language": "de", "value": "Klinische Informationen"}
+                        ],
+                    },
+                    {
+                        "forValues": ["Outbreak"],
+                        "setValues": [
+                            {"language": "de", "value": "Informationen zum Ausbruch"}
+                        ],
+                    },
+                    {
+                        "forValues": ["Patient"],
+                        "setValues": [
+                            {"language": "de", "value": "Patienteninformationen"}
+                        ],
+                    },
+                    {
+                        "forValues": ["Event"],
+                        "setValues": [
+                            {"language": "de", "value": "Informationen zum Ereignis"}
+                        ],
+                    },
+                    {
+                        "forValues": ["General"],
+                        "setValues": [
+                            {"language": "de", "value": "Administrative Angaben"}
+                        ],
+                    },
+                    {
+                        "forValues": ["Labor"],
+                        "setValues": [
+                            {"language": "de", "value": "Laborinformationen"}
+                        ],
+                    },
+                    {
+                        "forValues": ["Address"],
+                        "setValues": [
+                            {"language": "de", "value": "Adressinformationen"}
                         ],
                     },
                 ],
             }
         ]
-    )
+    }
 
 
 @pytest.fixture
-def resource_parent() -> IFSGResource:
-    return IFSGResource(
-        access_restriction=[
+def resource_parent() -> dict[str, Any]:
+    return {
+        "accessRestriction": [
             {
+                "comment": "restriktiv",
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
                     {"setValues": ["https://mex.rki.de/item/access-restriction-2"]}
                 ],
-                "comment": "restriktiv",
             }
         ],
-        accrual_periodicity=[
+        "accrualPeriodicity": [
             {
+                "comment": "täglich",
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
                     {"setValues": ["https://mex.rki.de/item/frequency-15"]}
                 ],
-                "comment": "täglich",
             }
         ],
-        alternative_title=[
+        "alternativeTitle": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -375,18 +420,19 @@ def resource_parent() -> IFSGResource:
                 ],
             }
         ],
-        contact=[
+        "contact": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
                     {
                         "forValues": ["FG99"],
-                        "rule": "Use value to match with identifier in /raw-data/organigram/organizational-units.json.",
+                        "rule": "Use value to match with identifier in "
+                        "/raw-data/organigram/organizational-units.json.",
                     }
                 ],
             }
         ],
-        description=[
+        "description": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -398,17 +444,17 @@ def resource_parent() -> IFSGResource:
                 ],
             }
         ],
-        identifier_in_primary_source=[
+        "identifierInPrimarySource": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
-                    {"setValues": ["ifsg-parent"], "rule": "Use value as indicated."}
+                    {"rule": "Use value as indicated.", "setValues": ["ifsg-parent"]}
                 ],
             }
         ],
-        instrument_tool_or_apparatus=[],
-        is_part_of=[],
-        keyword=[
+        "instrumentToolOrApparatus": [],
+        "isPartOf": [],
+        "keyword": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -421,14 +467,14 @@ def resource_parent() -> IFSGResource:
                 ],
             }
         ],
-        language=[
+        "language": [
             {
+                "comment": "Deutsch",
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [{"setValues": ["https://mex.rki.de/item/language-1"]}],
-                "comment": "Deutsch",
             }
         ],
-        publication=[
+        "publication": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -462,16 +508,16 @@ def resource_parent() -> IFSGResource:
                 ],
             }
         ],
-        resource_type_general=[
+        "resourceTypeGeneral": [
             {
+                "comment": "Public Health Fachdaten",
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
                     {"setValues": ["https://mex.rki.de/item/resource-type-general-1"]}
                 ],
-                "comment": "Public Health Fachdaten",
             }
         ],
-        resource_type_specific=[
+        "resourceTypeSpecific": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -479,7 +525,7 @@ def resource_parent() -> IFSGResource:
                 ],
             }
         ],
-        rights=[
+        "rights": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -487,7 +533,7 @@ def resource_parent() -> IFSGResource:
                 ],
             }
         ],
-        spatial=[
+        "spatial": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -495,17 +541,17 @@ def resource_parent() -> IFSGResource:
                 ],
             }
         ],
-        theme=[
+        "theme": [
             {
+                "comment": "Meldewesen, Infektionskrankheiten",
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
                     {"setValues": ["https://mex.rki.de/item/theme-17"]},
                     {"setValues": ["https://mex.rki.de/item/theme-2"]},
                 ],
-                "comment": "Meldewesen, Infektionskrankheiten",
             }
         ],
-        title=[
+        "title": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -513,50 +559,54 @@ def resource_parent() -> IFSGResource:
                         "setValues": [
                             {
                                 "language": "de",
-                                "value": "Meldedaten nach Infektionsschutzgesetz (IfSG)",
+                                "value": "Meldedaten nach "
+                                "Infektionsschutzgesetz "
+                                "(IfSG)",
                             }
                         ]
                     }
                 ],
             }
         ],
-        unit_in_charge=[
+        "unitInCharge": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
                     {
                         "forValues": ["FG99"],
-                        "rule": "Use value to match identifer using /raw-data/organigram/organizational-units.json.",
+                        "rule": "Use value to match identifer "
+                        "using "
+                        "/raw-data/organigram/organizational-units.json.",
                     }
                 ],
             }
         ],
-    )
+    }
 
 
 @pytest.fixture
-def resource_state() -> list[IFSGResource]:
+def resource_states() -> list[dict[str, Any]]:
     return [
-        IFSGResource(
-            access_restriction=[
+        {
+            "accessRestriction": [
                 {
+                    "comment": "restriktiv",
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
                         {"setValues": ["https://mex.rki.de/item/access-restriction-2"]}
                     ],
-                    "comment": "restriktiv",
                 }
             ],
-            accrual_periodicity=[
+            "accrualPeriodicity": [
                 {
+                    "comment": "unregelmäßig",
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
                         {"setValues": ["https://mex.rki.de/item/frequency-17"]}
                     ],
-                    "comment": "unregelmäßig",
                 }
             ],
-            alternative_title=[
+            "alternativeTitle": [
                 {
                     "fieldInPrimarySource": "InBundesland",
                     "locationInPrimarySource": "Meta.Disease",
@@ -579,25 +629,51 @@ def resource_state() -> list[IFSGResource]:
                     ],
                 }
             ],
-            contact=[
+            "contact": [
                 {
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [{"forValues": ["FG99"]}],
                 }
             ],
-            description=[],
-            instrument_tool_or_apparatus=[],
-            is_part_of=[
+            "description": [],
+            "identifierInPrimarySource": [
+                {
+                    "fieldInPrimarySource": "InBundesland",
+                    "locationInPrimarySource": "Meta.Disease",
+                    "mappingRules": [
+                        {"forValues": ["01"], "setValues": ["01"]},
+                        {"forValues": ["02"], "setValues": ["02"]},
+                        {"forValues": ["03"], "setValues": ["03"]},
+                        {"forValues": ["04"], "setValues": ["04"]},
+                        {"forValues": ["05"], "setValues": ["05"]},
+                        {"forValues": ["06"], "setValues": ["06"]},
+                        {"forValues": ["07"], "setValues": ["07"]},
+                        {"forValues": ["08"], "setValues": ["08"]},
+                        {"forValues": ["09"], "setValues": ["09"]},
+                        {"forValues": ["10"], "setValues": ["10"]},
+                        {"forValues": ["11"], "setValues": ["11"]},
+                        {"forValues": ["12"], "setValues": ["12"]},
+                        {"forValues": ["13"], "setValues": ["13"]},
+                        {"forValues": ["14"], "setValues": ["14"]},
+                        {"forValues": ["15"], "setValues": ["15"]},
+                        {"forValues": ["16"], "setValues": ["16"]},
+                    ],
+                }
+            ],
+            "instrumentToolOrApparatus": [],
+            "isPartOf": [
                 {
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
                         {
-                            "rule": "Use the 'stable target id' of item described by mapping/../ifsg/resource_parent"
+                            "rule": "Use the 'stable target id' of item "
+                            "described by "
+                            "mapping/../ifsg/resource_parent"
                         }
                     ],
                 }
             ],
-            keyword=[
+            "keyword": [
                 {
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
@@ -614,16 +690,16 @@ def resource_state() -> list[IFSGResource]:
                     ],
                 }
             ],
-            language=[
+            "language": [
                 {
+                    "comment": "Deutsch",
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
                         {"setValues": ["https://mex.rki.de/item/language-1"]}
                     ],
-                    "comment": "Deutsch",
                 }
             ],
-            publication=[
+            "publication": [
                 {
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
@@ -745,8 +821,9 @@ def resource_state() -> list[IFSGResource]:
                     ],
                 },
             ],
-            resource_type_general=[
+            "resourceTypeGeneral": [
                 {
+                    "comment": "Public Health Fachdaten",
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
                         {
@@ -755,10 +832,9 @@ def resource_state() -> list[IFSGResource]:
                             ]
                         }
                     ],
-                    "comment": "Public Health Fachdaten",
                 }
             ],
-            resource_type_specific=[
+            "resourceTypeSpecific": [
                 {
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
@@ -766,7 +842,7 @@ def resource_state() -> list[IFSGResource]:
                     ],
                 }
             ],
-            rights=[
+            "rights": [
                 {
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
@@ -778,7 +854,7 @@ def resource_state() -> list[IFSGResource]:
                     ],
                 }
             ],
-            spatial=[
+            "spatial": [
                 {
                     "fieldInPrimarySource": "InBundesland",
                     "locationInPrimarySource": "Meta.Disease",
@@ -862,17 +938,17 @@ def resource_state() -> list[IFSGResource]:
                     ],
                 }
             ],
-            theme=[
+            "theme": [
                 {
+                    "comment": "Meldewesen, Infektionskrankheiten",
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
                         {"setValues": ["https://mex.rki.de/item/theme-17"]},
                         {"setValues": ["https://mex.rki.de/item/theme-2"]},
                     ],
-                    "comment": "Meldewesen, Infektionskrankheiten",
                 }
             ],
-            title=[
+            "title": [
                 {
                     "fieldInPrimarySource": "InBundesland",
                     "locationInPrimarySource": "Meta.Disease",
@@ -956,38 +1032,40 @@ def resource_state() -> list[IFSGResource]:
                     ],
                 }
             ],
-            unit_in_charge=[
+            "unitInCharge": [
                 {
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
                         {
                             "forValues": ["FG99"],
-                            "rule": "Use value to match with identifer in /raw-data/organigram/organizational-units.json.",
+                            "rule": "Use value to match with "
+                            "identifer in "
+                            "/raw-data/organigram/organizational-units.json.",
                         }
                     ],
                 }
             ],
-        ),
-        IFSGResource(
-            access_restriction=[
+        },
+        {
+            "accessRestriction": [
                 {
+                    "comment": "restriktiv",
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
                         {"setValues": ["https://mex.rki.de/item/access-restriction-2"]}
                     ],
-                    "comment": "restriktiv",
                 }
             ],
-            accrual_periodicity=[
+            "accrualPeriodicity": [
                 {
+                    "comment": "unregelmäßig",
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
                         {"setValues": ["https://mex.rki.de/item/frequency-17"]}
                     ],
-                    "comment": "unregelmäßig",
                 }
             ],
-            alternative_title=[
+            "alternativeTitle": [
                 {
                     "fieldInPrimarySource": "InBundesland",
                     "locationInPrimarySource": "Meta.Disease",
@@ -1010,25 +1088,51 @@ def resource_state() -> list[IFSGResource]:
                     ],
                 }
             ],
-            contact=[
+            "contact": [
                 {
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [{"forValues": ["FG99"]}],
                 }
             ],
-            description=[],
-            instrument_tool_or_apparatus=[],
-            is_part_of=[
+            "description": [],
+            "identifierInPrimarySource": [
+                {
+                    "fieldInPrimarySource": "InBundesland",
+                    "locationInPrimarySource": "Meta.Disease",
+                    "mappingRules": [
+                        {"forValues": ["01"], "setValues": ["01"]},
+                        {"forValues": ["02"], "setValues": ["02"]},
+                        {"forValues": ["03"], "setValues": ["03"]},
+                        {"forValues": ["04"], "setValues": ["04"]},
+                        {"forValues": ["05"], "setValues": ["05"]},
+                        {"forValues": ["06"], "setValues": ["06"]},
+                        {"forValues": ["07"], "setValues": ["07"]},
+                        {"forValues": ["08"], "setValues": ["08"]},
+                        {"forValues": ["09"], "setValues": ["09"]},
+                        {"forValues": ["10"], "setValues": ["10"]},
+                        {"forValues": ["11"], "setValues": ["11"]},
+                        {"forValues": ["12"], "setValues": ["12"]},
+                        {"forValues": ["13"], "setValues": ["13"]},
+                        {"forValues": ["14"], "setValues": ["14"]},
+                        {"forValues": ["15"], "setValues": ["15"]},
+                        {"forValues": ["16"], "setValues": ["16"]},
+                    ],
+                }
+            ],
+            "instrumentToolOrApparatus": [],
+            "isPartOf": [
                 {
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
                         {
-                            "rule": "Use the 'stable target id' of item described by mapping/../ifsg/resource_parent"
+                            "rule": "Use the 'stable target id' of item "
+                            "described by "
+                            "mapping/../ifsg/resource_parent"
                         }
                     ],
                 }
             ],
-            keyword=[
+            "keyword": [
                 {
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
@@ -1045,16 +1149,16 @@ def resource_state() -> list[IFSGResource]:
                     ],
                 }
             ],
-            language=[
+            "language": [
                 {
+                    "comment": "Deutsch",
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
                         {"setValues": ["https://mex.rki.de/item/language-1"]}
                     ],
-                    "comment": "Deutsch",
                 }
             ],
-            publication=[
+            "publication": [
                 {
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
@@ -1084,7 +1188,7 @@ def resource_state() -> list[IFSGResource]:
                     "locationInPrimarySource": "Meta.Disease",
                     "mappingRules": [
                         {
-                            "forValues": ["01"],
+                            "forValues": ["07"],
                             "setValues": [
                                 {
                                     "language": "de",
@@ -1176,8 +1280,9 @@ def resource_state() -> list[IFSGResource]:
                     ],
                 },
             ],
-            resource_type_general=[
+            "resourceTypeGeneral": [
                 {
+                    "comment": "Public Health Fachdaten",
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
                         {
@@ -1186,10 +1291,9 @@ def resource_state() -> list[IFSGResource]:
                             ]
                         }
                     ],
-                    "comment": "Public Health Fachdaten",
                 }
             ],
-            resource_type_specific=[
+            "resourceTypeSpecific": [
                 {
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
@@ -1197,7 +1301,7 @@ def resource_state() -> list[IFSGResource]:
                     ],
                 }
             ],
-            rights=[
+            "rights": [
                 {
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
@@ -1209,18 +1313,101 @@ def resource_state() -> list[IFSGResource]:
                     ],
                 }
             ],
-            spatial=[],
-            theme=[
+            "spatial": [
                 {
+                    "fieldInPrimarySource": "InBundesland",
+                    "locationInPrimarySource": "Meta.Disease",
+                    "mappingRules": [
+                        {
+                            "forValues": ["01"],
+                            "setValues": [
+                                {"language": "de", "value": "Schleswig-Holstein"}
+                            ],
+                        },
+                        {
+                            "forValues": ["02"],
+                            "setValues": [{"language": "de", "value": "Hamburg"}],
+                        },
+                        {
+                            "forValues": ["03"],
+                            "setValues": [{"language": "de", "value": "Niedersachsen"}],
+                        },
+                        {
+                            "forValues": ["04"],
+                            "setValues": [{"language": "de", "value": "Bremen"}],
+                        },
+                        {
+                            "forValues": ["05"],
+                            "setValues": [
+                                {"language": "de", "value": "Nordrhein-Westfalen"}
+                            ],
+                        },
+                        {
+                            "forValues": ["06"],
+                            "setValues": [{"language": "de", "value": "Hessen"}],
+                        },
+                        {
+                            "forValues": ["07"],
+                            "setValues": [
+                                {"language": "de", "value": "Rheinland-Pfalz"}
+                            ],
+                        },
+                        {
+                            "forValues": ["08"],
+                            "setValues": [
+                                {"language": "de", "value": "Baden-Württemberg"}
+                            ],
+                        },
+                        {
+                            "forValues": ["09"],
+                            "setValues": [{"language": "de", "value": "Bayern"}],
+                        },
+                        {
+                            "forValues": ["10"],
+                            "setValues": [{"language": "de", "value": "Saarland"}],
+                        },
+                        {
+                            "forValues": ["11"],
+                            "setValues": [{"language": "de", "value": "Berlin"}],
+                        },
+                        {
+                            "forValues": ["12"],
+                            "setValues": [{"language": "de", "value": "Brandenburg"}],
+                        },
+                        {
+                            "forValues": ["13"],
+                            "setValues": [
+                                {"language": "de", "value": "Mecklenburg-Vorpommern"}
+                            ],
+                        },
+                        {
+                            "forValues": ["14"],
+                            "setValues": [{"language": "de", "value": "Sachsen"}],
+                        },
+                        {
+                            "forValues": ["15"],
+                            "setValues": [
+                                {"language": "de", "value": "Sachsen-Anhalt"}
+                            ],
+                        },
+                        {
+                            "forValues": ["16"],
+                            "setValues": [{"language": "de", "value": "Thüringen"}],
+                        },
+                    ],
+                }
+            ],
+            "theme": [
+                {
+                    "comment": "Meldewesen, Infektionskrankheiten",
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
                         {"setValues": ["https://mex.rki.de/item/theme-17"]},
                         {"setValues": ["https://mex.rki.de/item/theme-2"]},
                     ],
-                    "comment": "Meldewesen, Infektionskrankheiten",
                 }
             ],
-            title=[
+            "title": [
                 {
                     "fieldInPrimarySource": "InBundesland",
                     "locationInPrimarySource": "Meta.Disease",
@@ -1304,74 +1491,77 @@ def resource_state() -> list[IFSGResource]:
                     ],
                 }
             ],
-            unit_in_charge=[
+            "unitInCharge": [
                 {
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
                         {
                             "forValues": ["FG99"],
-                            "rule": "Use value to match with identifer in /raw-data/organigram/organizational-units.json.",
+                            "rule": "Use value to match with "
+                            "identifer in "
+                            "/raw-data/organigram/organizational-units.json.",
                         }
                     ],
                 }
             ],
-        ),
+        },
     ]
 
 
 @pytest.fixture
-def resource_disease() -> list[IFSGResource]:
+def resource_diseases() -> list[dict[str, Any]]:
     return [
-        IFSGResource(
-            access_restriction=[
+        {
+            "accessRestriction": [
                 {
+                    "comment": "restriktiv",
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
                         {"setValues": ["https://mex.rki.de/item/access-restriction-2"]}
                     ],
-                    "comment": "restriktiv",
                 }
             ],
-            accrual_periodicity=[
+            "accrualPeriodicity": [
                 {
+                    "comment": "unregelmäßig",
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
                         {"setValues": ["https://mex.rki.de/item/frequency-17"]}
                     ],
-                    "comment": "unregelmäßig",
                 }
             ],
-            alternative_title=[
+            "alternativeTitle": [
                 {
+                    "examplesInPrimarySource": ["BAN", "BOB"],
                     "fieldInPrimarySource": "Code",
                     "locationInPrimarySource": "Meta.Disease",
-                    "examplesInPrimarySource": ["BAN", "BOB"],
                     "mappingRules": [
                         {"rule": "Use value as it is. Do not assign a language."}
                     ],
                 }
             ],
-            contact=[
+            "contact": [
                 {
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
                         {
                             "forValues": ["FG99"],
-                            "rule": "Use value to match with identifier in /raw-data/organigram/organizational-units.json.",
+                            "rule": "Use value to match with identifier in "
+                            "/raw-data/organigram/organizational-units.json.",
                         }
                     ],
                 }
             ],
-            description=[],
-            identifier_in_primary_source=[
+            "description": [],
+            "identifierInPrimarySource": [
                 {
+                    "examplesInPrimarySource": ["102"],
                     "fieldInPrimarySource": "IdType",
                     "locationInPrimarySource": "Meta.Disease",
-                    "examplesInPrimarySource": ["102"],
                     "mappingRules": [{"rule": "Use value as it is."}],
                 }
             ],
-            instrument_tool_or_apparatus=[
+            "instrumentToolOrApparatus": [
                 {
                     "fieldInPrimarySource": 'ReferenceDef[A|B|C|D|E]="1"',
                     "locationInPrimarySource": "Meta.Disease",
@@ -1409,14 +1599,16 @@ def resource_disease() -> list[IFSGResource]:
                     ],
                 }
             ],
-            is_part_of=[
+            "isPartOf": [
                 {
                     "fieldInPrimarySource": "IFSGBundesland",
                     "locationInPrimarySource": "Meta.Disease",
                     "mappingRules": [
                         {"forValues": ["0"]},
                         {
-                            "rule": "Assign 'stable target id' of the item described by /mappings/../ifsg/resource_parent"
+                            "rule": "Assign 'stable target id' of the "
+                            "item described by "
+                            "/mappings/../ifsg/resource_parent"
                         },
                     ],
                 },
@@ -1426,86 +1618,126 @@ def resource_disease() -> list[IFSGResource]:
                     "mappingRules": [
                         {
                             "forValues": ["07"],
-                            "rule": "Assign 'stable target id' of the item with identiferInPrimarySource='07' as described by mapping/../ifsg/resource_state",
+                            "rule": "Assign 'stable target id' of the "
+                            "item with "
+                            "identiferInPrimarySource='07' as "
+                            "described by "
+                            "mapping/../ifsg/resource_state",
                         },
                         {
                             "forValues": ["09"],
-                            "rule": "Assign 'stable target id' of the item with identiferInPrimarySource='09' as described by mapping/../ifsg/resource_state",
+                            "rule": "Assign 'stable target id' of the "
+                            "item with "
+                            "identiferInPrimarySource='09' as "
+                            "described by "
+                            "mapping/../ifsg/resource_state",
                         },
                         {
                             "forValues": ["10"],
-                            "rule": "Assign 'stable target id' of the item with identiferInPrimarySource='10' as described by mapping/../ifsg/resource_state",
+                            "rule": "Assign 'stable target id' of the "
+                            "item with "
+                            "identiferInPrimarySource='10' as "
+                            "described by "
+                            "mapping/../ifsg/resource_state",
                         },
                         {
                             "forValues": ["11"],
-                            "rule": "Assign 'stable target id' of the item with identiferInPrimarySource='11' as described by mapping/../ifsg/resource_state",
+                            "rule": "Assign 'stable target id' of the "
+                            "item with "
+                            "identiferInPrimarySource='11' as "
+                            "described by "
+                            "mapping/../ifsg/resource_state",
                         },
                         {
                             "forValues": ["12"],
-                            "rule": "Assign 'stable target id' of the item with identiferInPrimarySource='12' as described by mapping/../ifsg/resource_state",
+                            "rule": "Assign 'stable target id' of the "
+                            "item with "
+                            "identiferInPrimarySource='12' as "
+                            "described by "
+                            "mapping/../ifsg/resource_state",
                         },
                         {
                             "forValues": ["13"],
-                            "rule": "Assign 'stable target id' of the item with identiferInPrimarySource='13' as  described by mapping/../ifsg/resource_state",
+                            "rule": "Assign 'stable target id' of the "
+                            "item with "
+                            "identiferInPrimarySource='13' as  "
+                            "described by "
+                            "mapping/../ifsg/resource_state",
                         },
                         {
                             "forValues": ["14"],
-                            "rule": "Assign 'stable target id' of the item with identiferInPrimarySource='14' as described by mapping/../ifsg/resource_state",
+                            "rule": "Assign 'stable target id' of the "
+                            "item with "
+                            "identiferInPrimarySource='14' as "
+                            "described by "
+                            "mapping/../ifsg/resource_state",
                         },
                         {
                             "forValues": ["15"],
-                            "rule": "Assign 'stable target id' of the item with identiferInPrimarySource='15' as described by mapping/../ifsg/resource_state",
+                            "rule": "Assign 'stable target id' of the "
+                            "item with "
+                            "identiferInPrimarySource='15' as "
+                            "described by "
+                            "mapping/../ifsg/resource_state",
                         },
                         {
                             "forValues": ["16"],
-                            "rule": "Assign 'stable target id' of the item with identiferInPrimarySource='16' as described by mapping/../ifsg/resource_state",
+                            "rule": "Assign 'stable target id' of the "
+                            "item with "
+                            "identiferInPrimarySource='16' as "
+                            "described by "
+                            "mapping/../ifsg/resource_state",
                         },
                     ],
                 },
             ],
-            keyword=[
+            "keyword": [
                 {
+                    "examplesInPrimarySource": ["Milzbrand", "Borreliose"],
                     "fieldInPrimarySource": "DiseaseName",
                     "locationInPrimarySource": "Meta.Disease",
-                    "examplesInPrimarySource": ["Milzbrand", "Borreliose"],
                     "mappingRules": [
                         {
-                            "rule": "Assign 'de' as default for the language property of the text object."
+                            "rule": "Assign 'de' as default for the "
+                            "language property of the text "
+                            "object."
                         }
                     ],
                 },
                 {
+                    "examplesInPrimarySource": ["Anthrax", "Lyme disease"],
                     "fieldInPrimarySource": "DiseaseNameEN",
                     "locationInPrimarySource": "Meta.Disease",
-                    "examplesInPrimarySource": ["Anthrax", "Lyme disease"],
                     "mappingRules": [
                         {
-                            "rule": "Assign 'en' as default for the language property of the text object."
+                            "rule": "Assign 'en' as default for the "
+                            "language property of the text "
+                            "object."
                         }
                     ],
                 },
                 {
-                    "fieldInPrimarySource": "SpecimenName",
-                    "locationInPrimarySource": "Meta.Disease",
                     "examplesInPrimarySource": [
                         "Bacillus anthracis",
                         "Borelia burgdorferi",
                     ],
+                    "fieldInPrimarySource": "SpecimenName",
+                    "locationInPrimarySource": "Meta.Disease",
                     "mappingRules": [
                         {"rule": "Use value as it is. Use language detection."}
                     ],
                 },
             ],
-            language=[
+            "language": [
                 {
+                    "comment": "Deutsch",
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
                         {"setValues": ["https://mex.rki.de/item/language-1"]}
                     ],
-                    "comment": "Deutsch",
                 }
             ],
-            publication=[
+            "publication": [
                 {
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
@@ -1521,8 +1753,9 @@ def resource_disease() -> list[IFSGResource]:
                     ],
                 }
             ],
-            resource_type_general=[
+            "resourceTypeGeneral": [
                 {
+                    "comment": "Public Health Fachdaten",
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
                         {
@@ -1531,10 +1764,9 @@ def resource_disease() -> list[IFSGResource]:
                             ]
                         }
                     ],
-                    "comment": "Public Health Fachdaten",
                 }
             ],
-            resource_type_specific=[
+            "resourceTypeSpecific": [
                 {
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
@@ -1542,7 +1774,7 @@ def resource_disease() -> list[IFSGResource]:
                     ],
                 }
             ],
-            rights=[
+            "rights": [
                 {
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
@@ -1554,7 +1786,7 @@ def resource_disease() -> list[IFSGResource]:
                     ],
                 }
             ],
-            spatial=[
+            "spatial": [
                 {
                     "fieldInPrimarySource": 'IFSGBundesland="0"',
                     "locationInPrimarySource": "Meta.Disease",
@@ -1611,8 +1843,9 @@ def resource_disease() -> list[IFSGResource]:
                     ],
                 },
             ],
-            theme=[
+            "theme": [
                 {
+                    "comment": "Meldewesen, Infektionskrankheiten",
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
                         {
@@ -1622,82 +1855,89 @@ def resource_disease() -> list[IFSGResource]:
                             ]
                         }
                     ],
-                    "comment": "Meldewesen, Infektionskrankheiten",
                 }
             ],
-            title=[
+            "title": [
                 {
                     "fieldInPrimarySource": "DiseaseName",
                     "locationInPrimarySource": "Meta.Disease",
                     "mappingRules": [
                         {
-                            "rule": "Construct the title after the following schema: Meldedaten nach Infektionsschutzgesetz (IfSG) zu [DiseaseName]. Assign 'de' as default for the language property of the text object."
+                            "rule": "Construct the title after the following "
+                            "schema: Meldedaten nach "
+                            "Infektionsschutzgesetz (IfSG) zu "
+                            "[DiseaseName]. Assign 'de' as default "
+                            "for the language property of the text "
+                            "object."
                         }
                     ],
                 }
             ],
-            unit_in_charge=[
+            "unitInCharge": [
                 {
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
                         {
                             "forValues": ["FG99"],
-                            "rule": "Use value to match with identifier from /raw-data/organigram/organizational-units.json.",
+                            "rule": "Use value to match with "
+                            "identifier from "
+                            "/raw-data/organigram/organizational-units.json.",
                         }
                     ],
                 }
             ],
-        ),
-        IFSGResource(
-            access_restriction=[
+        },
+        {
+            "accessRestriction": [
                 {
+                    "comment": "restriktiv",
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
                         {"setValues": ["https://mex.rki.de/item/access-restriction-2"]}
                     ],
-                    "comment": "restriktiv",
                 }
             ],
-            accrual_periodicity=[
+            "accrualPeriodicity": [
                 {
+                    "comment": "unregelmäßig",
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
                         {"setValues": ["https://mex.rki.de/item/frequency-17"]}
                     ],
-                    "comment": "unregelmäßig",
                 }
             ],
-            alternative_title=[
+            "alternativeTitle": [
                 {
+                    "examplesInPrimarySource": ["BAN", "BOB"],
                     "fieldInPrimarySource": "Code",
                     "locationInPrimarySource": "Meta.Disease",
-                    "examplesInPrimarySource": ["BAN", "BOB"],
                     "mappingRules": [
                         {"rule": "Use value as it is. Do not assign a language."}
                     ],
                 }
             ],
-            contact=[
+            "contact": [
                 {
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
                         {
                             "forValues": ["FG99"],
-                            "rule": "Use value to match with identifier in /raw-data/organigram/organizational-units.json.",
+                            "rule": "Use value to match with identifier in "
+                            "/raw-data/organigram/organizational-units.json.",
                         }
                     ],
                 }
             ],
-            description=[],
-            identifier_in_primary_source=[
+            "description": [],
+            "identifierInPrimarySource": [
                 {
+                    "examplesInPrimarySource": ["102"],
                     "fieldInPrimarySource": "IdType",
                     "locationInPrimarySource": "Meta.Disease",
-                    "examplesInPrimarySource": ["102"],
                     "mappingRules": [{"rule": "Use value as it is."}],
                 }
             ],
-            instrument_tool_or_apparatus=[
+            "instrumentToolOrApparatus": [
                 {
                     "fieldInPrimarySource": 'ReferenceDef[A|B|C|D|E]="1"',
                     "locationInPrimarySource": "Meta.Disease",
@@ -1735,14 +1975,16 @@ def resource_disease() -> list[IFSGResource]:
                     ],
                 }
             ],
-            is_part_of=[
+            "isPartOf": [
                 {
                     "fieldInPrimarySource": "IFSGBundesland",
                     "locationInPrimarySource": "Meta.Disease",
                     "mappingRules": [
                         {"forValues": ["0"]},
                         {
-                            "rule": "Assign 'stable target id' of the item described by /mappings/../ifsg/resource_parent"
+                            "rule": "Assign 'stable target id' of the "
+                            "item described by "
+                            "/mappings/../ifsg/resource_parent"
                         },
                     ],
                 },
@@ -1752,86 +1994,126 @@ def resource_disease() -> list[IFSGResource]:
                     "mappingRules": [
                         {
                             "forValues": ["07"],
-                            "rule": "Assign 'stable target id' of the item with identiferInPrimarySource='07' as described by mapping/../ifsg/resource_state",
+                            "rule": "Assign 'stable target id' of the "
+                            "item with "
+                            "identiferInPrimarySource='07' as "
+                            "described by "
+                            "mapping/../ifsg/resource_state",
                         },
                         {
                             "forValues": ["09"],
-                            "rule": "Assign 'stable target id' of the item with identiferInPrimarySource='09' as described by mapping/../ifsg/resource_state",
+                            "rule": "Assign 'stable target id' of the "
+                            "item with "
+                            "identiferInPrimarySource='09' as "
+                            "described by "
+                            "mapping/../ifsg/resource_state",
                         },
                         {
                             "forValues": ["10"],
-                            "rule": "Assign 'stable target id' of the item with identiferInPrimarySource='10' as described by mapping/../ifsg/resource_state",
+                            "rule": "Assign 'stable target id' of the "
+                            "item with "
+                            "identiferInPrimarySource='10' as "
+                            "described by "
+                            "mapping/../ifsg/resource_state",
                         },
                         {
                             "forValues": ["11"],
-                            "rule": "Assign 'stable target id' of the item with identiferInPrimarySource='11' as described by mapping/../ifsg/resource_state",
+                            "rule": "Assign 'stable target id' of the "
+                            "item with "
+                            "identiferInPrimarySource='11' as "
+                            "described by "
+                            "mapping/../ifsg/resource_state",
                         },
                         {
                             "forValues": ["12"],
-                            "rule": "Assign 'stable target id' of the item with identiferInPrimarySource='12' as described by mapping/../ifsg/resource_state",
+                            "rule": "Assign 'stable target id' of the "
+                            "item with "
+                            "identiferInPrimarySource='12' as "
+                            "described by "
+                            "mapping/../ifsg/resource_state",
                         },
                         {
                             "forValues": ["13"],
-                            "rule": "Assign 'stable target id' of the item with identiferInPrimarySource='13' as  described by mapping/../ifsg/resource_state",
+                            "rule": "Assign 'stable target id' of the "
+                            "item with "
+                            "identiferInPrimarySource='13' as  "
+                            "described by "
+                            "mapping/../ifsg/resource_state",
                         },
                         {
                             "forValues": ["14"],
-                            "rule": "Assign 'stable target id' of the item with identiferInPrimarySource='14' as described by mapping/../ifsg/resource_state",
+                            "rule": "Assign 'stable target id' of the "
+                            "item with "
+                            "identiferInPrimarySource='14' as "
+                            "described by "
+                            "mapping/../ifsg/resource_state",
                         },
                         {
                             "forValues": ["15"],
-                            "rule": "Assign 'stable target id' of the item with identiferInPrimarySource='15' as described by mapping/../ifsg/resource_state",
+                            "rule": "Assign 'stable target id' of the "
+                            "item with "
+                            "identiferInPrimarySource='15' as "
+                            "described by "
+                            "mapping/../ifsg/resource_state",
                         },
                         {
                             "forValues": ["16"],
-                            "rule": "Assign 'stable target id' of the item with identiferInPrimarySource='16' as described by mapping/../ifsg/resource_state",
+                            "rule": "Assign 'stable target id' of the "
+                            "item with "
+                            "identiferInPrimarySource='16' as "
+                            "described by "
+                            "mapping/../ifsg/resource_state",
                         },
                     ],
                 },
             ],
-            keyword=[
+            "keyword": [
                 {
+                    "examplesInPrimarySource": ["Milzbrand", "Borreliose"],
                     "fieldInPrimarySource": "DiseaseName",
                     "locationInPrimarySource": "Meta.Disease",
-                    "examplesInPrimarySource": ["Milzbrand", "Borreliose"],
                     "mappingRules": [
                         {
-                            "rule": "Assign 'de' as default for the language property of the text object."
+                            "rule": "Assign 'de' as default for the "
+                            "language property of the text "
+                            "object."
                         }
                     ],
                 },
                 {
+                    "examplesInPrimarySource": ["Anthrax", "Lyme disease"],
                     "fieldInPrimarySource": "DiseaseNameEN",
                     "locationInPrimarySource": "Meta.Disease",
-                    "examplesInPrimarySource": ["Anthrax", "Lyme disease"],
                     "mappingRules": [
                         {
-                            "rule": "Assign 'en' as default for the language property of the text object."
+                            "rule": "Assign 'en' as default for the "
+                            "language property of the text "
+                            "object."
                         }
                     ],
                 },
                 {
-                    "fieldInPrimarySource": "SpecimenName",
-                    "locationInPrimarySource": "Meta.Disease",
                     "examplesInPrimarySource": [
                         "Bacillus anthracis",
                         "Borelia burgdorferi",
                     ],
+                    "fieldInPrimarySource": "SpecimenName",
+                    "locationInPrimarySource": "Meta.Disease",
                     "mappingRules": [
                         {"rule": "Use value as it is. Use language detection."}
                     ],
                 },
             ],
-            language=[
+            "language": [
                 {
+                    "comment": "Deutsch",
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
                         {"setValues": ["https://mex.rki.de/item/language-1"]}
                     ],
-                    "comment": "Deutsch",
                 }
             ],
-            publication=[
+            "publication": [
                 {
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
@@ -1847,8 +2129,9 @@ def resource_disease() -> list[IFSGResource]:
                     ],
                 }
             ],
-            resource_type_general=[
+            "resourceTypeGeneral": [
                 {
+                    "comment": "Public Health Fachdaten",
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
                         {
@@ -1857,10 +2140,9 @@ def resource_disease() -> list[IFSGResource]:
                             ]
                         }
                     ],
-                    "comment": "Public Health Fachdaten",
                 }
             ],
-            resource_type_specific=[
+            "resourceTypeSpecific": [
                 {
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
@@ -1868,7 +2150,7 @@ def resource_disease() -> list[IFSGResource]:
                     ],
                 }
             ],
-            rights=[
+            "rights": [
                 {
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
@@ -1880,7 +2162,7 @@ def resource_disease() -> list[IFSGResource]:
                     ],
                 }
             ],
-            spatial=[
+            "spatial": [
                 {
                     "fieldInPrimarySource": 'IFSGBundesland="0"',
                     "locationInPrimarySource": "Meta.Disease",
@@ -1893,16 +2175,53 @@ def resource_disease() -> list[IFSGResource]:
                     "locationInPrimarySource": "Meta.Disease",
                     "mappingRules": [
                         {
-                            "forValues": ["42"],
+                            "forValues": ["07"],
                             "setValues": [
                                 {"language": "de", "value": "Rheinland-Pfalz"}
                             ],
                         },
+                        {
+                            "forValues": ["09"],
+                            "setValues": [{"language": "de", "value": "Bayern"}],
+                        },
+                        {
+                            "forValues": ["10"],
+                            "setValues": [{"language": "de", "value": "Saarland"}],
+                        },
+                        {
+                            "forValues": ["11"],
+                            "setValues": [{"language": "de", "value": "Berlin"}],
+                        },
+                        {
+                            "forValues": ["12"],
+                            "setValues": [{"language": "de", "value": "Brandenburg"}],
+                        },
+                        {
+                            "forValues": ["13"],
+                            "setValues": [
+                                {"language": "de", "value": "Mecklenburg-Vorpommern"}
+                            ],
+                        },
+                        {
+                            "forValues": ["14"],
+                            "setValues": [{"language": "de", "value": "Sachsen"}],
+                        },
+                        {
+                            "forValues": ["15"],
+                            "setValues": [
+                                {"language": "de", "value": "Sachsen-Anhalt"}
+                            ],
+                        },
+                        {
+                            "forValues": ["16"],
+                            "setValues": [{"language": "de", "value": "Thüringen"}],
+                        },
                     ],
                 },
             ],
-            theme=[
+            "theme": [
                 {
+                    "comment": "Meldewesen, Infektionskrankheiten",
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
                         {
@@ -1912,32 +2231,38 @@ def resource_disease() -> list[IFSGResource]:
                             ]
                         }
                     ],
-                    "comment": "Meldewesen, Infektionskrankheiten",
                 }
             ],
-            title=[
+            "title": [
                 {
                     "fieldInPrimarySource": "DiseaseName",
                     "locationInPrimarySource": "Meta.Disease",
                     "mappingRules": [
                         {
-                            "rule": "Construct the title after the following schema: Meldedaten nach Infektionsschutzgesetz (IfSG) zu [DiseaseName]. Assign 'de' as default for the language property of the text object."
+                            "rule": "Construct the title after the following "
+                            "schema: Meldedaten nach "
+                            "Infektionsschutzgesetz (IfSG) zu "
+                            "[DiseaseName]. Assign 'de' as default "
+                            "for the language property of the text "
+                            "object."
                         }
                     ],
                 }
             ],
-            unit_in_charge=[
+            "unitInCharge": [
                 {
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
                         {
                             "forValues": ["FG99"],
-                            "rule": "Use value to match with identifier from /raw-data/organigram/organizational-units.json.",
+                            "rule": "Use value to match with "
+                            "identifier from "
+                            "/raw-data/organigram/organizational-units.json.",
                         }
                     ],
                 }
             ],
-        ),
+        },
     ]
 
 
@@ -2341,9 +2666,9 @@ def extracted_ifsg_resource_disease() -> list[ExtractedResource]:
 def extracted_ifsg_variable_group() -> list[ExtractedVariableGroup]:
     return [
         ExtractedVariableGroup(
-            hadPrimarySource=PrimarySourceID.generate(23),
+            hadPrimarySource=MergedPrimarySourceIdentifier.generate(23),
             identifierInPrimarySource="101_Epi",
-            containedBy=[ResourceID.generate(24)],
+            containedBy=[MergedResourceIdentifier.generate(24)],
             label=[
                 Text(value="Epidemiologische Informationen", language=TextLanguage.DE)
             ],

@@ -3,6 +3,7 @@ from uuid import UUID
 
 import pytest
 from pytest import MonkeyPatch
+from traitlets import Any
 
 from mex.common.ldap.connector import LDAPConnector
 from mex.common.ldap.models.actor import LDAPActor
@@ -15,24 +16,20 @@ from mex.common.models import (
     ExtractedVariableGroup,
 )
 from mex.common.types import (
-    ContactPointID,
     Identifier,
-    OrganizationalUnitID,
-    OrganizationID,
-    PrimarySourceID,
+    MergedContactPointIdentifier,
+    MergedOrganizationalUnitIdentifier,
+    MergedOrganizationIdentifier,
+    MergedPrimarySourceIdentifier,
     Text,
     TextLanguage,
 )
-from mex.sumo.models.access_platform import SumoAccessPlatform
-from mex.sumo.models.activity import SumoActivity
 from mex.sumo.models.cc1_data_model_nokeda import Cc1DataModelNoKeda
 from mex.sumo.models.cc1_data_valuesets import Cc1DataValuesets
 from mex.sumo.models.cc2_aux_mapping import Cc2AuxMapping
 from mex.sumo.models.cc2_aux_model import Cc2AuxModel
 from mex.sumo.models.cc2_aux_valuesets import Cc2AuxValuesets
 from mex.sumo.models.cc2_feat_projection import Cc2FeatProjection
-from mex.sumo.models.resource_feat_model import ResourceFeatModel
-from mex.sumo.models.resource_nokeda import ResourceNokeda
 from mex.sumo.settings import SumoSettings
 
 
@@ -83,7 +80,7 @@ def mex_actor_resources() -> ExtractedContactPoint:
     """Return a dummy mex actor resource."""
     return ExtractedContactPoint(
         email="email@email.de",
-        hadPrimarySource=PrimarySourceID.generate(seed=42),
+        hadPrimarySource=MergedPrimarySourceIdentifier.generate(seed=42),
         identifierInPrimarySource="contact point",
     )
 
@@ -95,46 +92,46 @@ def mex_actor_access_platform() -> ExtractedPerson:
         familyName="Mustermann",
         fullName="Erika Mustermann",
         givenName="Erika",
-        hadPrimarySource=PrimarySourceID.generate(seed=42),
+        hadPrimarySource=MergedPrimarySourceIdentifier.generate(seed=42),
         identifierInPrimarySource="access platform",
     )
 
 
 @pytest.fixture
-def unit_merged_ids_by_synonym() -> dict[str, OrganizationalUnitID]:
+def unit_merged_ids_by_synonym() -> dict[str, MergedOrganizationalUnitIdentifier]:
     """Return dummy merged ids for units for testing."""
     return {
-        "MF4": OrganizationalUnitID.generate(seed=45),
-        "mf4": OrganizationalUnitID.generate(seed=45),
-        "FG32": OrganizationalUnitID.generate(seed=47),
-        "fg32": OrganizationalUnitID.generate(seed=47),
-        "FG99": OrganizationalUnitID.generate(seed=49),
-        "fg99": OrganizationalUnitID.generate(seed=49),
-        "FG 99": OrganizationalUnitID.generate(seed=49),
+        "MF4": MergedOrganizationalUnitIdentifier.generate(seed=45),
+        "mf4": MergedOrganizationalUnitIdentifier.generate(seed=45),
+        "FG32": MergedOrganizationalUnitIdentifier.generate(seed=47),
+        "fg32": MergedOrganizationalUnitIdentifier.generate(seed=47),
+        "FG99": MergedOrganizationalUnitIdentifier.generate(seed=49),
+        "fg99": MergedOrganizationalUnitIdentifier.generate(seed=49),
+        "FG 99": MergedOrganizationalUnitIdentifier.generate(seed=49),
     }
 
 
 @pytest.fixture
 def contact_merged_ids_by_emails():
     """Return dummy merged ids for units for testing."""
-    return {"email@email.de": ContactPointID.generate(seed=51)}
+    return {"email@email.de": MergedContactPointIdentifier.generate(seed=51)}
 
 
 @pytest.fixture
 def organizations_stable_target_ids_by_synonym():
     """Return dummy merged ids for units for testing."""
     return {
-        "Register": OrganizationalUnitID.generate(seed=60),
-        "Dummy Associate": OrganizationalUnitID.generate(seed=61),
-        "Robert Koch-Institut": OrganizationalUnitID.generate(seed=62),
+        "Register": MergedOrganizationalUnitIdentifier.generate(seed=60),
+        "Dummy Associate": MergedOrganizationalUnitIdentifier.generate(seed=61),
+        "Robert Koch-Institut": MergedOrganizationalUnitIdentifier.generate(seed=62),
     }
 
 
 @pytest.fixture
-def sumo_resources_feat() -> ResourceFeatModel:
+def sumo_resources_feat() -> dict[str, Any]:
     """Return feat SumoResource."""
-    return ResourceFeatModel(
-        access_restriction=[
+    return {
+        "accessRestriction": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -143,7 +140,7 @@ def sumo_resources_feat() -> ResourceFeatModel:
                 "comment": "restricted",
             }
         ],
-        accrual_periodicity=[
+        "accrualPeriodicity": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -152,7 +149,7 @@ def sumo_resources_feat() -> ResourceFeatModel:
                 "comment": "irregular",
             }
         ],
-        contact=[
+        "contact": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -163,7 +160,7 @@ def sumo_resources_feat() -> ResourceFeatModel:
                 ],
             }
         ],
-        contributing_unit=[
+        "contributingUnit": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -174,7 +171,7 @@ def sumo_resources_feat() -> ResourceFeatModel:
                 ],
             }
         ],
-        keyword=[
+        "keyword": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -183,14 +180,14 @@ def sumo_resources_feat() -> ResourceFeatModel:
                 ],
             }
         ],
-        mesh_id=[
+        "meshId": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [{"setValues": ["http://id.nlm.nih.gov/mesh/D004636"]}],
                 "comment": "Emergency Service, Hospital",
             }
         ],
-        resource_type_general=[
+        "resourceTypeGeneral": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -199,13 +196,13 @@ def sumo_resources_feat() -> ResourceFeatModel:
                 "comment": "Public Health Fachdaten",
             }
         ],
-        theme=[
+        "theme": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [{"setValues": ["https://mex.rki.de/item/theme-35"]}],
             }
         ],
-        title=[
+        "title": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -213,17 +210,17 @@ def sumo_resources_feat() -> ResourceFeatModel:
                 ],
             }
         ],
-        unit_in_charge=[
+        "unitInCharge": [
             {"fieldInPrimarySource": "n/a", "mappingRules": [{"forValues": ["FG 99"]}]}
         ],
-    )
+    }
 
 
 @pytest.fixture
-def sumo_resources_nokeda() -> ResourceNokeda:
+def sumo_resources_nokeda() -> dict[str, Any]:
     """Return feat SumoResource."""
-    return ResourceNokeda(
-        access_restriction=[
+    return {
+        "accessRestriction": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -232,7 +229,7 @@ def sumo_resources_nokeda() -> ResourceNokeda:
                 "comment": "restricted",
             }
         ],
-        accrual_periodicity=[
+        "accrualPeriodicity": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -241,7 +238,7 @@ def sumo_resources_nokeda() -> ResourceNokeda:
                 "comment": "daily",
             }
         ],
-        contact=[
+        "contact": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -252,7 +249,7 @@ def sumo_resources_nokeda() -> ResourceNokeda:
                 ],
             }
         ],
-        contributing_unit=[
+        "contributingUnit": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -263,7 +260,7 @@ def sumo_resources_nokeda() -> ResourceNokeda:
                 ],
             }
         ],
-        description=[
+        "description": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -278,7 +275,7 @@ def sumo_resources_nokeda() -> ResourceNokeda:
                 ],
             }
         ],
-        documentation=[
+        "documentation": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -294,7 +291,7 @@ def sumo_resources_nokeda() -> ResourceNokeda:
                 ],
             }
         ],
-        external_partner=[
+        "externalPartner": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -305,7 +302,7 @@ def sumo_resources_nokeda() -> ResourceNokeda:
                 ],
             }
         ],
-        keyword=[
+        "keyword": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -314,14 +311,14 @@ def sumo_resources_nokeda() -> ResourceNokeda:
                 ],
             }
         ],
-        mesh_id=[
+        "meshId": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [{"setValues": ["http://id.nlm.nih.gov/mesh/D004636"]}],
                 "comment": "Emergency Service, Hospital",
             }
         ],
-        publication=[
+        "publication": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -337,7 +334,7 @@ def sumo_resources_nokeda() -> ResourceNokeda:
                 ],
             }
         ],
-        publisher=[
+        "publisher": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -348,7 +345,7 @@ def sumo_resources_nokeda() -> ResourceNokeda:
                 ],
             }
         ],
-        resource_type_general=[
+        "resourceTypeGeneral": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -357,13 +354,13 @@ def sumo_resources_nokeda() -> ResourceNokeda:
                 "comment": "Public Health Fachdaten",
             }
         ],
-        resource_type_specific=[
+        "resourceTypeSpecific": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [{"setValues": [{"language": "de", "value": "Daten"}]}],
             }
         ],
-        rights=[
+        "rights": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -378,7 +375,7 @@ def sumo_resources_nokeda() -> ResourceNokeda:
                 ],
             }
         ],
-        spatial=[
+        "spatial": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -386,7 +383,7 @@ def sumo_resources_nokeda() -> ResourceNokeda:
                 ],
             }
         ],
-        state_of_data_processing=[
+        "stateOfDataProcessing": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -395,7 +392,7 @@ def sumo_resources_nokeda() -> ResourceNokeda:
                 "comment": "Sekundärdaten",
             }
         ],
-        theme=[
+        "theme": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -405,7 +402,7 @@ def sumo_resources_nokeda() -> ResourceNokeda:
                 "comment": "Infektionskrankheiten.",
             }
         ],
-        title=[
+        "title": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -413,7 +410,7 @@ def sumo_resources_nokeda() -> ResourceNokeda:
                 ],
             }
         ],
-        unit_in_charge=[
+        "unitInCharge": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -424,14 +421,14 @@ def sumo_resources_nokeda() -> ResourceNokeda:
                 ],
             }
         ],
-    )
+    }
 
 
 @pytest.fixture
-def sumo_access_platform() -> SumoAccessPlatform:
+def sumo_access_platform() -> dict[str, Any]:
     """Return Sumo Access Platform."""
-    return SumoAccessPlatform(
-        title=[
+    return {
+        "title": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -439,7 +436,7 @@ def sumo_access_platform() -> SumoAccessPlatform:
                 ],
             }
         ],
-        contact=[
+        "contact": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -450,7 +447,7 @@ def sumo_access_platform() -> SumoAccessPlatform:
                 ],
             }
         ],
-        identifier_in_primary_source=[
+        "identifierInPrimarySource": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -458,7 +455,7 @@ def sumo_access_platform() -> SumoAccessPlatform:
                 ],
             }
         ],
-        technical_accessibility=[
+        "technicalAccessibility": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -471,7 +468,7 @@ def sumo_access_platform() -> SumoAccessPlatform:
                 ],
             }
         ],
-        unit_in_charge=[
+        "unitInCharge": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -482,14 +479,14 @@ def sumo_access_platform() -> SumoAccessPlatform:
                 ],
             }
         ],
-    )
+    }
 
 
 @pytest.fixture
-def sumo_activity() -> SumoActivity:
+def sumo_activity() -> dict[str, Any]:
     """Return Sumo Activity."""
-    return SumoActivity(
-        abstract=[
+    return {
+        "abstract": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -497,7 +494,7 @@ def sumo_activity() -> SumoActivity:
                 ],
             }
         ],
-        activity_type=[
+        "activityType": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -506,7 +503,7 @@ def sumo_activity() -> SumoActivity:
                 "comment": "RKI-internes Projekt",
             }
         ],
-        contact=[
+        "contact": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -517,7 +514,7 @@ def sumo_activity() -> SumoActivity:
                 ],
             }
         ],
-        documentation=[
+        "documentation": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -533,7 +530,7 @@ def sumo_activity() -> SumoActivity:
                 ],
             }
         ],
-        external_associate=[
+        "externalAssociate": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -544,13 +541,13 @@ def sumo_activity() -> SumoActivity:
                 ],
             }
         ],
-        identifier_in_primary_source=[
+        "identifierInPrimarySource": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [{"setValues": ["https://url.url"]}],
             }
         ],
-        involved_unit=[
+        "involvedUnit": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -561,7 +558,7 @@ def sumo_activity() -> SumoActivity:
                 ],
             }
         ],
-        publication=[
+        "publication": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -586,7 +583,7 @@ def sumo_activity() -> SumoActivity:
                 ],
             }
         ],
-        responsible_unit=[
+        "responsibleUnit": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -597,19 +594,19 @@ def sumo_activity() -> SumoActivity:
                 ],
             }
         ],
-        short_name=[
+        "shortName": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [{"setValues": [{"value": "SUMO"}]}],
             }
         ],
-        start=[
+        "start": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [{"setValues": ["2018-07"]}],
             }
         ],
-        succeeds=[
+        "succeeds": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -620,7 +617,7 @@ def sumo_activity() -> SumoActivity:
                 ],
             }
         ],
-        theme=[
+        "theme": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -633,7 +630,7 @@ def sumo_activity() -> SumoActivity:
                 "comment": "dummy comment",
             }
         ],
-        title=[
+        "title": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -645,7 +642,7 @@ def sumo_activity() -> SumoActivity:
                 ],
             }
         ],
-        website=[
+        "website": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -661,29 +658,29 @@ def sumo_activity() -> SumoActivity:
                 ],
             }
         ],
-    )
+    }
 
 
 @pytest.fixture
 def transformed_activity() -> ExtractedActivity:
     """Return Sumo ExtractedActivity."""
     return ExtractedActivity(
-        hadPrimarySource=PrimarySourceID("hBYPjIX6hKi4FtA5ES5i1a"),
+        hadPrimarySource=MergedPrimarySourceIdentifier("hBYPjIX6hKi4FtA5ES5i1a"),
         identifierInPrimarySource="https://url.url",
         abstract=[Text(value="Dummy abstract.", language=TextLanguage.DE)],
         activityType=["https://mex.rki.de/item/activity-type-3"],
         alternativeTitle=[],
-        contact=[OrganizationalUnitID("bFQoRhcVH5DHVf")],
+        contact=[MergedOrganizationalUnitIdentifier("bFQoRhcVH5DHVf")],
         documentation=[],
         end=[],
-        externalAssociate=[OrganizationalUnitID("bFQoRhcVH5DHVp")],
+        externalAssociate=[MergedOrganizationalUnitIdentifier("bFQoRhcVH5DHVp")],
         funderOrCommissioner=[],
         fundingProgram=[],
         involvedPerson=[],
-        involvedUnit=[OrganizationalUnitID("bFQoRhcVH5DHU9")],
+        involvedUnit=[MergedOrganizationalUnitIdentifier("bFQoRhcVH5DHU9")],
         isPartOfActivity=[],
         publication=[],
-        responsibleUnit=[OrganizationalUnitID("bFQoRhcVH5DHVb")],
+        responsibleUnit=[MergedOrganizationalUnitIdentifier("bFQoRhcVH5DHVb")],
         shortName=[Text(value="SUMO", language=TextLanguage.DE)],
         start=[],
         succeeds=[],
@@ -709,7 +706,7 @@ def mex_resources_nokeda() -> ExtractedResource:
         keyword=["keyword1", "keyword2"],
         meshId=["http://id.nlm.nih.gov/mesh/D004636"],
         publication=["Situationsreport"],
-        publisher=[OrganizationID("bFQoRhcVH5DHU6")],
+        publisher=[MergedOrganizationIdentifier("bFQoRhcVH5DHU6")],
         resourceTypeGeneral=["https://mex.rki.de/item/resource-type-general-1"],
         resourceTypeSpecific=["Daten"],
         rights=[
@@ -719,7 +716,7 @@ def mex_resources_nokeda() -> ExtractedResource:
         stateOfDataProcessing="https://mex.rki.de/item/data-processing-state-2",
         theme=["https://mex.rki.de/item/theme-11"],
         title=["test_project"],
-        unitInCharge=[OrganizationalUnitID.generate(seed=42)],
+        unitInCharge=[MergedOrganizationalUnitIdentifier.generate(seed=42)],
     )
 
 
@@ -738,7 +735,7 @@ def mex_resources_feat() -> ExtractedResource:
         resourceTypeGeneral=["https://mex.rki.de/item/resource-type-general-1"],
         theme=["https://mex.rki.de/item/theme-1"],
         title=["Syndrome"],
-        unitInCharge=[OrganizationalUnitID.generate(seed=42)],
+        unitInCharge=[MergedOrganizationalUnitIdentifier.generate(seed=42)],
     )
 
 

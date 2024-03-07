@@ -4,9 +4,9 @@ from mex.common.models import ExtractedPrimarySource
 from mex.common.testing import Joker
 from mex.common.types import (
     ActivityType,
-    OrganizationalUnitID,
-    OrganizationID,
-    PersonID,
+    MergedOrganizationalUnitIdentifier,
+    MergedOrganizationIdentifier,
+    MergedPersonIdentifier,
     TextLanguage,
     Timestamp,
 )
@@ -52,11 +52,11 @@ def test_get_rki_az_types(rki_azs: str, expected_types: list[ActivityType]) -> N
 def test_transform_ff_projects_source_to_extracted_activity(
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
 ) -> None:
-    organization_id = OrganizationID.generate(seed=44)
+    organization_id = MergedOrganizationIdentifier.generate(seed=44)
     organizations_stable_target_ids_by_synonym = {"Test-Institute": organization_id}
-    person_id = PersonID.generate(seed=30)
+    person_id = MergedPersonIdentifier.generate(seed=30)
     person_stable_target_ids_by_query_string = {"Dr Frieda Ficticious": [person_id]}
-    unit_id = OrganizationalUnitID.generate(seed=21)
+    unit_id = MergedOrganizationalUnitIdentifier.generate(seed=21)
     unit_stable_target_ids_by_synonym = {"FG99": unit_id}
     ff_projects_source = FFProjectsSource(
         foerderprogr="Funding",

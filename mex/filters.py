@@ -12,7 +12,11 @@ RawDataT = TypeVar("RawDataT", bound=BaseRawData)
 def filter_by_global_rules(
     primary_source_id: Identifier,
     items: Iterable[RawDataT],
-) -> Generator[RawDataT, None, None,]:
+) -> Generator[
+    RawDataT,
+    None,
+    None,
+]:
     """Filter out items according to global filter rules, build filtered Generator.
 
     Args:

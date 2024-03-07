@@ -33,5 +33,5 @@ class ReportServerConnector(HTTPConnector):
             self.session.get(
                 urljoin(self.url, "/reports/api/v2.0/"), timeout=self.TIMEOUT
             )
-        except RequestException:
-            raise MExError("Report server not available.")
+        except RequestException as error:
+            raise MExError("Report server not available.") from error

@@ -23,7 +23,7 @@ class BlueAntConnector(HTTPConnector):
         api_key = settings.api_key.get_secret_value()
         self.session.headers["Authorization"] = f"Bearer {api_key}"
 
-    @cache
+    @cache  # noqa: B019
     def _get_json_from_api(self, relative_url: str) -> dict[str, Any]:
         """Get json from blueant api.
 
@@ -36,10 +36,7 @@ class BlueAntConnector(HTTPConnector):
         Returns:
             Parsed JSON body of the response
         """
-        response = self.request(
-            "GET",
-            relative_url,
-        )
+        response = self.request("GET", relative_url)
         if response.get("status", {}).get("code", 200) >= 400:
             raise MExError(response)
         return response

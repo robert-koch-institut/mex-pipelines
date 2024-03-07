@@ -15,7 +15,11 @@ from mex.common.models import (
 from mex.common.organigram.extract import (
     get_unit_merged_ids_by_emails,
 )
-from mex.common.types import OrganizationalUnitID, PersonID, ResourceID
+from mex.common.types import (
+    MergedOrganizationalUnitIdentifier,
+    MergedPersonIdentifier,
+    MergedResourceIdentifier,
+)
 from mex.pipeline import asset, run_job_in_process
 from mex.sinks import load
 from mex.synopse.extract import (
@@ -140,7 +144,7 @@ def synopse_variables_regular_use_by_thema(
 @asset(group_name="synopse")
 def unit_stable_target_ids_by_emails(
     extracted_organizational_units: list[ExtractedOrganizationalUnit],
-) -> dict[str, OrganizationalUnitID]:
+) -> dict[str, MergedOrganizationalUnitIdentifier]:
     """Group organizational units by their email addresses."""
     return get_unit_merged_ids_by_emails(extracted_organizational_units)
 
@@ -150,7 +154,7 @@ def extracted_synopse_contributor_stable_target_ids_by_name(
     synopse_project_contributors: list[LDAPPersonWithQuery],
     extracted_organizational_units: list[ExtractedOrganizationalUnit],
     extracted_primary_source_ldap: ExtractedPrimarySource,
-) -> dict[str, list[PersonID]]:
+) -> dict[str, list[MergedPersonIdentifier]]:
     """Get lookup from contributor name to extracted person stable target id.
 
     Also transforms Synopse data to extracted persons
@@ -178,12 +182,12 @@ def extracted_synopse_resource_stable_target_ids_by_synopse_id(
     synopse_study_overviews: list[SynopseStudyOverview],
     synopse_variables_extended_data_use_by_study_id: dict[int, list[SynopseVariable]],
     synopse_variables_regular_use_by_study_id: dict[int, list[SynopseVariable]],
-    unit_stable_target_ids_by_synonym: dict[str, OrganizationalUnitID],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     extracted_synopse_access_platforms: list[ExtractedAccessPlatform],
     extracted_synopse_activities: list[ExtractedActivity],
     extracted_organization_rki: ExtractedOrganization,
     extracted_primary_source_report_server: ExtractedPrimarySource,
-) -> dict[str, list[ResourceID]]:
+) -> dict[str, list[MergedResourceIdentifier]]:
     """Get lookup from synopse_id to extracted resource stable target id.
 
     Also transforms Synopse data to extracted resources
@@ -234,7 +238,7 @@ def extracted_synopse_resource_stable_target_ids_by_synopse_id(
 def extracted_synopse_access_platforms(
     synopse_studies: list[SynopseStudy],
     extracted_primary_source_report_server: ExtractedPrimarySource,
-    unit_stable_target_ids_by_synonym: dict[str, OrganizationalUnitID],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
 ) -> list[ExtractedAccessPlatform]:
     """Transform Synopse data to extracted access platforms and load result."""
     transformed_access_platforms = list(
@@ -252,9 +256,11 @@ def extracted_synopse_access_platforms(
 def extracted_synopse_activities(
     synopse_projects: list[SynopseProject],
     extracted_primary_source_report_server: ExtractedPrimarySource,
-    unit_stable_target_ids_by_emails: dict[str, OrganizationalUnitID],
-    extracted_synopse_contributor_stable_target_ids_by_name: dict[str, list[PersonID]],
-    unit_stable_target_ids_by_synonym: dict[str, OrganizationalUnitID],
+    unit_stable_target_ids_by_emails: dict[str, MergedOrganizationalUnitIdentifier],
+    extracted_synopse_contributor_stable_target_ids_by_name: dict[
+        str, list[MergedPersonIdentifier]
+    ],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
 ) -> list[ExtractedActivity]:
     """Transforms Synopse data to extracted activities and load result."""
     transformed_activities = list(
@@ -275,7 +281,7 @@ def extracted_synopse_variable_groups(
     synopse_variables_regular_use_by_thema: dict[str, list[SynopseVariable]],
     extracted_primary_source_report_server: ExtractedPrimarySource,
     extracted_synopse_resource_stable_target_ids_by_synopse_id: dict[
-        str, list[ResourceID]
+        str, list[MergedResourceIdentifier]
     ],
 ) -> list[ExtractedVariableGroup]:
     """Transforms Synopse data to extracted variable groups and load result."""
@@ -296,7 +302,7 @@ def extracted_synopse_variables(
     extracted_primary_source_report_server: ExtractedPrimarySource,
     extracted_synopse_variable_groups: list[ExtractedVariableGroup],
     extracted_synopse_resource_stable_target_ids_by_synopse_id: dict[
-        str, list[ResourceID]
+        str, list[MergedResourceIdentifier]
     ],
 ) -> None:
     """Transforms Synopse data to extracted variables and load result."""

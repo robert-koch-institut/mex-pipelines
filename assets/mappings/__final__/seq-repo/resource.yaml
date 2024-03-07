@@ -13,6 +13,12 @@ anonymizationPseudonymization:
     mappingRules:
     - setValues:
       - https://mex.rki.de/item/anonymization-pseudonymization-2
+contact:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - forValues:
+      - email@email.de
+      rule: Use value to match with ldap extractor.
 method:
   - fieldInPrimarySource: n/a
     mappingRules:
@@ -57,3 +63,30 @@ theme:
     - setValues:
       - https://mex.rki.de/item/theme-11
       - https://mex.rki.de/item/theme-34
+hadPrimarySource:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - rule: "dummy rule"
+identifier:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - rule: Assign identifier.
+identifierInPrimarySource:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+      - setValues:
+        - https://dummy.url.com/
+stableTargetId:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - rule: Assign 'stable target id' of merged item.
+title:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - setValues:
+      - language: de
+        value: Syndrome
+unitInCharge:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - forValues:

@@ -14,7 +14,10 @@ from mex.common.organigram.extract import (
 from mex.common.organigram.transform import (
     transform_organigram_units_to_organizational_units,
 )
-from mex.common.types import OrganizationalUnitID, PrimarySourceID
+from mex.common.types import (
+    MergedOrganizationalUnitIdentifier,
+    MergedPrimarySourceIdentifier,
+)
 from mex.international_projects.settings import InternationalProjectsSettings
 
 
@@ -33,7 +36,7 @@ def extracted_person() -> ExtractedPerson:
         givenName="Frieda",
         fullName="Dr. Fictitious, Frieda",
         identifierInPrimarySource="frieda",
-        hadPrimarySource=PrimarySourceID.generate(seed=40),
+        hadPrimarySource=MergedPrimarySourceIdentifier.generate(seed=40),
     )
 
 
@@ -66,7 +69,7 @@ def mocked_ldap(monkeypatch: MonkeyPatch) -> None:
 @pytest.fixture
 def unit_stable_target_ids_by_synonym(
     extracted_primary_sources: dict[str, ExtractedPrimarySource]
-) -> dict[str, OrganizationalUnitID]:
+) -> dict[str, MergedOrganizationalUnitIdentifier]:
     """Extract the dummy units and return them grouped by synonyms."""
     organigram_units = extract_organigram_units()
     mex_organizational_units = transform_organigram_units_to_organizational_units(

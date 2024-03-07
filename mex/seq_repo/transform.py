@@ -1,4 +1,4 @@
-from typing import Generator
+from typing import Any, Generator
 
 from mex.common.models import (
     ExtractedAccessPlatform,
@@ -8,16 +8,12 @@ from mex.common.models import (
     ExtractedResource,
 )
 from mex.common.types import Identifier
-from mex.seq_repo.models.access_platform import SeqRepoAccessPlatform
-from mex.seq_repo.models.activity import SeqRepoActivity
-from mex.seq_repo.models.distribution import SeqRepoDistribution
-from mex.seq_repo.models.resource import SeqRepoResource
-from mex.seq_repo.models.source import SeqRepoSource
+from mex.seq_repo.model import SeqRepoSource
 
 
 def transform_seq_repo_activities_to_extracted_activities(
     seq_repo_sources: dict[str, SeqRepoSource],
-    seq_repo_activity: SeqRepoActivity,
+    seq_repo_activity: dict[str, Any],
     extracted_primary_source: ExtractedPrimarySource,
 ) -> Generator[ExtractedActivity, None, None]:
     """Transform seq-repo activity to ExtractedActivity.
@@ -30,8 +26,8 @@ def transform_seq_repo_activities_to_extracted_activities(
     Returns:
         Generator for ExtractedActivity
     """
-    theme = seq_repo_activity.theme[0]["mappingRules"][0]["setValues"]
-    for _, source in seq_repo_sources.items():
+    theme = seq_repo_activity["theme"][0]["mappingRules"][0]["setValues"]
+    for source in seq_repo_sources.values():
         yield ExtractedActivity(
             contact=[
                 Identifier.generate()
@@ -49,7 +45,7 @@ def transform_seq_repo_activities_to_extracted_activities(
 
 def transform_seq_repo_distribution_to_extracted_distribution(
     seq_repo_sources: dict[str, SeqRepoSource],
-    seq_repo_distribution: SeqRepoDistribution,
+    seq_repo_distribution: dict[str, Any],
     mex_access_platform: ExtractedAccessPlatform,
     extracted_primary_source: ExtractedPrimarySource,
 ) -> Generator[ExtractedDistribution, None, None]:
@@ -64,11 +60,11 @@ def transform_seq_repo_distribution_to_extracted_distribution(
     Returns:
         Generator for ExtractedDistribution
     """
-    access_restriction = seq_repo_distribution.access_restriction[0]["mappingRules"][0][
-        "setValues"
-    ]
-    media_type = seq_repo_distribution.media_type[0]["mappingRules"][0]["setValues"]
-    title = seq_repo_distribution.title[0]["mappingRules"][0]["setValues"]
+    access_restriction = seq_repo_distribution["accessRestriction"][0]["mappingRules"][
+        0
+    ]["setValues"]
+    media_type = seq_repo_distribution["mediaType"][0]["mappingRules"][0]["setValues"]
+    title = seq_repo_distribution["title"][0]["mappingRules"][0]["setValues"]
 
     for identifier_in_primary_source, source in seq_repo_sources.items():
         yield ExtractedDistribution(
@@ -89,7 +85,7 @@ def transform_seq_repo_resource_to_extracted_resource(
     seq_repo_sources: dict[str, SeqRepoSource],
     seq_repo_distributions: dict[str, ExtractedDistribution],
     seq_repo_activities: dict[str, ExtractedActivity],
-    seq_repo_resource: SeqRepoResource,
+    seq_repo_resource: dict[str, Any],
     extracted_primary_source: ExtractedPrimarySource,
 ) -> Generator[ExtractedResource, None, None]:
     """Transform seq-repo resource to ExtractedResource.
@@ -104,28 +100,28 @@ def transform_seq_repo_resource_to_extracted_resource(
     Returns:
         Generator for ExtractedResource
     """
-    access_restriction = seq_repo_resource.access_restriction[0]["mappingRules"][0][
+    access_restriction = seq_repo_resource["accessRestriction"][0]["mappingRules"][0][
         "setValues"
     ]
-    accrual_periodicity = seq_repo_resource.accrual_periodicity[0]["mappingRules"][0][
+    accrual_periodicity = seq_repo_resource["accrualPeriodicity"][0]["mappingRules"][0][
         "setValues"
     ]
-    anonymization_pseudonymization = seq_repo_resource.anonymization_pseudonymization[
+    anonymization_pseudonymization = seq_repo_resource["anonymizationPseudonymization"][
         0
     ]["mappingRules"][0]["setValues"]
-    method = seq_repo_resource.method[0]["mappingRules"][0]["setValues"]
+    method = seq_repo_resource["method"][0]["mappingRules"][0]["setValues"]
 
-    resource_type_general = seq_repo_resource.resource_type_general[0]["mappingRules"][
+    resource_type_general = seq_repo_resource["resourceTypeGeneral"][0]["mappingRules"][
         0
     ]["setValues"]
-    resource_type_specific = seq_repo_resource.resource_type_specific[0][
+    resource_type_specific = seq_repo_resource["resourceTypeSpecific"][0][
         "mappingRules"
     ][0]["setValues"]
-    rights = seq_repo_resource.rights[0]["mappingRules"][0]["setValues"]
-    state_of_data_processing = seq_repo_resource.state_of_data_processing[0][
+    rights = seq_repo_resource["rights"][0]["mappingRules"][0]["setValues"]
+    state_of_data_processing = seq_repo_resource["stateOfDataProcessing"][0][
         "mappingRules"
     ][0]["setValues"]
-    theme = seq_repo_resource.theme[0]["mappingRules"][0]["setValues"]
+    theme = seq_repo_resource["theme"][0]["mappingRules"][0]["setValues"]
 
     for identifier_in_primary_source, source in seq_repo_sources.items():
         distribution = seq_repo_distributions[identifier_in_primary_source]
@@ -161,7 +157,7 @@ def transform_seq_repo_resource_to_extracted_resource(
 
 
 def transform_seq_repo_access_platform_to_extracted_access_platform(
-    seq_repo_access_platform: SeqRepoAccessPlatform,
+    seq_repo_access_platform: dict[str, Any],
     extracted_primary_source: ExtractedPrimarySource,
 ) -> ExtractedAccessPlatform:
     """Transform seq-repo access platform to ExtractedAccessPlatform.
@@ -173,29 +169,27 @@ def transform_seq_repo_access_platform_to_extracted_access_platform(
     Returns:
         ExtractedAccessPlatform
     """
-    alternative_title = seq_repo_access_platform.alternative_title[0]["mappingRules"][
+    alternative_title = seq_repo_access_platform["alternativeTitle"][0]["mappingRules"][
         0
     ]["setValues"]
 
-    description = seq_repo_access_platform.description[0]["mappingRules"][0][
+    description = seq_repo_access_platform["description"][0]["mappingRules"][0][
         "setValues"
     ]
-    endpoint_type = seq_repo_access_platform.endpoint_type[0]["mappingRules"][0][
+    endpoint_type = seq_repo_access_platform["endpointType"][0]["mappingRules"][0][
         "setValues"
     ]
-    identifier_in_primary_source = (
-        seq_repo_access_platform.identifier_in_primary_source[0]["mappingRules"][0][
-            "setValues"
-        ]
-    )
-    landing_page = seq_repo_access_platform.landing_page[0]["mappingRules"][0][
+    identifier_in_primary_source = seq_repo_access_platform[
+        "identifierInPrimarySource"
+    ][0]["mappingRules"][0]["setValues"]
+    landing_page = seq_repo_access_platform["landingPage"][0]["mappingRules"][0][
         "setValues"
     ]
 
-    technical_accessibility = seq_repo_access_platform.technical_accessibility[0][
+    technical_accessibility = seq_repo_access_platform["technicalAccessibility"][0][
         "mappingRules"
     ][0]["setValues"]
-    title = seq_repo_access_platform.title[0]["mappingRules"][0]["setValues"]
+    title = seq_repo_access_platform["title"][0]["mappingRules"][0]["setValues"]
 
     return ExtractedAccessPlatform(
         alternativeTitle=alternative_title,

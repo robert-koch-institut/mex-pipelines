@@ -1,3 +1,5 @@
+from typing import Any
+
 import pytest
 
 from mex.common.models import (
@@ -12,11 +14,7 @@ from mex.common.primary_source.transform import (
     transform_seed_primary_sources_to_extracted_primary_sources,
 )
 from mex.seq_repo.filter import filter_sources_on_latest_sequencing_date
-from mex.seq_repo.models.access_platform import SeqRepoAccessPlatform
-from mex.seq_repo.models.activity import SeqRepoActivity
-from mex.seq_repo.models.distribution import SeqRepoDistribution
-from mex.seq_repo.models.resource import SeqRepoResource
-from mex.seq_repo.models.source import SeqRepoSource
+from mex.seq_repo.model import SeqRepoSource
 from mex.seq_repo.settings import SeqRepoSettings
 from mex.seq_repo.transform import (
     transform_seq_repo_access_platform_to_extracted_access_platform,
@@ -84,9 +82,9 @@ def seq_repo_latest_sources(
 
 
 @pytest.fixture()
-def seq_repo_activity() -> SeqRepoActivity:
-    return SeqRepoActivity(
-        theme=[
+def seq_repo_activity() -> dict[str, Any]:
+    return {
+        "theme": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -99,13 +97,13 @@ def seq_repo_activity() -> SeqRepoActivity:
                 ],
             }
         ]
-    )
+    }
 
 
 @pytest.fixture()
-def seq_repo_distribution() -> SeqRepoDistribution:
-    return SeqRepoDistribution(
-        access_restriction=[
+def seq_repo_distribution() -> dict[str, Any]:
+    return {
+        "accessRestriction": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -113,7 +111,7 @@ def seq_repo_distribution() -> SeqRepoDistribution:
                 ],
             }
         ],
-        media_type=[
+        "mediaType": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -121,14 +119,14 @@ def seq_repo_distribution() -> SeqRepoDistribution:
                 ],
             }
         ],
-        title=[
+        "title": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [{"setValues": ["dummy-fastq-file"]}],
                 "comment": "So there must be rules for titles.",
             }
         ],
-        publisher=[
+        "publisher": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -139,19 +137,19 @@ def seq_repo_distribution() -> SeqRepoDistribution:
                 ],
             }
         ],
-    )
+    }
 
 
 @pytest.fixture()
-def seq_repo_access_platform() -> SeqRepoAccessPlatform:
-    return SeqRepoAccessPlatform(
-        alternative_title=[
+def seq_repo_access_platform() -> dict[str, Any]:
+    return {
+        "alternativeTitle": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [{"setValues": [{"value": "SeqRepo"}]}],
             }
         ],
-        contact=[
+        "contact": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -159,7 +157,7 @@ def seq_repo_access_platform() -> SeqRepoAccessPlatform:
                 ],
             }
         ],
-        description=[
+        "description": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -174,25 +172,25 @@ def seq_repo_access_platform() -> SeqRepoAccessPlatform:
                 ],
             }
         ],
-        endpoint_type=[
+        "endpointType": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [{"setValues": ["https://mex.rki.de/item/api-type-1"]}],
             }
         ],
-        identifier_in_primary_source=[
+        "identifierInPrimarySource": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [{"setValues": ["https://dummy.url.com/"]}],
             }
         ],
-        landing_page=[
+        "landingPage": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [{"setValues": [{"url": "https://dummy.url.com/"}]}],
             }
         ],
-        technical_accessibility=[
+        "technicalAccessibility": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -200,7 +198,7 @@ def seq_repo_access_platform() -> SeqRepoAccessPlatform:
                 ],
             }
         ],
-        title=[
+        "title": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -208,19 +206,19 @@ def seq_repo_access_platform() -> SeqRepoAccessPlatform:
                 ],
             }
         ],
-        unit_in_charge=[
+        "unitInCharge": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [{"forValues": ["fg99"], "rule": "dummy rule"}],
             }
         ],
-    )
+    }
 
 
 @pytest.fixture()
-def seq_repo_resource() -> SeqRepoResource:
-    return SeqRepoResource(
-        access_restriction=[
+def seq_repo_resource() -> dict[str, Any]:
+    return {
+        "accessRestriction": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -228,7 +226,7 @@ def seq_repo_resource() -> SeqRepoResource:
                 ],
             }
         ],
-        accrual_periodicity=[
+        "accrualPeriodicity": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -236,7 +234,7 @@ def seq_repo_resource() -> SeqRepoResource:
                 ],
             }
         ],
-        anonymization_pseudonymization=[
+        "anonymizationPseudonymization": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -248,7 +246,7 @@ def seq_repo_resource() -> SeqRepoResource:
                 ],
             }
         ],
-        method=[
+        "method": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -261,7 +259,7 @@ def seq_repo_resource() -> SeqRepoResource:
                 ],
             }
         ],
-        resource_type_general=[
+        "resourceTypeGeneral": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -269,7 +267,7 @@ def seq_repo_resource() -> SeqRepoResource:
                 ],
             }
         ],
-        resource_type_specific=[
+        "resourceTypeSpecific": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -282,7 +280,7 @@ def seq_repo_resource() -> SeqRepoResource:
                 ],
             }
         ],
-        rights=[
+        "rights": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -290,7 +288,7 @@ def seq_repo_resource() -> SeqRepoResource:
                 ],
             }
         ],
-        state_of_data_processing=[
+        "stateOfDataProcessing": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -298,7 +296,7 @@ def seq_repo_resource() -> SeqRepoResource:
                 ],
             }
         ],
-        publisher=[
+        "publisher": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -309,7 +307,7 @@ def seq_repo_resource() -> SeqRepoResource:
                 ],
             }
         ],
-        theme=[
+        "theme": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
@@ -322,13 +320,13 @@ def seq_repo_resource() -> SeqRepoResource:
                 ],
             }
         ],
-    )
+    }
 
 
 @pytest.fixture()
 def extracted_mex_access_platform(
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
-    seq_repo_access_platform: SeqRepoAccessPlatform,
+    seq_repo_access_platform: dict[str, Any],
 ) -> ExtractedAccessPlatform:
     return transform_seq_repo_access_platform_to_extracted_access_platform(
         seq_repo_access_platform,
@@ -340,7 +338,7 @@ def extracted_mex_access_platform(
 def extracted_mex_activities_dict(
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
     seq_repo_latest_sources: dict[str, SeqRepoSource],
-    seq_repo_activity: SeqRepoActivity,
+    seq_repo_activity: dict[str, Any],
 ) -> dict[str, ExtractedActivity]:
     extracted_mex_activities = transform_seq_repo_activities_to_extracted_activities(
         seq_repo_latest_sources,
@@ -359,7 +357,7 @@ def extracted_mex_distribution_dict(
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
     seq_repo_latest_sources: dict[str, SeqRepoSource],
     extracted_mex_access_platform: ExtractedAccessPlatform,
-    seq_repo_distribution: SeqRepoDistribution,
+    seq_repo_distribution: dict[str, Any],
 ) -> dict[str, ExtractedDistribution]:
     extracted_mex_distributions = (
         transform_seq_repo_distribution_to_extracted_distribution(
