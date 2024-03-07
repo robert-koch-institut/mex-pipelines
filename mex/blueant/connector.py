@@ -36,10 +36,7 @@ class BlueAntConnector(HTTPConnector):
         Returns:
             Parsed JSON body of the response
         """
-        response = self.request(
-            "GET",
-            relative_url,
-        )
+        response = self.request("GET", relative_url)
         if response.get("status", {}).get("code", 200) >= 400:
             raise MExError(response)
         return response

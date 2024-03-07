@@ -11,11 +11,11 @@ from mex.common.models import (
 )
 from mex.common.testing import Joker
 from mex.common.types import (
-    ContactPointID,
     Identifier,
     LinkLanguage,
-    OrganizationalUnitID,
-    PrimarySourceID,
+    MergedContactPointIdentifier,
+    MergedOrganizationalUnitIdentifier,
+    MergedPrimarySourceIdentifier,
     TextLanguage,
     Timestamp,
 )
@@ -65,12 +65,14 @@ def test_get_contact_merged_ids_by_names(
 
 def test_transform_resource_nokeda_to_mex_resource(
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
-    unit_merged_ids_by_synonym: dict[str, OrganizationalUnitID],
+    unit_merged_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     sumo_resources_nokeda: dict[str, Any],
     extracted_organization_rki: ExtractedOrganization,
     transformed_activity: ExtractedActivity,
 ) -> None:
-    contact_merged_ids_by_emails = {"email@email.de": ContactPointID.generate(43)}
+    contact_merged_ids_by_emails = {
+        "email@email.de": MergedContactPointIdentifier.generate(43)
+    }
     mex_source = transform_resource_nokeda_to_mex_resource(
         sumo_resources_nokeda,
         extracted_primary_sources["nokeda"],
@@ -81,7 +83,7 @@ def test_transform_resource_nokeda_to_mex_resource(
     )
     expected = {
         "identifier": Joker(),
-        "hadPrimarySource": PrimarySourceID(
+        "hadPrimarySource": MergedPrimarySourceIdentifier(
             extracted_primary_sources["nokeda"].stableTargetId
         ),
         "identifierInPrimarySource": "test_project",
@@ -139,12 +141,14 @@ def test_transform_resource_nokeda_to_mex_resource(
 
 def test_transform_resource_feat_model_to_mex_resource(
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
-    unit_merged_ids_by_synonym: dict[str, OrganizationalUnitID],
+    unit_merged_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     sumo_resources_feat: dict[str, Any],
     mex_resources_nokeda: ExtractedResource,
     transformed_activity: ExtractedActivity,
 ) -> None:
-    contact_merged_ids_by_emails = {"email@email.de": ContactPointID.generate(43)}
+    contact_merged_ids_by_emails = {
+        "email@email.de": MergedContactPointIdentifier.generate(43)
+    }
     mex_source = transform_resource_feat_model_to_mex_resource(
         sumo_resources_feat,
         extracted_primary_sources["nokeda"],
@@ -155,14 +159,14 @@ def test_transform_resource_feat_model_to_mex_resource(
     )
     expected = {
         "identifier": Joker(),
-        "hadPrimarySource": PrimarySourceID(
+        "hadPrimarySource": MergedPrimarySourceIdentifier(
             extracted_primary_sources["nokeda"].stableTargetId
         ),
         "identifierInPrimarySource": "Syndrome",
         "stableTargetId": Joker(),
         "accessRestriction": "https://mex.rki.de/item/access-restriction-2",
         "accrualPeriodicity": "https://mex.rki.de/item/frequency-17",
-        "contact": [ContactPointID.generate(43)],
+        "contact": [MergedContactPointIdentifier.generate(43)],
         "contributingUnit": [Joker()],
         "isPartOf": [mex_resources_nokeda.stableTargetId],
         "keyword": [
@@ -186,7 +190,7 @@ def test_transform_nokeda_aux_variable_to_mex_variable_group(
 ) -> None:
     expected = {
         "containedBy": [mex_resources_nokeda.stableTargetId],
-        "hadPrimarySource": PrimarySourceID(
+        "hadPrimarySource": MergedPrimarySourceIdentifier(
             extracted_primary_sources["nokeda"].stableTargetId
         ),
         "identifier": Joker(),
@@ -212,7 +216,7 @@ def test_transform_model_nokeda_variable_to_mex_variable_group(
 ) -> None:
     expected = {
         "containedBy": [mex_resources_nokeda.stableTargetId],
-        "hadPrimarySource": PrimarySourceID(
+        "hadPrimarySource": MergedPrimarySourceIdentifier(
             extracted_primary_sources["nokeda"].stableTargetId
         ),
         "identifier": Joker(),
@@ -241,7 +245,7 @@ def test_transform_feat_variable_to_mex_variable_group(
 ) -> None:
     expected = {
         "containedBy": [mex_resources_nokeda.stableTargetId],
-        "hadPrimarySource": PrimarySourceID(
+        "hadPrimarySource": MergedPrimarySourceIdentifier(
             extracted_primary_sources["nokeda"].stableTargetId
         ),
         "identifier": Joker(),
@@ -412,12 +416,12 @@ def test_transform_feat_projection_variable_to_mex_variable(
 
 def test_transform_sumo_access_platform_to_mex_access_platform(
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
-    unit_merged_ids_by_synonym: dict[str, OrganizationalUnitID],
+    unit_merged_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     sumo_access_platform: dict[str, Any],
 ) -> None:
     person_id = Identifier.generate(seed=30)
     person_stable_target_ids_by_query_string = {
-        "Roland Resolved": OrganizationalUnitID(person_id)
+        "Roland Resolved": MergedOrganizationalUnitIdentifier(person_id)
     }
     expected = {
         "identifier": Joker(),
@@ -443,8 +447,8 @@ def test_transform_sumo_access_platform_to_mex_access_platform(
 def test_transform_sumo_activity_to_extracted_activity(
     sumo_activity: dict[str, Any],
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
-    unit_merged_ids_by_synonym: dict[str, OrganizationalUnitID],
-    contact_merged_ids_by_emails: dict[str, ContactPointID],
+    unit_merged_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
+    contact_merged_ids_by_emails: dict[str, MergedContactPointIdentifier],
 ) -> None:
     extracted_activity = transform_sumo_activity_to_extracted_activity(
         sumo_activity,

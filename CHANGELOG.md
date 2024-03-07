@@ -9,21 +9,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- configure open-code synchronization workflow
-- add mapping connector and integrate into ifsg, seq-repo and sumo
-
 ### Changes
 
-- update cruft template to latest version
-- update to pytest 8 and other minor/patch bumps
+- update cruft template with new linters
+- utilize new, more precise Identifier subclasses
+- make pyodbc a soft dependency (only pipelines that use it may fail)
 
 ### Deprecated
 
 ### Removed
 
+- remove sync-persons pipeline, stopgap mx-1572
+- remove `public` as a valid sink option
+
 ### Fixed
 
+- fix some docstring indents and typings
+
 ### Security
+
+## [0.15.0] - 2024-02-27
+
+### Added
+
+- configure open-code synchronization workflow
+- add mapping connector and integrate into ifsg, seq-repo and sumo
+- add odk extract
+
+### Changes
+
+- update cruft template to latest version
+- update to pytest 8 and other minor/patch bumps
 
 ## [0.15.0] - 2024-01-31
 

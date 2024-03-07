@@ -15,7 +15,7 @@ from mex.common.models import (
     ExtractedResource,
 )
 from mex.common.primary_source.transform import get_primary_sources_by_name
-from mex.common.types import OrganizationalUnitID
+from mex.common.types import MergedOrganizationalUnitIdentifier
 from mex.pipeline import asset, run_job_in_process
 from mex.sinks import load
 
@@ -61,7 +61,7 @@ def extracted_biospecimen_resources(
     extracted_primary_source_report_server: ExtractedPrimarySource,
     extracted_primary_source_biospecimen: ExtractedPrimarySource,
     extracted_mex_persons: list[ExtractedPerson],
-    unit_stable_target_ids_by_synonym: dict[str, OrganizationalUnitID],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     extracted_organization_rki: ExtractedOrganization,
 ) -> list[ExtractedResource]:
     """Transform biospecimen resources to extracted resources and load them to the sinks."""  # noqa: E501

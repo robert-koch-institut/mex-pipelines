@@ -1,6 +1,6 @@
 from typing import Generator, Iterable
 
-from mex.common.types import Identifier, OrganizationalUnitID
+from mex.common.types import Identifier, MergedOrganizationalUnitIdentifier
 from mex.common.utils import any_contains_any, contains_any
 from mex.ff_projects.models.source import FFProjectsSource
 from mex.ff_projects.settings import FFProjectsSettings
@@ -10,7 +10,7 @@ from mex.logging import log_filter
 def filter_and_log_ff_projects_sources(
     sources: Iterable[FFProjectsSource],
     primary_source_id: Identifier,
-    unit_stable_target_ids_by_synonym: dict[str, OrganizationalUnitID],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
 ) -> Generator[FFProjectsSource, None, None]:
     """Filter FF Projects sources and log filtered sources.
 
@@ -32,7 +32,7 @@ def filter_and_log_ff_projects_sources(
 def filter_and_log_ff_projects_source(
     source: FFProjectsSource,
     primary_source_id: Identifier,
-    unit_stable_target_ids_by_synonym: dict[str, OrganizationalUnitID],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
 ) -> bool:
     """Filter a FFprojectSource according to settings and log filtering.
 

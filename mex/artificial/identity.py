@@ -10,7 +10,7 @@ from mex.common.models import (
     MEX_PRIMARY_SOURCE_STABLE_TARGET_ID,
     ExtractedData,
 )
-from mex.common.types import PrimarySourceID
+from mex.common.types import MergedPrimarySourceIdentifier
 
 IdentityMap = dict[str, list[Identity]]
 
@@ -61,10 +61,9 @@ def _create_numeric_ids(
     # compile a list of model classes (each model class can appear multiple times)
     # by adding some models more often than others, we can influence the likelihood
     # of `random_choices` picking that class from the list of models
-    weighted_model_class_list: list[type[ExtractedData]] = []
-    for model, weight in weights.items():
-        for _ in range(weight):
-            weighted_model_class_list.append(model)
+    weighted_model_class_list = [
+        model for model, weight in weights.items() for _ in range(weight)
+    ]
     # pick a random selection of model classes from the weighted model class list
     choices = list(faker.random_choices(weighted_model_class_list, settings.count))
     # count the picks, but use at least 2 so we can fulfill required references
@@ -109,7 +108,9 @@ def create_identities(
             if primary_sources := identity_map["PrimarySource"]:
                 # pick a random primary source to "extract" the identity from
                 primary_source: Identity = faker.random_element(primary_sources)
-                primary_source_id = PrimarySourceID(primary_source.stableTargetId)
+                primary_source_id = MergedPrimarySourceIdentifier(
+                    primary_source.stableTargetId
+                )
             else:
                 # the first primary source is extracted from this placeholder ID
                 primary_source_id = MEX_PRIMARY_SOURCE_STABLE_TARGET_ID

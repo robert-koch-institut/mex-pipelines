@@ -11,15 +11,15 @@ packages = [{ include = "mex" }]
 [tool.poetry.dependencies]
 python = ">=3.11,<3.13"
 beautifulsoup4 = "^4.12.3"
-dagster = "^1.6.3"
-dagster-postgres = "^0.22.3"
-dagster-webserver = "^1.6.3"
+dagster = "^1.6.6"
+dagster-postgres = "^0.22.6"
+dagster-webserver = "^1.6.6"
 faker = "^23.0.0"
-mex-common = { git = "https://github.com/robert-koch-institut/mex-common.git", rev = "0.19.3" }
+mex-common = { git = "https://github.com/robert-koch-institut/mex-common.git", rev = "0.21.0" }
 numpy = "^1.26.4"
 openpyxl = "^3.1.2"
-pandas = "^2.1.4"
-pydantic = "^2.6.1"
+pandas = "^2.2.1"
+pydantic = "^2.6.3"
 pyodbc = "^5.1.0"
 pyyaml = "^6.0.1"
 requests = "^2.31.0"
@@ -28,14 +28,15 @@ urllib3 = "^1.26.18"
 xlrd = "^2.0.1"
 
 [tool.poetry.group.dev.dependencies]
-black = "^24.1.1"
+black = "^24.2.0"
 click = "^8.1.7"
 ipdb = "^0.13.13"
 mypy = "^1.8.0"
 pandas-stubs = "^2.1.4"
-pytest = "^8.0.0"
+pytest = "^8.0.2"
 pytest-cov = "^4.1.0"
-ruff = "^0.2.0"
+pytest-random-order = "^1.1.1"
+ruff = "^0.3.0"
 sphinx = "^7.2.6"
 types-beautifulsoup4 = "^4.12.0"
 types-pytz = "^2023.4.0"
@@ -51,6 +52,7 @@ datscha-web = "mex.datscha_web.main:run"
 ff-projects = "mex.ff_projects.main:run"
 ifsg = "mex.ifsg.main:run"
 international-projects = "mex.international_projects.main:run"
+odk = "mex.odk.main:run"
 organigram = "mex.organigram.main:run"
 rdmo = "mex.rdmo.main:run"
 seq-repo = "mex.seq_repo.main:run"
@@ -94,6 +96,7 @@ addopts = [
     "--cov-fail-under=95",
     "--cov-branch",
     "--pdbcls=IPython.terminal.debugger:TerminalPdb",
+    "--random-order-bucket=global",
 ]
 markers = "integration: mark a test as integration test"
 
@@ -127,8 +130,6 @@ lint.select = [
     "T20", # Flake8 print statement checker
     "W",   # Python code style warnings
 ]
-show-fixes = true
-target-version = "py311"
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = [

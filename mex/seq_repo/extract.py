@@ -21,7 +21,7 @@ def extract_sources() -> Generator[SeqRepoSource, None, None]:
         Generator for Seq Repo resources
     """
     settings = SeqRepoSettings.get()
-    with open(settings.default_json_file_path, "r", encoding="utf-8") as file:
+    with open(settings.default_json_file_path, encoding="utf-8") as file:
         data = json.load(file)
         for item in data:
             yield SeqRepoSource.model_validate(item)

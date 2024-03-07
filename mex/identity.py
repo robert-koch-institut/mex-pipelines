@@ -4,7 +4,7 @@ from urllib.parse import urljoin
 from mex.common.connector.http import HTTPConnector
 from mex.common.identity.base import BaseProvider
 from mex.common.identity.models import Identity
-from mex.common.types import Identifier, PrimarySourceID
+from mex.common.types import Identifier, MergedPrimarySourceIdentifier
 from mex.settings import Settings
 
 
@@ -30,7 +30,7 @@ class BackendIdentityProvider(BaseProvider, HTTPConnector):
     @cache
     def assign(
         self,
-        had_primary_source: PrimarySourceID,
+        had_primary_source: MergedPrimarySourceIdentifier,
         identifier_in_primary_source: str,
     ) -> Identity:
         """Find an Identity in a database or assign a new one."""
