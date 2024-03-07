@@ -1,6 +1,4 @@
-from mex.seq_repo.extract import (
-    extract_sources,
-)
+from mex.seq_repo.extract import extract_sources
 
 
 def test_extract_sources() -> None:
@@ -17,3 +15,12 @@ def test_extract_sources() -> None:
         "project_id": "TEST-ID",
     }
     assert sources[0].model_dump() == expected
+
+
+# @pytest.mark.integration
+# def test_extract_source_project_coordinator(seq_repo_sources:list[SeqRepoSource]):
+
+
+#   "python.formatting.provider": "black",
+#   "explorer.confirmDelete": false,
+#   "python.linting.banditEnabled": true,

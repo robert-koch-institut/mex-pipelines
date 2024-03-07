@@ -1,5 +1,8 @@
 from typing import Any
 
+import pytest
+
+from mex.common.ldap.models.person import LDAPPersonWithQuery
 from mex.common.models import (
     ExtractedAccessPlatform,
     ExtractedActivity,
@@ -8,6 +11,8 @@ from mex.common.models import (
 )
 from mex.common.testing import Joker
 from mex.common.types import (
+    OrganizationID,
+    PersonID,
     TextLanguage,
     Timestamp,
 )
@@ -20,10 +25,15 @@ from mex.seq_repo.transform import (
 )
 
 
+@pytest.mark.usefixtures(
+    "mocked_ldap",
+)
 def test_transform_seq_repo_activities_to_extracted_activities(
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
     seq_repo_latest_sources: dict[str, SeqRepoSource],
     seq_repo_activity: dict[str, Any],
+    seq_repo_source_project_coordinators: list[LDAPPersonWithQuery],
+    project_coordinators_merged_ids_by_query_string: dict[str, list[PersonID]],
 ) -> None:
     expected = {
         "identifier": Joker(),
@@ -39,10 +49,19 @@ def test_transform_seq_repo_activities_to_extracted_activities(
         "title": [{"value": "FG99-ABC-123", "language": TextLanguage.DE}],
     }
 
+    unit_stable_target_ids_by_synonym = {
+        "C1": OrganizationID.generate(seed=555),
+        "C1 Child Department": OrganizationID.generate(seed=555),
+        "XY": OrganizationID.generate(seed=999),
+    }
+
     extracted_mex_activities = list(
         transform_seq_repo_activities_to_extracted_activities(
             seq_repo_latest_sources,
             seq_repo_activity,
+            seq_repo_source_project_coordinators,
+            unit_stable_target_ids_by_synonym,
+            project_coordinators_merged_ids_by_query_string,
             extracted_primary_source_seq_repo,
         )
     )

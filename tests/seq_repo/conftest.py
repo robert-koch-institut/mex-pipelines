@@ -2,6 +2,7 @@ from typing import Any
 
 import pytest
 
+from mex.common.ldap.models.person import LDAPPersonWithQuery
 from mex.common.models import (
     ExtractedAccessPlatform,
     ExtractedActivity,
@@ -13,6 +14,8 @@ from mex.common.primary_source.transform import (
     get_primary_sources_by_name,
     transform_seed_primary_sources_to_extracted_primary_sources,
 )
+from mex.common.types import PersonID
+from mex.seq_repo.extract import extract_source_project_coordinator
 from mex.seq_repo.filter import filter_sources_on_latest_sequencing_date
 from mex.seq_repo.model import SeqRepoSource
 from mex.seq_repo.settings import SeqRepoSettings
@@ -46,7 +49,7 @@ def extracted_primary_source_seq_repo() -> ExtractedPrimarySource:
     return extracted_primary_source_seq_repo
 
 
-@pytest.fixture()
+@pytest.fixture
 def seq_repo_sources() -> list[SeqRepoSource]:
     return [
         SeqRepoSource(
@@ -74,14 +77,14 @@ def seq_repo_sources() -> list[SeqRepoSource]:
     ]
 
 
-@pytest.fixture()
+@pytest.fixture
 def seq_repo_latest_sources(
     seq_repo_sources: list[SeqRepoSource],
 ) -> dict[str, SeqRepoSource]:
     return filter_sources_on_latest_sequencing_date(seq_repo_sources)
 
 
-@pytest.fixture()
+@pytest.fixture
 def seq_repo_activity() -> dict[str, Any]:
     return {
         "theme": [
@@ -100,7 +103,7 @@ def seq_repo_activity() -> dict[str, Any]:
     }
 
 
-@pytest.fixture()
+@pytest.fixture
 def seq_repo_distribution() -> dict[str, Any]:
     return {
         "accessRestriction": [
@@ -140,7 +143,7 @@ def seq_repo_distribution() -> dict[str, Any]:
     }
 
 
-@pytest.fixture()
+@pytest.fixture
 def seq_repo_access_platform() -> dict[str, Any]:
     return {
         "alternativeTitle": [
@@ -215,7 +218,7 @@ def seq_repo_access_platform() -> dict[str, Any]:
     }
 
 
-@pytest.fixture()
+@pytest.fixture
 def seq_repo_resource() -> dict[str, Any]:
     return {
         "accessRestriction": [
@@ -323,7 +326,7 @@ def seq_repo_resource() -> dict[str, Any]:
     }
 
 
-@pytest.fixture()
+@pytest.fixture
 def extracted_mex_access_platform(
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
     seq_repo_access_platform: dict[str, Any],
@@ -334,7 +337,7 @@ def extracted_mex_access_platform(
     )
 
 
-@pytest.fixture()
+@pytest.fixture
 def extracted_mex_activities_dict(
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
     seq_repo_latest_sources: dict[str, SeqRepoSource],
@@ -352,7 +355,7 @@ def extracted_mex_activities_dict(
     }
 
 
-@pytest.fixture()
+@pytest.fixture
 def extracted_mex_distribution_dict(
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
     seq_repo_latest_sources: dict[str, SeqRepoSource],
@@ -371,3 +374,34 @@ def extracted_mex_distribution_dict(
         distribution.identifierInPrimarySource: distribution
         for distribution in extracted_mex_distributions
     }
+
+
+@pytest.fixture
+def seq_repo_source_project_coordinators(
+    seq_repo_latest_sources: dict[str, SeqRepoSource],
+) -> list[LDAPPersonWithQuery]:
+    """Extract source project coordinators."""
+    return list(extract_source_project_coordinator(seq_repo_latest_sources))
+
+
+@pytest.fixture
+def project_coordinators_merged_ids_by_query_string() -> dict[str, list[PersonID]]:
+    """Get project coordinators merged ids."""
+    return {
+        "mustermann": [PersonID("e0Rxxm9WvnMqPLZ44UduNx")],
+        "max": [PersonID("d6Lni0XPiEQM5jILEBOYxO")],
+        "jelly": [PersonID("buTvstFluFUX9TeoHlhe7c")],
+        "fish": [PersonID("gOwHDDA0HQgT1eDYnC4Ai5")],
+    }
+
+
+# @pytest.fixture
+# def unit_stable_target_ids_by_synonym(
+#     extracted_primary_sources: dict[str, ExtractedPrimarySource],
+# ) -> dict[str, OrganizationalUnitID]:
+#     """Extract the dummy units and return them grouped by synonyms."""
+#     organigram_units = extract_organigram_units()
+#     mex_organizational_units = transform_organigram_units_to_organizational_units(
+#         organigram_units, extracted_primary_sources["organigram"]
+#     )
+#     return get_unit_merged_ids_by_synonyms(mex_organizational_units)
