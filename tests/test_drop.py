@@ -7,6 +7,7 @@ from requests.exceptions import HTTPError
 from mex.drop import DropApiConnector
 
 
+@pytest.mark.skip("Mex-drop might not be running. To be fixed in MX-1576")
 @pytest.mark.integration
 def test_list_files() -> None:
     connector = DropApiConnector.get()
@@ -14,6 +15,7 @@ def test_list_files() -> None:
     assert files == ["default"]
 
 
+@pytest.mark.skip("Mex-drop might not be running. To be fixed in MX-1576")
 @pytest.mark.integration
 def test_list_files_of_non_existing_x_system() -> None:
     connector = DropApiConnector.get()
@@ -34,6 +36,7 @@ def test_list_files_mocked(monkeypatch: MonkeyPatch) -> None:
     assert files == ["default"]
 
 
+@pytest.mark.skip("Mex-drop might not be running. To be fixed in MX-1576")
 @pytest.mark.integration
 def test_get_file() -> None:
     connector = DropApiConnector.get()
@@ -41,6 +44,7 @@ def test_get_file() -> None:
     assert content == {"foo": "bar", "list": [1, 2, "foo"], "nested": {"foo": "bar"}}
 
 
+@pytest.mark.skip("Mex-drop might not be running. To be fixed in MX-1576")
 @pytest.mark.integration
 def test_get_file_that_does_not_exist() -> None:
     connector = DropApiConnector.get()
