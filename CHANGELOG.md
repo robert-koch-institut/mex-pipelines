@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- settings attributes `drop_api_key` and `drop_api_url` (env names: `MEX_DROP_API_KEY` and `MEX_DROP_API_URL`)
+- drop api connector for listing and loading files from the drop api
+
 ### Changes
 
 - update cruft template with new linters
