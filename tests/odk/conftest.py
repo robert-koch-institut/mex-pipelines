@@ -232,7 +232,7 @@ def odk_resource_mappings() -> list[dict[str, Any]]:
                     "examplesInPrimarySource": None,
                     "mappingRules": [
                         {
-                            "forValues": ["consetetur", " sadipscing  "],
+                            "forValues": ["consetetur", "invidunt", " sadipscing  "],
                             "setValues": None,
                             "rule": "Use value",
                         }
@@ -334,7 +334,7 @@ def odk_resource_mappings() -> list[dict[str, Any]]:
                     "examplesInPrimarySource": None,
                     "mappingRules": [
                         {
-                            "forValues": ["invidunt"],
+                            "forValues": ["invidunt", "consetetur"],
                             "setValues": None,
                             "rule": "Use value to match with wikidata extractor.",
                         }

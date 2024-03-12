@@ -55,7 +55,10 @@ def test_transform_odk_resources_to_mex_resources(
         "contact": [unit_stable_target_ids_by_synonym["C1"]],
         "contributingUnit": [unit_stable_target_ids_by_synonym["C1"]],
         "description": [{"value": "amet", "language": "en"}],
-        "externalPartner": [external_partner_and_publisher_by_label["consetetur"]],
+        "externalPartner": [
+            external_partner_and_publisher_by_label["consetetur"],
+            external_partner_and_publisher_by_label["invidunt"],
+        ],
         "keyword": [
             {"value": "elitr"},
             {"value": "sed", "language": "en"},
@@ -68,7 +71,10 @@ def test_transform_odk_resources_to_mex_resources(
             {"value": "eirmod", "language": "de"},
         ],
         "methodDescription": [{"value": "tempor", "language": "en"}],
-        "publisher": [external_partner_and_publisher_by_label["invidunt"]],
+        "publisher": [
+            external_partner_and_publisher_by_label["invidunt"],
+            external_partner_and_publisher_by_label["consetetur"],
+        ],
         "resourceTypeGeneral": ["https://mex.rki.de/item/resource-type-general-8"],
         "rights": [{"value": "ut labore", "language": "de"}],
         "sizeOfDataBasis": "et dolore",
