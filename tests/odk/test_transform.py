@@ -2,6 +2,7 @@ from typing import Any
 
 import pytest
 
+from mex.common.identity import get_provider
 from mex.common.models import (
     ExtractedOrganization,
     ExtractedPrimarySource,
@@ -9,7 +10,9 @@ from mex.common.models import (
     ExtractedVariableGroup,
 )
 from mex.common.testing import Joker
-from mex.common.types import MergedOrganizationalUnitIdentifier
+from mex.common.types import (
+    MergedOrganizationalUnitIdentifier,
+)
 from mex.odk.model import ODKData
 from mex.odk.transform import (
     get_external_partner_and_publisher_by_label,
@@ -26,6 +29,12 @@ def test_transform_odk_resources_to_mex_resources(
     external_partner_and_publisher_by_label: dict[str, ExtractedOrganization],
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
 ) -> None:
+    identity_provider = get_provider()
+    identity = identity_provider.assign(
+        extracted_primary_sources["international-projects"].stableTargetId,
+        "testAAbr",
+    )  # "testAAbr" is the default value from test mapping
+
     resources = transform_odk_resources_to_mex_resources(
         odk_resource_mappings,
         unit_stable_target_ids_by_synonym,
@@ -77,6 +86,7 @@ def test_transform_odk_resources_to_mex_resources(
             {"value": "erat", "language": "de"},
         ],
         "unitInCharge": [unit_stable_target_ids_by_synonym["C1"]],
+        "wasGeneratedBy": identity.stableTargetId,
     }
     assert resources[0].model_dump(exclude_defaults=True) == expected
 
