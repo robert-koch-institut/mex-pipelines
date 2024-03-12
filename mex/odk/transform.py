@@ -294,12 +294,12 @@ def transform_odk_data_to_extracted_variables(
             description = [
                 cell
                 for column_name, cell in row.items()
-                if "hint" in column_name and isinstance(cell, str)
+                if column_name.startswith("hint") and isinstance(cell, str)
             ]
             label = [
                 cell
                 for column_name, cell in row.items()
-                if "label" in column_name and isinstance(cell, str)
+                if column_name.startswith("label") and isinstance(cell, str)
             ]
             if label == []:
                 continue  # TODO: address empty label list in MX-1568
