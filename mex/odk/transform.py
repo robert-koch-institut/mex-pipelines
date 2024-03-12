@@ -75,26 +75,16 @@ def transform_odk_resources_to_mex_resources(
         was_generated_by = None
         if identity:
             was_generated_by = identity[0].stableTargetId
-        external_partner = []
-        if (
-            resource["externalPartner"][0]["mappingRules"][0]["forValues"][0]
-            in external_partner_and_publisher_by_label.keys()
-        ):
-            external_partner.append(
-                external_partner_and_publisher_by_label[
-                    resource["externalPartner"][0]["mappingRules"][0]["forValues"][0]
-                ]
-            )
-        publisher = []
-        if (
-            resource["publisher"][0]["mappingRules"][0]["forValues"][0]
-            in external_partner_and_publisher_by_label.keys()
-        ):
-            publisher.append(
-                external_partner_and_publisher_by_label[
-                    resource["publisher"][0]["mappingRules"][0]["forValues"][0]
-                ]
-            )
+        external_partner = [
+            partner
+            for name in resource["externalPartner"][0]["mappingRules"][0]["forValues"]
+            if (partner := external_partner_and_publisher_by_label.get(name))
+        ]
+        publisher = [
+            partner
+            for name in resource["publisher"][0]["mappingRules"][0]["forValues"]
+            if (partner := external_partner_and_publisher_by_label.get(name))
+        ]
         resources.append(
             ExtractedResource(
                 identifierInPrimarySource=resource["identifierInPrimarySource"][0][
