@@ -112,7 +112,7 @@ def extracted_variable_groups_odk(
 
 
 @asset(group_name="odk")
-def extracted_variable_odk(
+def extracted_variables_odk(
     extracted_resources_odk: list[ExtractedResource],
     extracted_variable_groups_odk: list[ExtractedVariableGroup],
     odk_variable_groups: dict[str, list[dict[str, str]]],
