@@ -137,16 +137,12 @@ def get_external_partner_and_publisher_by_label(
     Returns:
         dictionary of wikidata OrganizationIDs by organization label
     """
-    labels = [
-        resource["publisher"][0]["mappingRules"][0]["forValues"][0]
+    labels = {
+        value
         for resource in odk_resource_mappings
-    ]
-    labels.extend(
-        [
-            resource["externalPartner"][0]["mappingRules"][0]["forValues"][0]
-            for resource in odk_resource_mappings
-        ]
-    )
+        for attribute in ["publisher", "externalPartner"]
+        for value in resource[attribute][0]["mappingRules"][0]["forValues"]
+    }
     external_partner_and_publisher_by_label: dict[str, MergedOrganizationIdentifier] = (
         {}
     )
