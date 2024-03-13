@@ -270,3 +270,23 @@ def test_transform_odk_data_to_extracted_variables(
         "usedIn": [extracted_resources_odk[0].stableTargetId],
     }
     assert extracted_variables[0].model_dump(exclude_defaults=True) == expected
+    expected = {
+        "hadPrimarySource": extracted_primary_sources["odk"].stableTargetId,
+        "identifierInPrimarySource": "consent_gatekeeper",
+        "belongsTo": [extracted_variable_groups_odk[0].stableTargetId],
+        "label": [
+            {"value": "**Verbal consent**"},
+            {"value": "**Omaitaverero wokotjinyo**"},
+        ],
+        "usedIn": [extracted_resources_odk[0].stableTargetId],
+        "valueSet": [
+            "consent",
+            "I AGREE with the above statements and wish to take part in the survey",
+            "Ami ME ITAVERE komaheya nge ri kombanda mba nu otji me raisa kutja mbi nonḓero okukara norupa mongonḓononeno.",
+            "I do NOT AGREE to take part in the survey",
+            "Ami HI NOKUITAVERA okukara norupa mongonḓononeno.",
+        ],
+        "identifier": Joker(),
+        "stableTargetId": Joker(),
+    }
+    assert extracted_variables[1].model_dump(exclude_defaults=True) == expected
