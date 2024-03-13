@@ -49,8 +49,11 @@ def transform_odk_resources_to_mex_resources(
             ]
         contributing_unit = None
         if resource.get("contributingUnit"):
-            contributing_unit = unit_stable_target_ids_by_synonym[
-                resource["contributingUnit"][0]["mappingRules"][0]["forValues"][0]
+            contributing_unit = [
+                unit_stable_target_ids_by_synonym[synonym]
+                for synonym in resource["contributingUnit"][0]["mappingRules"][0][
+                    "forValues"
+                ]
             ]
         description = None
         if resource.get("description"):
