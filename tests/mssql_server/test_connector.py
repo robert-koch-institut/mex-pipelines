@@ -3,12 +3,12 @@ from unittest.mock import MagicMock
 
 from pytest import MonkeyPatch
 
-from mex.ifsg.connector import IFSGConnector
 from mex.ifsg.models.meta_schema2type import MetaSchema2Type
+from mex.mssql_server.connector import MSSQLServerConnector
 
 
 def test_parse_rows(monkeypatch: MonkeyPatch) -> None:
-    def mocked_init(self: IFSGConnector) -> None:
+    def mocked_init(self: MSSQLServerConnector) -> None:
         cursor = MagicMock()
         cursor.fetchall.return_value = [
             (
@@ -28,8 +28,8 @@ def test_parse_rows(monkeypatch: MonkeyPatch) -> None:
         self._connection = MagicMock()
         self._connection.cursor.return_value.__enter__.return_value = cursor
 
-    monkeypatch.setattr(IFSGConnector, "__init__", mocked_init)
-    connection = IFSGConnector.get()
+    monkeypatch.setattr(MSSQLServerConnector, "__init__", mocked_init)
+    connection = MSSQLServerConnector.get()
 
     rows = connection.parse_rows(MetaSchema2Type)
 

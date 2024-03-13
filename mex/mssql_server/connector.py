@@ -14,7 +14,7 @@ from mex.ifsg.models.meta_item import MetaItem
 from mex.ifsg.models.meta_schema2field import MetaSchema2Field
 from mex.ifsg.models.meta_schema2type import MetaSchema2Type
 from mex.ifsg.models.meta_type import MetaType
-from mex.ifsg.settings import IFSGSettings
+from mex.mssql_server.settings import MSSQLServerSettings
 
 
 class NoOpPyodbc:
@@ -43,12 +43,12 @@ QUERY_BY_MODEL = {
 }
 
 
-class IFSGConnector(BaseConnector):
+class MSSQLServerConnector(BaseConnector):
     """Connector to handle authentication and queries towards the IFSG SQL server."""
 
     def __init__(self) -> None:
         """Create a new connector instance."""
-        settings = IFSGSettings.get()
+        settings = MSSQLServerSettings.get()
         if platform.system() != "Windows":  # pragma: no cover
             process = Popen(
                 ["kinit", settings.kerberos_user, "-V"],  # noqa: S603, S607

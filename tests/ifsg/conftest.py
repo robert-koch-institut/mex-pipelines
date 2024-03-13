@@ -24,7 +24,6 @@ from mex.common.types import (
     Text,
     TextLanguage,
 )
-from mex.ifsg.connector import IFSGConnector
 from mex.ifsg.models.meta_catalogue2item import MetaCatalogue2Item
 from mex.ifsg.models.meta_catalogue2item2schema import MetaCatalogue2Item2Schema
 from mex.ifsg.models.meta_disease import MetaDisease
@@ -33,6 +32,7 @@ from mex.ifsg.models.meta_item import MetaItem
 from mex.ifsg.models.meta_schema2field import MetaSchema2Field
 from mex.ifsg.models.meta_schema2type import MetaSchema2Type
 from mex.ifsg.models.meta_type import MetaType
+from mex.mssql_server.connector import MSSQLServerConnector
 
 ModelT = TypeVar("ModelT", bound=BaseModel)
 
@@ -154,16 +154,16 @@ def mocked_ifsg(
 ) -> None:
     """Mock IFSG connector."""
 
-    def mocked_init(self: IFSGConnector) -> None:
+    def mocked_init(self: MSSQLServerConnector) -> None:
         cursor = MagicMock()
         cursor.fetchone.return_value = ["mocked"]
         self._connection = MagicMock()
         self._connection.cursor.return_value.__enter__.return_value = cursor
 
-    monkeypatch.setattr(IFSGConnector, "__init__", mocked_init)
+    monkeypatch.setattr(MSSQLServerConnector, "__init__", mocked_init)
 
     monkeypatch.setattr(
-        IFSGConnector,
+        MSSQLServerConnector,
         "parse_rows",
         lambda self, model: mocked_sql_tables[model],
     )

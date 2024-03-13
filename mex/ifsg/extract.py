@@ -2,7 +2,7 @@ from typing import TypeVar
 
 from pydantic import BaseModel
 
-from mex.ifsg.connector import IFSGConnector
+from mex.mssql_server.connector import MSSQLServerConnector
 
 ModelT = TypeVar("ModelT", bound=BaseModel)
 
@@ -16,5 +16,5 @@ def extract_sql_table(model: type[ModelT]) -> list[ModelT]:
     Returns:
         list of parsed pydantic ModelT
     """
-    connection = IFSGConnector.get()
+    connection = MSSQLServerConnector.get()
     return [model.model_validate(row) for row in connection.parse_rows(model)]
