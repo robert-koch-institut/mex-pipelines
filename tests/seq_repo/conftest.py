@@ -1,20 +1,36 @@
 from typing import Any
+from unittest.mock import MagicMock
+from uuid import UUID
 
 import pytest
+from pytest import MonkeyPatch
 
-from mex.common.ldap.models.person import LDAPPersonWithQuery
+from mex.common.ldap.connector import LDAPConnector
+from mex.common.ldap.models.person import LDAPPerson, LDAPPersonWithQuery
 from mex.common.models import (
     ExtractedAccessPlatform,
     ExtractedActivity,
     ExtractedDistribution,
+    ExtractedPerson,
     ExtractedPrimarySource,
+)
+from mex.common.organigram.extract import (
+    extract_organigram_units,
+    get_unit_merged_ids_by_synonyms,
+)
+from mex.common.organigram.transform import (
+    transform_organigram_units_to_organizational_units,
 )
 from mex.common.primary_source.extract import extract_seed_primary_sources
 from mex.common.primary_source.transform import (
     get_primary_sources_by_name,
     transform_seed_primary_sources_to_extracted_primary_sources,
 )
-from mex.common.types import PersonID
+from mex.common.types import (
+    Identifier,
+    MergedOrganizationalUnitIdentifier,
+    MergedPersonIdentifier,
+)
 from mex.seq_repo.extract import extract_source_project_coordinator
 from mex.seq_repo.filter import filter_sources_on_latest_sequencing_date
 from mex.seq_repo.model import SeqRepoSource
@@ -99,7 +115,7 @@ def seq_repo_activity() -> dict[str, Any]:
                     }
                 ],
             }
-        ]
+        ],
     }
 
 
@@ -146,17 +162,23 @@ def seq_repo_distribution() -> dict[str, Any]:
 @pytest.fixture
 def seq_repo_access_platform() -> dict[str, Any]:
     return {
-        "alternativeTitle": [
-            {
-                "fieldInPrimarySource": "n/a",
-                "mappingRules": [{"setValues": [{"value": "SeqRepo"}]}],
-            }
-        ],
-        "contact": [
+        "identifierInPrimarySource": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
-                    {"forValues": ["fg99"], "rule": "Hmm, where are the rules?"}
+                    {
+                        "setValues": ["https://dummy.url.com/"],
+                    }
+                ],
+            }
+        ],
+        "alternativeTitle": [
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {
+                        "setValues": [{"value": "SeqRepo", "language": None}],
+                    }
                 ],
             }
         ],
@@ -167,10 +189,10 @@ def seq_repo_access_platform() -> dict[str, Any]:
                     {
                         "setValues": [
                             {
-                                "language": "en",
                                 "value": "This is just a sample description, don't read it.",
+                                "language": "en",
                             }
-                        ]
+                        ],
                     }
                 ],
             }
@@ -181,16 +203,20 @@ def seq_repo_access_platform() -> dict[str, Any]:
                 "mappingRules": [{"setValues": ["https://mex.rki.de/item/api-type-1"]}],
             }
         ],
-        "identifierInPrimarySource": [
-            {
-                "fieldInPrimarySource": "n/a",
-                "mappingRules": [{"setValues": ["https://dummy.url.com/"]}],
-            }
-        ],
         "landingPage": [
             {
                 "fieldInPrimarySource": "n/a",
-                "mappingRules": [{"setValues": [{"url": "https://dummy.url.com/"}]}],
+                "mappingRules": [
+                    {
+                        "setValues": [
+                            {
+                                "language": None,
+                                "title": None,
+                                "url": "https://dummy.url.com/",
+                            }
+                        ],
+                    }
+                ],
             }
         ],
         "technicalAccessibility": [
@@ -205,14 +231,22 @@ def seq_repo_access_platform() -> dict[str, Any]:
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
-                    {"setValues": [{"value": "Sequence Data Repository"}]}
+                    {
+                        "setValues": [
+                            {"value": "Sequence Data Repository", "language": None}
+                        ],
+                    }
                 ],
             }
         ],
-        "unitInCharge": [
+        "contact": [
             {
-                "fieldInPrimarySource": "n/a",
-                "mappingRules": [{"forValues": ["fg99"], "rule": "dummy rule"}],
+                "mappingRules": [
+                    {
+                        "forValues": ["FG99"],
+                        "setValues": None,
+                    }
+                ],
             }
         ],
     }
@@ -255,9 +289,20 @@ def seq_repo_resource() -> dict[str, Any]:
                 "mappingRules": [
                     {
                         "setValues": [
-                            {"language": "en", "value": "Next-Generation Sequencing"},
-                            {"language": "en", "value": "NGS"},
-                        ]
+                            {"value": "Next-Generation Sequencing", "language": "de"},
+                            {"value": "NGS", "language": "de"},
+                        ],
+                    }
+                ],
+            }
+        ],
+        "publisher": [
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {
+                        "forValues": ["Robert Koch-Institut"],
+                        "setValues": None,
                     }
                 ],
             }
@@ -276,9 +321,9 @@ def seq_repo_resource() -> dict[str, Any]:
                 "mappingRules": [
                     {
                         "setValues": [
-                            {"language": "en", "value": "Sequencing Data"},
-                            {"language": "de", "value": "Sequenzdaten"},
-                        ]
+                            {"value": "Sequencing Data", "language": "de"},
+                            {"value": "Sequenzdaten", "language": "de"},
+                        ],
                     }
                 ],
             }
@@ -287,7 +332,14 @@ def seq_repo_resource() -> dict[str, Any]:
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
-                    {"setValues": [{"language": "de", "value": "Dummy rights value."}]}
+                    {
+                        "setValues": [
+                            {
+                                "value": "Example content",
+                                "language": "de",
+                            }
+                        ],
+                    }
                 ],
             }
         ],
@@ -296,17 +348,6 @@ def seq_repo_resource() -> dict[str, Any]:
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
                     {"setValues": ["https://mex.rki.de/item/data-processing-state-1"]}
-                ],
-            }
-        ],
-        "publisher": [
-            {
-                "fieldInPrimarySource": "n/a",
-                "mappingRules": [
-                    {
-                        "forValues": ["Dummy Publisher"],
-                        "rule": "This rule is just a dummy rule.",
-                    }
                 ],
             }
         ],
@@ -330,9 +371,11 @@ def seq_repo_resource() -> dict[str, Any]:
 def extracted_mex_access_platform(
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
     seq_repo_access_platform: dict[str, Any],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
 ) -> ExtractedAccessPlatform:
     return transform_seq_repo_access_platform_to_extracted_access_platform(
         seq_repo_access_platform,
+        unit_stable_target_ids_by_synonym,
         extracted_primary_source_seq_repo,
     )
 
@@ -342,13 +385,20 @@ def extracted_mex_activities_dict(
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
     seq_repo_latest_sources: dict[str, SeqRepoSource],
     seq_repo_activity: dict[str, Any],
+    seq_repo_source_project_coordinators: list[LDAPPersonWithQuery],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
+    project_coordinators_merged_ids_by_query_string: dict[
+        str, list[MergedPersonIdentifier]
+    ],
 ) -> dict[str, ExtractedActivity]:
     extracted_mex_activities = transform_seq_repo_activities_to_extracted_activities(
         seq_repo_latest_sources,
         seq_repo_activity,
+        seq_repo_source_project_coordinators,
+        unit_stable_target_ids_by_synonym,
+        project_coordinators_merged_ids_by_query_string,
         extracted_primary_source_seq_repo,
     )
-
     return {
         activity.identifierInPrimarySource: activity
         for activity in extracted_mex_activities
@@ -385,23 +435,66 @@ def seq_repo_source_project_coordinators(
 
 
 @pytest.fixture
-def project_coordinators_merged_ids_by_query_string() -> dict[str, list[PersonID]]:
+def project_coordinators_merged_ids_by_query_string() -> (
+    dict[str, list[MergedPersonIdentifier]]
+):
     """Get project coordinators merged ids."""
     return {
-        "mustermann": [PersonID("e0Rxxm9WvnMqPLZ44UduNx")],
-        "max": [PersonID("d6Lni0XPiEQM5jILEBOYxO")],
-        "jelly": [PersonID("buTvstFluFUX9TeoHlhe7c")],
-        "fish": [PersonID("gOwHDDA0HQgT1eDYnC4Ai5")],
+        "mustermann": [MergedPersonIdentifier("e0Rxxm9WvnMqPLZ44UduNx")],
+        "max": [MergedPersonIdentifier("d6Lni0XPiEQM5jILEBOYxO")],
+        "jelly": [MergedPersonIdentifier("buTvstFluFUX9TeoHlhe7c")],
+        "fish": [MergedPersonIdentifier("gOwHDDA0HQgT1eDYnC4Ai5")],
     }
 
 
-# @pytest.fixture
-# def unit_stable_target_ids_by_synonym(
-#     extracted_primary_sources: dict[str, ExtractedPrimarySource],
-# ) -> dict[str, OrganizationalUnitID]:
-#     """Extract the dummy units and return them grouped by synonyms."""
-#     organigram_units = extract_organigram_units()
-#     mex_organizational_units = transform_organigram_units_to_organizational_units(
-#         organigram_units, extracted_primary_sources["organigram"]
-#     )
-#     return get_unit_merged_ids_by_synonyms(mex_organizational_units)
+@pytest.fixture
+def unit_stable_target_ids_by_synonym(
+    extracted_primary_sources: dict[str, ExtractedPrimarySource],
+) -> dict[str, MergedOrganizationalUnitIdentifier]:
+    """Extract the dummy units and return them grouped by synonyms."""
+    organigram_units = extract_organigram_units()
+    mex_organizational_units = transform_organigram_units_to_organizational_units(
+        organigram_units, extracted_primary_sources["organigram"]
+    )
+    return get_unit_merged_ids_by_synonyms(mex_organizational_units)
+
+
+@pytest.fixture
+def extracted_person() -> ExtractedPerson:
+    """Return an extracted person with static dummy values."""
+    return ExtractedPerson(
+        email=["fictitiousf@rki.de", "info@rki.de"],
+        familyName="Fictitious",
+        givenName="Frieda",
+        fullName="Dr. Fictitious, Frieda",
+        identifierInPrimarySource="frieda",
+        hadPrimarySource=Identifier.generate(seed=40),
+    )
+
+
+@pytest.fixture
+def mocked_ldap(monkeypatch: MonkeyPatch) -> None:
+    """Mock LDAP connector to return a mocked person and actor."""
+    monkeypatch.setattr(
+        LDAPConnector,
+        "__init__",
+        lambda self: setattr(self, "_connection", MagicMock()),
+    )
+    monkeypatch.setattr(
+        LDAPConnector,
+        "get_persons",
+        lambda *_, **__: iter(
+            [
+                LDAPPerson(
+                    employeeID="42",
+                    sn="mustermann",
+                    givenName="max",
+                    displayName="mustermann, max",
+                    objectGUID=UUID(int=4, version=4),
+                    department="FG99",
+                    departmentNumber="FG99",
+                    sAMAccountName="max",
+                )
+            ]
+        ),
+    )

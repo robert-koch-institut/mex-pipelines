@@ -8,7 +8,11 @@ from mex.common.models import (
     ExtractedPrimarySource,
     ExtractedResource,
 )
-from mex.common.types import Identifier, OrganizationalUnitID, PersonID
+from mex.common.types import (
+    Identifier,
+    MergedOrganizationalUnitIdentifier,
+    MergedPersonIdentifier,
+)
 from mex.seq_repo.model import SeqRepoSource
 
 
@@ -16,8 +20,10 @@ def transform_seq_repo_activities_to_extracted_activities(
     seq_repo_sources: dict[str, SeqRepoSource],
     seq_repo_activity: dict[str, Any],
     seq_repo_source_project_coordinators: list[LDAPPersonWithQuery],
-    unit_merged_ids_by_synonyms: dict[str, OrganizationalUnitID],
-    project_coordinators_merged_ids_by_query_string: dict[str, list[PersonID]],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
+    project_coordinators_merged_ids_by_query_string: dict[
+        str, list[MergedPersonIdentifier]
+    ],
     extracted_primary_source: ExtractedPrimarySource,
 ) -> Generator[ExtractedActivity, None, None]:
     """Transform seq-repo activity to ExtractedActivity.
@@ -27,15 +33,16 @@ def transform_seq_repo_activities_to_extracted_activities(
         seq_repo_activity: Seq Repo extracted activity for default values from mapping
         seq_repo_source_project_coordinators: Seq Repo sources project coordinators
                                             ldap query results
-        unit_merged_ids_by_synonyms: Unit merged ids by synonyms
-        project_coordinators_merged_ids_by_query_string: Sources project coordinators
-                                                        merged ids
+        unit_stable_target_ids_by_synonym: Unit stable target ids by synonym
+        project_coordinators_merged_ids_by_query_string: Seq Repo Sources project
+                                                        coordinators merged ids
         extracted_primary_source: Extracted primary source
 
     Returns:
         Generator for ExtractedActivity
     """
     theme = seq_repo_activity["theme"][0]["mappingRules"][0]["setValues"]
+
     for _, source in seq_repo_sources.items():
         project_coordinators_ids = []
         responsible_units = []
@@ -51,14 +58,14 @@ def transform_seq_repo_activities_to_extracted_activities(
                     and query_ldap.person.departmentNumber
                 ):
                     if query_ldap.person.sAMAccountName.lower() == pc.lower():
-                        unit = unit_merged_ids_by_synonyms.get(
+                        unit = unit_stable_target_ids_by_synonym.get(
                             query_ldap.person.departmentNumber
                         )
-                        if unit:
+                        if unit and unit not in responsible_units:
                             responsible_units.append(unit)
+
         if not responsible_units or not project_coordinators_ids:
             continue
-
         yield ExtractedActivity(
             contact=project_coordinators_ids,
             hadPrimarySource=extracted_primary_source.stableTargetId,
@@ -114,8 +121,10 @@ def transform_seq_repo_resource_to_extracted_resource(
     seq_repo_activities: dict[str, ExtractedActivity],
     seq_repo_resource: dict[str, Any],
     seq_repo_source_project_coordinators: list[LDAPPersonWithQuery],
-    unit_merged_ids_by_synonyms: dict[str, OrganizationalUnitID],
-    project_coordinators_merged_ids_by_query_string: dict[str, list[PersonID]],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
+    project_coordinators_merged_ids_by_query_string: dict[
+        str, list[MergedPersonIdentifier]
+    ],
     extracted_primary_source: ExtractedPrimarySource,
 ) -> Generator[ExtractedResource, None, None]:
     """Transform seq-repo resource to ExtractedResource.
@@ -125,6 +134,11 @@ def transform_seq_repo_resource_to_extracted_resource(
         seq_repo_distributions: Seq Repo extracted distribution
         seq_repo_activities: Seq Repo extracted activity for default values from mapping
         seq_repo_resource: Seq Repo extracted resource
+        seq_repo_source_project_coordinators: Seq Repo sources project coordinators
+                                            ldap query results
+        unit_stable_target_ids_by_synonym: Unit stable target ids by synonym
+        project_coordinators_merged_ids_by_query_string: Seq Repo Sources project
+                                                        coordinators merged ids
         extracted_primary_source: Extracted primary source
 
     Returns:
@@ -133,7 +147,7 @@ def transform_seq_repo_resource_to_extracted_resource(
     access_restriction = seq_repo_resource["accessRestriction"][0]["mappingRules"][0][
         "setValues"
     ]
-    accrual_periodicity = seq_repo_resource["contributingUnit"][0]["mappingRules"][0][
+    accrual_periodicity = seq_repo_resource["accrualPeriodicity"][0]["mappingRules"][0][
         "setValues"
     ]
     anonymization_pseudonymization = seq_repo_resource["anonymizationPseudonymization"][
@@ -171,15 +185,17 @@ def transform_seq_repo_resource_to_extracted_resource(
                     and query_ldap.person.departmentNumber
                 ):
                     if query_ldap.person.sAMAccountName.lower() == pc.lower():
-                        unit = unit_merged_ids_by_synonyms.get(
+                        unit = unit_stable_target_ids_by_synonym.get(
                             query_ldap.person.departmentNumber
                         )
-                        if unit:
+                        if unit and unit not in units_in_charge:
                             units_in_charge.append(unit)
         if not units_in_charge or not project_coordinators_ids:
             continue
 
-        contributing_unit = unit_merged_ids_by_synonyms.get(source.customer_org_unit_id)
+        contributing_unit = unit_stable_target_ids_by_synonym.get(
+            source.customer_org_unit_id
+        )
 
         yield ExtractedResource(
             accessRestriction=access_restriction,
@@ -208,13 +224,14 @@ def transform_seq_repo_resource_to_extracted_resource(
 
 def transform_seq_repo_access_platform_to_extracted_access_platform(
     seq_repo_access_platform: dict[str, Any],
-    unit_merged_ids_by_synonyms: dict[str, OrganizationalUnitID],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     extracted_primary_source: ExtractedPrimarySource,
 ) -> ExtractedAccessPlatform:
     """Transform seq-repo access platform to ExtractedAccessPlatform.
 
     Args:
         seq_repo_access_platform: Seq Repo extracted access platform
+        unit_stable_target_ids_by_synonym: Unit stable target ids by synonym
         extracted_primary_source: Extracted primary source
 
     Returns:
@@ -246,7 +263,7 @@ def transform_seq_repo_access_platform_to_extracted_access_platform(
 
     resolved_organigram = []
     for contact in contacts:
-        resolved_organigram.append(unit_merged_ids_by_synonyms.get(contact))
+        resolved_organigram.append(unit_stable_target_ids_by_synonym.get(contact))
 
     return ExtractedAccessPlatform(
         alternativeTitle=alternative_title,
@@ -260,6 +277,3 @@ def transform_seq_repo_access_platform_to_extracted_access_platform(
         title=title,
         unitInCharge=resolved_organigram,
     )
-
-    # TODO: update docs everywhere in transform.py
-    # TODO: run tests on transform, fix tests
