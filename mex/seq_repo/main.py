@@ -12,13 +12,10 @@ from mex.common.models import (
     ExtractedPrimarySource,
     ExtractedResource,
 )
-from mex.common.organigram.extract import (
-    get_unit_merged_ids_by_synonyms,
-)
 from mex.common.primary_source.transform import (
     get_primary_sources_by_name,
 )
-from mex.common.types import OrganizationalUnitID, PersonID
+from mex.common.types import MergedOrganizationalUnitIdentifier, MergedPersonIdentifier
 from mex.mapping.extract import extract_mapping_data
 from mex.pipeline import asset, run_job_in_process
 from mex.seq_repo.extract import extract_source_project_coordinator, extract_sources
@@ -62,14 +59,6 @@ def seq_repo_latest_source(
 
 
 @asset(group_name="seq_repo")
-def unit_merged_ids_by_synonyms(
-    extracted_organizational_units: list[ExtractedOrganizationalUnit],
-) -> dict[str, OrganizationalUnitID]:
-    """Group organizational units by their labels."""
-    return get_unit_merged_ids_by_synonyms(extracted_organizational_units)
-
-
-@asset(group_name="seq_repo")
 def seq_repo_source_project_coordinators(
     seq_repo_latest_source: dict[str, SeqRepoSource],
 ) -> list[LDAPPersonWithQuery]:
@@ -82,7 +71,7 @@ def project_coordinators_merged_ids_by_query_string(
     seq_repo_source_project_coordinators: list[LDAPPersonWithQuery],
     extracted_primary_source_ldap: ExtractedPrimarySource,
     extracted_organizational_units: list[ExtractedOrganizationalUnit],
-) -> dict[str, list[PersonID]]:
+) -> dict[str, list[MergedPersonIdentifier]]:
     """Get project coordinators merged ids."""
     extracted_persons = list(
         transform_ldap_persons_with_query_to_mex_persons(
@@ -93,7 +82,7 @@ def project_coordinators_merged_ids_by_query_string(
     )
     load(extracted_persons)
     return {
-        str(query_string): [PersonID(id) for id in merged_ids]
+        str(query_string): [MergedPersonIdentifier(id) for id in merged_ids]
         for query_string, merged_ids in get_merged_ids_by_query_string(
             seq_repo_source_project_coordinators, extracted_primary_source_ldap
         ).items()
@@ -105,28 +94,27 @@ def extracted_activity(
     seq_repo_latest_source: dict[str, SeqRepoSource],
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
     seq_repo_source_project_coordinators: list[LDAPPersonWithQuery],
-    unit_merged_ids_by_synonyms: dict[str, OrganizationalUnitID],
-    project_coordinators_merged_ids_by_query_string: dict[str, list[PersonID]],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
+    project_coordinators_merged_ids_by_query_string: dict[
+        str, list[MergedPersonIdentifier]
+    ],
 ) -> dict[str, ExtractedActivity]:
     """Extract activities from Seq-Repo."""
     settings = SeqRepoSettings.get()
     activity = extract_mapping_data(
         settings.mapping_path / "activity.yaml", ExtractedActivity
     )
-    # mex_activities = transform_seq_repo_activities_to_extracted_activities(
-    #     seq_repo_latest_source, activity, extracted_primary_source_seq_repo
-    # )
+
     mex_activities = transform_seq_repo_activities_to_extracted_activities(
         seq_repo_latest_source,
         activity,
         seq_repo_source_project_coordinators,
-        unit_merged_ids_by_synonyms,
+        unit_stable_target_ids_by_synonym,
         project_coordinators_merged_ids_by_query_string,
         extracted_primary_source_seq_repo,
     )
     mex_activities_gens = tee(mex_activities, 2)
     load(mex_activities_gens[0])
-
     return {
         activity.identifierInPrimarySource: activity
         for activity in mex_activities_gens[1]
@@ -135,7 +123,7 @@ def extracted_activity(
 
 @asset(group_name="seq_repo")
 def extracted_access_platform(
-    unit_merged_ids_by_synonyms: dict[str, OrganizationalUnitID],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
 ) -> ExtractedAccessPlatform:
     """Extract access platform from Seq-Repo."""
@@ -147,7 +135,7 @@ def extracted_access_platform(
     mex_access_platform = (
         transform_seq_repo_access_platform_to_extracted_access_platform(
             access_platform,
-            unit_merged_ids_by_synonyms,
+            unit_stable_target_ids_by_synonym,
             extracted_primary_source_seq_repo,
         )
     )
@@ -189,8 +177,10 @@ def seq_repo_resource(
     extracted_distribution: dict[str, ExtractedDistribution],
     extracted_activity: dict[str, ExtractedActivity],
     seq_repo_source_project_coordinators: list[LDAPPersonWithQuery],
-    unit_merged_ids_by_synonyms: dict[str, OrganizationalUnitID],
-    project_coordinators_merged_ids_by_query_string: dict[str, list[PersonID]],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
+    project_coordinators_merged_ids_by_query_string: dict[
+        str, list[MergedPersonIdentifier]
+    ],
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
 ) -> list[ExtractedResource]:
     """Extract resource from Seq-Repo."""
@@ -206,7 +196,7 @@ def seq_repo_resource(
         extracted_activity,
         resource,
         seq_repo_source_project_coordinators,
-        unit_merged_ids_by_synonyms,
+        unit_stable_target_ids_by_synonym,
         project_coordinators_merged_ids_by_query_string,
         extracted_primary_source_seq_repo,
     )

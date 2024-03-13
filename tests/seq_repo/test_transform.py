@@ -11,8 +11,8 @@ from mex.common.models import (
 )
 from mex.common.testing import Joker
 from mex.common.types import (
-    OrganizationID,
-    PersonID,
+    MergedOrganizationalUnitIdentifier,
+    MergedPersonIdentifier,
     TextLanguage,
     Timestamp,
 )
@@ -33,28 +33,31 @@ def test_transform_seq_repo_activities_to_extracted_activities(
     seq_repo_latest_sources: dict[str, SeqRepoSource],
     seq_repo_activity: dict[str, Any],
     seq_repo_source_project_coordinators: list[LDAPPersonWithQuery],
-    project_coordinators_merged_ids_by_query_string: dict[str, list[PersonID]],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
+    project_coordinators_merged_ids_by_query_string: dict[
+        str, list[MergedPersonIdentifier]
+    ],
 ) -> None:
     expected = {
-        "identifier": Joker(),
         "hadPrimarySource": extracted_primary_source_seq_repo.stableTargetId,
         "identifierInPrimarySource": "TEST-ID",
-        "stableTargetId": Joker(),
-        "contact": [Joker()],
-        "responsibleUnit": [Joker()],
+        "contact": [
+            str(project_coordinators_merged_ids_by_query_string["max"][0]),
+            str(project_coordinators_merged_ids_by_query_string["mustermann"][0]),
+        ],
+        "involvedPerson": [
+            str(project_coordinators_merged_ids_by_query_string["max"][0]),
+            str(project_coordinators_merged_ids_by_query_string["mustermann"][0]),
+        ],
+        "responsibleUnit": [str(unit_stable_target_ids_by_synonym["FG99"])],
         "theme": [
             "https://mex.rki.de/item/theme-11",
             "https://mex.rki.de/item/theme-34",
         ],
         "title": [{"value": "FG99-ABC-123", "language": TextLanguage.DE}],
+        "identifier": Joker(),
+        "stableTargetId": Joker(),
     }
-
-    unit_stable_target_ids_by_synonym = {
-        "C1": OrganizationID.generate(seed=555),
-        "C1 Child Department": OrganizationID.generate(seed=555),
-        "XY": OrganizationID.generate(seed=999),
-    }
-
     extracted_mex_activities = list(
         transform_seq_repo_activities_to_extracted_activities(
             seq_repo_latest_sources,
@@ -65,7 +68,6 @@ def test_transform_seq_repo_activities_to_extracted_activities(
             extracted_primary_source_seq_repo,
         )
     )
-
     assert (
         extracted_mex_activities[0].model_dump(exclude_none=True, exclude_defaults=True)
         == expected
@@ -108,71 +110,82 @@ def test_transform_seq_repo_distribution_to_extracted_distribution(
     )
 
 
+@pytest.mark.usefixtures(
+    "mocked_ldap",
+)
 def test_transform_seq_repo_resource_to_extracted_resource(
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
     seq_repo_latest_sources: dict[str, SeqRepoSource],
     extracted_mex_distribution_dict: dict[str, ExtractedDistribution],
     extracted_mex_activities_dict: dict[str, ExtractedActivity],
     seq_repo_resource: dict[str, Any],
+    seq_repo_source_project_coordinators: list[LDAPPersonWithQuery],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
+    project_coordinators_merged_ids_by_query_string: dict[
+        str, list[MergedPersonIdentifier]
+    ],
 ) -> None:
-    extracted_mex_resources = list(
-        transform_seq_repo_resource_to_extracted_resource(
-            seq_repo_latest_sources,
-            extracted_mex_distribution_dict,
-            extracted_mex_activities_dict,
-            seq_repo_resource,
-            extracted_primary_source_seq_repo,
-        )
-    )
-
     distribution = extracted_mex_distribution_dict["test-sample-id.TEST"]
     activity = extracted_mex_activities_dict["TEST-ID"]
-
     expected = {
-        "identifier": Joker(),
         "hadPrimarySource": extracted_primary_source_seq_repo.stableTargetId,
         "identifierInPrimarySource": "test-sample-id.TEST",
-        "stableTargetId": Joker(),
         "accessRestriction": "https://mex.rki.de/item/access-restriction-2",
         "accrualPeriodicity": "https://mex.rki.de/item/frequency-15",
         "anonymizationPseudonymization": [
             "https://mex.rki.de/item/anonymization-pseudonymization-2"
         ],
-        "contact": [Joker()],
+        "contact": [
+            str(project_coordinators_merged_ids_by_query_string["max"][0]),
+            str(project_coordinators_merged_ids_by_query_string["mustermann"][0]),
+        ],
+        "contributingUnit": [str(unit_stable_target_ids_by_synonym["FG99"])],
         "created": Timestamp("2023-08-07"),
         "distribution": [distribution.stableTargetId],
         "instrumentToolOrApparatus": [{"value": "TEST"}],
         "keyword": [
             {
                 "value": "Severe acute respiratory syndrome coronavirus 2",
-                "language": TextLanguage.EN,
+                "language": "en",
             }
         ],
         "method": [
-            {"value": "Next-Generation Sequencing", "language": TextLanguage.EN},
-            {"value": "NGS", "language": TextLanguage.EN},
+            {"value": "Next-Generation Sequencing", "language": "de"},
+            {"value": "NGS", "language": "de"},
         ],
         "resourceTypeGeneral": ["https://mex.rki.de/item/resource-type-general-1"],
         "resourceTypeSpecific": [
-            {"value": "Sequencing Data", "language": TextLanguage.EN},
-            {"value": "Sequenzdaten", "language": TextLanguage.DE},
+            {"value": "Sequencing Data", "language": "de"},
+            {"value": "Sequenzdaten", "language": "de"},
         ],
-        "rights": [{"value": "Dummy rights value.", "language": TextLanguage.DE}],
+        "rights": [{"value": "Example content", "language": "de"}],
         "stateOfDataProcessing": ["https://mex.rki.de/item/data-processing-state-1"],
         "theme": [
             "https://mex.rki.de/item/theme-11",
             "https://mex.rki.de/item/theme-34",
         ],
         "title": [
-            {
-                "value": "FG99-ABC-123 sample test-customer-name-1",
-                "language": TextLanguage.EN,
-            }
+            {"value": "FG99-ABC-123 sample test-customer-name-1", "language": "en"}
         ],
-        "unitInCharge": [Joker()],
+        "unitInCharge": [
+            str(unit_stable_target_ids_by_synonym["FG99"]),
+        ],
         "wasGeneratedBy": activity.stableTargetId,
+        "identifier": Joker(),
+        "stableTargetId": Joker(),
     }
-
+    extracted_mex_resources = list(
+        transform_seq_repo_resource_to_extracted_resource(
+            seq_repo_latest_sources,
+            extracted_mex_distribution_dict,
+            extracted_mex_activities_dict,
+            seq_repo_resource,
+            seq_repo_source_project_coordinators,
+            unit_stable_target_ids_by_synonym,
+            project_coordinators_merged_ids_by_query_string,
+            extracted_primary_source_seq_repo,
+        )
+    )
     assert (
         extracted_mex_resources[0].model_dump(exclude_none=True, exclude_defaults=True)
         == expected
@@ -182,13 +195,13 @@ def test_transform_seq_repo_resource_to_extracted_resource(
 def test_transform_seq_repo_access_platform_to_extracted_access_platform(
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
     seq_repo_access_platform: dict[str, Any],
+    unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
 ) -> None:
     expected = {
-        "identifier": Joker(),
         "hadPrimarySource": extracted_primary_source_seq_repo.stableTargetId,
         "identifierInPrimarySource": "https://dummy.url.com/",
-        "stableTargetId": Joker(),
         "alternativeTitle": [{"value": "SeqRepo"}],
+        "contact": [str(unit_stable_target_ids_by_synonym["FG99"])],
         "description": [
             {
                 "value": "This is just a sample description, don't read it.",
@@ -199,11 +212,15 @@ def test_transform_seq_repo_access_platform_to_extracted_access_platform(
         "landingPage": [{"url": "https://dummy.url.com/"}],
         "technicalAccessibility": "https://mex.rki.de/item/technical-accessibility-1",
         "title": [{"value": "Sequence Data Repository"}],
+        "unitInCharge": [str(unit_stable_target_ids_by_synonym["FG99"])],
+        "identifier": Joker(),
+        "stableTargetId": Joker(),
     }
 
     extracted_mex_access_platform = (
         transform_seq_repo_access_platform_to_extracted_access_platform(
             seq_repo_access_platform,
+            unit_stable_target_ids_by_synonym,
             extracted_primary_source_seq_repo,
         )
     )

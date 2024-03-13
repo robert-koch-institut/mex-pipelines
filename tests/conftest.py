@@ -37,7 +37,7 @@ def wikidata_organization_raw() -> dict[str, Any]:
 
 @pytest.fixture
 def wikidata_organization(
-    wikidata_organization_raw: dict[str, Any]
+    wikidata_organization_raw: dict[str, Any],
 ) -> WikidataOrganization:
     """Return a wikidata organization instance."""
     return WikidataOrganization.model_validate(wikidata_organization_raw)
