@@ -4,14 +4,8 @@ import pytest
 from numpy import nan
 
 from mex.common.models import (
-    ExtractedPrimarySource,
     ExtractedResource,
     ExtractedVariableGroup,
-)
-from mex.common.primary_source.extract import extract_seed_primary_sources
-from mex.common.primary_source.transform import (
-    get_primary_sources_by_name,
-    transform_seed_primary_sources_to_extracted_primary_sources,
 )
 from mex.common.types import (
     AccessRestriction,
@@ -32,41 +26,6 @@ from mex.odk.settings import ODKSettings
 def settings() -> ODKSettings:
     """Load the settings for this pytest session."""
     return ODKSettings.get()
-
-
-@pytest.fixture
-def extracted_primary_source_odk() -> ExtractedPrimarySource:
-    seed_primary_sources = extract_seed_primary_sources()
-    extracted_primary_sources = (
-        transform_seed_primary_sources_to_extracted_primary_sources(
-            seed_primary_sources
-        )
-    )
-
-    (extracted_primary_source,) = get_primary_sources_by_name(
-        extracted_primary_sources,
-        "odk",
-    )
-
-    return extracted_primary_source
-
-
-@pytest.fixture
-def extracted_primary_source_international_projects() -> ExtractedPrimarySource:
-    """Mocked international projects primary source."""
-    seed_primary_sources = extract_seed_primary_sources()
-    extracted_primary_sources = (
-        transform_seed_primary_sources_to_extracted_primary_sources(
-            seed_primary_sources
-        )
-    )
-
-    (extracted_primary_source,) = get_primary_sources_by_name(
-        extracted_primary_sources,
-        "international-projects",
-    )
-
-    return extracted_primary_source
 
 
 @pytest.fixture
