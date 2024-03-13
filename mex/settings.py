@@ -1,4 +1,5 @@
-from pydantic import Field
+from pydantic import AnyUrl, Field, SecretStr
+from pydantic_core import Url
 
 from mex.common.settings import BaseSettings
 from mex.common.types import IdentityProvider
@@ -28,3 +29,13 @@ class Settings(BaseSettings):
         description="Provider to assign stableTargetIds to new model instances.",
         validation_alias="MEX_IDENTITY_PROVIDER",
     )  # type: ignore[assignment]
+    drop_api_key: SecretStr = Field(
+        SecretStr("dummy_admin_key"),
+        description="Drop API key with admin access to call all GET endpoints",
+        validation_alias="MEX_DROP_API_KEY",
+    )
+    drop_api_url: AnyUrl = Field(
+        Url("http://localhost:8081/"),
+        description="MEx drop API url.",
+        validation_alias="MEX_DROP_API_URL",
+    )
