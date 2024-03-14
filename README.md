@@ -88,6 +88,12 @@ components of the MEx project are open-sourced under the same license as well.
 - create a tag `git tag ...`
 - push `git push --follow-tags`
 
+### container workflow
+
+- build image with `make image`
+- run directly using docker `make docker`
+- start dagster with docker compose `make dagster`
+
 ## commands
 
 - run `poetry run {command} --help` to print instructions
