@@ -28,7 +28,7 @@ urllib3 = "^1.26.18"
 xlrd = "^2.0.1"
 
 [tool.poetry.group.dev.dependencies]
-black = "^24.2.0"
+black = "^24.3.0"
 click = "^8.1.7"
 ipdb = "^0.13.13"
 mypy = "^1.9.0"
