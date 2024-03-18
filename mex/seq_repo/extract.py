@@ -41,8 +41,7 @@ def extract_source_project_coordinator(
     """
     ldap = LDAPConnector.get()
     seen = set()
-
-    for _, value in seq_repo_sources.items():
+    for value in seq_repo_sources.values():
         names = value.project_coordinators
         for name in names:
             if not name:

@@ -43,7 +43,7 @@ def transform_seq_repo_activities_to_extracted_activities(
     """
     theme = seq_repo_activity["theme"][0]["mappingRules"][0]["setValues"]
 
-    for _, source in seq_repo_sources.items():
+    for source in seq_repo_sources.values():
         project_coordinators_ids = []
         responsible_units = []
         for pc in source.project_coordinators:
@@ -57,10 +57,10 @@ def transform_seq_repo_activities_to_extracted_activities(
                     query_ldap.person.sAMAccountName
                     and query_ldap.person.departmentNumber
                 ):
-                    if query_ldap.person.sAMAccountName.lower() == pc.lower():
-                        unit = unit_stable_target_ids_by_synonym.get(
-                            query_ldap.person.departmentNumber
-                        )
+                    sam_account_name = query_ldap.person.sAMAccountName
+                    department_number = query_ldap.person.departmentNumber
+                    if sam_account_name.lower() == pc.lower():
+                        unit = unit_stable_target_ids_by_synonym.get(department_number)
                         if unit and unit not in responsible_units:
                             responsible_units.append(unit)
 
@@ -261,9 +261,9 @@ def transform_seq_repo_access_platform_to_extracted_access_platform(
 
     contacts = seq_repo_access_platform["contact"][0]["mappingRules"][0]["forValues"]
 
-    resolved_organigram = []
-    for contact in contacts:
-        resolved_organigram.append(unit_stable_target_ids_by_synonym.get(contact))
+    resolved_organigram = [
+        unit_stable_target_ids_by_synonym.get(contact) for contact in contacts
+    ]
 
     return ExtractedAccessPlatform(
         alternativeTitle=alternative_title,
