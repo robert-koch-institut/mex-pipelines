@@ -91,7 +91,7 @@ components of the MEx project are open-sourced under the same license as well.
 ### container workflow
 
 - build image with `make image`
-- run directly using docker `make docker`
+- run directly using docker `make run`
 - start dagster with docker compose `make dagster`
 
 ## commands
