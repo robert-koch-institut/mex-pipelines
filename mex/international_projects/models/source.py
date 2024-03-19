@@ -1,4 +1,4 @@
-from typing import Optional, Sequence
+from collections.abc import Sequence
 
 from pydantic import ConfigDict
 
@@ -13,7 +13,7 @@ class InternationalProjectsSource(BaseRawData):
 
     funding_type: str
     project_lead_person: str
-    end_date: Optional[Timestamp] = None
+    end_date: Timestamp | None = None
     partner_organization: list[str] = []
     funding_source: list[str] = []
     funding_program: str
@@ -21,7 +21,7 @@ class InternationalProjectsSource(BaseRawData):
     additional_rki_units: str
     project_lead_rki_unit: str
     project_abbreviation: str
-    start_date: Optional[Timestamp] = None
+    start_date: Timestamp | None = None
     activity1: str
     activity2: str
     topic1: str

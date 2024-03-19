@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Sequence
+from collections.abc import Sequence
 
 from mex.common.models import BaseModel
 from mex.common.types import Timestamp

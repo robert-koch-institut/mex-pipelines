@@ -1,4 +1,4 @@
-from typing import Generator, Hashable, Iterable
+from collections.abc import Generator, Hashable, Iterable
 
 from mex.blueant.models.source import BlueAntSource
 from mex.common.logging import watch

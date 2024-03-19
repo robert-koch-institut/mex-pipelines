@@ -1,6 +1,7 @@
 import re
+from collections.abc import Generator, Iterable
 from glob import glob
-from typing import Any, Generator, Iterable
+from typing import Any
 
 from pandas import DataFrame, ExcelFile, Series
 

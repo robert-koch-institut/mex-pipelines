@@ -1,8 +1,9 @@
 import re
 from collections import defaultdict
+from collections.abc import Generator, Hashable, Iterable
 from itertools import groupby, tee
 from pathlib import PureWindowsPath
-from typing import Generator, Hashable, Iterable, cast
+from typing import cast
 
 from mex.common.logging import watch
 from mex.common.models import (

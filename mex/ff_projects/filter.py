@@ -1,4 +1,4 @@
-from typing import Generator, Iterable
+from collections.abc import Generator, Iterable
 
 from mex.common.types import Identifier, MergedOrganizationalUnitIdentifier
 from mex.common.utils import any_contains_any, contains_any

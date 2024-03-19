@@ -1,5 +1,6 @@
+from collections.abc import Generator
 from functools import cache
-from typing import Any, Generator
+from typing import Any
 from urllib.parse import urljoin
 
 from mex.blueant.models.person import BlueAntPerson, BlueAntPersonResponse

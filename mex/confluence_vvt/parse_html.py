@@ -125,7 +125,9 @@ def get_row_data_for_all_rows(
 
             elif len(next_row_values) > min_ignorable_cols:
                 all_cols_data = {}
-                for key, value in zip(current_row_headers, next_row_values):
+                for key, value in zip(
+                    current_row_headers, next_row_values, strict=False
+                ):
                     current_row_all_cols_data = value.get_text(separator="\n").split(
                         "\n"
                     )
@@ -212,7 +214,7 @@ def get_interne_vorgangsnummer_from_title(
     for item in unwanted_elements:
         try:
             interne_vorgangsnummers.remove(item)
-        except ValueError:  # noqa: PERF203
+        except ValueError:
             pass
 
     return [x for x in interne_vorgangsnummers if x]  # clean empty strings

@@ -1,4 +1,4 @@
-from typing import Generator
+from collections.abc import Generator
 
 from mex.blueant.models.source import BlueAntSource
 from mex.blueant.settings import BlueAntSettings

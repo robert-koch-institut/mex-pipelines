@@ -1,4 +1,5 @@
-from typing import Generator, Iterable, TypeVar
+from collections.abc import Generator, Iterable
+from typing import TypeVar
 
 from mex.common.types import Identifier
 from mex.common.utils import any_contains_any

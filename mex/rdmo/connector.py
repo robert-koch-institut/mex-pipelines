@@ -1,5 +1,5 @@
+from collections.abc import Generator
 from functools import cache
-from typing import Generator
 from urllib.parse import urljoin
 
 from mex.common.connector import HTTPConnector

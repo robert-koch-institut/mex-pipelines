@@ -1,7 +1,8 @@
 import re
+from collections.abc import Generator, Iterable
 from datetime import datetime
 from functools import cache
-from typing import Any, Generator, Iterable
+from typing import Any
 
 import pandas as pd
 
