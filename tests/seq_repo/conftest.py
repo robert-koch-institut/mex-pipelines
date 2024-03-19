@@ -31,7 +31,6 @@ from mex.common.types import (
     MergedOrganizationalUnitIdentifier,
     MergedPersonIdentifier,
 )
-from mex.seq_repo.extract import extract_source_project_coordinator
 from mex.seq_repo.filter import filter_sources_on_latest_sequencing_date
 from mex.seq_repo.model import SeqRepoSource
 from mex.seq_repo.settings import SeqRepoSettings
@@ -427,11 +426,42 @@ def extracted_mex_distribution_dict(
 
 
 @pytest.fixture
-def seq_repo_source_resolved_project_coordinators(
-    seq_repo_latest_sources: dict[str, SeqRepoSource],
-) -> list[LDAPPersonWithQuery]:
+def seq_repo_source_resolved_project_coordinators() -> list[LDAPPersonWithQuery]:
     """Extract source project coordinators."""
-    return list(extract_source_project_coordinator(seq_repo_latest_sources))
+    return [
+        LDAPPersonWithQuery(
+            person=LDAPPerson(
+                sAMAccountName="max",
+                objectGUID=UUID("00000000-0000-4000-8000-000000000004"),
+                mail=[],
+                company=None,
+                department="FG99",
+                departmentNumber="FG99",
+                displayName="mustermann, max",
+                employeeID="42",
+                givenName=["max"],
+                ou=[],
+                sn="mustermann",
+            ),
+            query="max",
+        ),
+        LDAPPersonWithQuery(
+            person=LDAPPerson(
+                sAMAccountName="max",
+                objectGUID=UUID("00000000-0000-4000-8000-000000000004"),
+                mail=[],
+                company=None,
+                department="FG99",
+                departmentNumber="FG99",
+                displayName="mustermann, max",
+                employeeID="42",
+                givenName=["max"],
+                ou=[],
+                sn="mustermann",
+            ),
+            query="mustermann",
+        ),
+    ]
 
 
 @pytest.fixture
