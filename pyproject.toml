@@ -1,49 +1,49 @@
-[tool.poetry]
+[project]
 name = "mex-extractors"
 version = "0.15.0"
 description = "ETL pipelines for the RKI Metadata Exchange."
-authors = ["RKI MEx Team <mex@rki.de>"]
-readme = "README.md"
-license = "MIT"
-repository = "https://github.com/robert-koch-institut/mex-extractors"
-packages = [{ include = "mex" }]
+authors = [{ name = "MEx Team", email = "mex@rki.de" }]
+readme = { file = "README.md", content-type = "text/markdown" }
+license = { file = "LICENSE" }
+urls = { Repository = "https://github.com/robert-koch-institut/mex-extractors" }
+requires-python = "<3.13,>=3.11"
+dependencies = [
+    "beautifulsoup4>=4.12.3",
+    "dagster>=1.6.6",
+    "dagster-postgres>=0.22.6",
+    "dagster-webserver>=1.6.6",
+    "faker>=24.2.0",
+    "mex-common@git+https://github.com/robert-koch-institut/mex-common.git@0.21.0",
+    "numpy>=1.26.4",
+    "openpyxl>=3.1.2",
+    "pandas>=2.2.1",
+    "pydantic>=2.6.4",
+    "pyodbc>=5.1.0",
+    "pyyaml>=6.0.1",
+    "requests>=2.31.0",
+    "requests-ntlm>=1.2.0",
+    "urllib3>=1.26.18",
+    "xlrd>=2.0.1",
+]
+optional-dependencies.dev = [
+    "black>=24.3.0",
+    "click>=8.1.7",
+    "ipdb>=0.13.13",
+    "mypy>=1.9.0",
+    "pandas-stubs>=2.1.4",
+    "pytest>=8.1.1",
+    "pytest-cov>=4.1.0",
+    "pytest-random-order>=1.1.1",
+    "pytest-xdist>=3.5.0",
+    "ruff>=0.3.2",
+    "sphinx>=7.2.6",
+    "types-beautifulsoup4>=4.12.0",
+    "types-pytz>=2024.1.0",
+    "types-pyyaml>=6.0.12",
+    "types-requests>=2.31.0",
+]
 
-[tool.poetry.dependencies]
-python = ">=3.11,<3.13"
-beautifulsoup4 = "^4.12.3"
-dagster = "^1.6.6"
-dagster-postgres = "^0.22.6"
-dagster-webserver = "^1.6.6"
-faker = "^24.2.0"
-mex-common = { git = "https://github.com/robert-koch-institut/mex-common.git", rev = "0.21.0" }
-numpy = "^1.26.4"
-openpyxl = "^3.1.2"
-pandas = "^2.2.1"
-pydantic = "^2.6.4"
-pyodbc = "^5.1.0"
-pyyaml = "^6.0.1"
-requests = "^2.31.0"
-requests-ntlm = "^1.2.0"
-urllib3 = "^1.26.18"
-xlrd = "^2.0.1"
-
-[tool.poetry.group.dev.dependencies]
-black = "^24.3.0"
-click = "^8.1.7"
-ipdb = "^0.13.13"
-mypy = "^1.9.0"
-pandas-stubs = "^2.1.4"
-pytest = "^8.1.1"
-pytest-cov = "^4.1.0"
-pytest-random-order = "^1.1.1"
-ruff = "^0.3.2"
-sphinx = "^7.2.6"
-types-beautifulsoup4 = "^4.12.0"
-types-pytz = "^2024.1.0"
-types-pyyaml = "^6.0.12"
-types-requests = "^2.31.0"
-
-[tool.poetry.scripts]
+[project.scripts]
 artificial = "mex.artificial.main:run"
 biospecimen = "mex.biospecimen.main:run"
 blueant = "mex.blueant.main:run"
@@ -83,6 +83,14 @@ ignore_missing_imports = true
 [[tool.mypy.overrides]]
 module = ["mex.*.transform", "mex.*.extract"]
 disable_error_code = ["arg-type", "call-arg"]
+
+[tool.pdm]
+distribution = true
+
+[tool.pdm.scripts]
+autoupdate = { cmd = "pdm update --group :all --update-eager --save-minimum" }
+lint = { cmd = "pre-commit run --all-files" }
+test = { cmd = "pdm run pytest --numprocesses=auto --dist=worksteal" }
 
 [tool.pydantic-mypy]
 warn_untyped_fields = true

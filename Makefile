@@ -29,12 +29,12 @@ linter:
 pytest:
 	# run the pytest test suite with all unit tests
 	@ echo running unit tests; \
-	poetry run pytest -m "not integration"; \
+	pdm run pytest -m "not integration"; \
 
 wheel:
 	# build the python package
 	@ echo building wheel; \
-	poetry build --no-interaction --format wheel; \
+	pdm build --no-interaction --format wheel; \
 
 image:
 	# build the docker image

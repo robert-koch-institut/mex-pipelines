@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - update cruft template with new linters
 - utilize new, more precise Identifier subclasses
 - make pyodbc a soft dependency (only pipelines that use it may fail)
+- switch to pdm
 
 ### Deprecated
 
