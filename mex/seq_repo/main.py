@@ -59,7 +59,7 @@ def seq_repo_latest_source(
 
 
 @asset(group_name="seq_repo")
-def seq_repo_source_project_coordinators(
+def seq_repo_source_resolved_project_coordinators(
     seq_repo_latest_source: dict[str, SeqRepoSource],
 ) -> list[LDAPPersonWithQuery]:
     """Extract source project coordinators."""
@@ -68,14 +68,14 @@ def seq_repo_source_project_coordinators(
 
 @asset(group_name="seq_repo")
 def project_coordinators_merged_ids_by_query_string(
-    seq_repo_source_project_coordinators: list[LDAPPersonWithQuery],
+    seq_repo_source_resolved_project_coordinators: list[LDAPPersonWithQuery],
     extracted_primary_source_ldap: ExtractedPrimarySource,
     extracted_organizational_units: list[ExtractedOrganizationalUnit],
 ) -> dict[str, list[MergedPersonIdentifier]]:
     """Get project coordinators merged ids."""
     extracted_persons = list(
         transform_ldap_persons_with_query_to_mex_persons(
-            seq_repo_source_project_coordinators,
+            seq_repo_source_resolved_project_coordinators,
             extracted_primary_source_ldap,
             extracted_organizational_units,
         )
@@ -84,7 +84,7 @@ def project_coordinators_merged_ids_by_query_string(
     return {
         str(query_string): [MergedPersonIdentifier(id) for id in merged_ids]
         for query_string, merged_ids in get_merged_ids_by_query_string(
-            seq_repo_source_project_coordinators, extracted_primary_source_ldap
+            seq_repo_source_resolved_project_coordinators, extracted_primary_source_ldap
         ).items()
     }
 
@@ -93,7 +93,7 @@ def project_coordinators_merged_ids_by_query_string(
 def extracted_activity(
     seq_repo_latest_source: dict[str, SeqRepoSource],
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
-    seq_repo_source_project_coordinators: list[LDAPPersonWithQuery],
+    seq_repo_source_resolved_project_coordinators: list[LDAPPersonWithQuery],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     project_coordinators_merged_ids_by_query_string: dict[
         str, list[MergedPersonIdentifier]
@@ -108,7 +108,7 @@ def extracted_activity(
     mex_activities = transform_seq_repo_activities_to_extracted_activities(
         seq_repo_latest_source,
         activity,
-        seq_repo_source_project_coordinators,
+        seq_repo_source_resolved_project_coordinators,
         unit_stable_target_ids_by_synonym,
         project_coordinators_merged_ids_by_query_string,
         extracted_primary_source_seq_repo,
@@ -176,7 +176,7 @@ def seq_repo_resource(
     seq_repo_latest_source: dict[str, SeqRepoSource],
     extracted_distribution: dict[str, ExtractedDistribution],
     extracted_activity: dict[str, ExtractedActivity],
-    seq_repo_source_project_coordinators: list[LDAPPersonWithQuery],
+    seq_repo_source_resolved_project_coordinators: list[LDAPPersonWithQuery],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     project_coordinators_merged_ids_by_query_string: dict[
         str, list[MergedPersonIdentifier]
@@ -195,7 +195,7 @@ def seq_repo_resource(
         extracted_distribution,
         extracted_activity,
         resource,
-        seq_repo_source_project_coordinators,
+        seq_repo_source_resolved_project_coordinators,
         unit_stable_target_ids_by_synonym,
         project_coordinators_merged_ids_by_query_string,
         extracted_primary_source_seq_repo,

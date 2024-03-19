@@ -32,7 +32,7 @@ def test_transform_seq_repo_activities_to_extracted_activities(
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
     seq_repo_latest_sources: dict[str, SeqRepoSource],
     seq_repo_activity: dict[str, Any],
-    seq_repo_source_project_coordinators: list[LDAPPersonWithQuery],
+    seq_repo_source_resolved_project_coordinators: list[LDAPPersonWithQuery],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     project_coordinators_merged_ids_by_query_string: dict[
         str, list[MergedPersonIdentifier]
@@ -62,7 +62,7 @@ def test_transform_seq_repo_activities_to_extracted_activities(
         transform_seq_repo_activities_to_extracted_activities(
             seq_repo_latest_sources,
             seq_repo_activity,
-            seq_repo_source_project_coordinators,
+            seq_repo_source_resolved_project_coordinators,
             unit_stable_target_ids_by_synonym,
             project_coordinators_merged_ids_by_query_string,
             extracted_primary_source_seq_repo,
@@ -119,7 +119,7 @@ def test_transform_seq_repo_resource_to_extracted_resource(
     extracted_mex_distribution_dict: dict[str, ExtractedDistribution],
     extracted_mex_activities_dict: dict[str, ExtractedActivity],
     seq_repo_resource: dict[str, Any],
-    seq_repo_source_project_coordinators: list[LDAPPersonWithQuery],
+    seq_repo_source_resolved_project_coordinators: list[LDAPPersonWithQuery],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     project_coordinators_merged_ids_by_query_string: dict[
         str, list[MergedPersonIdentifier]
@@ -180,7 +180,7 @@ def test_transform_seq_repo_resource_to_extracted_resource(
             extracted_mex_distribution_dict,
             extracted_mex_activities_dict,
             seq_repo_resource,
-            seq_repo_source_project_coordinators,
+            seq_repo_source_resolved_project_coordinators,
             unit_stable_target_ids_by_synonym,
             project_coordinators_merged_ids_by_query_string,
             extracted_primary_source_seq_repo,

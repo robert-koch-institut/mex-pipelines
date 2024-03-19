@@ -385,7 +385,7 @@ def extracted_mex_activities_dict(
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
     seq_repo_latest_sources: dict[str, SeqRepoSource],
     seq_repo_activity: dict[str, Any],
-    seq_repo_source_project_coordinators: list[LDAPPersonWithQuery],
+    seq_repo_source_resolved_project_coordinators: list[LDAPPersonWithQuery],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     project_coordinators_merged_ids_by_query_string: dict[
         str, list[MergedPersonIdentifier]
@@ -394,7 +394,7 @@ def extracted_mex_activities_dict(
     extracted_mex_activities = transform_seq_repo_activities_to_extracted_activities(
         seq_repo_latest_sources,
         seq_repo_activity,
-        seq_repo_source_project_coordinators,
+        seq_repo_source_resolved_project_coordinators,
         unit_stable_target_ids_by_synonym,
         project_coordinators_merged_ids_by_query_string,
         extracted_primary_source_seq_repo,
@@ -427,7 +427,7 @@ def extracted_mex_distribution_dict(
 
 
 @pytest.fixture
-def seq_repo_source_project_coordinators(
+def seq_repo_source_resolved_project_coordinators(
     seq_repo_latest_sources: dict[str, SeqRepoSource],
 ) -> list[LDAPPersonWithQuery]:
     """Extract source project coordinators."""
