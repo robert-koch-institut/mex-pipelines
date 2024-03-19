@@ -2,19 +2,9 @@ import platform
 from subprocess import PIPE, STDOUT, Popen
 from typing import Any
 
-from pydantic import BaseModel
-
 from mex.common.connector import BaseConnector
 from mex.common.logging import echo
 from mex.grippeweb.settings import GrippewebSettings
-from mex.ifsg.models.meta_catalogue2item import MetaCatalogue2Item
-from mex.ifsg.models.meta_catalogue2item2schema import MetaCatalogue2Item2Schema
-from mex.ifsg.models.meta_disease import MetaDisease
-from mex.ifsg.models.meta_field import MetaField
-from mex.ifsg.models.meta_item import MetaItem
-from mex.ifsg.models.meta_schema2field import MetaSchema2Field
-from mex.ifsg.models.meta_schema2type import MetaSchema2Type
-from mex.ifsg.models.meta_type import MetaType
 
 
 class NoOpPyodbc:
@@ -31,15 +21,10 @@ except ImportError:
     pyodbc = NoOpPyodbc
 
 
-QUERY_BY_MODEL = {
-    MetaCatalogue2Item: "SELECT * FROM SurvNet3Meta.Meta.Catalogue2Item",
-    MetaCatalogue2Item2Schema: "SELECT * FROM SurvNet3Meta.Meta.Catalogue2Item2Schema",
-    MetaDisease: "SELECT * FROM SurvNet3Meta.Meta.Disease",
-    MetaField: "SELECT * FROM SurvNet3Meta.Meta.Field",
-    MetaItem: "SELECT * FROM SurvNet3Meta.Meta.Item",
-    MetaSchema2Field: "SELECT * FROM SurvNet3Meta.Meta.Schema2Field",
-    MetaSchema2Type: "SELECT * FROM SurvNet3Meta.Meta.Schema2Type",
-    MetaType: "SELECT * FROM SurvNet3Meta.Meta.Type",
+QUERY_BY_TABLE_NAME = {
+    "vActualQuestion": "SELECT * FROM GrippeWeb.MEx.vActualQuestion",
+    "vMasterDataMEx": "SELECT * FROM GrippeWeb.MEx.vMasterDataMEx",
+    "vWeeklyResponsesMEx": "SELECT * FROM GrippeWeb.MEx.vWeeklyResponsesMEx",
 }
 
 
@@ -64,17 +49,17 @@ class GrippewebConnector(BaseConnector):
             echo(stderr, fg="red")
         self._connection = pyodbc.connect(settings.mssql_connection_dsn)
 
-    def parse_rows(self, model: type[BaseModel]) -> list[dict[str, Any]]:
+    def parse_columns_by_column_name(self, table_name: str) -> dict[str, list[Any]]:
         """Execute whitelisted queries and zip results to column name."""
         with self._connection.cursor() as cursor:
 
-            cursor.execute(QUERY_BY_MODEL[model])
-            result = cursor.fetchall()
-
-            return [
-                dict(zip([column[0] for column in cursor.description], row))
-                for row in result
-            ]
+            cursor.execute(QUERY_BY_TABLE_NAME[table_name])
+            table = cursor.fetchall()
+            table_columns = list(zip(*table))
+            return {
+                column_name[0]: list(column)
+                for column_name, column in zip(cursor.description, table_columns)
+            }
 
     def close(self) -> None:
         """Close the underlying connection."""

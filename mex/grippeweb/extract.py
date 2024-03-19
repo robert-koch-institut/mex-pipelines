@@ -1,20 +1,19 @@
-from typing import TypeVar
+from typing import Any
 
-from pydantic import BaseModel
-
-from mex.grippeweb.connector import GrippewebConnector
-
-ModelT = TypeVar("ModelT", bound=BaseModel)
+from mex.grippeweb.connector import QUERY_BY_TABLE_NAME, GrippewebConnector
 
 
-def extract_sql_table(model: type[ModelT]) -> list[ModelT]:
+def extract_columns_by_table_and_column_name() -> dict[str, dict[str, list[Any]]]:
     """Extract sql tables and parse them into pydantic models.
 
     Settings:
         model: pydantic ModelT
 
     Returns:
-        list of parsed pydantic ModelT
+        list of columns by column names and table names
     """
     connection = GrippewebConnector.get()
-    return [model.model_validate(row) for row in connection.parse_rows(model)]
+    return {
+        table_name: connection.parse_columns_by_column_name(table_name)
+        for table_name in QUERY_BY_TABLE_NAME.keys()
+    }
