@@ -49,7 +49,6 @@ components of the MEx project are open-sourced under the same license as well.
 
 ## development
 
-
 ### installation
 
 - on unix, consider using pyenv https://github.com/pyenv/pyenv

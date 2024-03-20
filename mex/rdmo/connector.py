@@ -52,7 +52,7 @@ class RDMOConnector(HTTPConnector):
         for raw in response:
             yield RDMOSource.model_validate(raw)
 
-    @cache
+    @cache  # noqa: B019
     def get_question_path(self, attribute: int) -> str:
         """Get the prefix-less UDI of an RDMO question, possibly from cache.
 
@@ -73,7 +73,7 @@ class RDMOConnector(HTTPConnector):
             return question.uri.removeprefix(question.uri_prefix)
         raise MExError(f"No question found for {attribute=}")
 
-    @cache
+    @cache  # noqa: B019
     def get_option_key(self, option: int) -> str:
         """Return the human-readable key for an option ID, possibly from cache.
 

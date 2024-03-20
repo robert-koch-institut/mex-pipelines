@@ -1,4 +1,4 @@
-.PHONY: all test setup hooks install linter pytest wheel docs
+.PHONY: all test setup hooks install linter pytest wheel image run start docs
 all: install test
 test: linter pytest
 
@@ -8,7 +8,7 @@ PWD = $(shell pwd)
 setup:
 	# install meta requirements system-wide
 	@ echo installing requirements; \
-	python -m pip --quiet --disable-pip-version-check install --force-reinstall -r requirements.txt; \
+	pip --disable-pip-version-check install --force-reinstall -r requirements.txt; \
 
 hooks:
 	# install pre-commit hooks when not in CI
@@ -34,7 +34,7 @@ pytest:
 wheel:
 	# build the python package
 	@ echo building wheel; \
-	pdm build --no-interaction --format wheel; \
+	pdm build --format wheel; \
 
 image:
 	# build the docker image
@@ -53,7 +53,7 @@ run: image
 		--volume ${PWD}/work:/work \
 		rki/mex-extractors:${LATEST}; \
 
-dagster: image
+start: image
 	# start dagster using docker compose
 	@ echo running dagster for mex-extractors:${LATEST}; \
 	export DOCKER_BUILDKIT=1; \
