@@ -3,8 +3,10 @@ from typing import Any
 
 from mex.common.cli import entrypoint
 from mex.common.models import (
+    ExtractedAccessPlatform,
     ExtractedPrimarySource,
     ExtractedResource,
+    ExtractedVariableGroup,
 )
 from mex.common.primary_source.transform import (
     get_primary_sources_by_name,
@@ -42,7 +44,7 @@ def access_platform() -> dict[str, Any]:
     """Extract `access_platform` default values."""
     settings = GrippewebSettings.get()
     return extract_mapping_data(
-        settings.mapping_path / "access-platform.yaml", ExtractedResource
+        settings.mapping_path / "access-platform.yaml", ExtractedAccessPlatform
     )
 
 
@@ -61,7 +63,7 @@ def variable_group() -> dict[str, Any]:
     """Extract `variable_group` default values."""
     settings = GrippewebSettings.get()
     return extract_mapping_data(
-        settings.mapping_path / "variable-group.yaml", ExtractedResource
+        settings.mapping_path / "variable-group.yaml", ExtractedVariableGroup
     )
 
 

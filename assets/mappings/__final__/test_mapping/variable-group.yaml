@@ -26,17 +26,6 @@ stableTargetId:
   - fieldInPrimarySource: n/a
     mappingRules:
     - rule: Assign 'stable target id' of merged item.
-accessRestriction:
-  - fieldInPrimarySource: n/a
-    mappingRules:
-      - setValues:
-          - https://mex.rki.de/item/access-restriction-2 #restricted
-contact:
-  - fieldInPrimarySource: n/a
-    mappingRules:
-      - forValues:
-        - "mail@email.de"
-        rule: Match value
 containedBy:
 - fieldInPrimarySource: 'IdType="[0-9]{0,3}"'
   locationInPrimarySource: Meta.Field
@@ -91,21 +80,3 @@ label:
     setValues:
     - value: Adressinformationen
       language: de
-theme:
-  - fieldInPrimarySource: n/a
-    mappingRules:
-      - setValues:
-          - https://mex.rki.de/item/theme-35 #Studies and Surveillance
-          - https://mex.rki.de/item/theme-11 #Infectious Diseases
-          - https://mex.rki.de/item/theme-27 #Laboratory
-title:
-  - fieldInPrimarySource: n/a
-    mappingRules:
-      - setValues:
-        - value: "group title"
-unitInCharge:
-  - fieldInPrimarySource: n/a
-    mappingRules:
-      - forValues:
-        - "C1"
-        rule: Match

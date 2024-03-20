@@ -1,9 +1,3 @@
-accessRestriction:
-- fieldInPrimarySource: n/a
-  mappingRules:
-  - setValues:
-    - https://mex.rki.de/item/access-restriction-2
-    rule: Use value as it is.
 contact:
   - fieldInPrimarySource: n/a
     mappingRules:
@@ -22,13 +16,6 @@ technicalAccessibility:
     - setValues:
       - https://mex.rki.de/item/technical-accessibility-1
     comment: internal
-theme:
-- fieldInPrimarySource: n/a
-  mappingRules:
-  - setValues:
-    - https://mex.rki.de/item/theme-11
-    - https://mex.rki.de/item/theme-35
-    rule: Set values as indicated.
 title:
   - fieldInPrimarySource: n/a
     mappingRules:
