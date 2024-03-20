@@ -212,7 +212,7 @@ def get_interne_vorgangsnummer_from_title(
     for item in unwanted_elements:
         try:
             interne_vorgangsnummers.remove(item)
-        except ValueError:  # noqa: PERF203
+        except ValueError:
             pass
 
     return [x for x in interne_vorgangsnummers if x]  # clean empty strings

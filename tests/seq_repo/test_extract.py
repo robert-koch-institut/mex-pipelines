@@ -1,6 +1,4 @@
-from mex.seq_repo.extract import (
-    extract_sources,
-)
+from mex.seq_repo.extract import extract_sources
 
 
 def test_extract_sources() -> None:
