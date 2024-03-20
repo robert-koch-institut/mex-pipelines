@@ -288,11 +288,11 @@ def get_resolved_project_coordinators_and_units(
 
         for query in seq_repo_source_resolved_project_coordinators:
             query_ldap: LDAPPersonWithQuery = query
-            if query_ldap.person.sAMAccountName and query_ldap.person.departmentNumber:
-                if query_ldap.person.sAMAccountName.lower() == pc.lower():
-                    unit = unit_stable_target_ids_by_synonym.get(
-                        query_ldap.person.departmentNumber
-                    )
+            sam_account_name = query_ldap.person.sAMAccountName
+            department_number = query_ldap.person.departmentNumber
+            if sam_account_name and department_number:
+                if sam_account_name.lower() == pc.lower():
+                    unit = unit_stable_target_ids_by_synonym.get(department_number)
                     if unit and unit not in units_in_charge:
                         units_in_charge.append(unit)
     return project_coordinators_ids, units_in_charge
