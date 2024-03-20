@@ -2,6 +2,9 @@
 all: install test
 test: linter pytest
 
+LATEST = $(shell git describe --tags $(shell git rev-list --tags --max-count=1))
+PWD = $(shell pwd)
+
 setup:
 	# install meta requirements system-wide
 	@ echo installing requirements; \
@@ -32,6 +35,30 @@ wheel:
 	# build the python package
 	@ echo building wheel; \
 	poetry build --no-interaction --format wheel; \
+
+image:
+	# build the docker image
+	@ echo building docker image mex-extractors:${LATEST}; \
+	export DOCKER_BUILDKIT=1; \
+	docker build \
+		--tag rki/mex-extractors:${LATEST} \
+		--tag rki/mex-extractors:latest .; \
+
+run: image
+	# run the extractors using docker
+	@ echo running docker container mex-extractors:${LATEST}; \
+	mkdir --parents --mode 777 work; \
+	docker run \
+		--env MEX_WORK_DIR=/work \
+		--volume ${PWD}/work:/work \
+		rki/mex-extractors:${LATEST}; \
+
+dagster: image
+	# start dagster using docker compose
+	@ echo running dagster for mex-extractors:${LATEST}; \
+	export DOCKER_BUILDKIT=1; \
+	export COMPOSE_DOCKER_CLI_BUILD=1; \
+	docker compose up --remove-orphans; \
 
 docs:
 	# use sphinx to auto-generate html docs from code
