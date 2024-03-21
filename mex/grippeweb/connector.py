@@ -29,7 +29,7 @@ QUERY_BY_TABLE_NAME = {
 
 
 class GrippewebConnector(BaseConnector):
-    """Connector to handle authentication and queries towards the IFSG SQL server."""
+    """Connector to handle authentication and queries for Grippeweb SQL server."""
 
     def __init__(self) -> None:
         """Create a new connector instance."""

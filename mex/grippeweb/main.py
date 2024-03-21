@@ -24,7 +24,7 @@ from mex.sinks import load
 def extracted_primary_sources_grippeweb(
     extracted_primary_sources: list[ExtractedPrimarySource],
 ) -> ExtractedPrimarySource:
-    """Load and return grippeweb primary source."""
+    """Load and return Grippeweb primary source."""
     (extracted_primary_sources_grippeweb,) = get_primary_sources_by_name(
         extracted_primary_sources, "grippeweb"
     )
@@ -35,13 +35,13 @@ def extracted_primary_sources_grippeweb(
 
 @asset(group_name="grippeweb")
 def grippeweb_columns() -> dict[str, dict[str, list[Any]]]:
-    """Extract grippe web columns."""
+    """Extract Grippeweb SQL Server columns."""
     return extract_columns_by_table_and_column_name()
 
 
 @asset(group_name="grippeweb")
-def access_platform() -> dict[str, Any]:
-    """Extract `access_platform` default values."""
+def grippeweb_access_platform() -> dict[str, Any]:
+    """Extract Grippeweb `access_platform` default values."""
     settings = GrippewebSettings.get()
     return extract_mapping_data(
         settings.mapping_path / "access-platform.yaml", ExtractedAccessPlatform
@@ -50,7 +50,7 @@ def access_platform() -> dict[str, Any]:
 
 @asset(group_name="grippeweb")
 def grippeweb_resource_mappings() -> list[dict[str, Any]]:
-    """Extract grippeweb resource mappings."""
+    """Extract Grippeweb resource mappings."""
     settings = GrippewebSettings.get()
     return [
         extract_mapping_data(file, ExtractedResource)
@@ -59,8 +59,8 @@ def grippeweb_resource_mappings() -> list[dict[str, Any]]:
 
 
 @asset(group_name="grippeweb")
-def variable_group() -> dict[str, Any]:
-    """Extract `variable_group` default values."""
+def grippeweb_variable_group() -> dict[str, Any]:
+    """Extract Grippeweb `variable_group` default values."""
     settings = GrippewebSettings.get()
     return extract_mapping_data(
         settings.mapping_path / "variable-group.yaml", ExtractedVariableGroup
@@ -69,5 +69,5 @@ def variable_group() -> dict[str, Any]:
 
 @entrypoint(GrippewebSettings)
 def run() -> None:
-    """Run the IFSG extractor job in-process."""
+    """Run the Grippeweb extractor job in-process."""
     run_job_in_process("grippeweb")
