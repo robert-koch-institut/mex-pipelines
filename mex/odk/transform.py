@@ -178,8 +178,8 @@ def get_variable_groups_from_raw_data(
     for file in odk_raw_data:
         in_group = False
         group: list[dict[str, str]] = []
-        for i, type_row in enumerate(file.type):
-            name = file.name[i]
+        for row_index, type_row in enumerate(file.type):
+            name = file.name[row_index]
             if not isinstance(type_row, str) or not isinstance(name, str):
                 continue
             if type_row in ["note", "today"]:
@@ -198,14 +198,14 @@ def get_variable_groups_from_raw_data(
                     "file_name": file.file_name,
                 }
                 label_survey_dict = {
-                    label_name: label[i]
+                    label_name: label[row_index]
                     for label_name, label in file.label_survey.items()
-                    if isinstance(label[i], str)
+                    if isinstance(label[row_index], str)
                 }
                 hint_dict = {
-                    hint_name: hint[i]
+                    hint_name: hint[row_index]
                     for hint_name, hint in file.hint.items()
-                    if isinstance(hint[i], str)
+                    if isinstance(hint[row_index], str)
                 }
                 row_dict.update(label_survey_dict)
                 row_dict.update(hint_dict)
