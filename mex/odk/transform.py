@@ -72,6 +72,7 @@ def transform_odk_resources_to_mex_resources(
                 0
             ]["forValues"][0],
         )
+        was_generated_by = None
         if identity:
             was_generated_by = identity[0].stableTargetId
         external_partner = [
