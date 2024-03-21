@@ -42,11 +42,8 @@ def transform_odk_resources_to_mex_resources(
 
     resources = []
     for resource in odk_resource_mappings:
-        alternative_title = None
-        if resource.get("alternativeTitle"):
-            alternative_title = resource["alternativeTitle"][0]["mappingRules"][0][
-                "setValues"
-            ]
+        if rules := resource["alternativeTitle"]:
+            alternative_title = rules[0]["mappingRules"][0]["setValues"]
         contributing_unit = None
         if resource.get("contributingUnit"):
             contributing_unit = [
