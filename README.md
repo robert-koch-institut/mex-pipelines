@@ -143,6 +143,11 @@ components of the MEx project are open-sourced under the same license as well.
 - `poetry run international-projects` extracts sources from the international projects excel
 - based on international-projects to MEx mapping version a913b9e
 
+### grippeweb extractor
+
+- `poetry run grippeweb` extracts grippeweb metadata from grippeweb database
+- based on grippeweb to MEx mapping commit eb88773
+
 ### odk extractor
 
 - `poetry run odk` extracts ODK survey data from excel files
