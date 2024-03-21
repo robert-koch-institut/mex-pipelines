@@ -180,35 +180,36 @@ def get_variable_groups_from_raw_data(
         group: list[dict[str, str]] = []
         for i, type_row in enumerate(file.type):
             name = file.name[i]
-            if isinstance(type_row, str) and isinstance(name, str):
-                if type_row in ["note", "today"]:
-                    continue
-                if type_row == "begin_group":
-                    in_group = True
-                    group = []
-                    group_name = name
-                elif type_row == "end_group":
-                    in_group = False
-                    variable_groups[group_name] = group
-                if in_group:
-                    row_dict = {
-                        "type": type_row,
-                        "name": name,
-                        "file_name": file.file_name,
-                    }
-                    label_survey_dict = {
-                        label_name: label[i]
-                        for label_name, label in file.label_survey.items()
-                        if isinstance(label[i], str)
-                    }
-                    hint_dict = {
-                        hint_name: hint[i]
-                        for hint_name, hint in file.hint.items()
-                        if isinstance(hint[i], str)
-                    }
-                    row_dict.update(label_survey_dict)
-                    row_dict.update(hint_dict)
-                    group.append(row_dict)
+            if not isinstance(type_row, str) or not isinstance(name, str):
+                continue
+            if type_row in ["note", "today"]:
+                continue
+            if type_row == "begin_group":
+                in_group = True
+                group = []
+                group_name = name
+            elif type_row == "end_group":
+                in_group = False
+                variable_groups[group_name] = group
+            if in_group:
+                row_dict = {
+                    "type": type_row,
+                    "name": name,
+                    "file_name": file.file_name,
+                }
+                label_survey_dict = {
+                    label_name: label[i]
+                    for label_name, label in file.label_survey.items()
+                    if isinstance(label[i], str)
+                }
+                hint_dict = {
+                    hint_name: hint[i]
+                    for hint_name, hint in file.hint.items()
+                    if isinstance(hint[i], str)
+                }
+                row_dict.update(label_survey_dict)
+                row_dict.update(hint_dict)
+                group.append(row_dict)
     return variable_groups
 
 
