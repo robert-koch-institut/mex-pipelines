@@ -400,8 +400,8 @@ files = [
 
 [[package]]
 name = "dagster"
-version = "1.6.11"
-requires_python = ">=3.8,<3.13"
+version = "1.6.12"
+requires_python = "<3.13,>=3.8"
 summary = "Dagster is an orchestration platform for the development, production, and observation of data assets."
 groups = ["default"]
 dependencies = [
@@ -411,7 +411,7 @@ dependencies = [
     "click>=5.0",
     "coloredlogs<=14.0,>=6.1",
     "croniter>=0.3.34",
-    "dagster-pipes==1.6.11",
+    "dagster-pipes==1.6.12",
     "docstring-parser",
     "grpcio-health-checking>=1.44.0",
     "grpcio>=1.44.0",
@@ -440,70 +440,70 @@ dependencies = [
     "watchdog>=0.8.3",
 ]
 files = [
-    {file = "dagster-1.6.11-py3-none-any.whl", hash = "sha256:78324d699e80fc9d24727c32447835f3d8c19cf14a10b84e7c0e12c4f76d8115"},
-    {file = "dagster-1.6.11.tar.gz", hash = "sha256:a1da964ad4f3804e2830ef9f2b12cfc00d3ad52c3b5c75ca87ac8e88e7b46de5"},
+    {file = "dagster-1.6.12-py3-none-any.whl", hash = "sha256:38a7095f9b8ea6ce7d44911974633f6708f98cd89773ea7a04d41ec5f7f633d4"},
+    {file = "dagster-1.6.12.tar.gz", hash = "sha256:0fd74857722a1b92b650e238ad8de8a3e23444d8bf520d332315c2d0acdf5830"},
 ]
 
 [[package]]
 name = "dagster-graphql"
-version = "1.6.11"
-requires_python = ">=3.8,<3.13"
+version = "1.6.12"
+requires_python = "<3.13,>=3.8"
 summary = "The GraphQL frontend to python dagster."
 groups = ["default"]
 dependencies = [
-    "dagster==1.6.11",
+    "dagster==1.6.12",
     "gql[requests]<4,>=3",
     "graphene<4,>=3",
     "requests",
     "starlette",
 ]
 files = [
-    {file = "dagster-graphql-1.6.11.tar.gz", hash = "sha256:31af01fb18e48d8dbb239165ad6e52ab54a6e5f9e087c1df6cdac5ab2744fa8f"},
-    {file = "dagster_graphql-1.6.11-py3-none-any.whl", hash = "sha256:04cc853ec572e01a9df1dd24a594c4a1eb4bf3acda551f4f3d9810bcead359c4"},
+    {file = "dagster-graphql-1.6.12.tar.gz", hash = "sha256:6be246d5600a02dc2b8b913cba32a792b3e7b580c8acdb9f219ae69d09d85ea4"},
+    {file = "dagster_graphql-1.6.12-py3-none-any.whl", hash = "sha256:3f0042b2aaf638516e802c3f71f3d0db15e47695e781671808753d685190d7e1"},
 ]
 
 [[package]]
 name = "dagster-pipes"
-version = "1.6.11"
-requires_python = ">=3.8,<3.13"
+version = "1.6.12"
+requires_python = "<3.13,>=3.8"
 summary = "Toolkit for Dagster integrations with transform logic outside of Dagster"
 groups = ["default"]
 files = [
-    {file = "dagster-pipes-1.6.11.tar.gz", hash = "sha256:fbcdda55d32413e741519c216bba2956ed19159568d30e24db7bdfa4c988e6fa"},
-    {file = "dagster_pipes-1.6.11-py3-none-any.whl", hash = "sha256:21097de0461a003687e45e7cff0c10502ade0d7a4706d5e7aaca786a355f1772"},
+    {file = "dagster-pipes-1.6.12.tar.gz", hash = "sha256:cae106836449508909fde9215c2a4e170403fdfadb9bf539544db12cedab55af"},
+    {file = "dagster_pipes-1.6.12-py3-none-any.whl", hash = "sha256:33fcce587f69301af6dd1bedddd8a3e32b576557972ddda39b54340696bf79a1"},
 ]
 
 [[package]]
 name = "dagster-postgres"
-version = "0.22.11"
-requires_python = ">=3.8,<3.13"
+version = "0.22.12"
+requires_python = "<3.13,>=3.8"
 summary = "A Dagster integration for postgres"
 groups = ["default"]
 dependencies = [
-    "dagster==1.6.11",
+    "dagster==1.6.12",
     "psycopg2-binary",
 ]
 files = [
-    {file = "dagster-postgres-0.22.11.tar.gz", hash = "sha256:bab4d69780ab287d066ece14bb98ae8de98b7e47ad08517a3932295d3061d9fd"},
-    {file = "dagster_postgres-0.22.11-py3-none-any.whl", hash = "sha256:e2c7d5f5f2f01ba93f2dcfb2b75aa2ef34d509e018de8915acf97505f15efcba"},
+    {file = "dagster-postgres-0.22.12.tar.gz", hash = "sha256:a57dc4cec4b9c3c7a675c4dd2c002bd64352a99905da4b6819712cb5fcee0631"},
+    {file = "dagster_postgres-0.22.12-py3-none-any.whl", hash = "sha256:9a44af04fa6fdee765ce26c51172b44594ebba0eec6aa8a4b65131be71ffb919"},
 ]
 
 [[package]]
 name = "dagster-webserver"
-version = "1.6.11"
-requires_python = ">=3.8,<3.13"
+version = "1.6.12"
+requires_python = "<3.13,>=3.8"
 summary = "Web UI for dagster."
 groups = ["default"]
 dependencies = [
     "click<9.0,>=7.0",
-    "dagster-graphql==1.6.11",
-    "dagster==1.6.11",
+    "dagster-graphql==1.6.12",
+    "dagster==1.6.12",
     "starlette!=0.36.0",
     "uvicorn[standard]",
 ]
 files = [
-    {file = "dagster-webserver-1.6.11.tar.gz", hash = "sha256:7d0a28b32caeb9ec1e2b2e2ccf3823d8556a8dcf4e5f28d30a0248f2e4eff661"},
-    {file = "dagster_webserver-1.6.11-py3-none-any.whl", hash = "sha256:960892e1d2abb875e872a1c9fd2cdefd774f5f08820dba8e5a3cd00c32999a82"},
+    {file = "dagster-webserver-1.6.12.tar.gz", hash = "sha256:41a05865a50c3fd822f5bf548311426069f3046d3580e1a9b541d771bea15dc4"},
+    {file = "dagster_webserver-1.6.12-py3-none-any.whl", hash = "sha256:eee498928ca7dc9a7b47f8bd6b344fea62dc1d701f86f6ea6b355a30116d594a"},
 ]
 
 [[package]]
@@ -1820,28 +1820,28 @@ files = [
 
 [[package]]
 name = "ruff"
-version = "0.3.3"
+version = "0.3.4"
 requires_python = ">=3.7"
 summary = "An extremely fast Python linter and code formatter, written in Rust."
 groups = ["dev"]
 files = [
-    {file = "ruff-0.3.3-py3-none-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl", hash = "sha256:973a0e388b7bc2e9148c7f9be8b8c6ae7471b9be37e1cc732f8f44a6f6d7720d"},
-    {file = "ruff-0.3.3-py3-none-macosx_10_12_x86_64.whl", hash = "sha256:cfa60d23269d6e2031129b053fdb4e5a7b0637fc6c9c0586737b962b2f834493"},
-    {file = "ruff-0.3.3-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:1eca7ff7a47043cf6ce5c7f45f603b09121a7cc047447744b029d1b719278eb5"},
-    {file = "ruff-0.3.3-py3-none-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:e7d3f6762217c1da954de24b4a1a70515630d29f71e268ec5000afe81377642d"},
-    {file = "ruff-0.3.3-py3-none-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:b24c19e8598916d9c6f5a5437671f55ee93c212a2c4c569605dc3842b6820386"},
-    {file = "ruff-0.3.3-py3-none-manylinux_2_17_ppc64.manylinux2014_ppc64.whl", hash = "sha256:5a6cbf216b69c7090f0fe4669501a27326c34e119068c1494f35aaf4cc683778"},
-    {file = "ruff-0.3.3-py3-none-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:352e95ead6964974b234e16ba8a66dad102ec7bf8ac064a23f95371d8b198aab"},
-    {file = "ruff-0.3.3-py3-none-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:8d6ab88c81c4040a817aa432484e838aaddf8bfd7ca70e4e615482757acb64f8"},
-    {file = "ruff-0.3.3-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:79bca3a03a759cc773fca69e0bdeac8abd1c13c31b798d5bb3c9da4a03144a9f"},
-    {file = "ruff-0.3.3-py3-none-musllinux_1_2_aarch64.whl", hash = "sha256:2700a804d5336bcffe063fd789ca2c7b02b552d2e323a336700abb8ae9e6a3f8"},
-    {file = "ruff-0.3.3-py3-none-musllinux_1_2_armv7l.whl", hash = "sha256:fd66469f1a18fdb9d32e22b79f486223052ddf057dc56dea0caaf1a47bdfaf4e"},
-    {file = "ruff-0.3.3-py3-none-musllinux_1_2_i686.whl", hash = "sha256:45817af234605525cdf6317005923bf532514e1ea3d9270acf61ca2440691376"},
-    {file = "ruff-0.3.3-py3-none-musllinux_1_2_x86_64.whl", hash = "sha256:0da458989ce0159555ef224d5b7c24d3d2e4bf4c300b85467b08c3261c6bc6a8"},
-    {file = "ruff-0.3.3-py3-none-win32.whl", hash = "sha256:f2831ec6a580a97f1ea82ea1eda0401c3cdf512cf2045fa3c85e8ef109e87de0"},
-    {file = "ruff-0.3.3-py3-none-win_amd64.whl", hash = "sha256:be90bcae57c24d9f9d023b12d627e958eb55f595428bafcb7fec0791ad25ddfc"},
-    {file = "ruff-0.3.3-py3-none-win_arm64.whl", hash = "sha256:0171aab5fecdc54383993389710a3d1227f2da124d76a2784a7098e818f92d61"},
-    {file = "ruff-0.3.3.tar.gz", hash = "sha256:38671be06f57a2f8aba957d9f701ea889aa5736be806f18c0cd03d6ff0cbca8d"},
+    {file = "ruff-0.3.4-py3-none-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl", hash = "sha256:60c870a7d46efcbc8385d27ec07fe534ac32f3b251e4fc44b3cbfd9e09609ef4"},
+    {file = "ruff-0.3.4-py3-none-macosx_10_12_x86_64.whl", hash = "sha256:6fc14fa742e1d8f24910e1fff0bd5e26d395b0e0e04cc1b15c7c5e5fe5b4af91"},
+    {file = "ruff-0.3.4-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:d3ee7880f653cc03749a3bfea720cf2a192e4f884925b0cf7eecce82f0ce5854"},
+    {file = "ruff-0.3.4-py3-none-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:cf133dd744f2470b347f602452a88e70dadfbe0fcfb5fd46e093d55da65f82f7"},
+    {file = "ruff-0.3.4-py3-none-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:3f3860057590e810c7ffea75669bdc6927bfd91e29b4baa9258fd48b540a4365"},
+    {file = "ruff-0.3.4-py3-none-manylinux_2_17_ppc64.manylinux2014_ppc64.whl", hash = "sha256:986f2377f7cf12efac1f515fc1a5b753c000ed1e0a6de96747cdf2da20a1b369"},
+    {file = "ruff-0.3.4-py3-none-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:c4fd98e85869603e65f554fdc5cddf0712e352fe6e61d29d5a6fe087ec82b76c"},
+    {file = "ruff-0.3.4-py3-none-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:64abeed785dad51801b423fa51840b1764b35d6c461ea8caef9cf9e5e5ab34d9"},
+    {file = "ruff-0.3.4-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:df52972138318bc7546d92348a1ee58449bc3f9eaf0db278906eb511889c4b50"},
+    {file = "ruff-0.3.4-py3-none-musllinux_1_2_aarch64.whl", hash = "sha256:98e98300056445ba2cc27d0b325fd044dc17fcc38e4e4d2c7711585bd0a958ed"},
+    {file = "ruff-0.3.4-py3-none-musllinux_1_2_armv7l.whl", hash = "sha256:519cf6a0ebed244dce1dc8aecd3dc99add7a2ee15bb68cf19588bb5bf58e0488"},
+    {file = "ruff-0.3.4-py3-none-musllinux_1_2_i686.whl", hash = "sha256:bb0acfb921030d00070539c038cd24bb1df73a2981e9f55942514af8b17be94e"},
+    {file = "ruff-0.3.4-py3-none-musllinux_1_2_x86_64.whl", hash = "sha256:cf187a7e7098233d0d0c71175375c5162f880126c4c716fa28a8ac418dcf3378"},
+    {file = "ruff-0.3.4-py3-none-win32.whl", hash = "sha256:af27ac187c0a331e8ef91d84bf1c3c6a5dea97e912a7560ac0cef25c526a4102"},
+    {file = "ruff-0.3.4-py3-none-win_amd64.whl", hash = "sha256:de0d5069b165e5a32b3c6ffbb81c350b1e3d3483347196ffdf86dc0ef9e37dd6"},
+    {file = "ruff-0.3.4-py3-none-win_arm64.whl", hash = "sha256:6810563cc08ad0096b57c717bd78aeac888a1bfd38654d9113cb3dc4d3f74232"},
+    {file = "ruff-0.3.4.tar.gz", hash = "sha256:f0f4484c6541a99862b693e13a151435a279b271cff20e37101116a21e2a1ad1"},
 ]
 
 [[package]]
