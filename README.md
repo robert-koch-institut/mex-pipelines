@@ -146,7 +146,7 @@ components of the MEx project are open-sourced under the same license as well.
 ### odk extractor
 
 - `poetry run odk` extracts ODK survey data from excel files
-- based on odk to MEx mapping commit d6520d3
+- based on odk to MEx mapping commit 6696577
 
 ### organigram extractor
 
