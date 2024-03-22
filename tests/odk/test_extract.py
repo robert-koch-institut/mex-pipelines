@@ -7,7 +7,7 @@ from mex.odk.extract import extract_odk_raw_data, get_column_dict_by_pattern
 def test_extract_odk_raw_data() -> None:
     test = extract_odk_raw_data()
     expected = {
-        "file_name": "3rdWaveNAM_ZIG1_2_4_27072021.xlsx",
+        "file_name": "test_raw_data.xlsx",
         "hint": {
             "hint": [
                 nan,
@@ -88,7 +88,7 @@ def test_extract_odk_raw_data() -> None:
                 nan,
                 "Are you",
                 "*(Interviewer: End of Interview.)*",
-                "Taken together",
+                nan,
                 "How many",
                 "*(Interviewer: End of interview, no adult household members)*",
                 "Thank you for providing this basic information.",
@@ -137,10 +137,10 @@ def test_extract_odk_raw_data() -> None:
             "yes_no",
             "yes_no",
             nan,
-            "yes_no_dk_ref",
-            "yes_no_dk_ref",
-            "yes_no_dk_ref",
-            "yes_no_dk_ref",
+            "region",
+            "region",
+            "region",
+            "region",
             nan,
             "relationship_to_head",
             "relationship_to_head",
