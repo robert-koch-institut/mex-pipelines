@@ -1,4 +1,5 @@
-from typing import Generator, Iterable, cast
+from collections.abc import Generator, Iterable
+from typing import cast
 
 from mex.biospecimen.models.source import BiospecimenResource
 from mex.common.identity import get_provider

@@ -1,4 +1,4 @@
-from typing import Generator, Sequence
+from collections.abc import Generator, Sequence
 
 from mex.common.types import Identifier, Timestamp
 from mex.filters import filter_by_global_rules

@@ -1,5 +1,5 @@
+from collections.abc import Iterable
 from datetime import datetime
-from typing import Iterable
 
 from mex.seq_repo.model import SeqRepoSource
 

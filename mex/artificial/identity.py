@@ -1,5 +1,5 @@
 from binascii import crc32
-from typing import Sequence
+from collections.abc import Sequence
 
 from faker import Faker
 

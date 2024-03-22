@@ -110,6 +110,9 @@ dmypy.json
 *.db
 
 # Default exports
+identity.csv
+schema.json
+*.ndjson
 work/
 
 # Docker specifics
@@ -130,8 +133,7 @@ work/
 .pydocstyle
 Makefile
 mex.bat
-pdm.lock
-poetry.lock
+*.lock
 poetry.toml
 pytest.ini
 requirements.txt
