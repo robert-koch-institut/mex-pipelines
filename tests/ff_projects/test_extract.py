@@ -4,7 +4,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from mex.common.types import Timestamp
+from mex.common.types import TemporalEntity
 from mex.common.wikidata.models.organization import WikidataOrganization
 from mex.ff_projects.extract import (
     extract_ff_projects_organizations,
@@ -37,8 +37,8 @@ def test_extract_ff_projects_sources() -> None:
             "thema_des_projekts": "Fully Specified Source",
             "rki_az": "1364",
             "laufzeit_cells": ("2018-01-01 00:00:00", "2019-09-01 00:00:00"),
-            "laufzeit_bis": Timestamp("2019-08-31T23:00:00Z"),
-            "laufzeit_von": Timestamp("2017-12-31T23:00:00Z"),
+            "laufzeit_bis": TemporalEntity("2019-08-31T23:00:00Z"),
+            "laufzeit_von": TemporalEntity("2017-12-31T23:00:00Z"),
             "projektleiter": "Dr Frieda Ficticious",
             "rki_oe": "FG33",
             "zuwendungs_oder_auftraggeber": "Test-Institute",
@@ -68,7 +68,7 @@ def test_get_clean_names(name: str, expected_clean_name: str) -> None:
 def test_get_timestamp_from_cell() -> None:
     cell_value = datetime(2018, 1, 1, 0, 0)
     ts = get_timestamp_from_cell(cell_value)
-    assert ts == Timestamp("2017-12-31T23:00:00Z")
+    assert ts == TemporalEntity("2017-12-31T23:00:00Z")
 
     cell_value = MagicMock()
     ts = get_timestamp_from_cell(cell_value)

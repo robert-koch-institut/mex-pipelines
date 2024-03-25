@@ -148,7 +148,7 @@ def get_external_partner_and_publisher_by_label(
         {}
     )
     for label in labels:
-        if organization := list(search_organization_by_label(label)):
+        if organization := search_organization_by_label(label):
             external_partner_and_publisher_by_label[label] = (
                 MergedOrganizationIdentifier(
                     next(

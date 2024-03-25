@@ -7,8 +7,8 @@ from mex.common.types import (
     MergedOrganizationalUnitIdentifier,
     MergedOrganizationIdentifier,
     MergedPersonIdentifier,
+    TemporalEntity,
     TextLanguage,
-    Timestamp,
 )
 from mex.ff_projects.models.source import FFProjectsSource
 from mex.ff_projects.transform import (
@@ -61,9 +61,9 @@ def test_transform_ff_projects_source_to_extracted_activity(
     ff_projects_source = FFProjectsSource(
         foerderprogr="Funding",
         kategorie="Entgelt",
-        laufzeit_bis=Timestamp("2019-08-31T23:00:00Z"),
+        laufzeit_bis=TemporalEntity("2019-08-31T23:00:00Z"),
         laufzeit_cells=("2018-01-01 00:00:00", "2019-09-01 00:00:00"),
-        laufzeit_von=Timestamp("2017-12-31T23:00:00Z"),
+        laufzeit_von=TemporalEntity("2017-12-31T23:00:00Z"),
         lfd_nr="19",
         projektleiter="Dr Frieda Ficticious",
         rki_az="1364",
@@ -83,7 +83,7 @@ def test_transform_ff_projects_source_to_extracted_activity(
     assert extracted_activity.model_dump(exclude_none=True, exclude_defaults=True) == {
         "activityType": ["https://mex.rki.de/item/activity-type-1"],
         "contact": [person_id],
-        "end": [Timestamp("2019-08-31T23:00:00Z")],
+        "end": [TemporalEntity("2019-08-31T23:00:00Z")],
         "funderOrCommissioner": [organization_id],
         "fundingProgram": ["Funding"],
         "hadPrimarySource": extracted_primary_sources["ff-projects"].stableTargetId,
@@ -92,7 +92,7 @@ def test_transform_ff_projects_source_to_extracted_activity(
         "involvedPerson": [person_id],
         "responsibleUnit": [unit_id],
         "stableTargetId": Joker(),
-        "start": [Timestamp("2017-12-31T23:00:00Z")],
+        "start": [TemporalEntity("2017-12-31T23:00:00Z")],
         "title": [
             {"language": TextLanguage.EN, "value": "This is a project with a topic."}
         ],
