@@ -153,7 +153,7 @@ def get_external_partner_and_publisher_by_label(
                 MergedOrganizationIdentifier(
                     next(
                         transform_wikidata_organizations_to_extracted_organizations(
-                            organization,
+                            [organization],
                             extracted_primary_source_wikidata,
                         )
                     ).stableTargetId
