@@ -55,10 +55,12 @@ class GrippewebConnector(BaseConnector):
 
             cursor.execute(QUERY_BY_TABLE_NAME[table_name])
             table = cursor.fetchall()
-            table_columns = list(zip(*table))
+            table_columns = list(zip(*table, strict=False))
             return {
                 column_name[0]: list(column)
-                for column_name, column in zip(cursor.description, table_columns)
+                for column_name, column in zip(
+                    cursor.description, table_columns, strict=False
+                )
             }
 
     def close(self) -> None:
