@@ -1,4 +1,4 @@
-from typing import Sequence
+from collections.abc import Sequence
 
 from mex.common.types import Timestamp
 from mex.models import BaseRawData

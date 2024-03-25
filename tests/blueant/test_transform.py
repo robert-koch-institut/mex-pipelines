@@ -1,4 +1,5 @@
-from typing import Hashable, cast
+from collections.abc import Hashable
+from typing import cast
 
 from mex.blueant.models.source import BlueAntSource
 from mex.blueant.transform import transform_blueant_sources_to_extracted_activities

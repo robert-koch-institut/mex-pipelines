@@ -51,6 +51,6 @@ argument to the `asset` decorator in case you don't need its return value.
 
 Pipelines can be run in a couple of different ways:
 
-1. run `poetry run dagster dev` and click `materialize all` on `http://localhost:3000/locations/mex/jobs/foo_system`
-1. run `poetry run foo-system` according to the entrypoint in `pyproject.toml`
-1. run `poetry run dagster job execute -m mex -j foo_system` using the asset group name
+1. run `pdm run dagster dev` and click `materialize all` on `http://localhost:3000/locations/mex/jobs/foo_system`
+1. run `pdm run foo-system` according to the entrypoint in `pyproject.toml`
+1. run `pdm run dagster job execute -m mex -j foo_system` using the asset group name

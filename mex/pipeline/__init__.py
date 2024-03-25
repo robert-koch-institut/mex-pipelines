@@ -1,4 +1,5 @@
-from typing import TYPE_CHECKING, Any, Callable, TypeVar
+from collections.abc import Callable
+from typing import TYPE_CHECKING, Any, TypeVar
 
 if TYPE_CHECKING:  # pragma: no cover
     _AssetFn = TypeVar("_AssetFn")

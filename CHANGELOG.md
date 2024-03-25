@@ -9,9 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- settings attributes `drop_api_key` and `drop_api_url` (env names: `MEX_DROP_API_KEY` and `MEX_DROP_API_URL`)
+- add settings attributes `drop_api_key` and `drop_api_url`
 - drop api connector for listing and loading files from the drop api
 - add basic docker configuration with dockerfile, ignore and compose
+- implement odk transform functions
 - grippeweb extract
 
 ### Changes
@@ -19,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - update cruft template with new linters
 - utilize new, more precise Identifier subclasses
 - make pyodbc a soft dependency (only pipelines that use it may fail)
+- switch from poetry to pdm
 - move MSSQL Server authentication to general settings
 
 ### Deprecated
@@ -40,7 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - configure open-code synchronization workflow
 - add mapping connector and integrate into ifsg, seq-repo and sumo
-- add odk extract
+- add odk extraction assets
 - LDAP and Organigram integration for seq-repo
 
 ### Changes

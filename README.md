@@ -49,7 +49,6 @@ components of the MEx project are open-sourced under the same license as well.
 
 ## development
 
-
 ### installation
 
 - on unix, consider using pyenv https://github.com/pyenv/pyenv
@@ -69,16 +68,15 @@ components of the MEx project are open-sourced under the same license as well.
 - on windows run `.\mex.bat test`
 - or run manually
   - linter checks via `pre-commit run --all-files`
-  - all tests via `poetry run pytest`
-  - just unit tests via `poetry run pytest -m "not integration"`
+  - all tests via `pdm run pytest`
+  - just unit tests via `pdm run pytest -m "not integration"`
 
 ### updating dependencies
 
 - update boilerplate files with `cruft update`
 - update global requirements in `requirements.txt` manually
 - update git hooks with `pre-commit autoupdate`
-- show outdated dependencies with `poetry show --outdated`
-- update dependencies in poetry using `poetry update --lock`
+- update package dependencies using `pdm autoupdate`
 - update github actions in `.github/workflows/*.yml` manually
 
 ### creating release
@@ -96,51 +94,51 @@ components of the MEx project are open-sourced under the same license as well.
 
 ## commands
 
-- run `poetry run {command} --help` to print instructions
-- run `poetry run {command} --debug` for interactive debugging
+- run `pdm run {command} --help` to print instructions
+- run `pdm run {command} --debug` for interactive debugging
 
 ### dagster
 
-- `poetry run dagster dev` to launch a local dagster UI
+- `pdm run dagster dev` to launch a local dagster UI
 
 ### artificial extractor
 
-- `poetry run artificial` creates deterministic artificial sample data
+- `pdm run artificial` creates deterministic artificial sample data
 - execute only in local or dev environment
 
 ### biospecimen extractor
 
-- `poetry run biospecimen` extracts sources from the Biospecimen excel files
+- `pdm run biospecimen` extracts sources from the Biospecimen excel files
 - based on biospecimen to MEx mapping commit e629af3
 
 ### blueant extractor
 
-- `poetry run blueant` extracts sources from the Blue Ant project management software
+- `pdm run blueant` extracts sources from the Blue Ant project management software
 - based on blueant to MEx mapping commit e629af3
 
 ### confluence-vvt extractor
 
-- `poetry run confluence-vvt` extracts sources from the VVT confluence page
+- `pdm run confluence-vvt` extracts sources from the VVT confluence page
 - based on confluence-vvt to MEx mapping commit bbaf91e
 
 ### datscha-web extractor
 
-- `poetry run datscha-web` extracts sources from the datscha web app
+- `pdm run datscha-web` extracts sources from the datscha web app
 - based on datscha-web to MEx mapping commit e629af3
 
 ### ff-projects extractor
 
-- `poetry run ff-projects` extracts sources from the FF Projects excel file
+- `pdm run ff-projects` extracts sources from the FF Projects excel file
 - based on ff-projects to MEx mapping commit a913b9e
 
 ### ifsg extractor
 
-- `poetry run ifsg` extracts sources from the ifsg data base
+- `pdm run ifsg` extracts sources from the ifsg data base
 - based on ifsg to MEx mapping commit cf976cc
 
 ### international-projects extractor
 
-- `poetry run international-projects` extracts sources from the international projects excel
+- `pdm run international-projects` extracts sources from the international projects excel
 - based on international-projects to MEx mapping version a913b9e
 
 ### grippeweb extractor
@@ -150,30 +148,30 @@ components of the MEx project are open-sourced under the same license as well.
 
 ### odk extractor
 
-- `poetry run odk` extracts ODK survey data from excel files
-- based on odk to MEx mapping commit d6520d3
+- `pdm run odk` extracts ODK survey data from excel files
+- based on odk to MEx mapping commit 6696577
 
 ### organigram extractor
 
-- `poetry run organigram` extracts organizational units from JSON file
+- `pdm run organigram` extracts organizational units from JSON file
 - based on organigram to MEx mapping commit a913b9e
 
 ### rdmo extractor
 
-- `poetry run rdmo` extracts sources from RDMO using its REST API
+- `pdm run rdmo` extracts sources from RDMO using its REST API
 - based on rdmo to MEx mapping commit e629af3
 
 ### seq-repo extractor
 
-- `poetry run seq-repo` extracts sources from seq-repo JSON file
+- `pdm run seq-repo` extracts sources from seq-repo JSON file
 - based on seq-repo to MEx mapping commit f2814f9
 
 ### sumo extractor
 
-- `poetry run sumo` extract sumo data from xlsx files
+- `pdm run sumo` extract sumo data from xlsx files
 - based on sumo to MEx mapping commit f5e2b5f
 
 ### synopse extractor
 
-- `poetry run synopse` extracts synopse data from report-server exports
+- `pdm run synopse` extracts synopse data from report-server exports
 - based on synopse to MEx mapping commit 6472329

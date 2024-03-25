@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import Generator, Hashable, Iterable
+from collections.abc import Generator, Hashable, Iterable
 
 from mex.common.logging import watch
 from mex.common.models import ExtractedActivity, ExtractedPrimarySource

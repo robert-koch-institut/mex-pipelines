@@ -1,5 +1,5 @@
 import json
-from typing import Generator
+from collections.abc import Generator
 
 from mex.common.ldap.connector import LDAPConnector
 from mex.common.ldap.models.person import LDAPPersonWithQuery

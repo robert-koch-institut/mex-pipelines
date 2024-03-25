@@ -1,5 +1,5 @@
+from collections.abc import Callable, Iterable
 from itertools import tee
-from typing import Callable, Iterable
 
 from mex.common.exceptions import MExError
 from mex.common.models import ExtractedData
@@ -21,7 +21,9 @@ def load(models: Iterable[ExtractedData]) -> None:
     settings = BaseSettings.get()
     func: Callable[[Iterable[ExtractedData]], Iterable[Identifier]]
 
-    for sink, model_gen in zip(settings.sink, tee(models, len(settings.sink))):
+    for sink, model_gen in zip(
+        settings.sink, tee(models, len(settings.sink)), strict=False
+    ):
         if sink == Sink.BACKEND:
             func = post_to_backend_api
         elif sink == Sink.NDJSON:

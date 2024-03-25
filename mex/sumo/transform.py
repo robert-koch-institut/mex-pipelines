@@ -1,5 +1,6 @@
 from collections import defaultdict
-from typing import Any, Generator, Iterable
+from collections.abc import Generator, Iterable
+from typing import Any
 
 from mex.common.logging import watch
 from mex.common.models import (
