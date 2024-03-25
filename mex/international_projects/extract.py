@@ -1,6 +1,7 @@
 import warnings
+from collections.abc import Generator, Iterable
 from datetime import datetime
-from typing import Any, Generator, Iterable
+from typing import Any
 
 import pandas as pd
 
@@ -10,7 +11,11 @@ from mex.common.ldap.models.person import LDAPPersonWithQuery
 from mex.common.ldap.transform import analyse_person_string
 from mex.common.logging import watch
 from mex.common.models import ExtractedPrimarySource
-from mex.common.types import MergedOrganizationIdentifier, Timestamp, TimestampPrecision
+from mex.common.types import (
+    MergedOrganizationIdentifier,
+    TemporalEntity,
+    TemporalEntityPrecision,
+)
 from mex.common.wikidata.extract import search_organization_by_label
 from mex.common.wikidata.models.organization import WikidataOrganization
 from mex.international_projects.models.source import InternationalProjectsSource
@@ -149,7 +154,8 @@ def extract_international_projects_funding_sources(
         if funder_or_commissioner := source.funding_source:
             for org in funder_or_commissioner:
                 wikidata_org = search_organization_by_label(org)
-                found_orgs[org] = wikidata_org
+                if wikidata_org:
+                    found_orgs[org] = wikidata_org
     return found_orgs
 
 
@@ -170,7 +176,8 @@ def extract_international_projects_partner_organizations(
             for org in funder_or_commissioner:
                 wikidata_org = search_organization_by_label(org.replace('"', ""))
                 # TODO: remove replace() after wikidata extraction is fixed in MX-1502
-                found_orgs[org] = wikidata_org
+                if wikidata_org:
+                    found_orgs[org] = wikidata_org
     return found_orgs
 
 
@@ -204,17 +211,17 @@ def get_organization_merged_id_by_query(
     return organization_stable_target_id_by_query
 
 
-def get_timestamp_from_cell(cell_value: Any) -> Timestamp | None:
+def get_timestamp_from_cell(cell_value: Any) -> TemporalEntity | None:
     """Try to extract a timestamp from a cell.
 
     Args:
         cell_value: Value of a cell, could be int, string or datetime
 
     Returns:
-        Timestamp or None
+        TemporalEntity or None
     """
     if isinstance(cell_value, datetime):
-        timestamp = Timestamp(cell_value)
-        timestamp.precision = TimestampPrecision.DAY
+        timestamp = TemporalEntity(cell_value)
+        timestamp.precision = TemporalEntityPrecision.DAY
         return timestamp
     return None

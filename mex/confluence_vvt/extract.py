@@ -1,4 +1,4 @@
-from typing import Generator, Iterable
+from collections.abc import Generator, Iterable
 from urllib.parse import urljoin
 
 from mex.common.exceptions import MExError

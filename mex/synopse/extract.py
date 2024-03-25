@@ -1,4 +1,4 @@
-from typing import Generator, Iterable
+from collections.abc import Generator, Iterable
 
 from mex.common.extract import parse_csv
 from mex.common.ldap.connector import LDAPConnector

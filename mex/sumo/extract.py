@@ -1,4 +1,5 @@
-from typing import Any, Generator, Iterable
+from collections.abc import Generator, Iterable
+from typing import Any
 
 import numpy as np
 from pandas import ExcelFile

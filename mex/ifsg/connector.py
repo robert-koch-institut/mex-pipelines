@@ -70,7 +70,9 @@ class IFSGConnector(BaseConnector):
             cursor.execute(QUERY_BY_MODEL[model])
             result = cursor.fetchall()
             return [
-                dict(zip([column[0] for column in cursor.description], row))
+                dict(
+                    zip([column[0] for column in cursor.description], row, strict=False)
+                )
                 for row in result
             ]
 

@@ -15,14 +15,14 @@ from mex.artificial.settings import ArtificialSettings
 from mex.common.identity import Identity
 from mex.common.models import ExtractedData
 from mex.common.types import (
-    TIMESTAMP_FORMATS_BY_PRECISION,
+    TEMPORAL_ENTITY_FORMATS_BY_PRECISION,
     UTC,
     Email,
     Identifier,
     Link,
     LinkLanguage,
+    TemporalEntity,
     Text,
-    Timestamp,
 )
 
 
@@ -86,7 +86,7 @@ class BuilderProvider(PythonFakerProvider):
             factory = self.generator.email
         elif issubclass(inner_type, Text):
             factory = self.generator.text_object
-        elif issubclass(inner_type, Timestamp):
+        elif issubclass(inner_type, TemporalEntity):
             factory = self.generator.timestamp
         elif issubclass(inner_type, Enum):
             factory = partial(self.random_element, inner_type)
@@ -163,12 +163,14 @@ class LinkProvider(InternetFakerProvider, PythonFakerProvider):
 class TimestampProvider(PythonFakerProvider):
     """Faker provider that can return a custom Timestamp with random precision."""
 
-    def timestamp(self) -> Timestamp:
+    def timestamp(self) -> TemporalEntity:
         """Return a custom Timestamp with random date, time and precision."""
-        return Timestamp(
+        return TemporalEntity(
             datetime.fromtimestamp(
                 self.pyint(int(8e8), int(datetime.now().timestamp())), tz=UTC
-            ).strftime(self.random_element(TIMESTAMP_FORMATS_BY_PRECISION.values()))
+            ).strftime(
+                self.random_element(TEMPORAL_ENTITY_FORMATS_BY_PRECISION.values())
+            )
         )
 
 

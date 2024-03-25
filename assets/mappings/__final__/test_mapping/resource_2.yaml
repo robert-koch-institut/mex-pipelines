@@ -12,7 +12,7 @@ identifierInPrimarySource:
 - fieldInPrimarySource: n/a
   mappingRules:
   - setValues:
-    - diam
+    - test_raw_data
     rule: Set value as indicated.
 stableTargetId:
 - fieldInPrimarySource: n/a
@@ -131,5 +131,5 @@ wasGeneratedBy:
 - fieldInPrimarySource: n/a
   mappingRules:
   - forValues:
-    - C1
+    - testAAbr
     rule: Use value to match with identifierInPrimarySource in international projects. Assign stableTargetId of the matching item.

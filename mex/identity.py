@@ -27,7 +27,7 @@ class BackendIdentityProvider(BaseProvider, HTTPConnector):
         settings = Settings.get()
         self.url = urljoin(str(settings.backend_api_url), self.API_VERSION)
 
-    @cache
+    @cache  # noqa: B019
     def assign(
         self,
         had_primary_source: MergedPrimarySourceIdentifier,

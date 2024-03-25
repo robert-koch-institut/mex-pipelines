@@ -1,4 +1,4 @@
-from typing import Generator, Iterable
+from collections.abc import Generator, Iterable
 
 from mex.common.ldap.connector import LDAPConnector
 from mex.common.ldap.models.person import LDAPPersonWithQuery
@@ -69,5 +69,6 @@ def extract_datscha_web_organizations(
         for partner in item.get_partners():
             if partner and partner != "None":
                 organization = search_organization_by_label(partner)
-                partner_to_org_map[partner] = organization
+                if organization:
+                    partner_to_org_map[partner] = organization
     return partner_to_org_map

@@ -1,4 +1,4 @@
-from typing import Generator, Iterable
+from collections.abc import Generator, Iterable
 
 from mex.common.models import ExtractedPrimarySource
 from mex.logging import log_filter
