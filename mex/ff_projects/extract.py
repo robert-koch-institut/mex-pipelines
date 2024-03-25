@@ -102,9 +102,10 @@ def extract_ff_projects_source(row: "pd.Series[Any]") -> FFProjectsSource | None
     rki_az = get_string_from_cell(row.get("RKI-AZ"))
     laufzeit_von_cell = row.get("Laufzeit:\nvon            ")
     laufzeit_bis_cell = row.get("bis")
-    laufzeit_cells = get_optional_string_from_cell(
-        laufzeit_von_cell
-    ), get_optional_string_from_cell(laufzeit_bis_cell)
+    laufzeit_cells = (
+        get_optional_string_from_cell(laufzeit_von_cell),
+        get_optional_string_from_cell(laufzeit_bis_cell),
+    )
     laufzeit_von = get_timestamp_from_cell(laufzeit_von_cell)
     laufzeit_bis = get_timestamp_from_cell(laufzeit_bis_cell)
     zuwendungs_oder_auftraggeber = str(row.get("Zuwendungs-/ Auftraggeber"))
@@ -204,15 +205,10 @@ def extract_ff_projects_organizations(
         Dict with organization label and WikidataOrganization
     """
     return {
-        source.zuwendungs_oder_auftraggeber: orgs[0]
+        source.zuwendungs_oder_auftraggeber: org
         for source in ff_projects_sources
         if source.zuwendungs_oder_auftraggeber
-        and (
-            orgs := list(
-                search_organization_by_label(source.zuwendungs_oder_auftraggeber)
-            )
-        )
-        and len(orgs) == 1
+        and (org := search_organization_by_label(source.zuwendungs_oder_auftraggeber))
     }
 
 

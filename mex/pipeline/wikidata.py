@@ -9,21 +9,24 @@ from mex.sinks import load
 
 
 @asset(group_name="default")
-def wikidata_organization_rki() -> list[WikidataOrganization]:
+def wikidata_organization_rki() -> WikidataOrganization | None:
     """Extract WikidataOrganization for Robert Koch-Institut."""
-    return list(search_organization_by_label("Robert Koch-Institut"))
+    return search_organization_by_label("Robert Koch-Institut")
 
 
 @asset(group_name="default")
 def extracted_organization_rki(
-    wikidata_organization_rki: list[WikidataOrganization],
+    wikidata_organization_rki: WikidataOrganization,
     extracted_primary_source_wikidata: ExtractedPrimarySource,
-) -> ExtractedOrganization:
+) -> ExtractedOrganization | None:
     """Transforms RKI organization data to extracted organizations and load result."""
-    extracted_organization_rki = list(
+    extracted_organization_rki = (
         transform_wikidata_organizations_to_extracted_organizations(
             wikidata_organization_rki, extracted_primary_source_wikidata
         )
     )
-    load(extracted_organization_rki)
-    return extracted_organization_rki[0]
+    if extracted_organization_rki:
+        load([extracted_organization_rki])
+        return extracted_organization_rki
+
+    return None

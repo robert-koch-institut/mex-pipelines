@@ -148,9 +148,8 @@ def extract_international_projects_funding_sources(
     for source in international_projects_sources:
         if funder_or_commissioner := source.funding_source:
             for org in funder_or_commissioner:
-                wikidata_orgs = list(search_organization_by_label(org))
-                if len(wikidata_orgs) == 1:
-                    found_orgs[org] = wikidata_orgs[0]
+                wikidata_org = search_organization_by_label(org)
+                found_orgs[org] = wikidata_org
     return found_orgs
 
 
@@ -169,10 +168,9 @@ def extract_international_projects_partner_organizations(
     for source in international_projects_sources:
         if funder_or_commissioner := source.partner_organization:
             for org in funder_or_commissioner:
-                wikidata_orgs = list(search_organization_by_label(org.replace('"', "")))
+                wikidata_org = search_organization_by_label(org.replace('"', ""))
                 # TODO: remove replace() after wikidata extraction is fixed in MX-1502
-                if len(wikidata_orgs) == 1:
-                    found_orgs[org] = wikidata_orgs[0]
+                found_orgs[org] = wikidata_org
     return found_orgs
 
 
