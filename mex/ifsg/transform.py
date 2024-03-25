@@ -425,12 +425,9 @@ def transform_ifsg_data_to_mex_variables(
     Returns:
         transform filtered variable to extracted variables
     """
-    variable_group_stable_target_id_by_label = {
-        row.label[0].value: row.stableTargetId for row in extracted_ifsg_variable_group
-    }
-    label_by_statement_area_group = {
-        row["forValues"][0]: row["setValues"][0]["value"]
-        for row in ifsg_variable_group["label"][0]["mappingRules"]
+    variable_group_by_identifier_in_primary_source = {
+        row.identifierInPrimarySource: row.stableTargetId
+        for row in extracted_ifsg_variable_group
     }
     resource_disease_stable_target_id_by_id_type = {
         int(row.identifierInPrimarySource): row.stableTargetId
@@ -452,10 +449,9 @@ def transform_ifsg_data_to_mex_variables(
         in [c2i2s.id_catalogue2item for c2i2s in meta_catalogue2item2schema]
     ]
     for row in filtered_variables:
-        belongs_to = []
-        if row.statement_area_group in label_by_statement_area_group:
-            label = label_by_statement_area_group[row.statement_area_group]
-            belongs_to.append(variable_group_stable_target_id_by_label[label])
+        belongs_to = variable_group_by_identifier_in_primary_source.get(
+            f"{row.id_type}_{row.statement_area_group}"
+        )
         id_item_list = [
             c2i.id_item
             for c2i in meta_catalogue2item
