@@ -271,7 +271,6 @@ def extracted_ifsg_variable_group(
 @asset(group_name="ifsg")
 def extracted_ifsg_variable(
     filtered_variables: list[MetaField],
-    ifsg_variable_group: dict[str, Any],
     extracted_ifsg_resource_disease: list[ExtractedResource],
     extracted_ifsg_variable_group: list[ExtractedVariableGroup],
     extracted_primary_sources_ifsg: ExtractedPrimarySource,
@@ -282,7 +281,6 @@ def extracted_ifsg_variable(
     """Extracted and loaded ifsg variable."""
     extracted_variables = transform_ifsg_data_to_mex_variables(
         filtered_variables,
-        ifsg_variable_group,
         extracted_ifsg_resource_disease,
         extracted_ifsg_variable_group,
         extracted_primary_sources_ifsg,

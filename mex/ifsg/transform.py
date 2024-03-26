@@ -402,7 +402,6 @@ def transform_ifsg_data_to_mex_variable_group(
 
 def transform_ifsg_data_to_mex_variables(
     filtered_variables: list[MetaField],
-    ifsg_variable_group: dict[str, Any],
     extracted_ifsg_resource_disease: list[ExtractedResource],
     extracted_ifsg_variable_group: list[ExtractedVariableGroup],
     extracted_primary_sources_ifsg: ExtractedPrimarySource,
@@ -414,7 +413,6 @@ def transform_ifsg_data_to_mex_variables(
 
     Args:
         filtered_variables: MetaField list to transform into variables
-        ifsg_variable_group: ifsg_variable_group default values
         extracted_ifsg_resource_disease: ExtractedResource disease list
         extracted_ifsg_variable_group: variable group default values
         extracted_primary_sources_ifsg: ExtractedPrimarySource
