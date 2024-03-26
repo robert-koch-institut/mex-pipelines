@@ -238,12 +238,7 @@ def transform_odk_variable_groups_to_extracted_variable_groups(
         contained_by = resource_id_by_identifier_in_primary_source[
             group[0]["file_name"].split(".")[0]
         ]
-        label = [
-            cell
-            for row in group
-            for column_name, cell in row.items()
-            if "label" in column_name and isinstance(cell, str)
-        ]
+        label = [row["name"] for row in group]
 
         extracted_variable_groups.append(
             ExtractedVariableGroup(

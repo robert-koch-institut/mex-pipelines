@@ -223,21 +223,12 @@ def test_transform_odk_variable_groups_to_extracted_variable_groups(
         "identifierInPrimarySource": "gatekeeper",
         "containedBy": [extracted_resources_odk[0].stableTargetId],
         "label": [
-            {"value": "Introduction of study to gatekeeper", "language": "en"},
-            {"value": "Introduction of study to gatekeeper", "language": "en"},
-            {"value": "**Verbal consent**"},
-            {"value": "**Omaitaverero wokotjinyo**"},
-            {"value": "Are you"},
-            {"value": "Ove moyenene okunyamukura omapuriro inga?"},
-            {"value": "Taken together"},
-            {"value": "Tji wa twa kumwe"},
-            {"value": "How many"},
-            {"value": "Ovandu vengapi"},
-            {
-                "value": "Thank you for providing this basic information.",
-                "language": "en",
-            },
-            {"value": "Okuhepa tjinene"},
+            {"value": "gatekeeper"},
+            {"value": "consent_gatekeeper"},
+            {"value": "consent_basic_questions"},
+            {"value": "NR1"},
+            {"value": "NR2"},
+            {"value": "consent_gatekeeper_2"},
         ],
     }
     assert extracted_variable_groups[0].model_dump(exclude_defaults=True) == expected
