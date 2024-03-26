@@ -56,7 +56,7 @@ def get_timestamp_from_cell(cell_value: Any) -> TemporalEntity | None:
     if isinstance(cell_value, datetime):
         timestamp = TemporalEntity(cell_value)
         timestamp.precision = (
-            TemporalEntityPrecision.SECOND
+            TemporalEntityPrecision.DAY
         )  # keeps Timestamp precision in Seconds as standard.
         return timestamp
     return None
