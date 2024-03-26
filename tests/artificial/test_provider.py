@@ -16,6 +16,7 @@ from mex.common.types import (
     Link,
     MergedPrimarySourceIdentifier,
     TemporalEntity,
+    TemporalEntityPrecision,
     Text,
     TextLanguage,
 )
@@ -189,7 +190,9 @@ def test_link_provider(faker: Faker) -> None:
 
 
 def test_timestamp_provider(faker: Faker) -> None:
-    assert faker.timestamp() == TemporalEntity("2000-02-08T23:01:31Z")
+    assert faker.temporal_entity([TemporalEntityPrecision.DAY]) == TemporalEntity(
+        "2000-02-08"
+    )
 
 
 def test_text_provider_string(faker: Faker) -> None:

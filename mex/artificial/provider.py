@@ -22,6 +22,7 @@ from mex.common.types import (
     Link,
     LinkLanguage,
     TemporalEntity,
+    TemporalEntityPrecision,
     Text,
 )
 
@@ -87,7 +88,9 @@ class BuilderProvider(PythonFakerProvider):
         elif issubclass(inner_type, Text):
             factory = self.generator.text_object
         elif issubclass(inner_type, TemporalEntity):
-            factory = self.generator.timestamp
+            factory = partial(
+                self.generator.temporal_entity, inner_type.ALLOWED_PRECISION_LEVELS
+            )
         elif issubclass(inner_type, Enum):
             factory = partial(self.random_element, inner_type)
         elif issubclass(inner_type, str):
@@ -160,16 +163,20 @@ class LinkProvider(InternetFakerProvider, PythonFakerProvider):
         return Link(url=self.url(), title=title, language=language)
 
 
-class TimestampProvider(PythonFakerProvider):
-    """Faker provider that can return a custom Timestamp with random precision."""
+class TemporalEntityProvider(PythonFakerProvider):
+    """Faker provider that can return a custom TemporalEntity with random precision."""
 
-    def timestamp(self) -> TemporalEntity:
+    def temporal_entity(
+        self, allowed_precision_levels: list[TemporalEntityPrecision]
+    ) -> TemporalEntity:
         """Return a custom Timestamp with random date, time and precision."""
         return TemporalEntity(
             datetime.fromtimestamp(
                 self.pyint(int(8e8), int(datetime.now().timestamp())), tz=UTC
             ).strftime(
-                self.random_element(TEMPORAL_ENTITY_FORMATS_BY_PRECISION.values())
+                TEMPORAL_ENTITY_FORMATS_BY_PRECISION[
+                    self.random_element(allowed_precision_levels)
+                ]
             )
         )
 
