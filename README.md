@@ -134,12 +134,17 @@ components of the MEx project are open-sourced under the same license as well.
 ### ifsg extractor
 
 - `pdm run ifsg` extracts sources from the ifsg data base
-- based on ifsg to MEx mapping commit cf976cc
+- based on ifsg to MEx mapping commit f0e54cd
 
 ### international-projects extractor
 
 - `pdm run international-projects` extracts sources from the international projects excel
 - based on international-projects to MEx mapping version a913b9e
+
+### grippeweb extractor
+
+- `pdm run grippeweb` extracts grippeweb metadata from grippeweb database
+- based on grippeweb to MEx mapping commit eb88773
 
 ### odk extractor
 
