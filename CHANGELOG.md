@@ -34,6 +34,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [0.15.1] - 2024-03-27
+
+### Added
+
+### Changes
+- receive one or None organization from wikidata aux extractor
+- adjust Timestamp usage to TemporalEntity
+
 ## [0.15.0] - 2024-02-27
 
 ### Added
