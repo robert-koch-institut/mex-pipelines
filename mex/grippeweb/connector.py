@@ -15,12 +15,6 @@ class NoOpPyodbc:
         return
 
 
-try:
-    import pyodbc  # type: ignore[import-not-found]
-except ImportError:
-    pyodbc = NoOpPyodbc
-
-
 QUERY_BY_TABLE_NAME = {
     "vActualQuestion": "SELECT * FROM GrippeWeb.MEx.vActualQuestion",
     "vMasterDataMEx": "SELECT * FROM GrippeWeb.MEx.vMasterDataMEx",
@@ -33,6 +27,9 @@ class GrippewebConnector(BaseConnector):
 
     def __init__(self) -> None:
         """Create a new connector instance."""
+        # https://github.com/mkleehammer/pyodbc/wiki/Install#installing-on-linux
+        import pyodbc  # type: ignore[import-not-found]
+
         settings = GrippewebSettings.get()
         if platform.system() != "Windows":  # pragma: no cover
             process = Popen(
