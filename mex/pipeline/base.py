@@ -4,8 +4,10 @@ from typing import TYPE_CHECKING, cast
 from dagster import (
     AssetsDefinition,
     AssetSelection,
+    DefaultScheduleStatus,
     Definitions,
     FilesystemIOManager,
+    ScheduleDefinition,
     define_asset_job,
     load_assets_from_package_module,
 )
@@ -36,4 +38,14 @@ def load_job_definitions() -> Definitions:
         for group_name in group_names
         if group_name != "default"
     ]
-    return Definitions(assets=assets, jobs=jobs, resources=resources)
+    schedules = [
+        ScheduleDefinition(
+            job=job,
+            cron_schedule="0 0 * * *",
+            default_status=DefaultScheduleStatus.RUNNING,
+        )
+        for job in jobs
+    ]
+    return Definitions(
+        assets=assets, jobs=jobs, resources=resources, schedules=schedules
+    )
