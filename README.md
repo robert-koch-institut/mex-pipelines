@@ -134,7 +134,7 @@ components of the MEx project are open-sourced under the same license as well.
 ### ifsg extractor
 
 - `pdm run ifsg` extracts sources from the ifsg data base
-- based on ifsg to MEx mapping commit cf976cc
+- based on ifsg to MEx mapping commit f0e54cd
 
 ### international-projects extractor
 
