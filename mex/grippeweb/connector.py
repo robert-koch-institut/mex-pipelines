@@ -6,15 +6,6 @@ from mex.common.connector import BaseConnector
 from mex.common.logging import echo
 from mex.grippeweb.settings import GrippewebSettings
 
-
-class NoOpPyodbc:
-    """No-op pyodbc drop-in for when the libodbc dependency is not installed."""
-
-    def connect(self, _: str) -> None:  # pragma: no cover
-        """Create a new ODBC connection to a database."""
-        return
-
-
 QUERY_BY_TABLE_NAME = {
     "vActualQuestion": "SELECT * FROM GrippeWeb.MEx.vActualQuestion",
     "vMasterDataMEx": "SELECT * FROM GrippeWeb.MEx.vMasterDataMEx",
