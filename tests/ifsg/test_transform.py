@@ -249,7 +249,6 @@ def test_transform_ifsg_data_to_mex_variable_group(
 
 def test_transform_ifsg_data_to_mex_variable(
     meta_field: list[MetaField],
-    ifsg_variable_group: dict[str, Any],
     extracted_ifsg_resource_disease: list[ExtractedResource],
     extracted_ifsg_variable_group: list[ExtractedVariableGroup],
     extracted_primary_sources_ifsg: ExtractedPrimarySource,
@@ -259,7 +258,6 @@ def test_transform_ifsg_data_to_mex_variable(
 ) -> None:
     extracted_variable = transform_ifsg_data_to_mex_variables(
         meta_field,
-        ifsg_variable_group,
         extracted_ifsg_resource_disease,
         extracted_ifsg_variable_group,
         extracted_primary_sources_ifsg,
