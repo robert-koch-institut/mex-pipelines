@@ -220,16 +220,9 @@ def test_transform_odk_variable_groups_to_extracted_variable_groups(
         "identifier": Joker(),
         "stableTargetId": Joker(),
         "hadPrimarySource": extracted_primary_sources["odk"].stableTargetId,
-        "identifierInPrimarySource": "gatekeeper",
+        "identifierInPrimarySource": "begin_group-gatekeeper",
         "containedBy": [extracted_resources_odk[0].stableTargetId],
-        "label": [
-            {"value": "gatekeeper"},
-            {"value": "consent_gatekeeper"},
-            {"value": "consent_basic_questions"},
-            {"value": "NR1"},
-            {"value": "NR2"},
-            {"value": "consent_gatekeeper_2"},
-        ],
+        "label": [{"value": "gatekeeper"}],
     }
     assert extracted_variable_groups[0].model_dump(exclude_defaults=True) == expected
 
