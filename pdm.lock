@@ -400,7 +400,7 @@ files = [
 
 [[package]]
 name = "dagster"
-version = "1.6.12"
+version = "1.6.13"
 requires_python = "<3.13,>=3.8"
 summary = "Dagster is an orchestration platform for the development, production, and observation of data assets."
 groups = ["default"]
@@ -411,7 +411,7 @@ dependencies = [
     "click>=5.0",
     "coloredlogs<=14.0,>=6.1",
     "croniter>=0.3.34",
-    "dagster-pipes==1.6.12",
+    "dagster-pipes==1.6.13",
     "docstring-parser",
     "grpcio-health-checking>=1.44.0",
     "grpcio>=1.44.0",
@@ -440,70 +440,70 @@ dependencies = [
     "watchdog>=0.8.3",
 ]
 files = [
-    {file = "dagster-1.6.12-py3-none-any.whl", hash = "sha256:38a7095f9b8ea6ce7d44911974633f6708f98cd89773ea7a04d41ec5f7f633d4"},
-    {file = "dagster-1.6.12.tar.gz", hash = "sha256:0fd74857722a1b92b650e238ad8de8a3e23444d8bf520d332315c2d0acdf5830"},
+    {file = "dagster-1.6.13-py3-none-any.whl", hash = "sha256:1ae0109cf173550f1f18ea6870b03eb9774f86f36ec4268f063458b795dacce0"},
+    {file = "dagster-1.6.13.tar.gz", hash = "sha256:779ddf5d4f348cab7d5f3e09c1748462ccb9676f1275977122a4cef44e439eed"},
 ]
 
 [[package]]
 name = "dagster-graphql"
-version = "1.6.12"
+version = "1.6.13"
 requires_python = "<3.13,>=3.8"
 summary = "The GraphQL frontend to python dagster."
 groups = ["default"]
 dependencies = [
-    "dagster==1.6.12",
+    "dagster==1.6.13",
     "gql[requests]<4,>=3",
     "graphene<4,>=3",
     "requests",
     "starlette",
 ]
 files = [
-    {file = "dagster-graphql-1.6.12.tar.gz", hash = "sha256:6be246d5600a02dc2b8b913cba32a792b3e7b580c8acdb9f219ae69d09d85ea4"},
-    {file = "dagster_graphql-1.6.12-py3-none-any.whl", hash = "sha256:3f0042b2aaf638516e802c3f71f3d0db15e47695e781671808753d685190d7e1"},
+    {file = "dagster-graphql-1.6.13.tar.gz", hash = "sha256:27a2395d2a44398cd12cbee63a6e9a41b4e22776c8cd946db405101e84504398"},
+    {file = "dagster_graphql-1.6.13-py3-none-any.whl", hash = "sha256:19fa5001e2e6ae3e79f5d985bc428aca0d532754a38b34b33d91c07bb9f4ca9a"},
 ]
 
 [[package]]
 name = "dagster-pipes"
-version = "1.6.12"
+version = "1.6.13"
 requires_python = "<3.13,>=3.8"
 summary = "Toolkit for Dagster integrations with transform logic outside of Dagster"
 groups = ["default"]
 files = [
-    {file = "dagster-pipes-1.6.12.tar.gz", hash = "sha256:cae106836449508909fde9215c2a4e170403fdfadb9bf539544db12cedab55af"},
-    {file = "dagster_pipes-1.6.12-py3-none-any.whl", hash = "sha256:33fcce587f69301af6dd1bedddd8a3e32b576557972ddda39b54340696bf79a1"},
+    {file = "dagster-pipes-1.6.13.tar.gz", hash = "sha256:4efba77428ce47ccbe9d25ed00990f4975eb328225e41b1f110b7ee34dbe0b2e"},
+    {file = "dagster_pipes-1.6.13-py3-none-any.whl", hash = "sha256:f3f6b100fe049686d96919908bf3998c163a995a5188574914e0155413ce46b4"},
 ]
 
 [[package]]
 name = "dagster-postgres"
-version = "0.22.12"
+version = "0.22.13"
 requires_python = "<3.13,>=3.8"
 summary = "A Dagster integration for postgres"
 groups = ["default"]
 dependencies = [
-    "dagster==1.6.12",
+    "dagster==1.6.13",
     "psycopg2-binary",
 ]
 files = [
-    {file = "dagster-postgres-0.22.12.tar.gz", hash = "sha256:a57dc4cec4b9c3c7a675c4dd2c002bd64352a99905da4b6819712cb5fcee0631"},
-    {file = "dagster_postgres-0.22.12-py3-none-any.whl", hash = "sha256:9a44af04fa6fdee765ce26c51172b44594ebba0eec6aa8a4b65131be71ffb919"},
+    {file = "dagster-postgres-0.22.13.tar.gz", hash = "sha256:a6e024883a11d96cdd9ab62bc2612cd3f066fa99ebb791c935005cc42ed1472b"},
+    {file = "dagster_postgres-0.22.13-py3-none-any.whl", hash = "sha256:e0093573e1e13e1566f5c8fd4953cb7c9c66ef283d58dcb8cde5c2c4eafeaaf4"},
 ]
 
 [[package]]
 name = "dagster-webserver"
-version = "1.6.12"
+version = "1.6.13"
 requires_python = "<3.13,>=3.8"
 summary = "Web UI for dagster."
 groups = ["default"]
 dependencies = [
     "click<9.0,>=7.0",
-    "dagster-graphql==1.6.12",
-    "dagster==1.6.12",
+    "dagster-graphql==1.6.13",
+    "dagster==1.6.13",
     "starlette!=0.36.0",
     "uvicorn[standard]",
 ]
 files = [
-    {file = "dagster-webserver-1.6.12.tar.gz", hash = "sha256:41a05865a50c3fd822f5bf548311426069f3046d3580e1a9b541d771bea15dc4"},
-    {file = "dagster_webserver-1.6.12-py3-none-any.whl", hash = "sha256:eee498928ca7dc9a7b47f8bd6b344fea62dc1d701f86f6ea6b355a30116d594a"},
+    {file = "dagster-webserver-1.6.13.tar.gz", hash = "sha256:f018726d133b073b6890993f0920214fad86a59eb48186906c0703645a81c59e"},
+    {file = "dagster_webserver-1.6.13-py3-none-any.whl", hash = "sha256:9d1e6de1e8b9ce248b2e1aad218c1c2be2586689b2db54a8681b768670408d1b"},
 ]
 
 [[package]]
@@ -1639,8 +1639,8 @@ files = [
 
 [[package]]
 name = "pytest-cov"
-version = "4.1.0"
-requires_python = ">=3.7"
+version = "5.0.0"
+requires_python = ">=3.8"
 summary = "Pytest plugin for measuring coverage."
 groups = ["dev"]
 dependencies = [
@@ -1648,8 +1648,8 @@ dependencies = [
     "pytest>=4.6",
 ]
 files = [
-    {file = "pytest-cov-4.1.0.tar.gz", hash = "sha256:3904b13dfbfec47f003b8e77fd5b589cd11904a21ddf1ab38a64f204d6a10ef6"},
-    {file = "pytest_cov-4.1.0-py3-none-any.whl", hash = "sha256:6ba70b9e97e69fcc3fb45bfeab2d0a138fb65c4d0d6a41ef33983ad114be8c3a"},
+    {file = "pytest-cov-5.0.0.tar.gz", hash = "sha256:5837b58e9f6ebd335b0f8060eecce69b662415b16dc503883a02f45dfeb14857"},
+    {file = "pytest_cov-5.0.0-py3-none-any.whl", hash = "sha256:4f0764a1219df53214206bf1feea4633c3b558a2925c8b59f144f682861ce652"},
 ]
 
 [[package]]
