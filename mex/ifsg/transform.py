@@ -424,8 +424,8 @@ def transform_ifsg_data_to_mex_variables(
         transform filtered variable to extracted variables
     """
     variable_group_by_identifier_in_primary_source = {
-        row.identifierInPrimarySource: row.stableTargetId
-        for row in extracted_ifsg_variable_group
+        group.identifierInPrimarySource: group.stableTargetId
+        for group in extracted_ifsg_variable_group
     }
     resource_disease_stable_target_id_by_id_type = {
         int(row.identifierInPrimarySource): row.stableTargetId
