@@ -806,7 +806,7 @@ def extracted_variable_groups_odk() -> list[ExtractedVariableGroup]:
     return [
         ExtractedVariableGroup(
             hadPrimarySource=MergedPrimarySourceIdentifier.generate(50),
-            identifierInPrimarySource="gatekeeper",
+            identifierInPrimarySource="begin_group-gatekeeper",
             containedBy=[MergedResourceIdentifier.generate(51)],
             label=[
                 Text(value="Introduction of study to gatekeeper", language="en"),
@@ -829,7 +829,7 @@ def extracted_variable_groups_odk() -> list[ExtractedVariableGroup]:
         ),
         ExtractedVariableGroup(
             hadPrimarySource=MergedPrimarySourceIdentifier.generate(52),
-            identifierInPrimarySource="selection",
+            identifierInPrimarySource="begin_group-selection",
             containedBy=[MergedResourceIdentifier.generate(53)],
             label=[
                 Text(value="Selection of respondent", language="en"),
