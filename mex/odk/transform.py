@@ -197,10 +197,10 @@ def get_variable_groups_from_raw_data(
             if type_row == "begin_group":
                 in_group = True
                 group = []
-                group_name = name
+                begin_group_name = name
             elif type_row == "end_group":
                 in_group = False
-                variable_groups[group_name] = group
+                variable_groups[begin_group_name] = group
             if in_group:
                 row_dict = {
                     "type": type_row,
@@ -243,23 +243,17 @@ def transform_odk_variable_groups_to_extracted_variable_groups(
         resource.identifierInPrimarySource: resource.stableTargetId
         for resource in extracted_resources_odk
     }
-    for group_name, group in odk_variable_groups.items():
+    for begin_group_name, group in odk_variable_groups.items():
         contained_by = resource_id_by_identifier_in_primary_source[
             group[0]["file_name"].split(".")[0]
-        ]
-        label = [
-            cell
-            for row in group
-            for column_name, cell in row.items()
-            if "label" in column_name and isinstance(cell, str)
         ]
 
         extracted_variable_groups.append(
             ExtractedVariableGroup(
                 hadPrimarySource=extracted_primary_source_odk.stableTargetId,
-                identifierInPrimarySource=group_name,
+                identifierInPrimarySource=f"begin_group-{begin_group_name}",
                 containedBy=contained_by,
-                label=label,
+                label=begin_group_name,
             )
         )
     return extracted_variable_groups
@@ -294,12 +288,14 @@ def transform_odk_data_to_extracted_variables(
         resource.identifierInPrimarySource: resource.stableTargetId
         for resource in extracted_resources_odk
     }
-    for group_name, group in odk_variable_groups.items():
+    for begin_group_name, group in odk_variable_groups.items():
         used_in = resource_id_by_identifier_in_primary_source[
             group[0]["file_name"].split(".")[0]
         ]
 
-        belongs_to = variable_group_identifier_in_primary_source[group_name]
+        belongs_to = variable_group_identifier_in_primary_source[
+            f"begin_group-{begin_group_name}"
+        ]
         for row in group:
             description = [
                 cell
