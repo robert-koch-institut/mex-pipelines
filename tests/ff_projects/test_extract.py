@@ -4,7 +4,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from mex.common.types import TemporalEntity, TemporalEntityPrecision
+from mex.common.types import TemporalEntity
 from mex.common.wikidata.models.organization import WikidataOrganization
 from mex.ff_projects.extract import (
     extract_ff_projects_organizations,
@@ -66,7 +66,6 @@ def test_get_temporal_entity_from_cell() -> None:
     cell_value = datetime(2018, 1, 1, 0, 0)
     ts = get_temporal_entity_from_cell(cell_value)
     expected_ts = TemporalEntity("2017-12-31T23:00:00Z")
-    expected_ts.precision = TemporalEntityPrecision.DAY
     assert ts == expected_ts
 
     cell_value = MagicMock()
