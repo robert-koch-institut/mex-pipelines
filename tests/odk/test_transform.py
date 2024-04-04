@@ -220,25 +220,9 @@ def test_transform_odk_variable_groups_to_extracted_variable_groups(
         "identifier": Joker(),
         "stableTargetId": Joker(),
         "hadPrimarySource": extracted_primary_sources["odk"].stableTargetId,
-        "identifierInPrimarySource": "gatekeeper",
+        "identifierInPrimarySource": "begin_group-gatekeeper",
         "containedBy": [extracted_resources_odk[0].stableTargetId],
-        "label": [
-            {"value": "Introduction of study to gatekeeper", "language": "en"},
-            {"value": "Introduction of study to gatekeeper", "language": "en"},
-            {"value": "**Verbal consent**"},
-            {"value": "**Omaitaverero wokotjinyo**"},
-            {"value": "Are you"},
-            {"value": "Ove moyenene okunyamukura omapuriro inga?"},
-            {"value": "Taken together"},
-            {"value": "Tji wa twa kumwe"},
-            {"value": "How many"},
-            {"value": "Ovandu vengapi"},
-            {
-                "value": "Thank you for providing this basic information.",
-                "language": "en",
-            },
-            {"value": "Okuhepa tjinene"},
-        ],
+        "label": [{"value": "gatekeeper"}],
     }
     assert extracted_variable_groups[0].model_dump(exclude_defaults=True) == expected
 
