@@ -174,9 +174,7 @@ def extract_international_projects_partner_organizations(
     for source in international_projects_sources:
         if funder_or_commissioner := source.partner_organization:
             for org in funder_or_commissioner:
-                wikidata_org = search_organization_by_label(org)
-                # TODO: remove replace() after wikidata extraction is fixed in MX-1502
-                if wikidata_org:
+                if wikidata_org := search_organization_by_label(org):
                     found_orgs[org] = wikidata_org
     return found_orgs
 
