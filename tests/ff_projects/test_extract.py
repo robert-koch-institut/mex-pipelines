@@ -13,7 +13,7 @@ from mex.ff_projects.extract import (
     get_clean_names,
     get_optional_string_from_cell,
     get_string_from_cell,
-    get_timestamp_from_cell,
+    get_temporal_entity_from_cell,
 )
 
 
@@ -62,15 +62,15 @@ def test_get_clean_names(name: str, expected_clean_name: str) -> None:
     assert clean_name == expected_clean_name
 
 
-def test_get_timestamp_from_cell() -> None:
+def test_get_temporal_entity_from_cell() -> None:
     cell_value = datetime(2018, 1, 1, 0, 0)
-    ts = get_timestamp_from_cell(cell_value)
+    ts = get_temporal_entity_from_cell(cell_value)
     expected_ts = TemporalEntity("2017-12-31T23:00:00Z")
     expected_ts.precision = TemporalEntityPrecision.DAY
     assert ts == expected_ts
 
     cell_value = MagicMock()
-    ts = get_timestamp_from_cell(cell_value)
+    ts = get_temporal_entity_from_cell(cell_value)
     assert ts is None
 
 

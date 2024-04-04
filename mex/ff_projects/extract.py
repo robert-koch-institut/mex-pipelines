@@ -44,8 +44,8 @@ def extract_ff_projects_sources() -> Generator[FFProjectsSource, None, None]:
             yield source
 
 
-def get_timestamp_from_cell(cell_value: Any) -> TemporalEntity | None:
-    """Try to extract a timestamp from a cell.
+def get_temporal_entity_from_cell(cell_value: Any) -> TemporalEntity | None:
+    """Try to extract a temporal_entity from a cell.
 
     Args:
         cell_value: Value of a cell, could be int, string or datetime
@@ -54,11 +54,11 @@ def get_timestamp_from_cell(cell_value: Any) -> TemporalEntity | None:
         TemporalEntity or None
     """
     if isinstance(cell_value, datetime):
-        timestamp = TemporalEntity(cell_value)
-        timestamp.precision = (
+        temporal_entity = TemporalEntity(cell_value)
+        temporal_entity.precision = (
             TemporalEntityPrecision.DAY
-        )  # keeps Timestamp precision in Seconds as standard.
-        return timestamp
+        )  # keeps TemporalEntity precision in Seconds as standard.
+        return temporal_entity
     return None
 
 
@@ -111,8 +111,8 @@ def extract_ff_projects_source(row: "pd.Series[Any]") -> FFProjectsSource | None
         get_optional_string_from_cell(laufzeit_von_cell),
         get_optional_string_from_cell(laufzeit_bis_cell),
     )
-    laufzeit_von = get_timestamp_from_cell(laufzeit_von_cell)
-    laufzeit_bis = get_timestamp_from_cell(laufzeit_bis_cell)
+    laufzeit_von = get_temporal_entity_from_cell(laufzeit_von_cell)
+    laufzeit_bis = get_temporal_entity_from_cell(laufzeit_bis_cell)
     zuwendungs_oder_auftraggeber = str(row.get("Zuwendungs-/ Auftraggeber"))
     lfd_nr = get_string_from_cell(row.get("lfd. Nr."))
     projektleiter = get_string_from_cell(row.get("Projektleiter"))

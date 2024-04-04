@@ -64,8 +64,8 @@ def extract_international_projects_source(
     funding_type = row.get("Funding type")
     project_lead_person = row.get("Project lead (person)")
     project_lead_rki_unit = row.get("Project lead (RKI unit)")
-    start_date = get_timestamp_from_cell(row.get("Start date DD.MM.YYYY"))
-    end_date = get_timestamp_from_cell(row.get("End date DD.MM.YYYY"))
+    start_date = get_temporal_entity_from_cell(row.get("Start date DD.MM.YYYY"))
+    end_date = get_temporal_entity_from_cell(row.get("End date DD.MM.YYYY"))
     partner_organization = str(
         row.get("Partner organizations (full name and acronym)", "")
     )
@@ -211,8 +211,8 @@ def get_organization_merged_id_by_query(
     return organization_stable_target_id_by_query
 
 
-def get_timestamp_from_cell(cell_value: Any) -> TemporalEntity | None:
-    """Try to extract a timestamp from a cell.
+def get_temporal_entity_from_cell(cell_value: Any) -> TemporalEntity | None:
+    """Try to extract a temporal_entity from a cell.
 
     Args:
         cell_value: Value of a cell, could be int, string or datetime
@@ -221,7 +221,7 @@ def get_timestamp_from_cell(cell_value: Any) -> TemporalEntity | None:
         TemporalEntity or None
     """
     if isinstance(cell_value, datetime):
-        timestamp = TemporalEntity(cell_value)
-        timestamp.precision = TemporalEntityPrecision.DAY
-        return timestamp
+        temporal_entity = TemporalEntity(cell_value)
+        temporal_entity.precision = TemporalEntityPrecision.DAY
+        return temporal_entity
     return None
