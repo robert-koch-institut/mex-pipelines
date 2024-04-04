@@ -68,7 +68,6 @@ def extract_datscha_web_organizations(
     for item in datscha_web_items:
         for partner in item.get_partners():
             if partner and partner != "None":
-                organization = search_organization_by_label(partner)
-                if organization:
+                if organization := search_organization_by_label(partner):
                     partner_to_org_map[partner] = organization
     return partner_to_org_map
