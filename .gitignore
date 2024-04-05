@@ -118,9 +118,9 @@ dmypy.json
 *.db
 
 # Default exports
+*.ndjson
 identity.csv
 schema.json
-*.ndjson
 work/
 
 # dagster
