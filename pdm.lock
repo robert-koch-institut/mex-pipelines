@@ -400,7 +400,7 @@ files = [
 
 [[package]]
 name = "dagster"
-version = "1.6.14"
+version = "1.7.0"
 requires_python = "<3.13,>=3.8"
 summary = "Dagster is an orchestration platform for the development, production, and observation of data assets."
 groups = ["default"]
@@ -411,7 +411,7 @@ dependencies = [
     "click>=5.0",
     "coloredlogs<=14.0,>=6.1",
     "croniter>=0.3.34",
-    "dagster-pipes==1.6.14",
+    "dagster-pipes==1.7.0",
     "docstring-parser",
     "grpcio-health-checking>=1.44.0",
     "grpcio>=1.44.0",
@@ -440,70 +440,70 @@ dependencies = [
     "watchdog>=0.8.3",
 ]
 files = [
-    {file = "dagster-1.6.14-py3-none-any.whl", hash = "sha256:75238dde46a6d85fb9bbb58003c939c5d2dd0335e2b117e69c58f738f25dae2a"},
-    {file = "dagster-1.6.14.tar.gz", hash = "sha256:ca0e6e2b22757cc65895d9a5676794b5943e26366d73510e669c2b3c66fb7e51"},
+    {file = "dagster-1.7.0-py3-none-any.whl", hash = "sha256:0f890e0d7678567208ec889cce7303f87babfd9bbf29541ebb61e0fda7452bdf"},
+    {file = "dagster-1.7.0.tar.gz", hash = "sha256:6c40eae8a7a2bb80f6b42e78884d4af33ae8dec73f67b4d65a2217beaed8c7ed"},
 ]
 
 [[package]]
 name = "dagster-graphql"
-version = "1.6.14"
+version = "1.7.0"
 requires_python = "<3.13,>=3.8"
 summary = "The GraphQL frontend to python dagster."
 groups = ["default"]
 dependencies = [
-    "dagster==1.6.14",
+    "dagster==1.7.0",
     "gql[requests]<4,>=3",
     "graphene<4,>=3",
     "requests",
     "starlette",
 ]
 files = [
-    {file = "dagster-graphql-1.6.14.tar.gz", hash = "sha256:7991708d8611e846061456c1612c6078248399004b9ec87797bc9b1e0c1797c7"},
-    {file = "dagster_graphql-1.6.14-py3-none-any.whl", hash = "sha256:94023b84dd10e17bec7fac009fc235dff306b06b3e780e490299cd06d4baf9b6"},
+    {file = "dagster-graphql-1.7.0.tar.gz", hash = "sha256:b30ed3b5b950cd3e96120fbe7d65cade4c26f2f8491f6c1619d17fcd859abe07"},
+    {file = "dagster_graphql-1.7.0-py3-none-any.whl", hash = "sha256:053b33e211a5814b0edda1accb89296a507eb324c8672ce3cd18ac3806855e56"},
 ]
 
 [[package]]
 name = "dagster-pipes"
-version = "1.6.14"
+version = "1.7.0"
 requires_python = "<3.13,>=3.8"
 summary = "Toolkit for Dagster integrations with transform logic outside of Dagster"
 groups = ["default"]
 files = [
-    {file = "dagster-pipes-1.6.14.tar.gz", hash = "sha256:a1f366b9de8e9bfeedd0a2d2a3b7c04a6592e793af196eef1b5742d2d3517cb3"},
-    {file = "dagster_pipes-1.6.14-py3-none-any.whl", hash = "sha256:ede9de83c46c9ec460194bcd34c3a4b50c8aee63dae7fdda180a1a033c12566c"},
+    {file = "dagster-pipes-1.7.0.tar.gz", hash = "sha256:f0bb637a5d7f8d176d99dded06ec7530f2a3d5e760d87aa54bf6725fe085d03c"},
+    {file = "dagster_pipes-1.7.0-py3-none-any.whl", hash = "sha256:1633845a53cc95bd7e15b992a65caf5f9d141ab40cda185251f909b13233fd35"},
 ]
 
 [[package]]
 name = "dagster-postgres"
-version = "0.22.14"
+version = "0.23.0"
 requires_python = "<3.13,>=3.8"
 summary = "A Dagster integration for postgres"
 groups = ["default"]
 dependencies = [
-    "dagster==1.6.14",
+    "dagster==1.7.0",
     "psycopg2-binary",
 ]
 files = [
-    {file = "dagster-postgres-0.22.14.tar.gz", hash = "sha256:d860c67baa6438c6546266d70813779ae346a344f92cf41d27bc6f18be115fa0"},
-    {file = "dagster_postgres-0.22.14-py3-none-any.whl", hash = "sha256:a03a15523a586e7478cddb78bcfde04808f767c74f0363895123934ab54bb763"},
+    {file = "dagster-postgres-0.23.0.tar.gz", hash = "sha256:791968ccdc4d15a85a72bdaf2efc11d04ba0e67d447d0066d924fc4451e144b8"},
+    {file = "dagster_postgres-0.23.0-py3-none-any.whl", hash = "sha256:6150332aad1351bfa94eb3c402a8cbf3601ad50386dfbe4aa6bdee0de112b00c"},
 ]
 
 [[package]]
 name = "dagster-webserver"
-version = "1.6.14"
+version = "1.7.0"
 requires_python = "<3.13,>=3.8"
 summary = "Web UI for dagster."
 groups = ["default"]
 dependencies = [
     "click<9.0,>=7.0",
-    "dagster-graphql==1.6.14",
-    "dagster==1.6.14",
+    "dagster-graphql==1.7.0",
+    "dagster==1.7.0",
     "starlette!=0.36.0",
     "uvicorn[standard]",
 ]
 files = [
-    {file = "dagster-webserver-1.6.14.tar.gz", hash = "sha256:50d7256aa7d1094c77cc4dbc0d772bd6aeecc52d6386c586aa7feea5f5edabcb"},
-    {file = "dagster_webserver-1.6.14-py3-none-any.whl", hash = "sha256:4b4706006844fa589433165a32353793c300020c68d14f14b0169b9446b266f6"},
+    {file = "dagster-webserver-1.7.0.tar.gz", hash = "sha256:275d11acf8ca566d710a724a518efb91e4d8267c215f19c4d79ec660d6fd7a5f"},
+    {file = "dagster_webserver-1.7.0-py3-none-any.whl", hash = "sha256:954d86232560a68197b56d06e55fed95b7991f5aabf4b2f1868353a6315d79e2"},
 ]
 
 [[package]]
@@ -1214,14 +1214,14 @@ files = [
 
 [[package]]
 name = "parso"
-version = "0.8.3"
+version = "0.8.4"
 requires_python = ">=3.6"
 summary = "A Python Parser"
 groups = ["dev"]
 marker = "python_version >= \"3.11\""
 files = [
-    {file = "parso-0.8.3-py2.py3-none-any.whl", hash = "sha256:c001d4636cd3aecdaf33cbb40aebb59b094be2a74c556778ef5576c175e19e75"},
-    {file = "parso-0.8.3.tar.gz", hash = "sha256:8c07be290bb59f03588915921e29e8a50002acaf2cdc5fa0e0114f91709fafa0"},
+    {file = "parso-0.8.4-py2.py3-none-any.whl", hash = "sha256:a418670a20291dacd2dddc80c377c5c3791378ee1e8d12bffc35420643d43f18"},
+    {file = "parso-0.8.4.tar.gz", hash = "sha256:eb3a7b58240fb99099a345571deecc0f9540ea5f4dd2fe14c2a99d6b281ab92d"},
 ]
 
 [[package]]
@@ -2244,7 +2244,7 @@ files = [
 
 [[package]]
 name = "types-requests"
-version = "2.31.0.20240402"
+version = "2.31.0.20240403"
 requires_python = ">=3.8"
 summary = "Typing stubs for requests"
 groups = ["dev"]
@@ -2252,8 +2252,8 @@ dependencies = [
     "urllib3>=2",
 ]
 files = [
-    {file = "types-requests-2.31.0.20240402.tar.gz", hash = "sha256:e5c09a202f8ae79cd6ffbbba2203b6c3775a83126283bb2a6abbc129abc02a12"},
-    {file = "types_requests-2.31.0.20240402-py3-none-any.whl", hash = "sha256:bd7eb7102168d4b5b489f15cdd9842b63ab7fe56aa82a0589fa595b94195acf4"},
+    {file = "types-requests-2.31.0.20240403.tar.gz", hash = "sha256:e1e0cd0b655334f39d9f872b68a1310f0e343647688bf2cee932ec4c2b04de59"},
+    {file = "types_requests-2.31.0.20240403-py3-none-any.whl", hash = "sha256:06abf6a68f5c4f2a62f6bb006672dfb26ed50ccbfddb281e1ee6f09a65707d5d"},
 ]
 
 [[package]]

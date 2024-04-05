@@ -19,22 +19,22 @@ hooks:
 install: setup hooks
 	# install packages from lock file in local virtual environment
 	@ echo installing package; \
-	pdm sync --clean --group dev; \
+	pdm install-all; \
 
 linter:
 	# run the linter hooks from pre-commit on all files
 	@ echo linting all files; \
-	pre-commit run --all-files; \
+	pdm lint; \
 
 pytest:
 	# run the pytest test suite with all unit tests
 	@ echo running unit tests; \
-	pdm run pytest -m "not integration"; \
+	pdm unit; \
 
 wheel:
 	# build the python package
 	@ echo building wheel; \
-	pdm build --format wheel; \
+	pdm wheel; \
 
 image:
 	# build the docker image
@@ -54,14 +54,13 @@ run: image
 		rki/mex-extractors:${LATEST}; \
 
 start: image
-	# start dagster using docker compose
-	@ echo running dagster for mex-extractors:${LATEST}; \
+	# start the service using docker compose
+	@ echo start mex-extractors:${LATEST} with compose; \
 	export DOCKER_BUILDKIT=1; \
 	export COMPOSE_DOCKER_CLI_BUILD=1; \
 	docker compose up --remove-orphans; \
 
 docs:
 	# use sphinx to auto-generate html docs from code
-	@ echo generating api docs; \
-	pdm run sphinx-apidoc -f -o docs/source mex; \
-	pdm run sphinx-build -aE -b dirhtml docs docs/dist; \
+	@ echo generating docs; \
+	pdm doc; \
