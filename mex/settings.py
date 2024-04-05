@@ -39,6 +39,11 @@ class Settings(BaseSettings):
         description="MEx drop API url.",
         validation_alias="MEX_DROP_API_URL",
     )
+    schedule: str = Field(
+        "0 0 * * *",
+        description="A valid cron string defining when to run extractor jobs",
+        validation_alias="MEX_SCHEDULE",
+    )
 
     kerberos_user: str = Field(
         "user@domain.tld",
