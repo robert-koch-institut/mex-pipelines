@@ -4,11 +4,15 @@ from typing import TYPE_CHECKING, cast
 from dagster import (
     AssetsDefinition,
     AssetSelection,
+    DefaultScheduleStatus,
     Definitions,
     FilesystemIOManager,
+    ScheduleDefinition,
     define_asset_job,
     load_assets_from_package_module,
 )
+
+from mex.settings import Settings
 
 if TYPE_CHECKING:  # pragma: no cover
     from dagster._core.execution.execution_result import ExecutionResult
@@ -26,6 +30,8 @@ def load_job_definitions() -> Definitions:
     """Scan the mex package for assets, define jobs and io and return definitions."""
     import mex  # avoid circular imports
 
+    settings = Settings.get()
+
     resources = {"io_manager": FilesystemIOManager()}
     assets = cast(Sequence[AssetsDefinition], load_assets_from_package_module(mex))
     group_names = {
@@ -36,4 +42,14 @@ def load_job_definitions() -> Definitions:
         for group_name in group_names
         if group_name != "default"
     ]
-    return Definitions(assets=assets, jobs=jobs, resources=resources)
+    schedules = [
+        ScheduleDefinition(
+            job=job,
+            cron_schedule=settings.schedule,
+            default_status=DefaultScheduleStatus.RUNNING,
+        )
+        for job in jobs
+    ]
+    return Definitions(
+        assets=assets, jobs=jobs, resources=resources, schedules=schedules
+    )

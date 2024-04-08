@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - add basic docker configuration with dockerfile, ignore and compose
 - implement odk transform functions
 - grippeweb extract
+- dagster schedules for non-default groups, configurable via setting `schedule`
 
 ### Changes
 
