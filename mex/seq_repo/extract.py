@@ -1,30 +1,28 @@
-import json
 from collections.abc import Generator
 
+from mex.common.exceptions import MExError
 from mex.common.ldap.connector import LDAPConnector
 from mex.common.ldap.models.person import LDAPPersonWithQuery
 from mex.common.logging import watch
+from mex.drop import DropApiConnector
 from mex.seq_repo.model import (
     SeqRepoSource,
 )
-from mex.seq_repo.settings import SeqRepoSettings
 
 
 def extract_sources() -> Generator[SeqRepoSource, None, None]:
     """Extract Seq Repo sources by loading data from source json file.
 
-    Settings:
-        default_json_file_path: Path to the seq-repo json file,
-                                absolute or relative to `assets_dir`
-
     Returns:
         Generator for Seq Repo resources
     """
-    settings = SeqRepoSettings.get()
-    with open(settings.default_json_file_path, encoding="utf-8") as file:
-        data = json.load(file)
-        for item in data:
-            yield SeqRepoSource.model_validate(item)
+    connector = DropApiConnector.get()
+    files = connector.list_files("seq_repo")
+    if len(files) != 1:
+        raise MExError(f"Expected exactly one seq-repo file, got {len(files)}")
+    data = connector.get_file("seq_repo", files[0])
+    for item in data:
+        yield SeqRepoSource.model_validate(item)
 
 
 @watch
