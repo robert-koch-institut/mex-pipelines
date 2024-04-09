@@ -6,12 +6,12 @@ from mex.common.models import (
     ExtractedAccessPlatform,
     ExtractedActivity,
     ExtractedDistribution,
+    ExtractedOrganization,
     ExtractedPrimarySource,
     ExtractedResource,
 )
 from mex.common.types import (
     MergedOrganizationalUnitIdentifier,
-    MergedOrganizationIdentifier,
     MergedPersonIdentifier,
 )
 from mex.seq_repo.model import SeqRepoSource
@@ -71,7 +71,7 @@ def transform_seq_repo_distribution_to_extracted_distribution(
     seq_repo_sources: dict[str, SeqRepoSource],
     seq_repo_distribution: dict[str, Any],
     mex_access_platform: ExtractedAccessPlatform,
-    seq_repo_organization_ids_by_query_string: dict[str, MergedOrganizationIdentifier],
+    extracted_organization_rki: ExtractedOrganization,
     extracted_primary_source: ExtractedPrimarySource,
 ) -> Generator[ExtractedDistribution, None, None]:
     """Transform seq-repo distribution to ExtractedDistribution.
@@ -80,6 +80,7 @@ def transform_seq_repo_distribution_to_extracted_distribution(
         seq_repo_sources: Seq Repo extracted sources
         seq_repo_distribution: Seq Repo extracted distribution
         mex_access_platform: Extracted access platform
+        extracted_organization_rki: wikdiata extractded organization
         extracted_primary_source: Extracted primary source
 
     Returns:
@@ -90,7 +91,6 @@ def transform_seq_repo_distribution_to_extracted_distribution(
     ]["setValues"]
     media_type = seq_repo_distribution["mediaType"][0]["mappingRules"][0]["setValues"]
     title = seq_repo_distribution["title"][0]["mappingRules"][0]["setValues"]
-    publisher = seq_repo_distribution["publisher"][0]["mappingRules"][0]["forValues"][0]
 
     for identifier_in_primary_source, source in seq_repo_sources.items():
         yield ExtractedDistribution(
@@ -100,7 +100,7 @@ def transform_seq_repo_distribution_to_extracted_distribution(
             identifierInPrimarySource=identifier_in_primary_source,
             issued=source.sequencing_date,
             mediaType=media_type,
-            publisher=[seq_repo_organization_ids_by_query_string[publisher]],
+            publisher=extracted_organization_rki.stableTargetId,
             title=title,
         )
 
@@ -115,7 +115,7 @@ def transform_seq_repo_resource_to_extracted_resource(
     project_coordinators_merged_ids_by_query_string: dict[
         str, list[MergedPersonIdentifier]
     ],
-    seq_repo_organization_ids_by_query_string: dict[str, MergedOrganizationIdentifier],
+    extracted_organization_rki: ExtractedOrganization,
     extracted_primary_source: ExtractedPrimarySource,
 ) -> Generator[ExtractedResource, None, None]:
     """Transform seq-repo resource to ExtractedResource.
@@ -130,6 +130,7 @@ def transform_seq_repo_resource_to_extracted_resource(
         unit_stable_target_ids_by_synonym: Unit stable target ids by synonym
         project_coordinators_merged_ids_by_query_string: Seq Repo Sources resolved
                                                         project coordinators merged ids
+        extracted_organization_rki: wikdiata extractded organization
         extracted_primary_source: Extracted primary source
 
     Returns:
@@ -157,7 +158,6 @@ def transform_seq_repo_resource_to_extracted_resource(
         "mappingRules"
     ][0]["setValues"]
     theme = seq_repo_resource["theme"][0]["mappingRules"][0]["setValues"]
-    publisher = seq_repo_resource["publisher"][0]["mappingRules"][0]["forValues"][0]
 
     for identifier_in_primary_source, source in seq_repo_sources.items():
         distribution = seq_repo_distributions[identifier_in_primary_source]
@@ -192,7 +192,7 @@ def transform_seq_repo_resource_to_extracted_resource(
             instrumentToolOrApparatus=source.sequencing_platform,
             keyword=source.species,
             method=method,
-            publisher=[seq_repo_organization_ids_by_query_string[publisher]],
+            publisher=extracted_organization_rki.stableTargetId,
             resourceTypeGeneral=resource_type_general,
             resourceTypeSpecific=resource_type_specific,
             rights=rights,
