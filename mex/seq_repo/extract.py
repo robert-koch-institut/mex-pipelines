@@ -1,12 +1,17 @@
 import json
 from collections.abc import Generator
 
+from mex.common.identity import get_provider
 from mex.common.ldap.connector import LDAPConnector
 from mex.common.ldap.models.person import LDAPPersonWithQuery
 from mex.common.logging import watch
-from mex.seq_repo.model import (
-    SeqRepoSource,
+from mex.common.models import ExtractedPrimarySource
+from mex.common.types import (
+    MergedOrganizationIdentifier,
 )
+from mex.common.wikidata.extract import search_organization_by_label
+from mex.common.wikidata.models.organization import WikidataOrganization
+from mex.seq_repo.model import SeqRepoSource
 from mex.seq_repo.settings import SeqRepoSettings
 
 
@@ -52,3 +57,46 @@ def extract_source_project_coordinator(
             persons = list(ldap.get_persons(mail=f"{name}@rki.de"))
             if len(persons) == 1 and persons[0].objectGUID:
                 yield LDAPPersonWithQuery(person=persons[0], query=name)
+
+
+def extract_seq_repo_organizations() -> dict[str, WikidataOrganization]:
+    """Search and extract organizations from wikidata.
+
+    Returns:
+        Dict with organization label and WikidataOrganization
+    """
+    result = {}
+    organization_title = "Robert Koch-Institut"
+    if wikidata_organization := search_organization_by_label(organization_title):
+        result[organization_title] = wikidata_organization
+    return result
+
+
+def get_organization_merged_id_by_query(
+    wikidata_organizations_by_query: dict[str, WikidataOrganization],
+    wikidata_primary_source: ExtractedPrimarySource,
+) -> dict[str, MergedOrganizationIdentifier]:
+    """Return a mapping from organizations to their stable target ID.
+
+    There may be multiple entries per unit mapping to the same stable target ID.
+
+    Args:
+        wikidata_organizations_by_query: Iterable of extracted organizations
+        wikidata_primary_source: Primary source item for wikidata
+
+    Returns:
+        Dict with organization label and stable target ID
+    """
+    identity_provider = get_provider()
+    organization_stable_target_id_by_query = {}
+    for query, wikidata_organization in wikidata_organizations_by_query.items():
+        identities = identity_provider.fetch(
+            had_primary_source=wikidata_primary_source.stableTargetId,
+            identifier_in_primary_source=wikidata_organization.identifier,
+        )
+        if identities:
+            organization_stable_target_id_by_query[query] = (
+                MergedOrganizationIdentifier(identities[0].stableTargetId)
+            )
+
+    return organization_stable_target_id_by_query

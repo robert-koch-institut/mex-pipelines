@@ -15,10 +15,22 @@ from mex.common.models import (
 from mex.common.primary_source.transform import (
     get_primary_sources_by_name,
 )
-from mex.common.types import MergedOrganizationalUnitIdentifier, MergedPersonIdentifier
+from mex.common.types import (
+    MergedOrganizationalUnitIdentifier,
+    MergedOrganizationIdentifier,
+    MergedPersonIdentifier,
+)
+from mex.common.wikidata.transform import (
+    transform_wikidata_organizations_to_extracted_organizations,
+)
 from mex.mapping.extract import extract_mapping_data
 from mex.pipeline import asset, run_job_in_process
-from mex.seq_repo.extract import extract_source_project_coordinator, extract_sources
+from mex.seq_repo.extract import (
+    extract_seq_repo_organizations,
+    extract_source_project_coordinator,
+    extract_sources,
+    get_organization_merged_id_by_query,
+)
 from mex.seq_repo.filter import filter_sources_on_latest_sequencing_date
 from mex.seq_repo.model import SeqRepoSource
 from mex.seq_repo.settings import SeqRepoSettings
@@ -149,6 +161,7 @@ def extracted_distribution(
     seq_repo_latest_source: dict[str, SeqRepoSource],
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
     extracted_access_platform: ExtractedAccessPlatform,
+    seq_repo_organization_ids_by_query_string: dict[str, MergedOrganizationIdentifier],
 ) -> dict[str, ExtractedDistribution]:
     """Extract distribution from Seq-Repo."""
     settings = SeqRepoSettings.get()
@@ -160,6 +173,7 @@ def extracted_distribution(
         seq_repo_latest_source,
         distribution,
         extracted_access_platform,
+        seq_repo_organization_ids_by_query_string,
         extracted_primary_source_seq_repo,
     )
 
@@ -172,6 +186,23 @@ def extracted_distribution(
 
 
 @asset(group_name="seq_repo")
+def seq_repo_organization_ids_by_query_string(
+    extracted_primary_source_wikidata: ExtractedPrimarySource,
+) -> dict[str, MergedOrganizationIdentifier]:
+    """Extract organizations for Seq-Repo from wikidata and group them by query."""
+    wikidata_organizations_by_query = extract_seq_repo_organizations()
+    mex_extracted_organizations = (
+        transform_wikidata_organizations_to_extracted_organizations(
+            wikidata_organizations_by_query.values(), extracted_primary_source_wikidata
+        )
+    )
+    load(mex_extracted_organizations)
+    return get_organization_merged_id_by_query(
+        wikidata_organizations_by_query, extracted_primary_source_wikidata
+    )
+
+
+@asset(group_name="seq_repo")
 def seq_repo_resource(
     seq_repo_latest_source: dict[str, SeqRepoSource],
     extracted_distribution: dict[str, ExtractedDistribution],
@@ -181,6 +212,7 @@ def seq_repo_resource(
     project_coordinators_merged_ids_by_query_string: dict[
         str, list[MergedPersonIdentifier]
     ],
+    seq_repo_organization_ids_by_query_string: dict[str, MergedOrganizationIdentifier],
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
 ) -> list[ExtractedResource]:
     """Extract resource from Seq-Repo."""

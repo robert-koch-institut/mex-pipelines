@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - receive one or None organization from wikidata aux extractor
 - adjust Timestamp usage to TemporalEntity
 - move quotation marks (") filtering to mex-common from requested wikidata label
+- integrate wikidata aux extractor into seq-repo
 
 
 ### Deprecated
