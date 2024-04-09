@@ -101,7 +101,7 @@ def test_transform_seq_repo_distribution_to_extracted_distribution(
         "accessRestriction": "https://mex.rki.de/item/access-restriction-2",
         "issued": "2023-08-07",
         "mediaType": "https://mex.rki.de/item/mime-type-12",
-        "publisher": extracted_organization_rki.stableTargetId,
+        "publisher": [extracted_organization_rki.stableTargetId],
         "title": "dummy-fastq-file",
     }
 
