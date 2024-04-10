@@ -17,10 +17,10 @@ def extract_sources() -> Generator[SeqRepoSource, None, None]:
         Generator for Seq Repo resources
     """
     connector = DropApiConnector.get()
-    files = connector.list_files("seq_repo")
+    files = connector.list_files("seq-repo")
     if len(files) != 1:
         raise MExError(f"Expected exactly one seq-repo file, got {len(files)}")
-    data = connector.get_file("seq_repo", files[0])
+    data = connector.get_file("seq-repo", files[0])
     for item in data:
         yield SeqRepoSource.model_validate(item)
 
