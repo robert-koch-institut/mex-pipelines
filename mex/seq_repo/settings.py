@@ -10,13 +10,6 @@ class SeqRepoSettings(Settings):
 
     model_config = SettingsConfigDict(env_prefix="seq_repo_")
 
-    default_json_file_path: AssetsPath = Field(
-        AssetsPath("raw-data/seq-repo/default.json"),
-        description=(
-            "Path to the seq-repo default json file, "
-            "absolute path or relative to `assets_dir`."
-        ),
-    )
     mapping_path: AssetsPath = Field(
         AssetsPath("mappings/__final__/seq-repo"),
         description=(
