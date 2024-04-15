@@ -50,6 +50,12 @@ def load_job_definitions() -> Definitions:
         )
         for job in jobs
     ]
+    jobs.append(
+        define_asset_job(
+            "all_assets",
+            AssetSelection.groups(*[group for group in group_names]).upstream(),
+        )
+    )
     return Definitions(
         assets=assets, jobs=jobs, resources=resources, schedules=schedules
     )
