@@ -33,12 +33,13 @@ class DropApiConnector(HTTPConnector):
         Returns:
             list of available filenames for the x_system
         """
+        response_json = self.request(
+            method="GET",
+            endpoint=f"/{x_system}/",
+        )
         return cast(
             list[str],
-            self.request(
-                method="GET",
-                endpoint=f"/{x_system}/",
-            ),
+            response_json["entity-types"],
         )
 
     def get_file(self, x_system: str, file_id: str) -> dict[str, Any]:
