@@ -1,6 +1,5 @@
 import warnings
 from collections.abc import Generator, Iterable
-from datetime import datetime
 from typing import Any
 
 import pandas as pd
@@ -15,6 +14,7 @@ from mex.common.types import (
     MergedOrganizationIdentifier,
     TemporalEntity,
     TemporalEntityPrecision,
+    YearMonthDay,
 )
 from mex.common.wikidata.extract import search_organization_by_label
 from mex.common.wikidata.models.organization import WikidataOrganization
@@ -42,7 +42,10 @@ def extract_international_projects_sources() -> (
             category=UserWarning,
         )
         df = pd.read_excel(
-            settings.file_path, keep_default_na=False, parse_dates=True, header=1
+            settings.file_path,
+            keep_default_na=False,
+            parse_dates=True,
+            header=1,
         )
     for row in df.iterrows():
         if source := extract_international_projects_source(row[1]):
@@ -209,7 +212,9 @@ def get_organization_merged_id_by_query(
     return organization_stable_target_id_by_query
 
 
-def get_temporal_entity_from_cell(cell_value: Any) -> TemporalEntity | None:
+def get_temporal_entity_from_cell(
+    cell_value: Any,
+) -> TemporalEntity | YearMonthDay | None:
     """Try to extract a temporal_entity from a cell.
 
     Args:
@@ -218,8 +223,8 @@ def get_temporal_entity_from_cell(cell_value: Any) -> TemporalEntity | None:
     Returns:
         TemporalEntity or None
     """
-    if isinstance(cell_value, datetime):
+    try:
         temporal_entity = TemporalEntity(cell_value)
-        temporal_entity.precision = TemporalEntityPrecision.DAY
-        return temporal_entity
-    return None
+        return temporal_entity.apply_precision(TemporalEntityPrecision.DAY)
+    except Exception:
+        return None
