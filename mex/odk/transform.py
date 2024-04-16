@@ -11,13 +11,7 @@ from mex.common.types import (
     MergedOrganizationalUnitIdentifier,
     MergedOrganizationIdentifier,
 )
-from mex.common.wikidata.extract import search_organization_by_label
-from mex.common.wikidata.models.organization import WikidataOrganization
-from mex.common.wikidata.transform import (
-    transform_wikidata_organizations_to_extracted_organizations,
-)
 from mex.odk.model import ODKData
-from mex.sinks import load
 
 
 def transform_odk_resources_to_mex_resources(
@@ -124,53 +118,6 @@ def transform_odk_resources_to_mex_resources(
             )
         )
     return resources
-
-
-def get_external_partner_and_publisher_by_label(
-    odk_resource_mappings: list[dict[str, Any]],
-    extracted_primary_source_wikidata: ExtractedPrimarySource,
-) -> dict[str, MergedOrganizationIdentifier]:
-    """Extract wikidata OrganizationIDs for external partners and publishers.
-
-    Args:
-        odk_resource_mappings: list of resource mappings
-        extracted_primary_source_wikidata: wikidata primary source
-
-    Returns:
-        dictionary of wikidata OrganizationIDs by organization label
-    """
-    labels = {
-        value
-        for resource in odk_resource_mappings
-        for attribute in ["publisher", "externalPartner"]
-        for value in resource[attribute][0]["mappingRules"][0]["forValues"]
-    }
-    external_partner_and_publisher_by_label: dict[str, WikidataOrganization] = {}
-    for label in labels:
-        if organization := search_organization_by_label(label):
-            external_partner_and_publisher_by_label[label] = organization
-
-    mex_extracted_organizations = list(
-        transform_wikidata_organizations_to_extracted_organizations(
-            external_partner_and_publisher_by_label.values(),
-            extracted_primary_source_wikidata,
-        )
-    )
-    load(mex_extracted_organizations)
-
-    identity_provider = get_provider()
-    organization_stable_target_id_by_query = {}
-    for query, wikidata_org in external_partner_and_publisher_by_label.items():
-        identities = identity_provider.fetch(
-            had_primary_source=extracted_primary_source_wikidata.stableTargetId,
-            identifier_in_primary_source=wikidata_org.identifier,
-        )
-        if identities:
-            organization_stable_target_id_by_query[query] = (
-                MergedOrganizationIdentifier(identities[0].stableTargetId)
-            )
-
-    return organization_stable_target_id_by_query
 
 
 def get_variable_groups_from_raw_data(

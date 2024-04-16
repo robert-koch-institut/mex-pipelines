@@ -1,10 +1,7 @@
 from typing import Any
 
-import pytest
-
 from mex.common.identity import get_provider
 from mex.common.models import (
-    ExtractedOrganization,
     ExtractedPrimarySource,
     ExtractedResource,
     ExtractedVariableGroup,
@@ -12,10 +9,10 @@ from mex.common.models import (
 from mex.common.testing import Joker
 from mex.common.types import (
     MergedOrganizationalUnitIdentifier,
+    MergedOrganizationIdentifier,
 )
 from mex.odk.model import ODKData
 from mex.odk.transform import (
-    get_external_partner_and_publisher_by_label,
     get_variable_groups_from_raw_data,
     transform_odk_data_to_extracted_variables,
     transform_odk_resources_to_mex_resources,
@@ -26,7 +23,7 @@ from mex.odk.transform import (
 def test_transform_odk_resources_to_mex_resources(
     odk_resource_mappings: list[dict[str, Any]],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
-    external_partner_and_publisher_by_label: dict[str, ExtractedOrganization],
+    external_partner_and_publisher_by_label: dict[str, MergedOrganizationIdentifier],
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
 ) -> None:
     identity_provider = get_provider()
@@ -105,24 +102,6 @@ def test_transform_odk_resources_to_mex_resources(
     )
     assert resources_without_organizations[0].model_dump()["publisher"] == []
     assert resources_without_organizations[0].model_dump()["externalPartner"] == []
-
-
-@pytest.mark.usefixtures(
-    "mocked_wikidata",
-)
-def test_get_external_partner_and_publisher_by_label(
-    odk_resource_mappings: list[dict[str, Any]],
-    extracted_primary_sources: dict[str, ExtractedPrimarySource],
-) -> None:
-    organization_dict = get_external_partner_and_publisher_by_label(
-        odk_resource_mappings, extracted_primary_sources["wikidata"]
-    )
-
-    assert organization_dict == {
-        "invidunt": Joker(),
-        "consetetur": Joker(),
-        " sadipscing  ": Joker(),
-    }
 
 
 def test_get_variable_groups_from_raw_data(
