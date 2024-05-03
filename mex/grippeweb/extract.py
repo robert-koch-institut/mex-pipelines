@@ -1,6 +1,7 @@
 from typing import Any
 
 from mex.common.ldap.connector import LDAPConnector
+from mex.common.ldap.models.actor import LDAPActor
 from mex.common.ldap.models.person import LDAPPerson
 from mex.common.wikidata.extract import search_organization_by_label
 from mex.common.wikidata.models.organization import WikidataOrganization
@@ -20,29 +21,51 @@ def extract_columns_by_table_and_column_name() -> dict[str, dict[str, list[Any]]
     }
 
 
-def extract_ldap_persons(
+def extract_ldap_actors(
+    grippeweb_resource_mappings: list[dict[str, Any]],
     grippeweb_access_platform: dict[str, Any],
+) -> list[LDAPActor]:
+    """Extract LDAP actors for grippeweb resource mapping contacts.
+
+    Args:
+        grippeweb_resource_mappings: list of resources default value dicts
+        grippeweb_access_platform: grippeweb access platform
+
+    Returns:
+        list of LDAP Aators
+    """
+    ldap = LDAPConnector.get()
+
+    return [
+        *[
+            next(ldap.get_functional_accounts(mail))
+            for mapping in grippeweb_resource_mappings
+            for mail in mapping["contact"][0]["mappingRules"][0]["forValues"]
+        ],
+        *[
+            ldap.get_person(mail=mail)
+            for mail in grippeweb_access_platform["contact"][0]["mappingRules"][0][
+                "forValues"
+            ]
+        ],
+    ]
+
+
+def extract_ldap_persons(
     grippeweb_resource_mappings: list[dict[str, Any]],
 ) -> list[LDAPPerson]:
     """Extract LDAP persons for grippeweb_access_platform contacts.
 
     Args:
-        grippeweb_access_platform: grippeweb access platform
         grippeweb_resource_mappings: list of resources default value dicts
 
     Returns:
         list of LDAP persons
     """
     ldap = LDAPConnector.get()
-
     return [
         *[
-            ldap.get_person(mail=mail)
-            for mapping in [*grippeweb_resource_mappings, grippeweb_access_platform]
-            for mail in mapping["contact"][0]["mappingRules"][0]["forValues"]
-        ],
-        *[
-            ldap.get_person(name=name)
+            ldap.get_person(given_name=name.split(" ")[0], surname=name.split(" ")[1])
             for mapping in grippeweb_resource_mappings
             for name in mapping["contributor"][0]["mappingRules"][0]["forValues"]
         ],
@@ -64,7 +87,7 @@ def extract_grippeweb_organizations(
     publisher_by_name = {}
     for resource in grippeweb_resource_mappings:
         publisher_name = str(
-            resource["publisher"][0]["mappingRules"][0]["setValues"][0]
+            resource["publisher"][0]["mappingRules"][0]["forValues"][0]
         )
         if publisher := next(search_organization_by_label(publisher_name)):
             publisher_by_name[publisher_name] = publisher

@@ -2,12 +2,15 @@ import json
 from pathlib import Path
 from typing import Any
 from unittest.mock import MagicMock, Mock
+from uuid import UUID
 
 import pytest
 import requests
 from pytest import MonkeyPatch
 from requests import Response
 
+from mex.common.ldap.connector import LDAPConnector
+from mex.common.ldap.models.person import LDAPPerson
 from mex.common.models import ExtractedOrganization
 from mex.common.types import MergedPrimarySourceIdentifier
 from mex.common.wikidata.connector import (
@@ -20,6 +23,28 @@ from mex.settings import Settings
 pytest_plugins = ("mex.common.testing.plugin",)
 
 TEST_DATA_DIR = Path(__file__).parent / "test_data"
+
+
+@pytest.fixture
+def mocked_ldap(monkeypatch: MonkeyPatch) -> None:
+    """Mock the LDAP connector to return resolved persons and units."""
+    persons = [
+        LDAPPerson(
+            department="PARENT-UNIT",
+            employeeID="42",
+            sn="Contact",
+            givenName="Carla",
+            displayName="Contact, Carla",
+            objectGUID=UUID(int=4, version=4),
+            mail=["test_person@email.de"],
+        )
+    ]
+    monkeypatch.setattr(
+        LDAPConnector,
+        "__init__",
+        lambda self: setattr(self, "_connection", MagicMock()),
+    )
+    monkeypatch.setattr(LDAPConnector, "get_persons", lambda *_, **__: iter(persons))
 
 
 @pytest.fixture(autouse=True)
