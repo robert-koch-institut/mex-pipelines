@@ -13,6 +13,7 @@ from mex.common.models import ExtractedPrimarySource
 from mex.common.types import (
     MergedOrganizationIdentifier,
     TemporalEntity,
+    TemporalEntityPrecision,
     YearMonthDay,
 )
 from mex.common.wikidata.extract import search_organization_by_label
@@ -222,7 +223,7 @@ def get_temporal_entity_from_cell(
         TemporalEntity or None
     """
     try:
-        return YearMonthDay(cell_value)
+        return YearMonthDay(cell_value, precision=TemporalEntityPrecision.DAY)
     except (TypeError, ValueError) as error:
         logger.debug(error)
         return None
