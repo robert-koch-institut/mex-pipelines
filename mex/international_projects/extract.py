@@ -156,8 +156,7 @@ def extract_international_projects_funding_sources(
     for source in international_projects_sources:
         if funder_or_commissioner := source.funding_source:
             for org in funder_or_commissioner:
-                wikidata_org = search_organization_by_label(org)
-                if wikidata_org:
+                if wikidata_org := search_organization_by_label(org):
                     found_orgs[org] = wikidata_org
     return found_orgs
 
