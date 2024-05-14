@@ -169,7 +169,7 @@ class TemporalEntityProvider(PythonFakerProvider):
     def temporal_entity(
         self, allowed_precision_levels: list[TemporalEntityPrecision]
     ) -> TemporalEntity:
-        """Return a custom Timestamp with random date, time and precision."""
+        """Return a custom temporal entity with random date, time and precision."""
         return TemporalEntity(
             datetime.fromtimestamp(
                 self.pyint(int(8e8), int(datetime.now().timestamp())), tz=UTC

@@ -189,7 +189,7 @@ def test_link_provider(faker: Faker) -> None:
     )
 
 
-def test_timestamp_provider(faker: Faker) -> None:
+def test_temporal_entity_provider(faker: Faker) -> None:
     assert faker.temporal_entity([TemporalEntityPrecision.DAY]) == TemporalEntity(
         "2000-02-08"
     )

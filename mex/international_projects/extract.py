@@ -8,12 +8,11 @@ from mex.common.identity import get_provider
 from mex.common.ldap.connector import LDAPConnector
 from mex.common.ldap.models.person import LDAPPersonWithQuery
 from mex.common.ldap.transform import analyse_person_string
-from mex.common.logging import watch
+from mex.common.logging import logger, watch
 from mex.common.models import ExtractedPrimarySource
 from mex.common.types import (
     MergedOrganizationIdentifier,
     TemporalEntity,
-    TemporalEntityPrecision,
     YearMonthDay,
 )
 from mex.common.wikidata.extract import search_organization_by_label
@@ -208,7 +207,6 @@ def get_organization_merged_id_by_query(
             organization_stable_target_id_by_query[query] = (
                 MergedOrganizationIdentifier(identities[0].stableTargetId)
             )
-
     return organization_stable_target_id_by_query
 
 
@@ -224,7 +222,7 @@ def get_temporal_entity_from_cell(
         TemporalEntity or None
     """
     try:
-        temporal_entity = TemporalEntity(cell_value)
-        return temporal_entity.apply_precision(TemporalEntityPrecision.DAY)
-    except Exception:
+        return YearMonthDay(cell_value)
+    except (TypeError, ValueError) as error:
+        logger.debug(error)
         return None
