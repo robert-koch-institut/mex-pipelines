@@ -1,6 +1,6 @@
 [project]
 name = "mex-extractors"
-version = "0.15.0"
+version = "0.16.0"
 description = "ETL pipelines for the RKI Metadata Exchange."
 authors = [{ name = "MEx Team", email = "mex@rki.de" }]
 readme = { file = "README.md", content-type = "text/markdown" }
@@ -101,7 +101,6 @@ lint = { cmd = "pre-commit run --all-files" }
 unit = { cmd = "pdm run pytest -m 'not integration'" }
 test = { cmd = "pdm run pytest --numprocesses=auto --dist=worksteal" }
 all = { composite = ["install-all", "lint", "test", "doc"] }
-
 
 [tool.pydantic-mypy]
 warn_untyped_fields = true
