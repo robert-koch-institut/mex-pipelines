@@ -72,7 +72,6 @@ def transform_international_projects_source_to_extracted_activity(
     """
     if not source.full_project_name and not source.project_abbreviation:
         return None
-
     project_leads = person_stable_target_ids_by_query_string.get(
         source.project_lead_person, []
     )

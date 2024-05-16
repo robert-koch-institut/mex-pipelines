@@ -12,12 +12,18 @@ from mex.common.types import (
     MergedOrganizationalUnitIdentifier,
     MergedOrganizationIdentifier,
 )
+from mex.common.wikidata.transform import (
+    transform_wikidata_organizations_to_extracted_organizations,
+)
 from mex.mapping.extract import extract_mapping_data
-from mex.odk.extract import extract_odk_raw_data
+from mex.odk.extract import (
+    extract_odk_raw_data,
+    get_external_partner_and_publisher_by_label,
+    get_organization_merged_id_by_query,
+)
 from mex.odk.model import ODKData
 from mex.odk.settings import ODKSettings
 from mex.odk.transform import (
-    get_external_partner_and_publisher_by_label,
     get_variable_groups_from_raw_data,
     transform_odk_data_to_extracted_variables,
     transform_odk_resources_to_mex_resources,
@@ -60,9 +66,21 @@ def external_partner_and_publisher_by_label(
     odk_resource_mappings: list[dict[str, Any]],
     extracted_primary_source_wikidata: ExtractedPrimarySource,
 ) -> dict[str, MergedOrganizationIdentifier]:
-    """Extract wikidata for external partner and publisher, load to sinks and return."""
-    return get_external_partner_and_publisher_by_label(
-        odk_resource_mappings, extracted_primary_source_wikidata
+    """Extract partner organizations and return their IDs grouped by query string."""
+    wikidata_partner_organizations_by_query = (
+        get_external_partner_and_publisher_by_label(odk_resource_mappings)
+    )
+
+    mex_extracted_organizations_partner_organizations = (
+        transform_wikidata_organizations_to_extracted_organizations(
+            wikidata_partner_organizations_by_query.values(),
+            extracted_primary_source_wikidata,
+        )
+    )
+    load(mex_extracted_organizations_partner_organizations)
+
+    return get_organization_merged_id_by_query(
+        wikidata_partner_organizations_by_query, extracted_primary_source_wikidata
     )
 
 

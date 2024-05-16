@@ -1,6 +1,5 @@
 import warnings
 from collections.abc import Generator, Iterable
-from datetime import datetime
 from typing import Any
 
 import pandas as pd
@@ -9,9 +8,14 @@ from mex.common.identity import get_provider
 from mex.common.ldap.connector import LDAPConnector
 from mex.common.ldap.models.person import LDAPPersonWithQuery
 from mex.common.ldap.transform import analyse_person_string
-from mex.common.logging import watch
+from mex.common.logging import logger, watch
 from mex.common.models import ExtractedPrimarySource
-from mex.common.types import MergedOrganizationIdentifier, Timestamp, TimestampPrecision
+from mex.common.types import (
+    MergedOrganizationIdentifier,
+    TemporalEntity,
+    TemporalEntityPrecision,
+    YearMonthDay,
+)
 from mex.common.wikidata.extract import search_organization_by_label
 from mex.common.wikidata.models.organization import WikidataOrganization
 from mex.international_projects.models.source import InternationalProjectsSource
@@ -38,7 +42,10 @@ def extract_international_projects_sources() -> (
             category=UserWarning,
         )
         df = pd.read_excel(
-            settings.file_path, keep_default_na=False, parse_dates=True, header=1
+            settings.file_path,
+            keep_default_na=False,
+            parse_dates=True,
+            header=1,
         )
     for row in df.iterrows():
         if source := extract_international_projects_source(row[1]):
@@ -60,8 +67,8 @@ def extract_international_projects_source(
     funding_type = row.get("Funding type")
     project_lead_person = row.get("Project lead (person)")
     project_lead_rki_unit = row.get("Project lead (RKI unit)")
-    start_date = get_timestamp_from_cell(row.get("Start date DD.MM.YYYY"))
-    end_date = get_timestamp_from_cell(row.get("End date DD.MM.YYYY"))
+    start_date = get_temporal_entity_from_cell(row.get("Start date DD.MM.YYYY"))
+    end_date = get_temporal_entity_from_cell(row.get("End date DD.MM.YYYY"))
     partner_organization = str(
         row.get("Partner organizations (full name and acronym)", "")
     )
@@ -149,9 +156,8 @@ def extract_international_projects_funding_sources(
     for source in international_projects_sources:
         if funder_or_commissioner := source.funding_source:
             for org in funder_or_commissioner:
-                wikidata_orgs = list(search_organization_by_label(org))
-                if len(wikidata_orgs) == 1:
-                    found_orgs[org] = wikidata_orgs[0]
+                if wikidata_org := search_organization_by_label(org):
+                    found_orgs[org] = wikidata_org
     return found_orgs
 
 
@@ -170,10 +176,8 @@ def extract_international_projects_partner_organizations(
     for source in international_projects_sources:
         if funder_or_commissioner := source.partner_organization:
             for org in funder_or_commissioner:
-                wikidata_orgs = list(search_organization_by_label(org.replace('"', "")))
-                # TODO: remove replace() after wikidata extraction is fixed in MX-1502
-                if len(wikidata_orgs) == 1:
-                    found_orgs[org] = wikidata_orgs[0]
+                if wikidata_org := search_organization_by_label(org):
+                    found_orgs[org] = wikidata_org
     return found_orgs
 
 
@@ -203,21 +207,22 @@ def get_organization_merged_id_by_query(
             organization_stable_target_id_by_query[query] = (
                 MergedOrganizationIdentifier(identities[0].stableTargetId)
             )
-
     return organization_stable_target_id_by_query
 
 
-def get_timestamp_from_cell(cell_value: Any) -> Timestamp | None:
-    """Try to extract a timestamp from a cell.
+def get_temporal_entity_from_cell(
+    cell_value: Any,
+) -> TemporalEntity | YearMonthDay | None:
+    """Try to extract a temporal_entity from a cell.
 
     Args:
         cell_value: Value of a cell, could be int, string or datetime
 
     Returns:
-        Timestamp or None
+        TemporalEntity or None
     """
-    if isinstance(cell_value, datetime):
-        timestamp = Timestamp(cell_value)
-        timestamp.precision = TimestampPrecision.DAY
-        return timestamp
-    return None
+    try:
+        return YearMonthDay(cell_value, precision=TemporalEntityPrecision.DAY)
+    except (TypeError, ValueError) as error:
+        logger.debug(error)
+        return None
