@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:909fa560a40207fc68231f79a71d2619b3a9be3589064c76ea5acf1d53a91b08"
+content_hash = "sha256:6ddc4a2ecaf3f83216f87c61e43e0c2080bb0edd9ce3f83ee9d3464ca996aed4"
 
 [[package]]
 name = "alabaster"
@@ -400,7 +400,7 @@ files = [
 
 [[package]]
 name = "dagster"
-version = "1.6.14"
+version = "1.7.5"
 requires_python = "<3.13,>=3.8"
 summary = "Dagster is an orchestration platform for the development, production, and observation of data assets."
 groups = ["default"]
@@ -411,8 +411,9 @@ dependencies = [
     "click>=5.0",
     "coloredlogs<=14.0,>=6.1",
     "croniter>=0.3.34",
-    "dagster-pipes==1.6.14",
+    "dagster-pipes==1.7.5",
     "docstring-parser",
+    "filelock",
     "grpcio-health-checking>=1.44.0",
     "grpcio>=1.44.0",
     "packaging>=20.9",
@@ -440,70 +441,70 @@ dependencies = [
     "watchdog>=0.8.3",
 ]
 files = [
-    {file = "dagster-1.6.14-py3-none-any.whl", hash = "sha256:75238dde46a6d85fb9bbb58003c939c5d2dd0335e2b117e69c58f738f25dae2a"},
-    {file = "dagster-1.6.14.tar.gz", hash = "sha256:ca0e6e2b22757cc65895d9a5676794b5943e26366d73510e669c2b3c66fb7e51"},
+    {file = "dagster-1.7.5-py3-none-any.whl", hash = "sha256:1ce7409d40b750b9a0e51d3f95cb33b84aa41a31f5f5d07c68c3731327dac7c7"},
+    {file = "dagster-1.7.5.tar.gz", hash = "sha256:02c8b149e4fe1ccd3c2dd0cb9a16a3435ca1cf3b08efec5d39a1580191bd67a6"},
 ]
 
 [[package]]
 name = "dagster-graphql"
-version = "1.6.14"
+version = "1.7.5"
 requires_python = "<3.13,>=3.8"
 summary = "The GraphQL frontend to python dagster."
 groups = ["default"]
 dependencies = [
-    "dagster==1.6.14",
+    "dagster==1.7.5",
     "gql[requests]<4,>=3",
     "graphene<4,>=3",
     "requests",
     "starlette",
 ]
 files = [
-    {file = "dagster-graphql-1.6.14.tar.gz", hash = "sha256:7991708d8611e846061456c1612c6078248399004b9ec87797bc9b1e0c1797c7"},
-    {file = "dagster_graphql-1.6.14-py3-none-any.whl", hash = "sha256:94023b84dd10e17bec7fac009fc235dff306b06b3e780e490299cd06d4baf9b6"},
+    {file = "dagster-graphql-1.7.5.tar.gz", hash = "sha256:9375fc5d2728dd80852ea3642ff6e04e96d6dad4346d2924b79e5b16d57a6b86"},
+    {file = "dagster_graphql-1.7.5-py3-none-any.whl", hash = "sha256:c49edd2caea10c4e910ea759682a321a72739ef565556f2a73fd136a4f1bb858"},
 ]
 
 [[package]]
 name = "dagster-pipes"
-version = "1.6.14"
+version = "1.7.5"
 requires_python = "<3.13,>=3.8"
 summary = "Toolkit for Dagster integrations with transform logic outside of Dagster"
 groups = ["default"]
 files = [
-    {file = "dagster-pipes-1.6.14.tar.gz", hash = "sha256:a1f366b9de8e9bfeedd0a2d2a3b7c04a6592e793af196eef1b5742d2d3517cb3"},
-    {file = "dagster_pipes-1.6.14-py3-none-any.whl", hash = "sha256:ede9de83c46c9ec460194bcd34c3a4b50c8aee63dae7fdda180a1a033c12566c"},
+    {file = "dagster-pipes-1.7.5.tar.gz", hash = "sha256:239c244f2d41ce3c5064a7662914453175805c4af6133279641f1e73aceca8db"},
+    {file = "dagster_pipes-1.7.5-py3-none-any.whl", hash = "sha256:b4362beec6177633154aa3a1a8590dcaeb2bd7934e3e6ebc6cd8213cc7b7096a"},
 ]
 
 [[package]]
 name = "dagster-postgres"
-version = "0.22.14"
+version = "0.23.5"
 requires_python = "<3.13,>=3.8"
 summary = "A Dagster integration for postgres"
 groups = ["default"]
 dependencies = [
-    "dagster==1.6.14",
+    "dagster==1.7.5",
     "psycopg2-binary",
 ]
 files = [
-    {file = "dagster-postgres-0.22.14.tar.gz", hash = "sha256:d860c67baa6438c6546266d70813779ae346a344f92cf41d27bc6f18be115fa0"},
-    {file = "dagster_postgres-0.22.14-py3-none-any.whl", hash = "sha256:a03a15523a586e7478cddb78bcfde04808f767c74f0363895123934ab54bb763"},
+    {file = "dagster-postgres-0.23.5.tar.gz", hash = "sha256:f112bc115035ed932530087fd7a41cbd582a59fc89228f06b2953af2b68cca93"},
+    {file = "dagster_postgres-0.23.5-py3-none-any.whl", hash = "sha256:7a7246c2feccefa8f9a49f4793ccc3fef9ac134d0a6ea62d8121c479b2a10406"},
 ]
 
 [[package]]
 name = "dagster-webserver"
-version = "1.6.14"
+version = "1.7.5"
 requires_python = "<3.13,>=3.8"
 summary = "Web UI for dagster."
 groups = ["default"]
 dependencies = [
     "click<9.0,>=7.0",
-    "dagster-graphql==1.6.14",
-    "dagster==1.6.14",
+    "dagster-graphql==1.7.5",
+    "dagster==1.7.5",
     "starlette!=0.36.0",
     "uvicorn[standard]",
 ]
 files = [
-    {file = "dagster-webserver-1.6.14.tar.gz", hash = "sha256:50d7256aa7d1094c77cc4dbc0d772bd6aeecc52d6386c586aa7feea5f5edabcb"},
-    {file = "dagster_webserver-1.6.14-py3-none-any.whl", hash = "sha256:4b4706006844fa589433165a32353793c300020c68d14f14b0169b9446b266f6"},
+    {file = "dagster-webserver-1.7.5.tar.gz", hash = "sha256:4dcdd04328bf74abed50ff3281ab573ad58dc938abb7305a32007680349bbaac"},
+    {file = "dagster_webserver-1.7.5-py3-none-any.whl", hash = "sha256:96c479df390deef2884051d70a98e7be94e2cd17e8dce41830bd28f6492f8297"},
 ]
 
 [[package]]
@@ -576,7 +577,7 @@ files = [
 
 [[package]]
 name = "faker"
-version = "24.4.0"
+version = "25.2.0"
 requires_python = ">=3.8"
 summary = "Faker is a Python package that generates fake data for you."
 groups = ["default"]
@@ -584,19 +585,30 @@ dependencies = [
     "python-dateutil>=2.4",
 ]
 files = [
-    {file = "Faker-24.4.0-py3-none-any.whl", hash = "sha256:998c29ee7d64429bd59204abffa9ba11f784fb26c7b9df4def78d1a70feb36a7"},
-    {file = "Faker-24.4.0.tar.gz", hash = "sha256:a5ddccbe97ab691fad6bd8036c31f5697cfaa550e62e000078d1935fa8a7ec2e"},
+    {file = "Faker-25.2.0-py3-none-any.whl", hash = "sha256:cfe97c4857c4c36ee32ea4aaabef884895992e209bae4cbd26807cf3e05c6918"},
+    {file = "Faker-25.2.0.tar.gz", hash = "sha256:45b84f47ff1ef86e3d1a8d11583ca871ecf6730fad0660edadc02576583a2423"},
+]
+
+[[package]]
+name = "filelock"
+version = "3.14.0"
+requires_python = ">=3.8"
+summary = "A platform independent file lock."
+groups = ["default"]
+files = [
+    {file = "filelock-3.14.0-py3-none-any.whl", hash = "sha256:43339835842f110ca7ae60f1e1c160714c5a6afd15a2873419ab185334975c0f"},
+    {file = "filelock-3.14.0.tar.gz", hash = "sha256:6ea72da3be9b8c82afd3edcf99f2fffbb5076335a5ae4d03248bb5b6c3eae78a"},
 ]
 
 [[package]]
 name = "fsspec"
-version = "2024.3.1"
+version = "2024.5.0"
 requires_python = ">=3.8"
 summary = "File-system specification"
 groups = ["default"]
 files = [
-    {file = "fsspec-2024.3.1-py3-none-any.whl", hash = "sha256:918d18d41bf73f0e2b261824baeb1b124bcf771767e3a26425cd7dec3332f512"},
-    {file = "fsspec-2024.3.1.tar.gz", hash = "sha256:f39780e282d7d117ffb42bb96992f8a90795e4d0fb0f661a70ca39fe9c43ded9"},
+    {file = "fsspec-2024.5.0-py3-none-any.whl", hash = "sha256:e0fdbc446d67e182f49a70b82cf7889028a63588fde6b222521f10937b2b670c"},
+    {file = "fsspec-2024.5.0.tar.gz", hash = "sha256:1d021b0b0f933e3b3029ed808eb400c08ba101ca2de4b3483fbc9ca23fcee94a"},
 ]
 
 [[package]]
@@ -1199,7 +1211,7 @@ files = [
 
 [[package]]
 name = "pandas-stubs"
-version = "2.2.1.240316"
+version = "2.2.2.240514"
 requires_python = ">=3.9"
 summary = "Type annotations for pandas"
 groups = ["dev"]
@@ -1208,8 +1220,8 @@ dependencies = [
     "types-pytz>=2022.1.1",
 ]
 files = [
-    {file = "pandas_stubs-2.2.1.240316-py3-none-any.whl", hash = "sha256:0126a26451a37cb893ea62357ca87ba3d181bd999ec8ba2ca5602e20207d6682"},
-    {file = "pandas_stubs-2.2.1.240316.tar.gz", hash = "sha256:236a4f812fb6b1922e9607ff09e427f6d8540c421c9e5a40e3e4ddf7adac7f05"},
+    {file = "pandas_stubs-2.2.2.240514-py3-none-any.whl", hash = "sha256:5d6f64d45a98bc94152a0f76fa648e598cd2b9ba72302fd34602479f0c391a53"},
+    {file = "pandas_stubs-2.2.2.240514.tar.gz", hash = "sha256:85b20da44a62c80eb8389bcf4cbfe31cce1cafa8cca4bf1fc75ec45892e72ce8"},
 ]
 
 [[package]]
@@ -1313,13 +1325,13 @@ files = [
 
 [[package]]
 name = "platformdirs"
-version = "4.2.1"
+version = "4.2.2"
 requires_python = ">=3.8"
 summary = "A small Python package for determining appropriate platform-specific dirs, e.g. a `user data dir`."
 groups = ["dev"]
 files = [
-    {file = "platformdirs-4.2.1-py3-none-any.whl", hash = "sha256:17d5a1161b3fd67b390023cb2d3b026bbd40abde6fdb052dfbd3a29c3ba22ee1"},
-    {file = "platformdirs-4.2.1.tar.gz", hash = "sha256:031cd18d4ec63ec53e82dceaac0417d218a6863f7745dfcc9efe7793b7039bdf"},
+    {file = "platformdirs-4.2.2-py3-none-any.whl", hash = "sha256:2d7a1657e36a80ea911db832a8a6ece5ee53d8de21edd5cc5879af6530b1bfee"},
+    {file = "platformdirs-4.2.2.tar.gz", hash = "sha256:38b7b51f512eed9e84a22788b4bce1de17c0adb134d6becb09836e37d8654cd3"},
 ]
 
 [[package]]
@@ -2197,15 +2209,16 @@ files = [
 
 [[package]]
 name = "types-beautifulsoup4"
-version = "4.12.0.0"
+version = "4.12.0.20240511"
+requires_python = ">=3.8"
 summary = "Typing stubs for beautifulsoup4"
 groups = ["dev"]
 dependencies = [
     "types-html5lib",
 ]
 files = [
-    {file = "types-beautifulsoup4-4.12.0.0.tar.gz", hash = "sha256:3859e70d3118d65d12ebfca109304de4bf52383e6f99f941c114fd1153bb6cc1"},
-    {file = "types_beautifulsoup4-4.12.0.0-py3-none-any.whl", hash = "sha256:43c23852a6ef0053632b9a308fc3488831c0f3e02c0f4b4478a28703217cf683"},
+    {file = "types-beautifulsoup4-4.12.0.20240511.tar.gz", hash = "sha256:004f6096fdd83b19cdbf6cb10e4eae57b10205eccc365d0a69d77da836012e28"},
+    {file = "types_beautifulsoup4-4.12.0.20240511-py3-none-any.whl", hash = "sha256:7ceda66a93ba28d759d5046d7fec9f4cad2f563a77b3a789efc90bcadafeefd1"},
 ]
 
 [[package]]
