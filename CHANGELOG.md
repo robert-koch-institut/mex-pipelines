@@ -23,6 +23,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - make pyodbc a soft dependency (only pipelines that use it may fail)
 - switch from poetry to pdm
 - move MSSQL Server authentication to general settings
+- receive one or None organization from wikidata aux extractor
+- adjust Timestamp usage to TemporalEntity
+- move quotation marks (") filtering to mex-common from requested wikidata label
 - get seq-repo data via mex-drop connector (was: file)
 
 ### Deprecated

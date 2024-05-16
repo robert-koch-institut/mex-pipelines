@@ -11,12 +11,7 @@ from mex.common.types import (
     MergedOrganizationalUnitIdentifier,
     MergedOrganizationIdentifier,
 )
-from mex.common.wikidata.extract import search_organization_by_label
-from mex.common.wikidata.transform import (
-    transform_wikidata_organizations_to_extracted_organizations,
-)
 from mex.odk.model import ODKData
-from mex.sinks import load
 
 
 def transform_odk_resources_to_mex_resources(
@@ -42,6 +37,7 @@ def transform_odk_resources_to_mex_resources(
 
     resources = []
     for resource in odk_resource_mappings:
+        alternative_title = None
         if rules := resource["alternativeTitle"]:
             alternative_title = rules[0]["mappingRules"][0]["setValues"]
         contributing_unit = None
@@ -125,44 +121,6 @@ def transform_odk_resources_to_mex_resources(
     return resources
 
 
-def get_external_partner_and_publisher_by_label(
-    odk_resource_mappings: list[dict[str, Any]],
-    extracted_primary_source_wikidata: ExtractedPrimarySource,
-) -> dict[str, MergedOrganizationIdentifier]:
-    """Extract wikidata OrganizationIDs for external partners and publishers.
-
-    Args:
-        odk_resource_mappings: list of resource mappings
-        extracted_primary_source_wikidata: wikidata primary source
-
-    Returns:
-        dictionary of wikidata OrganizationIDs by organization label
-    """
-    labels = {
-        value
-        for resource in odk_resource_mappings
-        for attribute in ["publisher", "externalPartner"]
-        for value in resource[attribute][0]["mappingRules"][0]["forValues"]
-    }
-    external_partner_and_publisher_by_label: dict[str, MergedOrganizationIdentifier] = (
-        {}
-    )
-    for label in labels:
-        if organization := list(search_organization_by_label(label)):
-            external_partner_and_publisher_by_label[label] = (
-                MergedOrganizationIdentifier(
-                    next(
-                        transform_wikidata_organizations_to_extracted_organizations(
-                            organization,
-                            extracted_primary_source_wikidata,
-                        )
-                    ).stableTargetId
-                )
-            )
-            load(organization)
-    return external_partner_and_publisher_by_label
-
-
 def get_variable_groups_from_raw_data(
     odk_raw_data: list[ODKData],
 ) -> dict[str, list[dict[str, str]]]:
@@ -234,7 +192,6 @@ def transform_odk_variable_groups_to_extracted_variable_groups(
         for resource in extracted_resources_odk
     }
     for begin_group_name, group in odk_variable_groups.items():
-
         contained_by = resource_id_by_identifier_in_primary_source[
             group[0]["file_name"].split(".")[0]
         ]
@@ -280,7 +237,6 @@ def transform_odk_data_to_extracted_variables(
         for resource in extracted_resources_odk
     }
     for begin_group_name, group in odk_variable_groups.items():
-
         used_in = resource_id_by_identifier_in_primary_source[
             group[0]["file_name"].split(".")[0]
         ]
