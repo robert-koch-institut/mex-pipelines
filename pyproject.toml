@@ -36,7 +36,7 @@ optional-dependencies.dev = [
     "pytest==8.2.0",
     "ruff==0.4.4",
     "sphinx==7.2.6",
-    "types-beautifulsoup4==4.12.0",
+    "types-beautifulsoup4==4.12.0.20240504",
     "types-pytz==2024.1.0.20240417",
     "types-pyyaml==6.0.12.20240311",
     "types-requests==2.31.0.20240406",

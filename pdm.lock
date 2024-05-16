@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:909fa560a40207fc68231f79a71d2619b3a9be3589064c76ea5acf1d53a91b08"
+content_hash = "sha256:2994ecf6cfc52953bef81b3604930a0a775773ec8f4da02333d8e0f9f527cb1a"
 
 [[package]]
 name = "alabaster"
@@ -2197,15 +2197,16 @@ files = [
 
 [[package]]
 name = "types-beautifulsoup4"
-version = "4.12.0.0"
+version = "4.12.0.20240504"
+requires_python = ">=3.8"
 summary = "Typing stubs for beautifulsoup4"
 groups = ["dev"]
 dependencies = [
     "types-html5lib",
 ]
 files = [
-    {file = "types-beautifulsoup4-4.12.0.0.tar.gz", hash = "sha256:3859e70d3118d65d12ebfca109304de4bf52383e6f99f941c114fd1153bb6cc1"},
-    {file = "types_beautifulsoup4-4.12.0.0-py3-none-any.whl", hash = "sha256:43c23852a6ef0053632b9a308fc3488831c0f3e02c0f4b4478a28703217cf683"},
+    {file = "types-beautifulsoup4-4.12.0.20240504.tar.gz", hash = "sha256:d7b7af4ccc52fc22784d33a529695e34329a9bdd5db6a649c9b25cb2c3a148d5"},
+    {file = "types_beautifulsoup4-4.12.0.20240504-py3-none-any.whl", hash = "sha256:84e04e4473b3c79da04d9d1f89d20a38e5cc92f9c080a8e1f9d36a287b350465"},
 ]
 
 [[package]]
