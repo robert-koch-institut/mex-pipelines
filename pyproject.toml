@@ -21,7 +21,7 @@ dependencies = [
     "pyodbc==5.1.0",
     "pyyaml==6.0.1",
     "requests-ntlm==1.2.0",
-    "requests==2.31.0",
+    "requests==2.32.0",
     "xlrd==2.0.1",
 ]
 optional-dependencies.dev = [
