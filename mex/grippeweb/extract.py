@@ -89,6 +89,6 @@ def extract_grippeweb_organizations(
         publisher_name = str(
             resource["publisher"][0]["mappingRules"][0]["forValues"][0]
         )
-        if publisher := next(search_organization_by_label(publisher_name)):
+        if publisher := search_organization_by_label(publisher_name):
             publisher_by_name[publisher_name] = publisher
     return publisher_by_name

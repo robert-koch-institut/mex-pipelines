@@ -11,7 +11,7 @@ class GrippewebSettings(Settings):
     model_config = SettingsConfigDict(env_prefix="grippeweb_")
 
     mapping_path: AssetsPath = Field(
-        AssetsPath("mappings/__final__/test_mapping"),
+        AssetsPath("mappings/__final__/grippeweb"),
         description=(
             "Path to the directory with the Grippeweb mapping files containing the "
             "default values, absolute path or relative to `assets_dir`."

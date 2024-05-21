@@ -10,6 +10,7 @@ from pytest import MonkeyPatch
 from requests import Response
 
 from mex.common.ldap.connector import LDAPConnector
+from mex.common.ldap.models.actor import LDAPActor
 from mex.common.ldap.models.person import LDAPPerson
 from mex.common.models import ExtractedOrganization
 from mex.common.types import MergedPrimarySourceIdentifier
@@ -28,6 +29,13 @@ TEST_DATA_DIR = Path(__file__).parent / "test_data"
 @pytest.fixture
 def mocked_ldap(monkeypatch: MonkeyPatch) -> None:
     """Mock the LDAP connector to return resolved persons and units."""
+    actors = [
+        LDAPActor(
+            sAMAccountName="C1",
+            objectGUID=UUID(int=4, version=4),
+            mail=["C1@email.de"],
+        )
+    ]
     persons = [
         LDAPPerson(
             department="PARENT-UNIT",
@@ -43,6 +51,9 @@ def mocked_ldap(monkeypatch: MonkeyPatch) -> None:
         LDAPConnector,
         "__init__",
         lambda self: setattr(self, "_connection", MagicMock()),
+    )
+    monkeypatch.setattr(
+        LDAPConnector, "get_functional_accounts", lambda *_, **__: iter(actors)
     )
     monkeypatch.setattr(LDAPConnector, "get_persons", lambda *_, **__: iter(persons))
 
