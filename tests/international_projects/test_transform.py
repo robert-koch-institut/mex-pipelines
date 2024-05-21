@@ -7,8 +7,7 @@ from mex.common.types import (
     Identifier,
     TextLanguage,
     Theme,
-    Timestamp,
-    TimestampPrecision,
+    YearMonthDay,
 )
 from mex.international_projects.extract import extract_international_projects_sources
 from mex.international_projects.transform import (
@@ -21,12 +20,6 @@ def test_transform_international_projects_source_to_mex_source(
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
     unit_stable_target_ids_by_synonym: dict[str, Identifier],
 ) -> None:
-    end = Timestamp(2021, 12, 30, 23, 0, tzinfo=timezone("UTC"))
-    end.precision = TimestampPrecision.DAY
-
-    start = Timestamp(2021, 7, 26, 23, 0, tzinfo=timezone("UTC"))
-    start.precision = TimestampPrecision.DAY
-
     organization_id = Identifier.generate(seed=44)
     funding_source_stable_target_ids_by_synonym = {"Test-Institute": organization_id}
     partner_organizations_stable_target_ids_by_synonym = {"WHO": organization_id}
@@ -35,7 +28,7 @@ def test_transform_international_projects_source_to_mex_source(
     unit_id = Identifier.generate(seed=21)
     unit_stable_target_ids_by_synonym = {"FG99": unit_id}
 
-    international_projects_sources = extract_international_projects_sources()
+    international_projects_sources = list(extract_international_projects_sources())
 
     extracted_activities = list(
         transform_international_projects_sources_to_extracted_activities(
@@ -64,14 +57,14 @@ def test_transform_international_projects_source_to_mex_source(
             person_id,
             unit_id,
         ],
-        "end": [end],
+        "end": [YearMonthDay(2021, 12, 31, tzinfo=timezone("UTC"))],
         "externalAssociate": [organization_id],
         "funderOrCommissioner": [organization_id],
         "involvedPerson": [person_id],
         "involvedUnit": [unit_id],
         "responsibleUnit": [unit_id],
         "shortName": [{"value": "testAAbr"}],
-        "start": [start],
+        "start": [YearMonthDay(2021, 7, 27, tzinfo=timezone("UTC"))],
         "theme": ["https://mex.rki.de/item/theme-27"],
         "title": [
             {"value": "This is a test project full title", "language": TextLanguage.EN}

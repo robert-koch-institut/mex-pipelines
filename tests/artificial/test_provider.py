@@ -15,9 +15,10 @@ from mex.common.types import (
     Identifier,
     Link,
     MergedPrimarySourceIdentifier,
+    TemporalEntity,
+    TemporalEntityPrecision,
     Text,
     TextLanguage,
-    Timestamp,
 )
 
 
@@ -93,10 +94,10 @@ def test_builder_provider_inner_type_and_pattern(faker: Faker) -> None:
 @pytest.mark.parametrize(
     ("annotation", "expected"),
     [
-        (Link, [Link(language=None, title=None, url="http://trost.org/")]),
-        (Email, ["schollluise@example.com"]),
+        (Link, [Link(language=None, title=None, url="http://trapp.org/")]),
+        (Email, ["schonlandluise@example.com"]),
         (Text, [Text(value="Zurück man Schuh nicht der.", language=TextLanguage.DE)]),
-        (Timestamp, [Timestamp("2021")]),
+        (TemporalEntity, [TemporalEntity("2021")]),
         (APIType, [APIType["OTHER"]]),
         (
             Annotated[Pattern, Field(pattern=r"^https://ror\.org/[a-z0-9]{9}$")],
@@ -152,7 +153,7 @@ def test_builder_provider_field_value_error(faker: Faker) -> None:
 def test_builder_provider_extracted_data(faker: Faker) -> None:
     models = faker.extracted_data(ExtractedContactPoint)
     assert models[0].model_dump(exclude_defaults=True) == {
-        "email": ["lothardippel@example.net", "strohmax@example.com"],
+        "email": ["lothardippel@example.net", "stolzemax@example.com"],
         "hadPrimarySource": Joker(),
         "identifier": Joker(),
         "identifierInPrimarySource": "ContactPoint-4181830114",
@@ -184,12 +185,14 @@ def test_identity_provider_reference(faker: Faker) -> None:
 
 def test_link_provider(faker: Faker) -> None:
     assert faker.link() == Link(
-        language="de", title="Scholl", url="https://www.briemer.com/"
+        language="de", title="Schonland", url="https://www.briemer.com/"
     )
 
 
-def test_timestamp_provider(faker: Faker) -> None:
-    assert faker.timestamp() == Timestamp("2000-02-08T23:01:31Z")
+def test_temporal_entity_provider(faker: Faker) -> None:
+    assert faker.temporal_entity([TemporalEntityPrecision.DAY]) == TemporalEntity(
+        "2000-02-08"
+    )
 
 
 def test_text_provider_string(faker: Faker) -> None:

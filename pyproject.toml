@@ -1,6 +1,6 @@
 [project]
 name = "mex-extractors"
-version = "0.15.0"
+version = "0.16.0"
 description = "ETL pipelines for the RKI Metadata Exchange."
 authors = [{ name = "MEx Team", email = "mex@rki.de" }]
 readme = { file = "README.md", content-type = "text/markdown" }
@@ -8,39 +8,38 @@ license = { file = "LICENSE" }
 urls = { Repository = "https://github.com/robert-koch-institut/mex-extractors" }
 requires-python = "<3.13,>=3.11"
 dependencies = [
-    "beautifulsoup4>=4.12.3",
-    "dagster-postgres>=0.22.14",
-    "dagster-webserver>=1.6.14",
-    "dagster>=1.6.14",
-    "faker>=24.4.0",
-    "mex-common@git+https://github.com/robert-koch-institut/mex-common.git@0.24.0",
-    "numpy>=1.26.4",
-    "openpyxl>=3.1.2",
-    "pandas>=2.2.1",
-    "pydantic>=2.6.4",
-    "pyodbc>=5.1.0",
-    "pyyaml>=6.0.1",
-    "requests-ntlm>=1.2.0",
-    "requests>=2.31.0",
-    "urllib3>=1.26.18",
-    "xlrd>=2.0.1",
+    "beautifulsoup4==4.12.3",
+    "dagster-postgres==0.23.5",
+    "dagster-webserver==1.7.5",
+    "dagster==1.7.5",
+    "faker==25.2.0",
+    "mex-common@git+https://github.com/robert-koch-institut/mex-common.git@0.25.0",
+    "numpy==1.26.4",
+    "openpyxl==3.1.2",
+    "pandas==2.2.2",
+    "pydantic==2.7.1",
+    "pyodbc==5.1.0",
+    "pyyaml==6.0.1",
+    "requests-ntlm==1.2.0",
+    "requests==2.31.0",
+    "xlrd==2.0.1",
 ]
 optional-dependencies.dev = [
-    "black>=24.3.0",
-    "click>=8.1.7",
-    "ipdb>=0.13.13",
-    "mypy>=1.9.0",
-    "pandas-stubs>=2.2.1",
-    "pytest-cov>=4.1.0",
-    "pytest-random-order>=1.1.1",
-    "pytest-xdist>=3.5.0",
-    "pytest>=8.1.1",
-    "ruff>=0.3.5",
-    "sphinx>=7.2.6",
-    "types-beautifulsoup4>=4.12.0",
-    "types-pytz>=2024.1.0",
-    "types-pyyaml>=6.0.12",
-    "types-requests>=2.31.0",
+    "black==24.4.2",
+    "click==8.1.7",
+    "ipdb==0.13.13",
+    "mypy==1.10.0",
+    "pandas-stubs==2.2.2.240514",
+    "pytest-cov==5.0.0",
+    "pytest-random-order==1.1.1",
+    "pytest-xdist==3.6.1",
+    "pytest==8.2.0",
+    "ruff==0.4.4",
+    "sphinx==7.3.7",
+    "types-beautifulsoup4==4.12.0.20240511",
+    "types-pytz==2024.1.0.20240417",
+    "types-pyyaml==6.0.12.20240311",
+    "types-requests==2.31.0.20240406",
 ]
 
 [project.scripts]
@@ -176,5 +175,5 @@ known-first-party = ["mex", "tests"]
 convention = "google"
 
 [build-system]
-requires = ["pdm-backend>=2.1.8"]
+requires = ["pdm-backend==2.3.0"]
 build-backend = "pdm.backend"
