@@ -13,7 +13,7 @@ dependencies = [
     "dagster-webserver==1.7.5",
     "dagster==1.7.5",
     "faker==25.2.0",
-    "mex-common@git+https://github.com/robert-koch-institut/mex-common.git@hotfix/isolate-settings-context-before-first-test",
+    "mex-common@git+https://github.com/robert-koch-institut/mex-common.git@0.25.1",
     "numpy==1.26.4",
     "openpyxl==3.1.2",
     "pandas==2.2.2",

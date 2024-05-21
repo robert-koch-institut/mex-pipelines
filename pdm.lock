@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:681b4cd975d96c2b8ecee4139d218e2fed8e1938707a0830003bfd2e0394330b"
+content_hash = "sha256:698083c64c87ad1514f13e6232f9cc471aab6c2d2c6e631e799a239ea7b79999"
 
 [[package]]
 name = "alabaster"
@@ -1019,8 +1019,8 @@ name = "mex-common"
 version = "0.25.1"
 requires_python = "<3.13,>=3.11"
 git = "https://github.com/robert-koch-institut/mex-common.git"
-ref = "hotfix/isolate-settings-context-before-first-test"
-revision = "db2c12a25a34ddef90b2bc9c8d1d9d4e28d448cb"
+ref = "0.25.1"
+revision = "fc7ce4ba2a9f77c55392f6af4a9b4708490d0d7c"
 summary = "Common library for MEx python projects."
 groups = ["default"]
 dependencies = [
@@ -1870,13 +1870,13 @@ files = [
 
 [[package]]
 name = "setuptools"
-version = "69.5.1"
+version = "70.0.0"
 requires_python = ">=3.8"
 summary = "Easily download, build, install, upgrade, and uninstall Python packages"
 groups = ["default"]
 files = [
-    {file = "setuptools-69.5.1-py3-none-any.whl", hash = "sha256:c636ac361bc47580504644275c9ad802c50415c7522212252c033bd15f301f32"},
-    {file = "setuptools-69.5.1.tar.gz", hash = "sha256:6c1fccdac05a97e598fb0ae3bbed5904ccb317337a51139dcd51453611bbb987"},
+    {file = "setuptools-70.0.0-py3-none-any.whl", hash = "sha256:54faa7f2e8d2d11bcd2c07bed282eef1046b5c080d1c32add737d7b5817b1ad4"},
+    {file = "setuptools-70.0.0.tar.gz", hash = "sha256:f211a66637b8fa059bb28183da127d4e86396c991a942b028c6650d4319c3fd0"},
 ]
 
 [[package]]
