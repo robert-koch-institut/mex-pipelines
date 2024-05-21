@@ -27,9 +27,10 @@ def test_extract_datscha_web_organizations(
     datscha_web_item: DatschaWebItem, monkeypatch: MonkeyPatch
 ) -> None:
     monkeypatch.setattr(
-        mex.datscha_web.extract, "search_organization_by_label", lambda x: ["test"]
+        mex.datscha_web.extract, "search_organization_by_label", lambda x: "test"
     )
     result = extract_datscha_web_organizations([datscha_web_item])
+
     assert result == {
         datscha_web_item.empfaenger_der_daten_im_drittstaat: "test",
     }
