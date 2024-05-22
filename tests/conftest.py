@@ -23,7 +23,7 @@ pytest_plugins = (
     "tests.confluence_vvt.mocked_confluence_vvt",
     "tests.datscha_web.mocked_datscha_web",
     "tests.grippeweb.mocked_grippeweb",
-    # "tests.ifsg.conftest",
+    "tests.ifsg.mocked_ifsg",
     # "tests.rdmo.conftest",
     # "tests.seq_repo.conftest",
 )

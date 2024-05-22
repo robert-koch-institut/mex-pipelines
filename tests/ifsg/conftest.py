@@ -1,9 +1,7 @@
 from typing import Any, TypeVar
-from unittest.mock import MagicMock
 
 import pytest
 from pydantic import BaseModel
-from pytest import MonkeyPatch
 
 from mex.common.models import (
     ExtractedPrimarySource,
@@ -24,7 +22,6 @@ from mex.common.types import (
     Text,
     TextLanguage,
 )
-from mex.ifsg.connector import IFSGConnector
 from mex.ifsg.models.meta_catalogue2item import MetaCatalogue2Item
 from mex.ifsg.models.meta_catalogue2item2schema import MetaCatalogue2Item2Schema
 from mex.ifsg.models.meta_disease import MetaDisease
@@ -146,27 +143,6 @@ def mocked_sql_tables() -> dict[ModelT, list[BaseModel]]:
             {"code": "test2", "id_type": 1, "sql_table_name": "Disease"},
         ],
     }
-
-
-@pytest.fixture
-def mocked_ifsg(
-    mocked_sql_tables: dict[str, list[BaseModel]], monkeypatch: MonkeyPatch
-) -> None:
-    """Mock IFSG connector."""
-
-    def mocked_init(self: IFSGConnector) -> None:
-        cursor = MagicMock()
-        cursor.fetchone.return_value = ["mocked"]
-        self._connection = MagicMock()
-        self._connection.cursor.return_value.__enter__.return_value = cursor
-
-    monkeypatch.setattr(IFSGConnector, "__init__", mocked_init)
-
-    monkeypatch.setattr(
-        IFSGConnector,
-        "parse_rows",
-        lambda self, model: mocked_sql_tables[model],
-    )
 
 
 @pytest.fixture
