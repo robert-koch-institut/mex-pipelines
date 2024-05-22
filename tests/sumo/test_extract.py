@@ -119,7 +119,7 @@ def test_extract_ldap_contact_points_by_name(
     expected = {
         "person": {
             "sAMAccountName": None,
-            "objectGUID": UUID("00000000-0000-4000-8000-000000000004"),
+            "objectGUID": UUID("00000000-0000-4000-8000-000000000001"),
             "mail": [],
             "company": None,
             "department": "PARENT-UNIT",

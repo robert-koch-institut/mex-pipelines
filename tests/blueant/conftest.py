@@ -1,13 +1,7 @@
-from unittest.mock import MagicMock
-from uuid import UUID
-
 import pytest
-from pytest import MonkeyPatch
 
 from mex.blueant.models.source import BlueAntSource
 from mex.blueant.settings import BlueAntSettings
-from mex.common.ldap.connector import LDAPConnector
-from mex.common.ldap.models.person import LDAPPerson
 from mex.common.models import ExtractedPerson
 from mex.common.types import Identifier, TemporalEntity
 
@@ -61,30 +55,4 @@ def blueant_source_without_leader() -> BlueAntSource:
         department="C1 Child Department",
         status="Projektumsetzung",
         type_="Sonderforschungsprojekt",
-    )
-
-
-@pytest.fixture
-def mocked_ldap(monkeypatch: MonkeyPatch) -> None:
-    """Mock the LDAP connector to return resolved persons and units."""
-    monkeypatch.setattr(
-        LDAPConnector,
-        "__init__",
-        lambda self: setattr(self, "_connection", MagicMock()),
-    )
-    monkeypatch.setattr(
-        LDAPConnector,
-        "get_persons",
-        lambda _, **__: iter(
-            [
-                LDAPPerson(
-                    employeeID="42",
-                    sn="Resolved",
-                    givenName="Roland",
-                    displayName="Resolved, Roland",
-                    objectGUID=UUID(int=1, version=4),
-                    department="PARENT-UNIT",
-                )
-            ]
-        ),
     )

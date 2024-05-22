@@ -75,7 +75,7 @@ def test_extract_international_projects_project_leaders() -> None:
     expected = {
         "person": {
             "sAMAccountName": None,
-            "objectGUID": uuid.UUID("00000000-0000-4000-8000-000000000004"),
+            "objectGUID": uuid.UUID("00000000-0000-4000-8000-000000000001"),
             "mail": [],
             "company": None,
             "department": "PARENT-UNIT",

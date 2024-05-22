@@ -2,12 +2,16 @@ import json
 from pathlib import Path
 from typing import Any
 from unittest.mock import MagicMock, Mock
+from uuid import UUID
 
 import pytest
 import requests
 from pytest import MonkeyPatch
 from requests import Response
 
+from mex.common.ldap.connector import LDAPConnector
+from mex.common.ldap.models.actor import LDAPActor
+from mex.common.ldap.models.person import LDAPPerson
 from mex.common.models import ExtractedOrganization
 from mex.common.types import MergedPrimarySourceIdentifier
 from mex.common.wikidata.connector import (
@@ -112,4 +116,39 @@ def mocked_wikidata(
         WikidataAPIConnector,
         "get_wikidata_item_details_by_id",
         get_wikidata_item_details_by_id,
+    )
+
+
+@pytest.fixture
+def mocked_ldap(monkeypatch: MonkeyPatch) -> None:
+    """Mock the LDAP connector to return resolved persons and units."""
+    actors = [
+        LDAPActor(
+            sAMAccountName="ContactC",
+            objectGUID=UUID(int=4, version=4),
+            mail=["email@email.de", "contactc@rki.de"],
+        )
+    ]
+    monkeypatch.setattr(
+        LDAPConnector,
+        "__init__",
+        lambda self: setattr(self, "_connection", MagicMock()),
+    )
+    monkeypatch.setattr(
+        LDAPConnector, "get_functional_accounts", lambda *_, **__: iter(actors)
+    )
+    persons = [
+        LDAPPerson(
+            employeeID="42",
+            sn="Resolved",
+            givenName=["Roland"],
+            displayName="Resolved, Roland",
+            objectGUID=UUID(int=1, version=4),
+            department="PARENT-UNIT",
+        )
+    ]
+    monkeypatch.setattr(
+        LDAPConnector,
+        "get_persons",
+        lambda *_, **__: iter(persons),
     )

@@ -1,13 +1,8 @@
-from unittest.mock import MagicMock
 from uuid import UUID
 
 import pytest
-from pytest import MonkeyPatch
 from traitlets import Any
 
-from mex.common.ldap.connector import LDAPConnector
-from mex.common.ldap.models.actor import LDAPActor
-from mex.common.ldap.models.person import LDAPPerson
 from mex.common.models import (
     ExtractedActivity,
     ExtractedContactPoint,
@@ -37,42 +32,6 @@ from mex.sumo.settings import SumoSettings
 def settings() -> SumoSettings:
     """Load the settings for this pytest session."""
     return SumoSettings.get()
-
-
-@pytest.fixture
-def mocked_ldap(monkeypatch: MonkeyPatch) -> None:
-    """Mock the LDAP connector to return resolved actors."""
-    actors = [
-        LDAPActor(
-            sAMAccountName="ContactC",
-            objectGUID=UUID(int=4, version=4),
-            mail=["email@email.de", "contactc@rki.de"],
-        )
-    ]
-    monkeypatch.setattr(
-        LDAPConnector,
-        "__init__",
-        lambda self: setattr(self, "_connection", MagicMock()),
-    )
-    monkeypatch.setattr(
-        LDAPConnector, "get_functional_accounts", lambda *_, **__: iter(actors)
-    )
-    monkeypatch.setattr(
-        LDAPConnector,
-        "get_persons",
-        lambda *_, **__: iter(
-            [
-                LDAPPerson(
-                    employeeID="42",
-                    sn="Resolved",
-                    givenName="Roland",
-                    displayName="Resolved, Roland",
-                    objectGUID=UUID(int=4, version=4),
-                    department="PARENT-UNIT",
-                )
-            ]
-        ),
-    )
 
 
 @pytest.fixture
