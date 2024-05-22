@@ -21,7 +21,7 @@ pytest_plugins = (
     "mex.common.testing.plugin",
     "tests.blueant.mocked_blueant",
     "tests.confluence_vvt.mocked_confluence_vvt",
-    # "tests.datscha_web.conftest",
+    "tests.datscha_web.mocked_datscha_web",
     "tests.grippeweb.mocked_grippeweb",
     # "tests.ifsg.conftest",
     # "tests.rdmo.conftest",
