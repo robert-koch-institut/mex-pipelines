@@ -33,12 +33,14 @@ from mex.grippeweb.settings import GrippewebSettings
 from mex.grippeweb.transform import (
     transform_grippeweb_access_platform_to_extracted_access_platform,
     transform_grippeweb_resource_mappings_to_extracted_resources,
-    transform_wikidata_organizations_to_extracted_organizations_with_query,
 )
 from mex.mapping.extract import extract_mapping_data
 from mex.pipeline import asset, run_job_in_process
 from mex.sinks import load
 from mex.sumo.transform import get_contact_merged_ids_by_emails
+from mex.wikidata.transform import (
+    transform_wikidata_organizations_to_extracted_organizations_with_query,
+)
 
 
 @asset(group_name="grippeweb", deps=["extracted_primary_source_mex"])
@@ -91,13 +93,10 @@ def grippeweb_variable_group() -> dict[str, Any]:
 @asset(group_name="grippeweb")
 def extracted_mex_functional_units_grippeweb(
     grippeweb_resource_mappings: list[dict[str, Any]],
-    grippeweb_access_platform: dict[str, Any],
     extracted_primary_source_ldap: ExtractedPrimarySource,
 ) -> dict[Email, MergedContactPointIdentifier]:
     """Extract ldap persons for grippeweb from ldap and transform them to mex persons and load them to sinks."""  # noqa: E501
-    ldap_actors = extract_ldap_actors(
-        grippeweb_resource_mappings, grippeweb_access_platform
-    )
+    ldap_actors = extract_ldap_actors(grippeweb_resource_mappings)
     mex_actors_resources = list(
         transform_ldap_actors_to_mex_contact_points(
             ldap_actors, extracted_primary_source_ldap
@@ -110,11 +109,14 @@ def extracted_mex_functional_units_grippeweb(
 @asset(group_name="grippeweb")
 def extracted_mex_persons_grippeweb(
     grippeweb_resource_mappings: list[dict[str, Any]],
+    grippeweb_access_platform: dict[str, Any],
     extracted_primary_source_ldap: ExtractedPrimarySource,
     extracted_organizational_units: list[ExtractedOrganizationalUnit],
 ) -> list[ExtractedPerson]:
     """Extract ldap persons for grippeweb from ldap and transform them to mex persons and load them to sinks."""  # noqa: E501
-    ldap_persons = extract_ldap_persons(grippeweb_resource_mappings)
+    ldap_persons = extract_ldap_persons(
+        grippeweb_resource_mappings, grippeweb_access_platform
+    )
     mex_persons = list(
         transform_ldap_persons_to_mex_persons(
             ldap_persons, extracted_primary_source_ldap, extracted_organizational_units

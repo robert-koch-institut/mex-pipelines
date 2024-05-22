@@ -23,41 +23,33 @@ def extract_columns_by_table_and_column_name() -> dict[str, dict[str, list[Any]]
 
 def extract_ldap_actors(
     grippeweb_resource_mappings: list[dict[str, Any]],
-    grippeweb_access_platform: dict[str, Any],
 ) -> list[LDAPActor]:
     """Extract LDAP actors for grippeweb resource mapping contacts.
 
     Args:
         grippeweb_resource_mappings: list of resources default value dicts
-        grippeweb_access_platform: grippeweb access platform
-
     Returns:
-        list of LDAP Aators
+        list of LDAP Actors
     """
     ldap = LDAPConnector.get()
 
     return [
-        *[
-            next(ldap.get_functional_accounts(mail))
-            for mapping in grippeweb_resource_mappings
-            for mail in mapping["contact"][0]["mappingRules"][0]["forValues"]
-        ],
-        *[
-            ldap.get_person(mail=mail)
-            for mail in grippeweb_access_platform["contact"][0]["mappingRules"][0][
-                "forValues"
-            ]
-        ],
+        next(ldap.get_functional_accounts(mail))
+        for mapping in grippeweb_resource_mappings
+        for mail in mapping["contact"][0]["mappingRules"][0]["forValues"]
     ]
 
 
 def extract_ldap_persons(
     grippeweb_resource_mappings: list[dict[str, Any]],
+    grippeweb_access_platform: dict[str, Any],
 ) -> list[LDAPPerson]:
     """Extract LDAP persons for grippeweb_access_platform contacts.
 
     Args:
         grippeweb_resource_mappings: list of resources default value dicts
+        grippeweb_access_platform: grippeweb access platform
+
 
     Returns:
         list of LDAP persons
@@ -68,6 +60,12 @@ def extract_ldap_persons(
             ldap.get_person(given_name=name.split(" ")[0], surname=name.split(" ")[1])
             for mapping in grippeweb_resource_mappings
             for name in mapping["contributor"][0]["mappingRules"][0]["forValues"]
+        ],
+        *[
+            ldap.get_person(mail=mail)
+            for mail in grippeweb_access_platform["contact"][0]["mappingRules"][0][
+                "forValues"
+            ]
         ],
     ]
 
