@@ -25,7 +25,7 @@ pytest_plugins = (
     "tests.grippeweb.mocked_grippeweb",
     "tests.ifsg.mocked_ifsg",
     "tests.rdmo.mocked_rdmo",
-    # "tests.seq_repo.conftest",
+    "tests.seq_repo.mocked_drop_for_seqrepo",
 )
 
 TEST_DATA_DIR = Path(__file__).parent / "test_data"
