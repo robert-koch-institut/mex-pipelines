@@ -23,7 +23,7 @@ def transform_grippeweb_resource_mappings_to_extracted_resources(
     grippeweb_organization_ids_by_query_string: dict[str, MergedOrganizationIdentifier],
     extracted_mex_functional_units_grippeweb: dict[Email, MergedContactPointIdentifier],
     # TODO: add extracted_confluence_vvt_sources: list[ExtractedActivity],
-) -> list[ExtractedResource]:
+) -> dict[str, ExtractedResource]:
     """Transform grippe web values to extracted resources and link them.
 
     Args:
@@ -53,7 +53,7 @@ def transform_grippeweb_resource_mappings_to_extracted_resources(
     resource_dict["grippeweb-plus"].isPartOf = [
         resource_dict["grippeweb"].stableTargetId
     ]
-    return list(resource_dict.values())
+    return resource_dict
 
 
 def transform_grippeweb_resource_mappings_to_dict(

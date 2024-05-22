@@ -5,9 +5,17 @@ import pytest
 from pydantic import BaseModel
 from pytest import MonkeyPatch
 
+from mex.common.models import (
+    ExtractedAccessPlatform,
+    ExtractedPerson,
+    ExtractedPrimarySource,
+)
 from mex.common.types import (
     MergedContactPointIdentifier,
     MergedOrganizationalUnitIdentifier,
+    MergedOrganizationIdentifier,
+    MergedPrimarySourceIdentifier,
+    Text,
 )
 from mex.grippeweb.connector import GrippewebConnector
 
@@ -71,6 +79,28 @@ def unit_stable_target_ids_by_synonym() -> (
 ):
     """Mock unit stable target ids."""
     return {"C1": MergedOrganizationalUnitIdentifier.generate(seed=44)}
+
+
+@pytest.fixture
+def extracted_mex_persons_grippeweb() -> list[ExtractedPerson]:
+    """Return an extracted person with static dummy values."""
+    return [
+        ExtractedPerson(
+            email=["ContactC@rki.de", "info@rki.de"],
+            familyName="Contact",
+            givenName="Carla",
+            fullName="Contact, Carla",
+            identifierInPrimarySource="Carla",
+            hadPrimarySource=MergedPrimarySourceIdentifier.generate(seed=40),
+        )
+    ]
+
+
+@pytest.fixture
+def grippeweb_organization_ids_by_query_string() -> (
+    dict[str, MergedOrganizationIdentifier]
+):
+    return {"Robert Koch-Institut": MergedOrganizationIdentifier.generate(42)}
 
 
 @pytest.fixture
@@ -260,9 +290,7 @@ def grippeweb_resource_mappings() -> list[dict[str, Any]]:
                     "mappingRules": [
                         {
                             "forValues": None,
-                            "setValues": [
-                                "https://mex.rki.de/item/anonymization-pseudonymization-2"
-                            ],
+                            "setValues": "https://mex.rki.de/item/anonymization-pseudonymization-2",
                             "rule": None,
                         }
                     ],
@@ -276,7 +304,7 @@ def grippeweb_resource_mappings() -> list[dict[str, Any]]:
                     "examplesInPrimarySource": None,
                     "mappingRules": [
                         {
-                            "forValues": ["test_person@email.de"],
+                            "forValues": ["c1@email.de"],
                             "setValues": None,
                             "rule": "Match value using ldap extractor.",
                         }
@@ -417,7 +445,11 @@ def grippeweb_resource_mappings() -> list[dict[str, Any]]:
                     "locationInPrimarySource": None,
                     "examplesInPrimarySource": None,
                     "mappingRules": [
-                        {"forValues": None, "setValues": ["GERMAN"], "rule": None}
+                        {
+                            "forValues": None,
+                            "setValues": "https://mex.rki.de/item/language-1",
+                            "rule": None,
+                        }
                     ],
                     "comment": "Deutsch",
                 }
@@ -517,7 +549,7 @@ def grippeweb_resource_mappings() -> list[dict[str, Any]]:
                     "mappingRules": [
                         {
                             "forValues": None,
-                            "setValues": ["SURVEILLANCE_DATA"],
+                            "setValues": "https://mex.rki.de/item/resource-type-general-10",
                             "rule": None,
                         }
                     ],
@@ -590,7 +622,11 @@ def grippeweb_resource_mappings() -> list[dict[str, Any]]:
                     "locationInPrimarySource": None,
                     "examplesInPrimarySource": None,
                     "mappingRules": [
-                        {"forValues": None, "setValues": ["RAW_DATA"], "rule": None}
+                        {
+                            "forValues": None,
+                            "setValues": "https://mex.rki.de/item/data-processing-state-1",
+                            "rule": None,
+                        }
                     ],
                     "comment": "Rohdaten",
                 }
@@ -614,7 +650,7 @@ def grippeweb_resource_mappings() -> list[dict[str, Any]]:
                     "mappingRules": [
                         {
                             "forValues": None,
-                            "setValues": ["STUDIES_AND_SURVEILLANCE"],
+                            "setValues": "https://mex.rki.de/item/theme-35",
                             "rule": None,
                         }
                     ],
@@ -721,7 +757,11 @@ def grippeweb_resource_mappings() -> list[dict[str, Any]]:
                     "locationInPrimarySource": None,
                     "examplesInPrimarySource": None,
                     "mappingRules": [
-                        {"forValues": None, "setValues": ["RESTRICTED"], "rule": None}
+                        {
+                            "forValues": None,
+                            "setValues": "https://mex.rki.de/item/access-restriction-2",
+                            "rule": None,
+                        }
                     ],
                     "comment": None,
                 }
@@ -732,7 +772,11 @@ def grippeweb_resource_mappings() -> list[dict[str, Any]]:
                     "locationInPrimarySource": None,
                     "examplesInPrimarySource": None,
                     "mappingRules": [
-                        {"forValues": None, "setValues": ["DAILY"], "rule": None}
+                        {
+                            "forValues": None,
+                            "setValues": "https://mex.rki.de/item/frequency-15",
+                            "rule": None,
+                        }
                     ],
                     "comment": None,
                 }
@@ -746,7 +790,7 @@ def grippeweb_resource_mappings() -> list[dict[str, Any]]:
                     "mappingRules": [
                         {
                             "forValues": None,
-                            "setValues": ["PSEUDONYMIZED"],
+                            "setValues": "https://mex.rki.de/item/anonymization-pseudonymization-2",
                             "rule": None,
                         }
                     ],
@@ -760,7 +804,7 @@ def grippeweb_resource_mappings() -> list[dict[str, Any]]:
                     "examplesInPrimarySource": None,
                     "mappingRules": [
                         {
-                            "forValues": ["test_person@email.de"],
+                            "forValues": ["c1@email.de"],
                             "setValues": None,
                             "rule": "Match value by using ldap extract extractor.",
                         }
@@ -883,7 +927,11 @@ def grippeweb_resource_mappings() -> list[dict[str, Any]]:
                     "locationInPrimarySource": None,
                     "examplesInPrimarySource": None,
                     "mappingRules": [
-                        {"forValues": None, "setValues": ["GERMAN"], "rule": None}
+                        {
+                            "forValues": None,
+                            "setValues": "https://mex.rki.de/item/language-1",
+                            "rule": None,
+                        }
                     ],
                     "comment": None,
                 }
@@ -988,7 +1036,7 @@ def grippeweb_resource_mappings() -> list[dict[str, Any]]:
                     "mappingRules": [
                         {
                             "forValues": None,
-                            "setValues": ["SURVEILLANCE_DATA"],
+                            "setValues": "https://mex.rki.de/item/resource-type-general-10",
                             "rule": None,
                         }
                     ],
@@ -1064,7 +1112,7 @@ def grippeweb_resource_mappings() -> list[dict[str, Any]]:
                     "mappingRules": [
                         {
                             "forValues": None,
-                            "setValues": ["SECONDARY_DATA"],
+                            "setValues": "https://mex.rki.de/item/data-processing-state-1",
                             "rule": None,
                         }
                     ],
@@ -1090,12 +1138,7 @@ def grippeweb_resource_mappings() -> list[dict[str, Any]]:
                     "mappingRules": [
                         {
                             "forValues": None,
-                            "setValues": ["STUDIES_AND_SURVEILLANCE"],
-                            "rule": None,
-                        },
-                        {
-                            "forValues": None,
-                            "setValues": ["INFECTIOUS_DISEASES"],
+                            "setValues": "https://mex.rki.de/item/theme-35",
                             "rule": None,
                         },
                     ],
@@ -1179,3 +1222,17 @@ def grippeweb_resource_mappings() -> list[dict[str, Any]]:
             ],
         },
     ]
+
+
+@pytest.fixture
+def grippeweb_extracted_access_platform(
+    extracted_primary_sources: dict[str, ExtractedPrimarySource],
+) -> ExtractedAccessPlatform:
+    return ExtractedAccessPlatform(
+        hadPrimarySource=extracted_primary_sources["grippeweb"].stableTargetId,
+        identifierInPrimarySource="primary-source",
+        contact=[MergedContactPointIdentifier.generate(seed=234)],
+        technicalAccessibility="https://mex.rki.de/item/technical-accessibility-1",
+        title=[Text(value="primary-source", language="en")],
+        unitInCharge=[MergedOrganizationalUnitIdentifier.generate(seed=235)],
+    )

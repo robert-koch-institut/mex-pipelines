@@ -170,7 +170,7 @@ def extracted_access_platform_grippeweb(
 
 
 @asset(group_name="grippeweb")
-def grippeweb_extracted_resources(
+def grippeweb_extracted_resource_dict(
     grippeweb_resource_mappings: list[dict[str, Any]],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     extracted_access_platform_grippeweb: ExtractedAccessPlatform,
@@ -179,7 +179,7 @@ def grippeweb_extracted_resources(
     grippeweb_organization_ids_by_query_string: dict[str, MergedOrganizationIdentifier],
     extracted_mex_functional_units_grippeweb: dict[Email, MergedContactPointIdentifier],
     # extracted_confluence_vvt_sources: list[ExtractedActivity],
-) -> list[ExtractedResource]:
+) -> dict[str, ExtractedResource]:
     """Transform Grippeweb default values to extracted resources and load to sinks."""
     extracted_resources = transform_grippeweb_resource_mappings_to_extracted_resources(
         grippeweb_resource_mappings,
@@ -191,7 +191,7 @@ def grippeweb_extracted_resources(
         extracted_mex_functional_units_grippeweb,
         # extracted_confluence_vvt_sources,
     )
-    load(extracted_resources)
+    load(list(extracted_resources.values()))
     return extracted_resources
 
 
