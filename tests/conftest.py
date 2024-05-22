@@ -17,7 +17,16 @@ from mex.common.wikidata.connector import (
 from mex.common.wikidata.models.organization import WikidataOrganization
 from mex.settings import Settings
 
-pytest_plugins = ("mex.common.testing.plugin",)
+pytest_plugins = (
+    "mex.common.testing.plugin",
+    "tests.blueant.mocked_blueant",
+    # "tests.confluence_vvt.conftest",
+    # "tests.datscha_web.conftest",
+    "tests.grippeweb.mocked_grippeweb",
+    # "tests.ifsg.conftest",
+    # "tests.rdmo.conftest",
+    # "tests.seq_repo.conftest",
+)
 
 TEST_DATA_DIR = Path(__file__).parent / "test_data"
 
