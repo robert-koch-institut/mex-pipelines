@@ -100,6 +100,11 @@ components of the MEx project are open-sourced under the same license as well.
 
 - `pdm run dagster dev` to launch a local dagster UI
 
+### all extractors
+
+- `pdm run all-extractors` executes all extractors
+- execute only in local or dev environment
+
 ### artificial extractor
 
 - `pdm run artificial` creates deterministic artificial sample data
