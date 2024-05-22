@@ -45,21 +45,6 @@ def unit_merged_ids_by_synonym(
 
 
 @pytest.fixture
-def mocked_confluence_vvt(monkeypatch: MonkeyPatch) -> None:
-    """Mock the Confluence-vvt connector to return empty data."""
-    response = Mock(spec=Response, status_code=200)
-    response.json.return_value = {"results": []}
-    session = MagicMock(spec=requests.Session)
-    session.get = MagicMock(side_effect=[response])
-
-    monkeypatch.setattr(
-        ConfluenceVvtConnector,
-        "__init__",
-        lambda self: setattr(self, "session", session),
-    )
-
-
-@pytest.fixture
 def detail_page_data_html() -> str:
     """Return dummy detail page HTML."""
     with open(TEST_DATA_DIR / "detail_page_data.html", encoding="utf-8") as fh:

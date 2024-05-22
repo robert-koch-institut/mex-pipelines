@@ -20,7 +20,7 @@ from mex.settings import Settings
 pytest_plugins = (
     "mex.common.testing.plugin",
     "tests.blueant.mocked_blueant",
-    # "tests.confluence_vvt.conftest",
+    "tests.confluence_vvt.mocked_confluence_vvt",
     # "tests.datscha_web.conftest",
     "tests.grippeweb.mocked_grippeweb",
     # "tests.ifsg.conftest",
