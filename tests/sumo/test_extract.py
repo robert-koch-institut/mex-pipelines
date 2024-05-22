@@ -120,7 +120,7 @@ def test_extract_ldap_contact_points_by_name(
         "person": {
             "sAMAccountName": None,
             "objectGUID": UUID("00000000-0000-4000-8000-000000000001"),
-            "mail": [],
+            "mail": ["test_person@email.de"],
             "company": None,
             "department": "PARENT-UNIT",
             "departmentNumber": None,

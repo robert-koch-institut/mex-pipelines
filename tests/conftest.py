@@ -145,6 +145,7 @@ def mocked_ldap(monkeypatch: MonkeyPatch) -> None:
             displayName="Resolved, Roland",
             objectGUID=UUID(int=1, version=4),
             department="PARENT-UNIT",
+            mail=["test_person@email.de"],
         )
     ]
     monkeypatch.setattr(

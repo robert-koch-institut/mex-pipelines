@@ -2,15 +2,12 @@ import json
 from pathlib import Path
 from typing import Any, cast
 from unittest.mock import MagicMock, Mock
-from uuid import UUID
 
 import pytest
 import requests
 from pytest import MonkeyPatch
 from requests.models import Response
 
-from mex.common.ldap.connector import LDAPConnector
-from mex.common.ldap.models.person import LDAPPerson
 from mex.common.models import ExtractedPrimarySource
 from mex.common.organigram.extract import (
     extract_organigram_units,
@@ -75,29 +72,4 @@ def mocked_confluence_vvt_detailed_page_data(
         ConfluenceVvtConnector,
         "__init__",
         lambda self, _: setattr(self, "session", session),
-    )
-
-
-@pytest.fixture
-def mocked_ldap(monkeypatch: MonkeyPatch) -> None:
-    """Mock the LDAP connector to return resolved persons and units."""
-    monkeypatch.setattr(
-        LDAPConnector,
-        "__init__",
-        lambda self: setattr(self, "_connection", MagicMock()),
-    )
-    monkeypatch.setattr(
-        LDAPConnector,
-        "get_persons",
-        lambda *_, **__: iter(
-            [
-                LDAPPerson(
-                    employeeID="42",
-                    sn="Resolved",
-                    givenName="Renate",
-                    displayName="Resolved, Renate",
-                    objectGUID=UUID(int=1, version=4),
-                )
-            ]
-        ),
     )
