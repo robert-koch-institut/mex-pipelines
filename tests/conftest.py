@@ -24,7 +24,7 @@ pytest_plugins = (
     "tests.datscha_web.mocked_datscha_web",
     "tests.grippeweb.mocked_grippeweb",
     "tests.ifsg.mocked_ifsg",
-    # "tests.rdmo.conftest",
+    "tests.rdmo.mocked_rdmo",
     # "tests.seq_repo.conftest",
 )
 
