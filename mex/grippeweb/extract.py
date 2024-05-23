@@ -28,8 +28,9 @@ def extract_ldap_actors(
 
     Args:
         grippeweb_resource_mappings: list of resources default value dicts
+
     Returns:
-        list of LDAP Actors
+        list of LDAP actors
     """
     ldap = LDAPConnector.get()
 
@@ -44,12 +45,11 @@ def extract_ldap_persons(
     grippeweb_resource_mappings: list[dict[str, Any]],
     grippeweb_access_platform: dict[str, Any],
 ) -> list[LDAPPerson]:
-    """Extract LDAP persons for grippeweb_access_platform contacts.
+    """Extract LDAP persons for grippeweb.
 
     Args:
         grippeweb_resource_mappings: list of resources default value dicts
         grippeweb_access_platform: grippeweb access platform
-
 
     Returns:
         list of LDAP persons
@@ -73,10 +73,10 @@ def extract_ldap_persons(
 def extract_grippeweb_organizations(
     grippeweb_resource_mappings: list[dict[str, Any]],
 ) -> dict[str, WikidataOrganization]:
-    """Search and extract organization from wikidata.
+    """Search and extract grippeweb organization from wikidata.
 
     Args:
-        grippeweb_resource_mappings: grippeweb  resource mappings
+        grippeweb_resource_mappings: grippeweb resource mappings
 
     Returns:
         Dict with keys: mapping default values

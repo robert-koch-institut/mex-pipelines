@@ -22,7 +22,7 @@ def transform_grippeweb_resource_mappings_to_extracted_resources(
     extracted_mex_persons_grippeweb: list[ExtractedPerson],
     grippeweb_organization_ids_by_query_string: dict[str, MergedOrganizationIdentifier],
     extracted_mex_functional_units_grippeweb: dict[Email, MergedContactPointIdentifier],
-    # TODO: add extracted_confluence_vvt_sources: list[ExtractedActivity],
+    # TODO: (MX-1583) extracted_confluence_vvt_sources: list[ExtractedActivity],
 ) -> dict[str, ExtractedResource]:
     """Transform grippe web values to extracted resources and link them.
 
@@ -38,7 +38,7 @@ def transform_grippeweb_resource_mappings_to_extracted_resources(
             extracted grippeweb mex functional accounts
 
     Returns:
-        list ExtractedResource
+        grippeweb resources by identifierInPrimarySource
     """
     resource_dict = transform_grippeweb_resource_mappings_to_dict(
         grippeweb_resource_mappings,
@@ -48,7 +48,7 @@ def transform_grippeweb_resource_mappings_to_extracted_resources(
         extracted_mex_persons_grippeweb,
         grippeweb_organization_ids_by_query_string,
         extracted_mex_functional_units_grippeweb,
-        # TODO: add extracted_confluence_vvt_sources,
+        # TODO: (blocked by MX-1583) extracted_confluence_vvt_sources,
     )
     resource_dict["grippeweb-plus"].isPartOf = [
         resource_dict["grippeweb"].stableTargetId
@@ -64,7 +64,7 @@ def transform_grippeweb_resource_mappings_to_dict(
     extracted_mex_persons_grippeweb: list[ExtractedPerson],
     grippeweb_organization_ids_by_query_string: dict[str, MergedOrganizationIdentifier],
     extracted_mex_functional_units_grippeweb: dict[Email, MergedContactPointIdentifier],
-    # TODO: add extracted_confluence_vvt_sources: list[ExtractedActivity],
+    # TODO: (MX-1583) extracted_confluence_vvt_sources: list[ExtractedActivity],
 ) -> dict[str, ExtractedResource]:
     """Transform grippe web values to extracted resources.
 
@@ -88,7 +88,7 @@ def transform_grippeweb_resource_mappings_to_dict(
         person.fullName[0]: person for person in extracted_mex_persons_grippeweb
     }
     """
-    TODO: add confluence_vvt_by_identifier_in_primary_source = {
+    TODO: (blocked by MX-1583) confluence_vvt_by_identifier_in_primary_source = {
          source.identifierInPrimarySource: source.stableTargetId
          for source in extracted_confluence_vvt_sources
      }"""
@@ -150,6 +150,10 @@ def transform_grippeweb_resource_mappings_to_dict(
         unit_in_charge = unit_stable_target_ids_by_synonym[
             resource["unitInCharge"][0]["mappingRules"][0]["forValues"][0]
         ]
+        """ TODO: (MX-1583) was_generated_by =
+            confluence_vvt_by_identifier_in_primary_source[
+            resource["wasGeneratedBy"][0]["mappingRules"][0]["forValues"][0]
+            ]"""
         resource_dict[identifier_in_primary_source] = ExtractedResource(
             accessPlatform=grippeweb_extracted_access_platform.stableTargetId,
             accessRestriction=access_restriction,
@@ -179,6 +183,7 @@ def transform_grippeweb_resource_mappings_to_dict(
             theme=theme,
             title=title,
             unitInCharge=unit_in_charge,
+            # TODO: (blocked by MX-1583) wasGeneratedBy = was_generated_by
         )
     return resource_dict
 
@@ -198,7 +203,7 @@ def transform_grippeweb_access_platform_to_extracted_access_platform(
         extracted_mex_functional_units_grippeweb: extracted grippeweb functional units
 
     Returns:
-        ExtractedAccessPlatform
+        ExtractedAccessPlatform grippeweb
     """
     identifier_in_primary_source = grippeweb_access_platform[
         "identifierInPrimarySource"

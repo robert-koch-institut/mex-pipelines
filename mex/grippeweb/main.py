@@ -95,7 +95,7 @@ def extracted_mex_functional_units_grippeweb(
     grippeweb_resource_mappings: list[dict[str, Any]],
     extracted_primary_source_ldap: ExtractedPrimarySource,
 ) -> dict[Email, MergedContactPointIdentifier]:
-    """Extract ldap persons for grippeweb from ldap and transform them to mex persons and load them to sinks."""  # noqa: E501
+    """Extract ldap actors for grippeweb from ldap and transform them to contact points and load them to sinks."""  # noqa: E501
     ldap_actors = extract_ldap_actors(grippeweb_resource_mappings)
     mex_actors_resources = list(
         transform_ldap_actors_to_mex_contact_points(
@@ -156,7 +156,7 @@ def extracted_access_platform_grippeweb(
     extracted_primary_source_grippeweb: ExtractedPrimarySource,
     extracted_mex_functional_units_grippeweb: dict[Email, MergedContactPointIdentifier],
 ) -> ExtractedAccessPlatform:
-    """Transform Grippeweb values to extracted access platform and load to sinks."""
+    """Transform Grippeweb mappings to extracted access platform and load to sinks."""
     extracted_access_platform_grippeweb = (
         transform_grippeweb_access_platform_to_extracted_access_platform(
             grippeweb_access_platform,
@@ -178,7 +178,7 @@ def grippeweb_extracted_resource_dict(
     extracted_mex_persons_grippeweb: list[ExtractedPerson],
     grippeweb_organization_ids_by_query_string: dict[str, MergedOrganizationIdentifier],
     extracted_mex_functional_units_grippeweb: dict[Email, MergedContactPointIdentifier],
-    # extracted_confluence_vvt_sources: list[ExtractedActivity],
+    # TODO: (MX-1583) extracted_confluence_vvt_sources: list[ExtractedActivity]
 ) -> dict[str, ExtractedResource]:
     """Transform Grippeweb default values to extracted resources and load to sinks."""
     extracted_resources = transform_grippeweb_resource_mappings_to_extracted_resources(
@@ -189,7 +189,7 @@ def grippeweb_extracted_resource_dict(
         extracted_mex_persons_grippeweb,
         grippeweb_organization_ids_by_query_string,
         extracted_mex_functional_units_grippeweb,
-        # extracted_confluence_vvt_sources,
+        # TODO: (blocked by MX-1583) extracted_confluence_vvt_sources,
     )
     load(list(extracted_resources.values()))
     return extracted_resources
