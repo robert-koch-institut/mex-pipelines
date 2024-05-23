@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - implement odk transform functions
 - grippeweb extract
 - dagster schedules for non-default groups, configurable via setting `schedule`
+- add publisher pipeline to sink  all merged items from mex-backend to ndjson sink as a mock target
 
 ### Changes
 
