@@ -1,4 +1,4 @@
-from typing import TypeVar
+from typing import Any
 from unittest.mock import MagicMock
 
 import pytest
@@ -17,7 +17,10 @@ from mex.ifsg.models.meta_type import MetaType
 
 
 @pytest.fixture
-def mocked_ifsg(mocked_ifsg_sql_tables, monkeypatch: MonkeyPatch) -> None:
+def mocked_ifsg(
+    mocked_ifsg_sql_tables: dict[type[BaseModel], list[dict[str, Any]]],
+    monkeypatch: MonkeyPatch,
+) -> None:
     """Mock IFSG connector."""
 
     def mocked_init(self: IFSGConnector) -> None:
@@ -35,11 +38,8 @@ def mocked_ifsg(mocked_ifsg_sql_tables, monkeypatch: MonkeyPatch) -> None:
     )
 
 
-ModelT = TypeVar("ModelT", bound=BaseModel)
-
-
 @pytest.fixture
-def mocked_ifsg_sql_tables() -> dict[ModelT, list[BaseModel]]:
+def mocked_ifsg_sql_tables() -> dict[type[BaseModel], list[dict[str, Any]]]:
     return {
         MetaCatalogue2Item: [
             {"IdCatalogue2Item": 0, "IdCatalogue": 0, "IdItem": 0},
