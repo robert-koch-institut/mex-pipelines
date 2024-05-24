@@ -52,7 +52,7 @@ def load_job_definitions() -> Definitions:
     ]
     jobs.append(
         define_asset_job(
-            "all_assets",
+            "all_extractors",
             AssetSelection.groups(*[group for group in group_names]).upstream(),
         )
     )

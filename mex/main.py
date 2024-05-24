@@ -6,4 +6,4 @@ from mex.settings import Settings
 @entrypoint(Settings)
 def run() -> None:
     """Run all extractor jobs in-process."""
-    run_job_in_process("all_assets")
+    run_job_in_process("all_extractors")
