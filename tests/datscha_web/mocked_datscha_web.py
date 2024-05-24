@@ -2,7 +2,7 @@ from typing import Any
 from unittest.mock import MagicMock
 
 import pytest
-from _pytest.monkeypatch import MonkeyPatch
+from pytest import MonkeyPatch
 
 from mex.datscha_web.connector import DatschaWebConnector
 from mex.datscha_web.models.item import DatschaWebItem

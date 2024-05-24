@@ -2,7 +2,7 @@ from unittest.mock import MagicMock
 
 import pytest
 import requests
-from _pytest.monkeypatch import MonkeyPatch
+from pytest import MonkeyPatch
 
 from mex.blueant.connector import BlueAntConnector
 from mex.blueant.models.person import BlueAntPerson

@@ -4,7 +4,7 @@ from unittest.mock import MagicMock
 
 import pytest
 import requests
-from _pytest.monkeypatch import MonkeyPatch
+from pytest import MonkeyPatch
 
 from mex.drop import DropApiConnector
 

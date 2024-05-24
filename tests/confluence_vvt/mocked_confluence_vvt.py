@@ -2,7 +2,7 @@ from unittest.mock import MagicMock, Mock
 
 import pytest
 import requests
-from _pytest.monkeypatch import MonkeyPatch
+from pytest import MonkeyPatch
 from requests import Response
 
 from mex.confluence_vvt.connector import ConfluenceVvtConnector

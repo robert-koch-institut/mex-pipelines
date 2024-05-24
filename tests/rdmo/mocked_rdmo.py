@@ -1,7 +1,7 @@
 from unittest.mock import MagicMock
 
 import pytest
-from _pytest.monkeypatch import MonkeyPatch
+from pytest import MonkeyPatch
 
 from mex.rdmo.connector import RDMOConnector
 from mex.rdmo.models.person import RDMOPerson

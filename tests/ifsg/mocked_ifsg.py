@@ -2,8 +2,8 @@ from typing import TypeVar
 from unittest.mock import MagicMock
 
 import pytest
-from _pytest.monkeypatch import MonkeyPatch
 from pydantic import BaseModel
+from pytest import MonkeyPatch
 
 from mex.ifsg.connector import IFSGConnector
 from mex.ifsg.models.meta_catalogue2item import MetaCatalogue2Item

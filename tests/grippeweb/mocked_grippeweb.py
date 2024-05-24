@@ -1,8 +1,8 @@
 from unittest.mock import MagicMock
 
 import pytest
-from _pytest.monkeypatch import MonkeyPatch
 from pydantic import BaseModel
+from pytest import MonkeyPatch
 
 from mex.grippeweb.connector import GrippewebConnector
 
