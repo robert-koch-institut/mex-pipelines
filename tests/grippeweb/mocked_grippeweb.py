@@ -1,14 +1,16 @@
 from unittest.mock import MagicMock
 
 import pytest
-from pydantic import BaseModel
 from pytest import MonkeyPatch
 
 from mex.grippeweb.connector import GrippewebConnector
 
 
 @pytest.fixture
-def mocked_grippeweb(mocked_grippeweb_sql_tables, monkeypatch: MonkeyPatch) -> None:
+def mocked_grippeweb(
+    mocked_grippeweb_sql_tables: dict[str, dict[str, list[str | None]]],
+    monkeypatch: MonkeyPatch,
+) -> None:
     """Mock grippeweb connector."""
 
     def mocked_init(self: GrippewebConnector) -> None:
@@ -27,7 +29,7 @@ def mocked_grippeweb(mocked_grippeweb_sql_tables, monkeypatch: MonkeyPatch) -> N
 
 
 @pytest.fixture
-def mocked_grippeweb_sql_tables() -> dict[str, list[BaseModel]]:
+def mocked_grippeweb_sql_tables() -> dict[str, dict[str, list[str | None]]]:
     return {
         "vActualQuestion": {
             "Id": ["AAA", "BBB"],
