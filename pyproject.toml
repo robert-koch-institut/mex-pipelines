@@ -33,7 +33,7 @@ optional-dependencies.dev = [
     "pytest-cov==5.0.0",
     "pytest-random-order==1.1.1",
     "pytest-xdist==3.6.1",
-    "pytest==8.2.0",
+    "pytest==8.2.1",
     "ruff==0.4.4",
     "sphinx==7.3.7",
     "types-beautifulsoup4==4.12.0.20240511",
@@ -43,6 +43,7 @@ optional-dependencies.dev = [
 ]
 
 [project.scripts]
+all-extractors = "mex.main:run"
 artificial = "mex.artificial.main:run"
 biospecimen = "mex.biospecimen.main:run"
 blueant = "mex.blueant.main:run"

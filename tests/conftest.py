@@ -21,41 +21,18 @@ from mex.common.wikidata.connector import (
 from mex.common.wikidata.models.organization import WikidataOrganization
 from mex.settings import Settings
 
-pytest_plugins = ("mex.common.testing.plugin",)
+pytest_plugins = (
+    "mex.common.testing.plugin",
+    "tests.blueant.mocked_blueant",
+    "tests.confluence_vvt.mocked_confluence_vvt",
+    "tests.datscha_web.mocked_datscha_web",
+    "tests.grippeweb.mocked_grippeweb",
+    "tests.ifsg.mocked_ifsg",
+    "tests.rdmo.mocked_rdmo",
+    "tests.seq_repo.mocked_drop_for_seqrepo",
+)
 
 TEST_DATA_DIR = Path(__file__).parent / "test_data"
-
-
-@pytest.fixture
-def mocked_ldap(monkeypatch: MonkeyPatch) -> None:
-    """Mock the LDAP connector to return resolved persons and units."""
-    actors = [
-        LDAPActor(
-            sAMAccountName="C1",
-            objectGUID=UUID(int=4, version=4),
-            mail=["C1@email.de"],
-        )
-    ]
-    persons = [
-        LDAPPerson(
-            department="PARENT-UNIT",
-            employeeID="42",
-            sn="Contact",
-            givenName="Carla",
-            displayName="Contact, Carla",
-            objectGUID=UUID(int=4, version=4),
-            mail=["test_person@email.de"],
-        )
-    ]
-    monkeypatch.setattr(
-        LDAPConnector,
-        "__init__",
-        lambda self: setattr(self, "_connection", MagicMock()),
-    )
-    monkeypatch.setattr(
-        LDAPConnector, "get_functional_accounts", lambda *_, **__: iter(actors)
-    )
-    monkeypatch.setattr(LDAPConnector, "get_persons", lambda *_, **__: iter(persons))
 
 
 @pytest.fixture(autouse=True)
@@ -139,4 +116,40 @@ def mocked_wikidata(
         WikidataAPIConnector,
         "get_wikidata_item_details_by_id",
         get_wikidata_item_details_by_id,
+    )
+
+
+@pytest.fixture
+def mocked_ldap(monkeypatch: MonkeyPatch) -> None:
+    """Mock the LDAP connector to return resolved persons and units."""
+    actors = [
+        LDAPActor(
+            sAMAccountName="ContactC",
+            objectGUID=UUID(int=4, version=4),
+            mail=["email@email.de", "contactc@rki.de"],
+        )
+    ]
+    monkeypatch.setattr(
+        LDAPConnector,
+        "__init__",
+        lambda self: setattr(self, "_connection", MagicMock()),
+    )
+    monkeypatch.setattr(
+        LDAPConnector, "get_functional_accounts", lambda *_, **__: iter(actors)
+    )
+    persons = [
+        LDAPPerson(
+            employeeID="42",
+            sn="Resolved",
+            givenName=["Roland"],
+            displayName="Resolved, Roland",
+            objectGUID=UUID(int=1, version=4),
+            department="PARENT-UNIT",
+            mail=["test_person@email.de"],
+        )
+    ]
+    monkeypatch.setattr(
+        LDAPConnector,
+        "get_persons",
+        lambda *_, **__: iter(persons),
     )
