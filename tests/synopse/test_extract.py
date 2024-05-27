@@ -93,7 +93,7 @@ def test_extract_synopse_project_contributors(synopse_project: SynopseProject) -
         extract_synopse_project_contributors([synopse_project, synopse_project])
     )
     assert len(persons) == 1
-    assert persons[0].person.displayName == "Contact, Carla"
+    assert persons[0].person.displayName == "Resolved, Roland"
 
 
 def test_extract_study_overviews() -> None:

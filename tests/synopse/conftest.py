@@ -1,12 +1,8 @@
 from itertools import groupby
-from unittest.mock import MagicMock
 from uuid import UUID
 
 import pytest
-from pytest import MonkeyPatch
 
-from mex.common.ldap.connector import LDAPConnector
-from mex.common.ldap.models.person import LDAPPerson
 from mex.common.models import (
     ExtractedAccessPlatform,
     ExtractedActivity,
@@ -542,24 +538,3 @@ def extracted_variable_groups(
             resource_ids_by_synopse_id,
         )
     )
-
-
-@pytest.fixture
-def mocked_ldap(monkeypatch: MonkeyPatch) -> None:
-    """Mock the LDAP connector to return resolved persons and units."""
-    persons = [
-        LDAPPerson(
-            employeeID="42",
-            sn="Contact",
-            givenName="Carla",
-            displayName="Contact, Carla",
-            objectGUID=UUID(int=4, version=4),
-            mail=["info@rki.de", "contactc@rki.de"],
-        )
-    ]
-    monkeypatch.setattr(
-        LDAPConnector,
-        "__init__",
-        lambda self: setattr(self, "_connection", MagicMock()),
-    )
-    monkeypatch.setattr(LDAPConnector, "get_persons", lambda *_, **__: iter(persons))

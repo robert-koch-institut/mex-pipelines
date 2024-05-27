@@ -8,7 +8,7 @@ from mex.blueant.extract import (
 )
 from mex.blueant.models.source import BlueAntSource
 from mex.common.ldap.connector import LDAPConnector
-from tests.blueant.conftest import MOCKED_API_SOURCE, MOCKED_RESOLVED_ATTRIBUTES
+from tests.blueant.mocked_blueant import MOCKED_API_SOURCE, MOCKED_RESOLVED_ATTRIBUTES
 
 
 @pytest.mark.integration

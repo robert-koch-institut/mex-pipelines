@@ -10,7 +10,7 @@ from mex.seq_repo.extract import extract_sources
 
 
 @pytest.mark.usefixtures(
-    "mocked_drop",
+    "mocked_drop_for_seqrepo",
 )
 def test_extract_sources() -> None:
     sources = list(extract_sources())
