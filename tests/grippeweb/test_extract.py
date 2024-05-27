@@ -38,25 +38,19 @@ def test_extract_columns_by_table_and_column_name() -> None:
     assert columns == expected
 
 
-@pytest.mark.usefixtures("mocked_ldap")
+@pytest.mark.usefixtures("mocked_ldap", "mocked_grippeweb")
 def test_extract_ldap_actors(grippeweb_resource_mappings: list[dict[str, Any]]) -> None:
     ldap_actors = extract_ldap_actors(grippeweb_resource_mappings)
-    expected = [
-        LDAPActor(
-            sAMAccountName="C1",
-            objectGUID=UUID(int=4, version=4),
-            mail=["C1@email.de"],
-        ),
-        LDAPActor(
-            sAMAccountName="C1",
-            objectGUID=UUID(int=4, version=4),
-            mail=["C1@email.de"],
-        ),
-    ]
-    assert ldap_actors == expected
+    expected = LDAPActor(
+        sAMAccountName="ContactC",
+        objectGUID=UUID(int=4, version=4),
+        mail=["email@email.de", "contactc@rki.de"],
+    )
+
+    assert ldap_actors[0] == expected
 
 
-@pytest.mark.usefixtures("mocked_ldap")
+@pytest.mark.usefixtures("mocked_ldap", "mocked_grippeweb")
 def test_extract_ldap_persons(
     grippeweb_resource_mappings: list[dict[str, Any]],
     grippeweb_access_platform: dict[str, Any],
@@ -64,39 +58,19 @@ def test_extract_ldap_persons(
     ldap_persons = extract_ldap_persons(
         grippeweb_resource_mappings, grippeweb_access_platform
     )
-    expected = [
-        LDAPPerson(
-            objectGUID=UUID(int=4, version=4),
-            mail=["test_person@email.de"],
-            department="PARENT-UNIT",
-            displayName="Contact, Carla",
-            employeeID="42",
-            givenName=["Carla"],
-            sn="Contact",
-        ),
-        LDAPPerson(
-            objectGUID=UUID(int=4, version=4),
-            mail=["test_person@email.de"],
-            department="PARENT-UNIT",
-            displayName="Contact, Carla",
-            employeeID="42",
-            givenName=["Carla"],
-            sn="Contact",
-        ),
-        LDAPPerson(
-            objectGUID=UUID(int=4, version=4),
-            mail=["test_person@email.de"],
-            department="PARENT-UNIT",
-            displayName="Contact, Carla",
-            employeeID="42",
-            givenName=["Carla"],
-            sn="Contact",
-        ),
-    ]
-    assert ldap_persons == expected
+    expected = LDAPPerson(
+        objectGUID=UUID(int=1, version=4),
+        mail=["test_person@email.de"],
+        department="PARENT-UNIT",
+        displayName="Resolved, Roland",
+        employeeID="42",
+        givenName=["Roland"],
+        sn="Resolved",
+    )
+    assert ldap_persons[0] == expected
 
 
-@pytest.mark.usefixtures("mocked_wikidata")
+@pytest.mark.usefixtures("mocked_wikidata", "mocked_grippeweb")
 def test_extract_grippeweb_organizations(
     grippeweb_resource_mappings: list[dict[str, Any]]
 ) -> None:

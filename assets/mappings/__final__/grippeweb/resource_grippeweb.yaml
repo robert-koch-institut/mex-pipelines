@@ -23,7 +23,7 @@ contact:
   - fieldInPrimarySource: n/a
     mappingRules:
     - forValues:
-      - "c1@email.de"
+      - "contactc@rki.de"
       rule: Match value by using ldap extract extractor.
 contributingUnit:
   - fieldInPrimarySource: n/a
@@ -35,7 +35,7 @@ contributor:
   - fieldInPrimarySource: n/a
     mappingRules:
     - forValues:
-      - "Carla Contact"
+      - "Roland Resolved"
       rule: Match values using ldap extractor.
 created:
   - fieldInPrimarySource: n/a

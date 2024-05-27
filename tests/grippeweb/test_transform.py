@@ -1,5 +1,7 @@
 from typing import Any
 
+import pytest
+
 from mex.common.models import (
     ExtractedAccessPlatform,
     ExtractedPerson,
@@ -20,6 +22,7 @@ from mex.grippeweb.transform import (
 )
 
 
+@pytest.mark.usefixtures("mocked_grippeweb")
 def test_transform_grippeweb_access_platform_to_extracted_access_platform(
     grippeweb_access_platform: dict[str, Any],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
@@ -38,7 +41,7 @@ def test_transform_grippeweb_access_platform_to_extracted_access_platform(
     expected = {
         "hadPrimarySource": extracted_primary_sources["grippeweb"].stableTargetId,
         "identifierInPrimarySource": "primary-source",
-        "contact": [extracted_mex_functional_units_grippeweb["c1@email.de"]],
+        "contact": [extracted_mex_functional_units_grippeweb["contactc@rki.de"]],
         "technicalAccessibility": "https://mex.rki.de/item/technical-accessibility-1",
         "title": [{"value": "primary-source", "language": "en"}],
         "unitInCharge": [unit_stable_target_ids_by_synonym["C1"]],
@@ -51,6 +54,7 @@ def test_transform_grippeweb_access_platform_to_extracted_access_platform(
     )
 
 
+@pytest.mark.usefixtures("mocked_grippeweb")
 def test_transform_grippeweb_resource_mappings_to_dict(
     grippeweb_resource_mappings: list[dict[str, Any]],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
@@ -78,7 +82,7 @@ def test_transform_grippeweb_resource_mappings_to_dict(
         "anonymizationPseudonymization": [
             "https://mex.rki.de/item/anonymization-pseudonymization-2"
         ],
-        "contact": [extracted_mex_functional_units_grippeweb["c1@email.de"]],
+        "contact": [extracted_mex_functional_units_grippeweb["contactc@rki.de"]],
         "contributingUnit": [unit_stable_target_ids_by_synonym["C1"]],
         "contributor": [extracted_mex_persons_grippeweb[0].stableTargetId],
         "created": YearMonth("2011"),
@@ -123,6 +127,7 @@ def test_transform_grippeweb_resource_mappings_to_dict(
     )
 
 
+@pytest.mark.usefixtures("mocked_grippeweb")
 def test_transform_grippeweb_resource_mappings_to_extracted_resources(
     grippeweb_resource_mappings: list[dict[str, Any]],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
