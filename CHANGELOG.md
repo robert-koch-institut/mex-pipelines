@@ -9,13 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- entrypoint `all-extractors`: run all extractors
+
 ### Changes
+
+- update mex-common to 0.25.1
 
 ### Deprecated
 
 ### Removed
 
 ### Fixed
+
+- first test does not receive isolated settings but potentially production settings
 
 ### Security
 

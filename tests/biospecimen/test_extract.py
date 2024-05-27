@@ -25,15 +25,15 @@ def test_extract_biospecimen_contacts_by_email(
     expected = [
         LDAPPerson(
             sAMAccountName=None,
-            objectGUID=UUID("00000000-0000-4000-8000-000000000004"),
+            objectGUID=UUID("00000000-0000-4000-8000-000000000001"),
             mail=["test_person@email.de"],
             company=None,
             department="PARENT-UNIT",
-            displayName="Contact, Carla",
+            displayName="Resolved, Roland",
             employeeID="42",
-            givenName=["Carla"],
+            givenName=["Roland"],
             ou=[],
-            sn="Contact",
+            sn="Resolved",
         )
     ]
     assert len(ldap_persons) == 1
