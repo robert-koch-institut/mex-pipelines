@@ -68,7 +68,7 @@ def mocked_ldap(monkeypatch: MonkeyPatch) -> None:
 
 @pytest.fixture
 def unit_stable_target_ids_by_synonym(
-    extracted_primary_sources: dict[str, ExtractedPrimarySource]
+    extracted_primary_sources: dict[str, ExtractedPrimarySource],
 ) -> dict[str, MergedOrganizationalUnitIdentifier]:
     """Extract the dummy units and return them grouped by synonyms."""
     organigram_units = extract_organigram_units()

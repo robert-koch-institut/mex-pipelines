@@ -1,6 +1,17 @@
+from unittest.mock import MagicMock
+
+import pytest
+import requests
+from pytest import MonkeyPatch
+
+from mex.common.exceptions import MExError
+from mex.drop import DropApiConnector
 from mex.seq_repo.extract import extract_sources
 
 
+@pytest.mark.usefixtures(
+    "mocked_drop",
+)
 def test_extract_sources() -> None:
     sources = list(extract_sources())
     expected = {
@@ -15,3 +26,21 @@ def test_extract_sources() -> None:
         "project_id": "TEST-ID",
     }
     assert sources[0].model_dump() == expected
+
+
+def test_extract_sources_fails_on_unexpected_number_of_files(
+    monkeypatch: MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        DropApiConnector,
+        "__init__",
+        lambda self: setattr(self, "session", MagicMock(spec=requests.Session)),
+    )
+    monkeypatch.setattr(
+        DropApiConnector,
+        "list_files",
+        lambda _self, x_system: [],
+    )
+
+    with pytest.raises(MExError, match="Expected exactly one seq-repo file"):
+        list(extract_sources())

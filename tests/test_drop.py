@@ -28,7 +28,7 @@ def test_list_files_of_non_existing_x_system() -> None:
 def test_list_files_mocked(monkeypatch: MonkeyPatch) -> None:
     mocked_send_request = MagicMock(
         spec=DropApiConnector._send_request,
-        return_value=Mock(json=MagicMock(return_value=["default"])),
+        return_value=Mock(json=MagicMock(return_value={"entity-types": ["default"]})),
     )
     monkeypatch.setattr(DropApiConnector, "_send_request", mocked_send_request)
     connector = DropApiConnector.get()

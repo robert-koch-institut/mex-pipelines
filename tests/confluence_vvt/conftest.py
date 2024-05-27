@@ -34,7 +34,7 @@ def settings() -> ConfluenceVvtSettings:
 
 @pytest.fixture
 def unit_merged_ids_by_synonym(
-    extracted_primary_sources: dict[str, ExtractedPrimarySource]
+    extracted_primary_sources: dict[str, ExtractedPrimarySource],
 ) -> dict[str, MergedOrganizationalUnitIdentifier]:
     """Return unit merged ids by synonym for organigram units."""
     organigram_units = extract_organigram_units()

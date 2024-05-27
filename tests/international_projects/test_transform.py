@@ -35,7 +35,7 @@ def test_transform_international_projects_source_to_mex_source(
     unit_id = Identifier.generate(seed=21)
     unit_stable_target_ids_by_synonym = {"FG99": unit_id}
 
-    international_projects_sources = extract_international_projects_sources()
+    international_projects_sources = list(extract_international_projects_sources())
 
     extracted_activities = list(
         transform_international_projects_sources_to_extracted_activities(

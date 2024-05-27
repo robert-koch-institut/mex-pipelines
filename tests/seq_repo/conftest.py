@@ -1,8 +1,11 @@
+import json
+from pathlib import Path
 from typing import Any
 from unittest.mock import MagicMock
 from uuid import UUID
 
 import pytest
+import requests
 from pytest import MonkeyPatch
 
 from mex.common.ldap.connector import LDAPConnector
@@ -25,6 +28,7 @@ from mex.common.types import (
     MergedOrganizationalUnitIdentifier,
     MergedPersonIdentifier,
 )
+from mex.drop import DropApiConnector
 from mex.seq_repo.filter import filter_sources_on_latest_sequencing_date
 from mex.seq_repo.model import SeqRepoSource
 from mex.seq_repo.settings import SeqRepoSettings
@@ -542,4 +546,29 @@ def mocked_ldap(monkeypatch: MonkeyPatch) -> None:
                 )
             ]
         ),
+    )
+
+
+@pytest.fixture
+def mocked_drop(monkeypatch: MonkeyPatch) -> None:
+    """Mock the drop api connector to return dummy data."""
+    monkeypatch.setattr(
+        DropApiConnector,
+        "__init__",
+        lambda self: setattr(self, "session", MagicMock(spec=requests.Session)),
+    )
+    monkeypatch.setattr(
+        DropApiConnector,
+        "list_files",
+        lambda *_, **__: ["one"],
+    )
+
+    def get_file_mocked(*_, **__):
+        with open(Path(__file__).parent / "test_data" / "default.json") as handle:
+            return json.load(handle)
+
+    monkeypatch.setattr(
+        DropApiConnector,
+        "get_file",
+        get_file_mocked,
     )

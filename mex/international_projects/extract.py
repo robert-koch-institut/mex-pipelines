@@ -1,6 +1,5 @@
 import warnings
 from collections.abc import Generator, Iterable
-from datetime import datetime
 from typing import Any
 
 import pandas as pd
@@ -9,12 +8,13 @@ from mex.common.identity import get_provider
 from mex.common.ldap.connector import LDAPConnector
 from mex.common.ldap.models.person import LDAPPersonWithQuery
 from mex.common.ldap.transform import analyse_person_string
-from mex.common.logging import watch
+from mex.common.logging import logger, watch
 from mex.common.models import ExtractedPrimarySource
 from mex.common.types import (
     MergedOrganizationIdentifier,
     TemporalEntity,
     TemporalEntityPrecision,
+    YearMonthDay,
 )
 from mex.common.wikidata.extract import search_organization_by_label
 from mex.common.wikidata.models.organization import WikidataOrganization
@@ -42,7 +42,10 @@ def extract_international_projects_sources() -> (
             category=UserWarning,
         )
         df = pd.read_excel(
-            settings.file_path, keep_default_na=False, parse_dates=True, header=1
+            settings.file_path,
+            keep_default_na=False,
+            parse_dates=True,
+            header=1,
         )
     for row in df.iterrows():
         if source := extract_international_projects_source(row[1]):
@@ -153,8 +156,7 @@ def extract_international_projects_funding_sources(
     for source in international_projects_sources:
         if funder_or_commissioner := source.funding_source:
             for org in funder_or_commissioner:
-                wikidata_org = search_organization_by_label(org)
-                if wikidata_org:
+                if wikidata_org := search_organization_by_label(org):
                     found_orgs[org] = wikidata_org
     return found_orgs
 
@@ -205,11 +207,12 @@ def get_organization_merged_id_by_query(
             organization_stable_target_id_by_query[query] = (
                 MergedOrganizationIdentifier(identities[0].stableTargetId)
             )
-
     return organization_stable_target_id_by_query
 
 
-def get_temporal_entity_from_cell(cell_value: Any) -> TemporalEntity | None:
+def get_temporal_entity_from_cell(
+    cell_value: Any,
+) -> TemporalEntity | YearMonthDay | None:
     """Try to extract a temporal_entity from a cell.
 
     Args:
@@ -218,8 +221,8 @@ def get_temporal_entity_from_cell(cell_value: Any) -> TemporalEntity | None:
     Returns:
         TemporalEntity or None
     """
-    if isinstance(cell_value, datetime):
-        temporal_entity = TemporalEntity(cell_value)
-        temporal_entity.precision = TemporalEntityPrecision.DAY
-        return temporal_entity
-    return None
+    try:
+        return YearMonthDay(cell_value, precision=TemporalEntityPrecision.DAY)
+    except (TypeError, ValueError) as error:
+        logger.debug(error)
+        return None
