@@ -27,7 +27,7 @@ def test_transform_grippeweb_access_platform_to_extracted_access_platform(
     grippeweb_access_platform: dict[str, Any],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
-    extracted_mex_functional_units_grippeweb: dict[Email, MergedContactPointIdentifier],
+    extracted_mex_persons_grippeweb: list[ExtractedPerson],
 ) -> None:
 
     extracted_access_platform = (
@@ -35,13 +35,13 @@ def test_transform_grippeweb_access_platform_to_extracted_access_platform(
             grippeweb_access_platform,
             unit_stable_target_ids_by_synonym,
             extracted_primary_sources["grippeweb"],
-            extracted_mex_functional_units_grippeweb,
+            extracted_mex_persons_grippeweb,
         )
     )
     expected = {
         "hadPrimarySource": extracted_primary_sources["grippeweb"].stableTargetId,
         "identifierInPrimarySource": "primary-source",
-        "contact": [extracted_mex_functional_units_grippeweb["contactc@rki.de"]],
+        "contact": [extracted_mex_persons_grippeweb[0].stableTargetId],
         "technicalAccessibility": "https://mex.rki.de/item/technical-accessibility-1",
         "title": [{"value": "primary-source", "language": "en"}],
         "unitInCharge": [unit_stable_target_ids_by_synonym["C1"]],

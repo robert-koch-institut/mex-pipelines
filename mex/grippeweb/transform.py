@@ -119,9 +119,15 @@ def transform_grippeweb_resource_mappings_to_dict(
         description = resource["description"][0]["mappingRules"][0]["setValues"]
         documentation = resource["documentation"][0]["mappingRules"][0]["setValues"]
         icd10code = resource["icd10code"][0]["mappingRules"][0]["setValues"]
-        identifier_in_primary_source = resource["identifierInPrimarySource"][0][
-            "mappingRules"
-        ][0]["setValues"][0]
+        identifier_in_primary_source_mapping_rules = resource[
+            "identifierInPrimarySource"
+        ][0]["mappingRules"][0]
+        if set_values := identifier_in_primary_source_mapping_rules["setValues"]:
+            identifier_in_primary_source = set_values[0]
+        else:
+            identifier_in_primary_source = identifier_in_primary_source_mapping_rules[
+                "forValues"
+            ][0]
         keyword = resource["keyword"][0]["mappingRules"][0]["setValues"]
         language = resource["language"][0]["mappingRules"][0]["setValues"]
         mesh_id = resource["meshId"][0]["mappingRules"][0]["setValues"]
@@ -192,7 +198,7 @@ def transform_grippeweb_access_platform_to_extracted_access_platform(
     grippeweb_access_platform: dict[str, Any],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     extracted_primary_source: ExtractedPrimarySource,
-    extracted_mex_functional_units_grippeweb: dict[Email, MergedContactPointIdentifier],
+    extracted_mex_persons_grippeweb: list[ExtractedPerson],
 ) -> ExtractedAccessPlatform:
     """Transform grippeweb access platform to ExtractedAccessPlatform.
 
@@ -200,17 +206,21 @@ def transform_grippeweb_access_platform_to_extracted_access_platform(
         grippeweb_access_platform: grippeweb extracted access platform
         unit_stable_target_ids_by_synonym: Unit stable target ids by synonym
         extracted_primary_source: Extracted primary source
-        extracted_mex_functional_units_grippeweb: extracted grippeweb functional units
+        extracted_mex_persons_grippeweb: extracted grippeweb persons
 
     Returns:
         ExtractedAccessPlatform grippeweb
     """
+    mex_person_stable_target_id_by_email = {
+        person.email[0]: person.stableTargetId
+        for person in extracted_mex_persons_grippeweb
+    }
     identifier_in_primary_source = grippeweb_access_platform[
         "identifierInPrimarySource"
     ][0]["mappingRules"][0]["setValues"]
 
     contact = [
-        extracted_mex_functional_units_grippeweb[email.lower()]
+        mex_person_stable_target_id_by_email[email]
         for email in grippeweb_access_platform["contact"][0]["mappingRules"][0][
             "forValues"
         ]

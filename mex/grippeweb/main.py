@@ -154,7 +154,7 @@ def extracted_access_platform_grippeweb(
     grippeweb_access_platform: dict[str, Any],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     extracted_primary_source_grippeweb: ExtractedPrimarySource,
-    extracted_mex_functional_units_grippeweb: dict[Email, MergedContactPointIdentifier],
+    extracted_mex_persons_grippeweb: list[ExtractedPerson],
 ) -> ExtractedAccessPlatform:
     """Transform Grippeweb mappings to extracted access platform and load to sinks."""
     extracted_access_platform_grippeweb = (
@@ -162,7 +162,7 @@ def extracted_access_platform_grippeweb(
             grippeweb_access_platform,
             unit_stable_target_ids_by_synonym,
             extracted_primary_source_grippeweb,
-            extracted_mex_functional_units_grippeweb,
+            extracted_mex_persons_grippeweb,
         )
     )
     load([extracted_access_platform_grippeweb])

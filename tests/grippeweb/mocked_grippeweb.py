@@ -42,7 +42,7 @@ def extracted_mex_persons_grippeweb() -> list[ExtractedPerson]:
     """Return an extracted person with static dummy values."""
     return [
         ExtractedPerson(
-            email=["ContactC@rki.de", "info@rki.de"],
+            email=["test_person@email.de"],
             familyName="Contact",
             givenName="Carla",
             fullName="Contact, Carla",
@@ -99,7 +99,7 @@ def grippeweb_access_platform() -> dict[str, Any]:
                 "examplesInPrimarySource": None,
                 "mappingRules": [
                     {
-                        "forValues": ["contactc@rki.de"],
+                        "forValues": ["test_person@email.de"],
                         "setValues": None,
                         "rule": "Match value using ldap extractor",
                     }
