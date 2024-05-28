@@ -21,10 +21,10 @@ def extract_columns_by_table_and_column_name() -> dict[str, dict[str, list[Any]]
     }
 
 
-def extract_ldap_actors(
+def extract_ldap_actors_for_functional_accounts(
     grippeweb_resource_mappings: list[dict[str, Any]],
 ) -> list[LDAPActor]:
-    """Extract LDAP actors for grippeweb resource mapping contacts.
+    """Extract LDAP actors functional accounts from grippeweb resource mapping contacts.
 
     Args:
         grippeweb_resource_mappings: list of resources default value dicts

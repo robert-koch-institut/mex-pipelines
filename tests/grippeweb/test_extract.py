@@ -8,7 +8,7 @@ from mex.common.ldap.models.person import LDAPPerson
 from mex.grippeweb.extract import (
     extract_columns_by_table_and_column_name,
     extract_grippeweb_organizations,
-    extract_ldap_actors,
+    extract_ldap_actors_for_functional_accounts,
     extract_ldap_persons,
 )
 
@@ -39,8 +39,12 @@ def test_extract_columns_by_table_and_column_name() -> None:
 
 
 @pytest.mark.usefixtures("mocked_ldap", "mocked_grippeweb")
-def test_extract_ldap_actors(grippeweb_resource_mappings: list[dict[str, Any]]) -> None:
-    ldap_actors = extract_ldap_actors(grippeweb_resource_mappings)
+def test_extract_ldap_actors_for_functional_accounts(
+    grippeweb_resource_mappings: list[dict[str, Any]]
+) -> None:
+    ldap_actors = extract_ldap_actors_for_functional_accounts(
+        grippeweb_resource_mappings
+    )
     expected = LDAPActor(
         sAMAccountName="ContactC",
         objectGUID=UUID(int=4, version=4),

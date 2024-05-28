@@ -26,7 +26,7 @@ from mex.common.types import (
 from mex.grippeweb.extract import (
     extract_columns_by_table_and_column_name,
     extract_grippeweb_organizations,
-    extract_ldap_actors,
+    extract_ldap_actors_for_functional_accounts,
     extract_ldap_persons,
 )
 from mex.grippeweb.settings import GrippewebSettings
@@ -96,7 +96,9 @@ def extracted_mex_functional_units_grippeweb(
     extracted_primary_source_ldap: ExtractedPrimarySource,
 ) -> dict[Email, MergedContactPointIdentifier]:
     """Extract ldap actors for grippeweb from ldap and transform them to contact points and load them to sinks."""  # noqa: E501
-    ldap_actors = extract_ldap_actors(grippeweb_resource_mappings)
+    ldap_actors = extract_ldap_actors_for_functional_accounts(
+        grippeweb_resource_mappings
+    )
     mex_actors_resources = list(
         transform_ldap_actors_to_mex_contact_points(
             ldap_actors, extracted_primary_source_ldap
