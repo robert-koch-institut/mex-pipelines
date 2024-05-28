@@ -91,7 +91,8 @@ def transform_grippeweb_resource_mappings_to_dict(
     TODO: (blocked by MX-1583) confluence_vvt_by_identifier_in_primary_source = {
          source.identifierInPrimarySource: source.stableTargetId
          for source in extracted_confluence_vvt_sources
-     }"""
+     }
+    """
     for resource in grippeweb_resource_mappings:
 
         access_restriction = resource["accessRestriction"][0]["mappingRules"][0][
