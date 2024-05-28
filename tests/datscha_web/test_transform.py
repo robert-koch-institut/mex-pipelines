@@ -5,14 +5,9 @@ import pytest
 from mex.common.models import ExtractedPrimarySource
 from mex.common.testing import Joker
 from mex.common.types import Identifier
-from mex.common.wikidata.models.organization import WikidataOrganization
-from mex.common.wikidata.transform import (
-    transform_wikidata_organizations_to_extracted_organizations,
-)
 from mex.datscha_web.models.item import DatschaWebItem
 from mex.datscha_web.transform import (
     transform_datscha_web_items_to_mex_activities,
-    transform_wikidata_organizations_to_extracted_organizations_with_query,
 )
 
 
@@ -134,22 +129,3 @@ def test_transform_datscha_web_items_to_mex_activities_without_involved_persons(
         "theme": ["https://mex.rki.de/item/theme-1"],
         "title": [{"value": "Consequuntur atque reiciendis voluptates minus."}],
     }
-
-
-def test_transform_wikidata_organizations_to_extracted_organizations_with_query(
-    wikidata_organization: WikidataOrganization,
-    extracted_primary_sources: dict[str, ExtractedPrimarySource],
-) -> None:
-    expected = {
-        "test": next(
-            transform_wikidata_organizations_to_extracted_organizations(
-                [wikidata_organization], extracted_primary_sources["wikidata"]
-            )
-        )
-    }
-    assert (
-        transform_wikidata_organizations_to_extracted_organizations_with_query(
-            {"test": wikidata_organization}, extracted_primary_sources["wikidata"]
-        )
-        == expected
-    )

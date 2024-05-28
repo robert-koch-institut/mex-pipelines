@@ -122,7 +122,7 @@ def extracted_activity(
 
 
 @asset(group_name="seq_repo")
-def extracted_access_platform(
+def seq_repo_extracted_access_platform(
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
 ) -> ExtractedAccessPlatform:
@@ -148,7 +148,7 @@ def extracted_access_platform(
 def extracted_distribution(
     seq_repo_latest_source: dict[str, SeqRepoSource],
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
-    extracted_access_platform: ExtractedAccessPlatform,
+    seq_repo_extracted_access_platform: ExtractedAccessPlatform,
 ) -> dict[str, ExtractedDistribution]:
     """Extract distribution from Seq-Repo."""
     settings = SeqRepoSettings.get()
@@ -159,7 +159,7 @@ def extracted_distribution(
     mex_distributions = transform_seq_repo_distribution_to_extracted_distribution(
         seq_repo_latest_source,
         distribution,
-        extracted_access_platform,
+        seq_repo_extracted_access_platform,
         extracted_primary_source_seq_repo,
     )
 
