@@ -10,7 +10,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - entrypoint `all-extractors`: run all extractors
-
 - transform grippeweb resources
 - wikidata aux extractor into seq-repo
 
