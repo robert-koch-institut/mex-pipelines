@@ -19,7 +19,6 @@ from mex.mapping.extract import extract_mapping_data
 from mex.odk.extract import (
     extract_odk_raw_data,
     get_external_partner_and_publisher_by_label,
-    get_organization_merged_id_by_query,
 )
 from mex.odk.model import ODKData
 from mex.odk.settings import ODKSettings
@@ -30,6 +29,7 @@ from mex.odk.transform import (
     transform_odk_variable_groups_to_extracted_variable_groups,
 )
 from mex.pipeline import asset, run_job_in_process
+from mex.pipeline.wikidata import get_organization_merged_id_by_query
 from mex.sinks import load
 
 

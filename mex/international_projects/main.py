@@ -16,7 +16,6 @@ from mex.international_projects.extract import (
     extract_international_projects_partner_organizations,
     extract_international_projects_project_leaders,
     extract_international_projects_sources,
-    get_organization_merged_id_by_query,
 )
 from mex.international_projects.models.source import InternationalProjectsSource
 from mex.international_projects.settings import InternationalProjectsSettings
@@ -24,6 +23,7 @@ from mex.international_projects.transform import (
     transform_international_projects_sources_to_extracted_activities,
 )
 from mex.pipeline import asset, run_job_in_process
+from mex.pipeline.wikidata import get_organization_merged_id_by_query
 from mex.sinks import load
 
 
