@@ -13,15 +13,15 @@ dependencies = [
     "dagster-webserver==1.7.7",
     "dagster==1.7.7",
     "faker==25.3.0",
-    "mex-common@git+https://github.com/robert-koch-institut/mex-common.git@0.25.1",
+    "mex-common@git+https://github.com/robert-koch-institut/mex-common.git@0.26.0",
     "numpy==1.26.4",
     "openpyxl==3.1.2",
     "pandas==2.2.2",
-    "pydantic==2.7.1",
+    "pydantic==2.7.2",
     "pyodbc==5.1.0",
     "pyyaml==6.0.1",
     "requests-ntlm==1.2.0",
-    "requests==2.31.0",
+    "requests==2.32.2",
     "xlrd==2.0.1",
 ]
 optional-dependencies.dev = [
@@ -39,7 +39,7 @@ optional-dependencies.dev = [
     "types-beautifulsoup4==4.12.0.20240511",
     "types-pytz==2024.1.0.20240417",
     "types-pyyaml==6.0.12.20240311",
-    "types-requests==2.32.0.20240521",
+    "types-requests==2.32.0.20240523",
 ]
 
 [project.scripts]

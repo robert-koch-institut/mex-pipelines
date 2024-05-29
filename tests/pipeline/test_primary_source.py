@@ -11,7 +11,7 @@ def test_extracted_primary_sources() -> None:
     primary_sources = extracted_primary_sources()
     assert len(primary_sources) > 10
     assert primary_sources[0].model_dump(exclude_defaults=True) == {
-        "identifier": "00000000000000",
+        "identifier": "00000000000001",
         "hadPrimarySource": "00000000000000",
         "identifierInPrimarySource": "mex",
         "stableTargetId": "00000000000000",
