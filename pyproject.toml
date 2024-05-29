@@ -9,10 +9,10 @@ urls = { Repository = "https://github.com/robert-koch-institut/mex-extractors" }
 requires-python = "<3.13,>=3.11"
 dependencies = [
     "beautifulsoup4==4.12.3",
-    "dagster-postgres==0.23.5",
-    "dagster-webserver==1.7.5",
-    "dagster==1.7.5",
-    "faker==25.2.0",
+    "dagster-postgres==0.23.7",
+    "dagster-webserver==1.7.7",
+    "dagster==1.7.7",
+    "faker==25.3.0",
     "mex-common@git+https://github.com/robert-koch-institut/mex-common.git@0.25.1",
     "numpy==1.26.4",
     "openpyxl==3.1.2",
@@ -34,7 +34,7 @@ optional-dependencies.dev = [
     "pytest-random-order==1.1.1",
     "pytest-xdist==3.6.1",
     "pytest==8.2.1",
-    "ruff==0.4.4",
+    "ruff==0.4.6",
     "sphinx==7.3.7",
     "types-beautifulsoup4==4.12.0.20240511",
     "types-pytz==2024.1.0.20240417",
