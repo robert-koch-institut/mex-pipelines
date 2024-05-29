@@ -6,11 +6,11 @@ from mex.common.models import (
     ExtractedAccessPlatform,
     ExtractedActivity,
     ExtractedDistribution,
+    ExtractedOrganization,
     ExtractedPrimarySource,
     ExtractedResource,
 )
 from mex.common.types import (
-    Identifier,
     MergedOrganizationalUnitIdentifier,
     MergedPersonIdentifier,
 )
@@ -71,6 +71,7 @@ def transform_seq_repo_distribution_to_extracted_distribution(
     seq_repo_sources: dict[str, SeqRepoSource],
     seq_repo_distribution: dict[str, Any],
     mex_access_platform: ExtractedAccessPlatform,
+    extracted_organization_rki: ExtractedOrganization,
     extracted_primary_source: ExtractedPrimarySource,
 ) -> Generator[ExtractedDistribution, None, None]:
     """Transform seq-repo distribution to ExtractedDistribution.
@@ -79,6 +80,7 @@ def transform_seq_repo_distribution_to_extracted_distribution(
         seq_repo_sources: Seq Repo extracted sources
         seq_repo_distribution: Seq Repo extracted distribution
         mex_access_platform: Extracted access platform
+        extracted_organization_rki: wikidata extracted organization
         extracted_primary_source: Extracted primary source
 
     Returns:
@@ -98,9 +100,7 @@ def transform_seq_repo_distribution_to_extracted_distribution(
             identifierInPrimarySource=identifier_in_primary_source,
             issued=source.sequencing_date,
             mediaType=media_type,
-            publisher=[
-                Identifier.generate()
-            ],  # TODO: publisher -> resolve with wikidata
+            publisher=extracted_organization_rki.stableTargetId,
             title=title,
         )
 
@@ -115,6 +115,7 @@ def transform_seq_repo_resource_to_extracted_resource(
     project_coordinators_merged_ids_by_query_string: dict[
         str, list[MergedPersonIdentifier]
     ],
+    extracted_organization_rki: ExtractedOrganization,
     extracted_primary_source: ExtractedPrimarySource,
 ) -> Generator[ExtractedResource, None, None]:
     """Transform seq-repo resource to ExtractedResource.
@@ -129,6 +130,7 @@ def transform_seq_repo_resource_to_extracted_resource(
         unit_stable_target_ids_by_synonym: Unit stable target ids by synonym
         project_coordinators_merged_ids_by_query_string: Seq Repo Sources resolved
                                                         project coordinators merged ids
+        extracted_organization_rki: wikidata extracted organization
         extracted_primary_source: Extracted primary source
 
     Returns:
@@ -190,7 +192,7 @@ def transform_seq_repo_resource_to_extracted_resource(
             instrumentToolOrApparatus=source.sequencing_platform,
             keyword=source.species,
             method=method,
-            publisher=[],  # TODO: publisher -> wikidata
+            publisher=extracted_organization_rki.stableTargetId,
             resourceTypeGeneral=resource_type_general,
             resourceTypeSpecific=resource_type_specific,
             rights=rights,
