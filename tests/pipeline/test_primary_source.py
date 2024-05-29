@@ -1,3 +1,8 @@
+from mex.common.models import (
+    MEX_PRIMARY_SOURCE_IDENTIFIER,
+    MEX_PRIMARY_SOURCE_IDENTIFIER_IN_PRIMARY_SOURCE,
+    MEX_PRIMARY_SOURCE_STABLE_TARGET_ID,
+)
 from mex.pipeline.primary_source import (
     extracted_primary_source_ldap,
     extracted_primary_source_mex,
@@ -11,10 +16,12 @@ def test_extracted_primary_sources() -> None:
     primary_sources = extracted_primary_sources()
     assert len(primary_sources) > 10
     assert primary_sources[0].model_dump(exclude_defaults=True) == {
-        "identifier": "00000000000001",
-        "hadPrimarySource": "00000000000000",
-        "identifierInPrimarySource": "mex",
-        "stableTargetId": "00000000000000",
+        "identifier": str(MEX_PRIMARY_SOURCE_IDENTIFIER),
+        "hadPrimarySource": str(MEX_PRIMARY_SOURCE_STABLE_TARGET_ID),
+        "identifierInPrimarySource": str(
+            MEX_PRIMARY_SOURCE_IDENTIFIER_IN_PRIMARY_SOURCE
+        ),
+        "stableTargetId": str(MEX_PRIMARY_SOURCE_STABLE_TARGET_ID),
     }
 
 
