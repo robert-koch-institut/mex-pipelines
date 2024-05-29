@@ -80,7 +80,7 @@ def transform_seq_repo_distribution_to_extracted_distribution(
         seq_repo_sources: Seq Repo extracted sources
         seq_repo_distribution: Seq Repo extracted distribution
         mex_access_platform: Extracted access platform
-        extracted_organization_rki: wikdiata extractded organization
+        extracted_organization_rki: wikidata extracted organization
         extracted_primary_source: Extracted primary source
 
     Returns:
@@ -130,7 +130,7 @@ def transform_seq_repo_resource_to_extracted_resource(
         unit_stable_target_ids_by_synonym: Unit stable target ids by synonym
         project_coordinators_merged_ids_by_query_string: Seq Repo Sources resolved
                                                         project coordinators merged ids
-        extracted_organization_rki: wikdiata extractded organization
+        extracted_organization_rki: wikidata extracted organization
         extracted_primary_source: Extracted primary source
 
     Returns:
