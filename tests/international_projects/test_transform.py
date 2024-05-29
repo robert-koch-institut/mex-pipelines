@@ -9,6 +9,7 @@ from mex.common.types import (
     TemporalEntityPrecision,
     TextLanguage,
     Theme,
+    YearMonthDay,
 )
 from mex.international_projects.extract import extract_international_projects_sources
 from mex.international_projects.transform import (
@@ -64,14 +65,14 @@ def test_transform_international_projects_source_to_mex_source(
             person_id,
             unit_id,
         ],
-        "end": [end],
+        "end": [YearMonthDay("2021-12-31")],
         "externalAssociate": [organization_id],
         "funderOrCommissioner": [organization_id],
         "involvedPerson": [person_id],
         "involvedUnit": [unit_id],
         "responsibleUnit": [unit_id],
         "shortName": [{"value": "testAAbr"}],
-        "start": [start],
+        "start": [YearMonthDay("2021-07-27")],
         "theme": ["https://mex.rki.de/item/theme-27"],
         "title": [
             {"value": "This is a test project full title", "language": TextLanguage.EN}
