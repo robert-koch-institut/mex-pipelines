@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:6f7d2c919ebff722b2fb3e5aa2e690fdbe18900e1bd5fae6d9c9a043f4cbcba8"
+content_hash = "sha256:a15e0f3e03aeccc7aefbe9ad514b0c761d7798b233c7b3a76721a13196182752"
 
 [[package]]
 name = "alabaster"
@@ -1016,11 +1016,11 @@ files = [
 
 [[package]]
 name = "mex-common"
-version = "0.26.0"
+version = "0.26.1"
 requires_python = "<3.13,>=3.11"
 git = "https://github.com/robert-koch-institut/mex-common.git"
-ref = "0.26.0"
-revision = "469167e4fbb56e0ee8da6dc5f5c8a41480b84bce"
+ref = "0.26.1"
+revision = "9647a129c574c3499efd4d5308916b4a0e3a13e5"
 summary = "Common library for MEx python projects."
 groups = ["default"]
 dependencies = [
