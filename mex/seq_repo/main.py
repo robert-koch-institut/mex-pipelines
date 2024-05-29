@@ -155,7 +155,6 @@ def seq_repo_extracted_access_platform(
 def extracted_distribution(
     seq_repo_latest_source: dict[str, SeqRepoSource],
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
-    extracted_access_platform: ExtractedAccessPlatform,
     extracted_organization_rki: ExtractedOrganization,
     seq_repo_extracted_access_platform: ExtractedAccessPlatform,
 ) -> dict[str, ExtractedDistribution]:
