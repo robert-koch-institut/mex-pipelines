@@ -5,8 +5,6 @@ from mex.common.models import ExtractedPrimarySource
 from mex.common.testing import Joker
 from mex.common.types import (
     Identifier,
-    TemporalEntity,
-    TemporalEntityPrecision,
     TextLanguage,
     Theme,
     YearMonthDay,
@@ -22,12 +20,6 @@ def test_transform_international_projects_source_to_mex_source(
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
     unit_stable_target_ids_by_synonym: dict[str, Identifier],
 ) -> None:
-    end = TemporalEntity(2021, 12, 30, 23, 0, tzinfo=timezone("UTC"))
-    end.precision = TemporalEntityPrecision.DAY
-
-    start = TemporalEntity(2021, 7, 26, 23, 0, tzinfo=timezone("UTC"))
-    start.precision = TemporalEntityPrecision.DAY
-
     organization_id = Identifier.generate(seed=44)
     funding_source_stable_target_ids_by_synonym = {"Test-Institute": organization_id}
     partner_organizations_stable_target_ids_by_synonym = {"WHO": organization_id}
@@ -65,14 +57,14 @@ def test_transform_international_projects_source_to_mex_source(
             person_id,
             unit_id,
         ],
-        "end": [YearMonthDay("2021-12-31")],
+        "end": [YearMonthDay(2021, 12, 31, tzinfo=timezone("UTC"))],
         "externalAssociate": [organization_id],
         "funderOrCommissioner": [organization_id],
         "involvedPerson": [person_id],
         "involvedUnit": [unit_id],
         "responsibleUnit": [unit_id],
         "shortName": [{"value": "testAAbr"}],
-        "start": [YearMonthDay("2021-07-27")],
+        "start": [YearMonthDay(2021, 7, 27, tzinfo=timezone("UTC"))],
         "theme": ["https://mex.rki.de/item/theme-27"],
         "title": [
             {"value": "This is a test project full title", "language": TextLanguage.EN}

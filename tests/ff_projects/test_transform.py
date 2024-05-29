@@ -7,9 +7,8 @@ from mex.common.types import (
     MergedOrganizationalUnitIdentifier,
     MergedOrganizationIdentifier,
     MergedPersonIdentifier,
-    TemporalEntity,
-    TemporalEntityPrecision,
     TextLanguage,
+    YearMonthDay,
 )
 from mex.ff_projects.models.source import FFProjectsSource
 from mex.ff_projects.transform import (
@@ -59,12 +58,8 @@ def test_transform_ff_projects_source_to_extracted_activity(
     person_stable_target_ids_by_query_string = {"Dr Frieda Ficticious": [person_id]}
     unit_id = MergedOrganizationalUnitIdentifier.generate(seed=21)
     unit_stable_target_ids_by_synonym = {"FG99": unit_id}
-
-    laufzeit_bis = TemporalEntity("2019-08-31T23:00:00Z")
-    laufzeit_bis.precision = TemporalEntityPrecision.DAY
-
-    laufzeit_von = TemporalEntity("2017-12-31T23:00:00Z")
-    laufzeit_von.precision = TemporalEntityPrecision.DAY
+    laufzeit_bis = YearMonthDay("2019-08-31")
+    laufzeit_von = YearMonthDay("2017-12-31")
 
     ff_projects_source = FFProjectsSource(
         foerderprogr="Funding",
