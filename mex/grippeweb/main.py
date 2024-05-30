@@ -33,6 +33,8 @@ from mex.grippeweb.settings import GrippewebSettings
 from mex.grippeweb.transform import (
     transform_grippeweb_access_platform_to_extracted_access_platform,
     transform_grippeweb_resource_mappings_to_extracted_resources,
+    transform_grippeweb_variable_group_to_extracted_variable_groups,
+    transform_grippeweb_variable_to_extracted_variables,
 )
 from mex.mapping.extract import extract_mapping_data
 from mex.pipeline import asset, run_job_in_process
@@ -195,6 +197,40 @@ def grippeweb_extracted_resource_dict(
     )
     load(list(extracted_resources.values()))
     return extracted_resources
+
+@asset(group_name="grippeweb")
+def grippeweb_extracted_variable_group(
+    grippeweb_variable_group: dict[str, Any],
+    grippeweb_columns : dict[str, dict[str, list[Any]]],
+    grippeweb_extracted_resource_dict:dict[str, ExtractedResource],
+    extracted_primary_source_grippeweb: ExtractedPrimarySource,
+) -> list[ExtractedVariableGroup]:
+    """Transform Grippeweb default values to extracted variable_groups and load to sinks."""
+    extracted_variable_groups = transform_grippeweb_variable_group_to_extracted_variable_groups(
+        grippeweb_variable_group,
+        grippeweb_columns,
+        grippeweb_extracted_resource_dict,
+        extracted_primary_source_grippeweb
+    )
+    load(extracted_variable_groups)
+    return extracted_variable_groups
+
+@asset(group_name="grippeweb")
+def grippeweb_extracted_variable(
+    grippeweb_variable: dict[str, Any],
+    grippeweb_columns : dict[str, dict[str, list[Any]]],
+    grippeweb_extracted_resource_dict:dict[str, ExtractedResource],
+    extracted_primary_source_grippeweb: ExtractedPrimarySource,
+) -> list[ExtractedVariableGroup]:
+    """Transform Grippeweb default values to extracted variables and load to sinks."""
+    extracted_variables = transform_grippeweb_variable_to_extracted_variables(
+        grippeweb_variable,
+        grippeweb_columns,
+        grippeweb_extracted_resource_dict,
+        extracted_primary_source_grippeweb
+    )
+    load(extracted_variables)
+    return extracted_variables
 
 
 @entrypoint(GrippewebSettings)

@@ -5,6 +5,8 @@ from mex.common.models import (
     ExtractedPerson,
     ExtractedPrimarySource,
     ExtractedResource,
+    ExtractedVariableGroup,
+    ExtractedVariable,
 )
 from mex.common.types import (
     Email,
@@ -244,3 +246,54 @@ def transform_grippeweb_access_platform_to_extracted_access_platform(
         title=title,
         unitInCharge=unit_in_charge,
     )
+
+
+def transform_grippeweb_variable_group_to_extracted_variable_groups(
+    grippeweb_variable_group: dict[str, Any],
+    grippeweb_columns: dict[str, dict[str, list[Any]]],
+    grippeweb_extracted_resource_dict: dict[str, ExtractedResource],
+    extracted_primary_source_grippeweb: ExtractedPrimarySource,
+) -> list[ExtractedVariableGroup]:
+    """Transform Grippeweb variable groups to extracted variable groups.
+
+    Returns:
+        list of extracted variable groups"""
+
+    label_by_table_name = {
+        mapping_rules["forValues"]: mapping_rules["SetValues"]
+        for mapping_rules in grippeweb_variable_group["label"][0]["mappingRules"][0]
+    }
+    return [
+        ExtractedVariableGroup(
+            containedBy=grippeweb_extracted_resource_dict["grippeweb"].stableTargetId,
+            hadPrimarySource=extracted_primary_source_grippeweb.stableTargetId,
+            identifierInPrimarySource=table_name,
+            label=label_by_table_name[table_name],
+        )
+        for table_name in grippeweb_columns.keys()
+    ]
+
+def transform_grippeweb_variable_to_extracted_variables(
+    grippeweb_variable: dict[str, Any],
+    grippeweb_columns: dict[str, dict[str, list[Any]]],
+    grippeweb_extracted_resource_dict: dict[str, ExtractedResource],
+    extracted_primary_source_grippeweb: ExtractedPrimarySource,
+) -> list[ExtractedVariable]:
+    """Transform Grippeweb variables to extracted variables.
+
+    Returns:
+        list of extracted variables"""
+
+    label_by_table_name = {
+        mapping_rules["forValues"]: mapping_rules["SetValues"]
+        for mapping_rules in grippeweb_variable["label"][0]["mappingRules"][0]
+    }
+    return [
+        ExtractedVariable(
+            containedBy=grippeweb_extracted_resource_dict["grippeweb"].stableTargetId,
+            hadPrimarySource=extracted_primary_source_grippeweb.stableTargetId,
+            identifierInPrimarySource=table_name,
+            label=label_by_table_name[table_name],
+        )
+        for table_name in grippeweb_columns
+    ]
