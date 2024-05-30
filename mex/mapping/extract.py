@@ -4,7 +4,7 @@ from typing import Any
 import yaml
 from pydantic import BaseModel
 
-from mex.common.models.mapping import MAPPING_MODEL_BY_EXTRACTED_CLASS_NAME
+from mex.common.models import MAPPING_MODEL_BY_EXTRACTED_CLASS_NAME
 
 
 def extract_mapping_data(path: Path, model_type: type[BaseModel]) -> dict[str, Any]:
