@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - update mex-common to 0.26.1
 - move `mex.pipeline` documentation to `__init__` to have it in sphinx
+- move `get_organization_merged_id_by_query` to pipeline module
 
 ### Deprecated
 
