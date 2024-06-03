@@ -9,6 +9,8 @@ from mex.common.models import (
     ExtractedAccessPlatform,
     ExtractedPerson,
     ExtractedPrimarySource,
+    ExtractedResource,
+    ExtractedVariableGroup,
 )
 from mex.common.types import (
     MergedContactPointIdentifier,
@@ -1237,3 +1239,111 @@ def mocked_grippeweb_sql_tables() -> dict[str, dict[str, list[str | None]]]:
             "Haushalt_Registrierer": [None, None],
         },
     }
+
+
+@pytest.fixture
+def grippeweb_variable_group() -> dict[str, Any]:
+    return {
+        "label": [
+            {
+                "fieldInPrimarySource": "label of the SQL-table",
+                "locationInPrimarySource": "Tabellen",
+                "examplesInPrimarySource": None,
+                "mappingRules": [
+                    {
+                        "forValues": ["MEx.vActualQuestion"],
+                        "setValues": [
+                            {"value": "Additional Questions", "language": "en"}
+                        ],
+                        "rule": None,
+                    },
+                    {
+                        "forValues": ["MEx.vMasterDataMEx"],
+                        "setValues": [{"value": "Master Data", "language": None}],
+                        "rule": None,
+                    },
+                    {
+                        "forValues": ["MEx.vWeeklyResponsesMEx"],
+                        "setValues": [{"value": "Weekly Responses", "language": "en"}],
+                        "rule": None,
+                    },
+                ],
+                "comment": None,
+            }
+        ],
+    }
+
+
+@pytest.fixture
+def grippeweb_variable() -> dict[str, Any]:
+    return {
+        "valueSet": [
+            {
+                "fieldInPrimarySource": "Id",
+                "locationInPrimarySource": "vActualQuestion",
+                "examplesInPrimarySource": ["NULL", "Diverse", "Female"],
+                "mappingRules": [
+                    {
+                        "forValues": None,
+                        "setValues": None,
+                        "rule": "SELECT DISTINCT [fieldInPrimarySource] FROM [locationInPrimarySource]",
+                    }
+                ],
+                "comment": None,
+            }
+        ],
+    }
+
+
+@pytest.fixture
+def grippeweb_extracted_resource_dict(
+    extracted_primary_sources: dict[str, ExtractedPrimarySource],
+) -> dict[str, ExtractedResource]:
+    return {
+        "grippeweb": ExtractedResource(
+            hadPrimarySource=extracted_primary_sources["grippeweb"].stableTargetId,
+            identifierInPrimarySource="grippeweb",
+            accessRestriction="https://mex.rki.de/item/access-restriction-2",
+            accrualPeriodicity="https://mex.rki.de/item/frequency-15",
+            contact=[MergedContactPointIdentifier.generate(42)],
+            temporal="seit 2011",
+            theme=["https://mex.rki.de/item/theme-35"],
+            title=[Text(value="GrippeWeb", language="de")],
+            anonymizationPseudonymization=[
+                "https://mex.rki.de/item/anonymization-pseudonymization-2"
+            ],
+            description=[Text(value="GrippeWeb", language="de")],
+            icd10code=["J00-J99"],
+            keyword=[Text(value="Citizen Science", language="en")],
+            language=["https://mex.rki.de/item/language-1"],
+            meshId=["http://id.nlm.nih.gov/mesh/D012140"],
+            method=[Text(value="Online-Befragung", language="de")],
+            methodDescription=[
+                Text(value="Online-Surveillanceintrument", language="de")
+            ],
+            resourceTypeGeneral=["https://mex.rki.de/item/resource-type-general-10"],
+            resourceTypeSpecific=[
+                Text(value="bevölkerungsbasierte Surveillancedaten", language="de")
+            ],
+            rights=[Text(value="Verfahren", language="de")],
+            stateOfDataProcessing=["https://mex.rki.de/item/data-processing-state-1"],
+            unitInCharge=[MergedOrganizationalUnitIdentifier.generate(42)],
+            entityType="ExtractedResource",
+        )
+    }
+
+
+@pytest.fixture
+def extracted_variable_groups(
+    extracted_primary_sources: dict[str, ExtractedPrimarySource],
+    grippeweb_extracted_resource_dict: dict[str, ExtractedResource],
+) -> list[ExtractedVariableGroup]:
+    return [
+        ExtractedVariableGroup(
+            hadPrimarySource=extracted_primary_sources["grippeweb"].stableTargetId,
+            identifierInPrimarySource="vActualQuestion",
+            containedBy=[grippeweb_extracted_resource_dict["grippeweb"].stableTargetId],
+            label=[Text(value="Additional Questions", language="en")],
+            entityType="ExtractedVariableGroup",
+        )
+    ]

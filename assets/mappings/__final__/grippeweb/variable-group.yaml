@@ -13,13 +13,21 @@ identifier:
     mappingRules:
     - rule: Assign identifier.
 identifierInPrimarySource:
-  - fieldInPrimarySource: label
+  - fieldInPrimarySource: label of the SQL-table
     locationInPrimarySource: Tabellen
     mappingRules:
     - forValues:
       - "MEx.vActualQuestion"
       setValues:
       - "MEx.vActualQuestion"
+    - forValues:
+      - "MEx.vMasterData"
+      setValues:
+      -  "MEx.vMasterData"
+    - forValues:
+      - "MEx.vWeeklyResponses"
+      setValues:
+      -  "MEx.vWeeklyResponses"
 label:
   - fieldInPrimarySource: label of the SQL-table
     locationInPrimarySource: Tabellen
@@ -29,6 +37,16 @@ label:
       setValues:
       - language: en
         value: "Additional Questions"
+    - forValues:
+      - "MEx.vMasterDataMEx"
+      setValues:
+      - langauge: en
+        value: "Master Data"
+    - forValues:
+      - "MEx.vWeeklyResponsesMEx"
+      setValues:
+      - language: en
+        value: "Weekly Responses"
 stableTargetId:
   - fieldInPrimarySource: n/a
     mappingRules:

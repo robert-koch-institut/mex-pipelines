@@ -5,8 +5,8 @@ from mex.common.models import (
     ExtractedPerson,
     ExtractedPrimarySource,
     ExtractedResource,
-    ExtractedVariableGroup,
     ExtractedVariable,
+    ExtractedVariableGroup,
 )
 from mex.common.types import (
     Email,
@@ -257,24 +257,26 @@ def transform_grippeweb_variable_group_to_extracted_variable_groups(
     """Transform Grippeweb variable groups to extracted variable groups.
 
     Returns:
-        list of extracted variable groups"""
-
+    list of extracted variable groups
+    """
     label_by_table_name = {
-        mapping_rules["forValues"]: mapping_rules["SetValues"]
-        for mapping_rules in grippeweb_variable_group["label"][0]["mappingRules"][0]
+        mapping_rules["forValues"][0]: mapping_rules["setValues"][0]
+        for mapping_rules in grippeweb_variable_group["label"][0]["mappingRules"]
     }
     return [
         ExtractedVariableGroup(
             containedBy=grippeweb_extracted_resource_dict["grippeweb"].stableTargetId,
             hadPrimarySource=extracted_primary_source_grippeweb.stableTargetId,
             identifierInPrimarySource=table_name,
-            label=label_by_table_name[table_name],
+            label=label_by_table_name[f"MEx.{table_name}"],
         )
         for table_name in grippeweb_columns.keys()
     ]
 
+
 def transform_grippeweb_variable_to_extracted_variables(
     grippeweb_variable: dict[str, Any],
+    grippeweb_extracted_variable_group: list[ExtractedVariableGroup],
     grippeweb_columns: dict[str, dict[str, list[Any]]],
     grippeweb_extracted_resource_dict: dict[str, ExtractedResource],
     extracted_primary_source_grippeweb: ExtractedPrimarySource,
@@ -282,18 +284,40 @@ def transform_grippeweb_variable_to_extracted_variables(
     """Transform Grippeweb variables to extracted variables.
 
     Returns:
-        list of extracted variables"""
-
-    label_by_table_name = {
-        mapping_rules["forValues"]: mapping_rules["SetValues"]
-        for mapping_rules in grippeweb_variable["label"][0]["mappingRules"][0]
+    list of extracted variables
+    """
+    valueset_locations_by_field = {
+        valueset["fieldInPrimarySource"]: valueset["locationInPrimarySource"]
+        for valueset in grippeweb_variable["valueSet"]
+    }
+    variable_group_by_location = {
+        group.identifierInPrimarySource: group.stableTargetId
+        for group in grippeweb_extracted_variable_group
     }
     return [
         ExtractedVariable(
-            containedBy=grippeweb_extracted_resource_dict["grippeweb"].stableTargetId,
+            belongsTo=(
+                [
+                    variable_group_by_location["vMasterDataMEx"],
+                    variable_group_by_location["vWeeklyResponsesMEx"],
+                ]
+                if location == "vMasterDataMEx AND vWeeklyResponsesMEx"
+                else [variable_group_by_location[location]]
+            ),
             hadPrimarySource=extracted_primary_source_grippeweb.stableTargetId,
-            identifierInPrimarySource=table_name,
-            label=label_by_table_name[table_name],
+            identifierInPrimarySource=field,
+            label=field,
+            usedIn=grippeweb_extracted_resource_dict["grippeweb"].stableTargetId,
+            valueSet=list(
+                (
+                    set(grippeweb_columns["vMasterDataMEx"][field]).union(
+                        set(grippeweb_columns["vWeeklyResponsesMEx"][field])
+                    )
+                    if location == "vMasterDataMEx AND vWeeklyResponsesMEx"
+                    else set(grippeweb_columns[location][field])
+                )
+                - set([None])
+            ),
         )
-        for table_name in grippeweb_columns
+        for field, location in valueset_locations_by_field.items()
     ]
