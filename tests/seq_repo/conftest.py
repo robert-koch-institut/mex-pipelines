@@ -8,6 +8,7 @@ from mex.common.models import (
     ExtractedAccessPlatform,
     ExtractedActivity,
     ExtractedDistribution,
+    ExtractedOrganization,
     ExtractedPerson,
     ExtractedPrimarySource,
 )
@@ -400,12 +401,14 @@ def extracted_mex_distribution_dict(
     seq_repo_latest_sources: dict[str, SeqRepoSource],
     extracted_mex_access_platform: ExtractedAccessPlatform,
     seq_repo_distribution: dict[str, Any],
+    extracted_organization_rki: ExtractedOrganization,
 ) -> dict[str, ExtractedDistribution]:
     extracted_mex_distributions = (
         transform_seq_repo_distribution_to_extracted_distribution(
             seq_repo_latest_sources,
             seq_repo_distribution,
             extracted_mex_access_platform,
+            extracted_organization_rki,
             extracted_primary_source_seq_repo,
         )
     )

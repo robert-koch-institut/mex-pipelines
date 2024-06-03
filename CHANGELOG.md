@@ -10,12 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - entrypoint `all-extractors`: run all extractors
-
 - transform grippeweb resources
+- wikidata aux extractor into seq-repo
 
 ### Changes
 
-- update mex-common to 0.25.1
+- update mex-common to 0.26.1
+- move `mex.pipeline` documentation to `__init__` to have it in sphinx
 
 ### Deprecated
 
@@ -48,6 +49,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - receive one or None organization from wikidata aux extractor
 - adjust Timestamp usage to TemporalEntity
 - move quotation marks (") filtering to mex-common from requested wikidata label
+
+### Deprecated
+
 - get seq-repo data via mex-drop connector (was: file)
 
 ### Removed

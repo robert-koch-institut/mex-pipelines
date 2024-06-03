@@ -8,6 +8,7 @@ from mex.common.models import (
     ExtractedAccessPlatform,
     ExtractedActivity,
     ExtractedDistribution,
+    ExtractedOrganization,
     ExtractedOrganizationalUnit,
     ExtractedPrimarySource,
     ExtractedResource,
@@ -15,10 +16,16 @@ from mex.common.models import (
 from mex.common.primary_source.transform import (
     get_primary_sources_by_name,
 )
-from mex.common.types import MergedOrganizationalUnitIdentifier, MergedPersonIdentifier
+from mex.common.types import (
+    MergedOrganizationalUnitIdentifier,
+    MergedPersonIdentifier,
+)
 from mex.mapping.extract import extract_mapping_data
 from mex.pipeline import asset, run_job_in_process
-from mex.seq_repo.extract import extract_source_project_coordinator, extract_sources
+from mex.seq_repo.extract import (
+    extract_source_project_coordinator,
+    extract_sources,
+)
 from mex.seq_repo.filter import filter_sources_on_latest_sequencing_date
 from mex.seq_repo.model import SeqRepoSource
 from mex.seq_repo.settings import SeqRepoSettings
@@ -148,6 +155,7 @@ def seq_repo_extracted_access_platform(
 def extracted_distribution(
     seq_repo_latest_source: dict[str, SeqRepoSource],
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
+    extracted_organization_rki: ExtractedOrganization,
     seq_repo_extracted_access_platform: ExtractedAccessPlatform,
 ) -> dict[str, ExtractedDistribution]:
     """Extract distribution from Seq-Repo."""
@@ -160,6 +168,7 @@ def extracted_distribution(
         seq_repo_latest_source,
         distribution,
         seq_repo_extracted_access_platform,
+        extracted_organization_rki,
         extracted_primary_source_seq_repo,
     )
 
@@ -181,6 +190,7 @@ def seq_repo_resource(
     project_coordinators_merged_ids_by_query_string: dict[
         str, list[MergedPersonIdentifier]
     ],
+    extracted_organization_rki: ExtractedOrganization,
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
 ) -> list[ExtractedResource]:
     """Extract resource from Seq-Repo."""
@@ -198,6 +208,7 @@ def seq_repo_resource(
         seq_repo_source_resolved_project_coordinators,
         unit_stable_target_ids_by_synonym,
         project_coordinators_merged_ids_by_query_string,
+        extracted_organization_rki,
         extracted_primary_source_seq_repo,
     )
 
