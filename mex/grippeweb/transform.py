@@ -256,8 +256,14 @@ def transform_grippeweb_variable_group_to_extracted_variable_groups(
 ) -> list[ExtractedVariableGroup]:
     """Transform Grippeweb variable groups to extracted variable groups.
 
+    Args:
+        grippeweb_variable_group: grippeweb variable group default values
+        grippeweb_columns: grippeweb data by column and tbale
+        grippeweb_extracted_resource_dict: extracted resources by name
+        extracted_primary_source_grippeweb: Extracted primary source
+
     Returns:
-    list of extracted variable groups
+        list of extracted variable groups
     """
     label_by_table_name = {
         mapping_rules["forValues"][0]: mapping_rules["setValues"][0]
@@ -283,8 +289,15 @@ def transform_grippeweb_variable_to_extracted_variables(
 ) -> list[ExtractedVariable]:
     """Transform Grippeweb variables to extracted variables.
 
+    Args:
+        grippeweb_variable: grippeweb variable default values
+        grippeweb_extracted_variable_group: extracted grippeweb variable groups
+        grippeweb_columns: grippeweb data by column and tbale
+        grippeweb_extracted_resource_dict: extracted resources by name
+        extracted_primary_source_grippeweb: Extracted primary source
+
     Returns:
-    list of extracted variables
+        list of extracted variables
     """
     valueset_locations_by_field = {
         valueset["fieldInPrimarySource"]: valueset["locationInPrimarySource"]
