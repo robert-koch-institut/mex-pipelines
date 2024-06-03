@@ -40,7 +40,8 @@ def get_organization_merged_id_by_query(
 ) -> dict[str, MergedOrganizationIdentifier]:
     """Return a mapping from organizations to their stable target ID.
 
-    There may be multiple entries per unit mapping to the same stable target ID.
+    MergedOrganizationIdentifiers are looked up in the identity provider and will be
+    omitted for any organization that has not yet been assigned an `Identity` there.
 
     Args:
         wikidata_organizations_by_query: dict of Extracted organizations by query string
