@@ -24,7 +24,10 @@ from mex.international_projects.transform import (
 )
 from mex.pipeline import asset, run_job_in_process
 from mex.sinks import load
-from mex.wikidata.extract import get_organization_merged_id_by_query
+from mex.wikidata.extract import (
+    get_organization_merged_id_by_query,
+    get_organization_merged_id_by_query_with_transform_and_load,
+)
 
 
 @asset(group_name="international_projects", deps=["extracted_primary_source_mex"])
@@ -75,15 +78,8 @@ def international_projects_funding_sources_ids_by_query(
     wikidata_funding_sources_by_query = extract_international_projects_funding_sources(
         international_projects_sources
     )
-    mex_extracted_organizations_funding_sources = (
-        transform_wikidata_organizations_to_extracted_organizations(
-            wikidata_funding_sources_by_query.values(),
-            extracted_primary_source_wikidata,
-        )
-    )
-    load(mex_extracted_organizations_funding_sources)
 
-    return get_organization_merged_id_by_query(
+    return get_organization_merged_id_by_query_with_transform_and_load(
         wikidata_funding_sources_by_query, extracted_primary_source_wikidata
     )
 
