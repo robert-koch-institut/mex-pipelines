@@ -12,12 +12,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - entrypoint `all-extractors`: run all extractors
 - transform grippeweb resources
 - wikidata aux extractor into seq-repo
+- function `get_organization_merged_id_by_query_with_transform_and_load` to
+ wikidata.extract module
 
 ### Changes
 
 - update mex-common to 0.26.1
 - move `mex.pipeline` documentation to `__init__` to have it in sphinx
-- move `get_organization_merged_id_by_query` to pipeline module
 
 ### Deprecated
 
