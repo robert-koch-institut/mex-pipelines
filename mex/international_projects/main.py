@@ -8,9 +8,6 @@ from mex.common.types import (
     MergedOrganizationIdentifier,
     MergedPersonIdentifier,
 )
-from mex.common.wikidata.transform import (
-    transform_wikidata_organizations_to_extracted_organizations,
-)
 from mex.international_projects.extract import (
     extract_international_projects_funding_sources,
     extract_international_projects_partner_organizations,
@@ -25,7 +22,6 @@ from mex.international_projects.transform import (
 from mex.pipeline import asset, run_job_in_process
 from mex.sinks import load
 from mex.wikidata.extract import (
-    get_organization_merged_id_by_query,
     get_organization_merged_id_by_query_with_transform_and_load,
 )
 
@@ -95,15 +91,8 @@ def international_projects_partner_organization_ids_by_query(
             international_projects_sources
         )
     )
-    mex_extracted_organizations_partner_organizations = (
-        transform_wikidata_organizations_to_extracted_organizations(
-            wikidata_partner_organizations_by_query.values(),
-            extracted_primary_source_wikidata,
-        )
-    )
-    load(mex_extracted_organizations_partner_organizations)
 
-    return get_organization_merged_id_by_query(
+    return get_organization_merged_id_by_query_with_transform_and_load(
         wikidata_partner_organizations_by_query, extracted_primary_source_wikidata
     )
 
