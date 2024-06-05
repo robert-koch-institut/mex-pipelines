@@ -63,6 +63,6 @@ def get_organization_merged_id_by_query_with_transform_and_load(
     load(extracted_organizations_by_query.values())
 
     return {
-        query: organization.stableTargetId
+        query: MergedOrganizationIdentifier(organization.stableTargetId)
         for query, organization in extracted_organizations_by_query.items()
     }
