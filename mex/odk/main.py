@@ -29,8 +29,8 @@ from mex.odk.transform import (
     transform_odk_variable_groups_to_extracted_variable_groups,
 )
 from mex.pipeline import asset, run_job_in_process
-from mex.pipeline.wikidata import get_organization_merged_id_by_query
 from mex.sinks import load
+from mex.wikidata.extract import get_organization_merged_id_by_query
 
 
 @asset(group_name="odk", deps=["extracted_primary_source_mex"])

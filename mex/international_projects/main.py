@@ -23,8 +23,8 @@ from mex.international_projects.transform import (
     transform_international_projects_sources_to_extracted_activities,
 )
 from mex.pipeline import asset, run_job_in_process
-from mex.pipeline.wikidata import get_organization_merged_id_by_query
 from mex.sinks import load
+from mex.wikidata.extract import get_organization_merged_id_by_query
 
 
 @asset(group_name="international_projects", deps=["extracted_primary_source_mex"])

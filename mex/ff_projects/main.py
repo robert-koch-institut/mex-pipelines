@@ -26,8 +26,8 @@ from mex.ff_projects.models.source import FFProjectsSource
 from mex.ff_projects.settings import FFProjectsSettings
 from mex.ff_projects.transform import transform_ff_projects_source_to_extracted_activity
 from mex.pipeline import asset, run_job_in_process
-from mex.pipeline.wikidata import get_organization_merged_id_by_query
 from mex.sinks import load
+from mex.wikidata.extract import get_organization_merged_id_by_query
 
 
 @asset(group_name="ff_projects", deps=["extracted_primary_source_mex"])

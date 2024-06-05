@@ -29,7 +29,6 @@ from mex.common.wikidata.transform import (
 )
 from mex.mapping.extract import extract_mapping_data
 from mex.pipeline import asset, run_job_in_process
-from mex.pipeline.wikidata import get_organization_merged_id_by_query
 from mex.sinks import load
 from mex.sumo.extract import (
     extract_cc1_data_model_nokeda,
@@ -61,6 +60,7 @@ from mex.sumo.transform import (
     transform_sumo_access_platform_to_mex_access_platform,
     transform_sumo_activity_to_extracted_activity,
 )
+from mex.wikidata.extract import get_organization_merged_id_by_query
 
 
 @asset(group_name="sumo", deps=["extracted_primary_source_mex"])
