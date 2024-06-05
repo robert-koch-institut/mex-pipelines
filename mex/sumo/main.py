@@ -24,9 +24,6 @@ from mex.common.types import (
     MergedOrganizationalUnitIdentifier,
     MergedOrganizationIdentifier,
 )
-from mex.common.wikidata.transform import (
-    transform_wikidata_organizations_to_extracted_organizations,
-)
 from mex.mapping.extract import extract_mapping_data
 from mex.pipeline import asset, run_job_in_process
 from mex.sinks import load
@@ -60,7 +57,9 @@ from mex.sumo.transform import (
     transform_sumo_access_platform_to_mex_access_platform,
     transform_sumo_activity_to_extracted_activity,
 )
-from mex.wikidata.extract import get_organization_merged_id_by_query
+from mex.wikidata.extract import (
+    get_organization_merged_id_by_query_with_transform_and_load,
+)
 
 
 @asset(group_name="sumo", deps=["extracted_primary_source_mex"])
@@ -203,13 +202,8 @@ def organization_stable_target_id_by_query_sumo(
 ) -> dict[str, MergedOrganizationIdentifier]:
     """Extract and load SUMO organizations and return them by stable target ids."""
     sumo_organizations = extract_sumo_organizations(extracted_resources_nokeda_sumo)
-    mex_extracted_organizations = list(
-        transform_wikidata_organizations_to_extracted_organizations(
-            sumo_organizations.values(), extracted_primary_source_wikidata
-        )
-    )
-    load(mex_extracted_organizations)
-    return get_organization_merged_id_by_query(
+
+    return get_organization_merged_id_by_query_with_transform_and_load(
         sumo_organizations, extracted_primary_source_wikidata
     )
 
