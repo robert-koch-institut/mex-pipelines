@@ -12,15 +12,11 @@ from mex.common.types import (
     MergedOrganizationIdentifier,
     MergedPersonIdentifier,
 )
-from mex.common.wikidata.transform import (
-    transform_wikidata_organizations_to_extracted_organizations,
-)
 from mex.ff_projects.extract import (
     extract_ff_project_authors,
     extract_ff_projects_organizations,
     extract_ff_projects_sources,
     filter_out_duplicate_source_ids,
-    get_organization_merged_id_by_query,
 )
 from mex.ff_projects.filter import filter_and_log_ff_projects_sources
 from mex.ff_projects.models.source import FFProjectsSource
@@ -28,6 +24,9 @@ from mex.ff_projects.settings import FFProjectsSettings
 from mex.ff_projects.transform import transform_ff_projects_source_to_extracted_activity
 from mex.pipeline import asset, run_job_in_process
 from mex.sinks import load
+from mex.wikidata.extract import (
+    get_merged_organization_id_by_query_with_transform_and_load,
+)
 
 
 @asset(group_name="ff_projects", deps=["extracted_primary_source_mex"])
@@ -90,13 +89,8 @@ def ff_projects_organization_ids_by_query_string(
     wikidata_organizations_by_query = extract_ff_projects_organizations(
         ff_projects_sources
     )
-    mex_extracted_organizations = (
-        transform_wikidata_organizations_to_extracted_organizations(
-            wikidata_organizations_by_query.values(), extracted_primary_source_wikidata
-        )
-    )
-    load(mex_extracted_organizations)
-    return get_organization_merged_id_by_query(
+
+    return get_merged_organization_id_by_query_with_transform_and_load(
         wikidata_organizations_by_query, extracted_primary_source_wikidata
     )
 

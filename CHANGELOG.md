@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - entrypoint `all-extractors`: run all extractors
 - transform grippeweb resources
 - wikidata aux extractor into seq-repo
+- function `get_merged_organization_id_by_query_with_transform_and_load` to
+ wikidata.extract module
 
 ### Changes
 
