@@ -2,15 +2,12 @@ import json
 from pathlib import Path
 from typing import Any, cast
 from unittest.mock import MagicMock, Mock
-from uuid import UUID
 
 import pytest
 import requests
 from pytest import MonkeyPatch
 from requests.models import Response
 
-from mex.common.ldap.connector import LDAPConnector
-from mex.common.ldap.models.person import LDAPPerson
 from mex.common.models import ExtractedPrimarySource
 from mex.common.organigram.extract import (
     extract_organigram_units,
@@ -34,7 +31,7 @@ def settings() -> ConfluenceVvtSettings:
 
 @pytest.fixture
 def unit_merged_ids_by_synonym(
-    extracted_primary_sources: dict[str, ExtractedPrimarySource]
+    extracted_primary_sources: dict[str, ExtractedPrimarySource],
 ) -> dict[str, MergedOrganizationalUnitIdentifier]:
     """Return unit merged ids by synonym for organigram units."""
     organigram_units = extract_organigram_units()
@@ -42,21 +39,6 @@ def unit_merged_ids_by_synonym(
         organigram_units, extracted_primary_sources["organigram"]
     )
     return get_unit_merged_ids_by_synonyms(mex_organizational_units)
-
-
-@pytest.fixture
-def mocked_confluence_vvt(monkeypatch: MonkeyPatch) -> None:
-    """Mock the Confluence-vvt connector to return empty data."""
-    response = Mock(spec=Response, status_code=200)
-    response.json.return_value = {"results": []}
-    session = MagicMock(spec=requests.Session)
-    session.get = MagicMock(side_effect=[response])
-
-    monkeypatch.setattr(
-        ConfluenceVvtConnector,
-        "__init__",
-        lambda self: setattr(self, "session", session),
-    )
 
 
 @pytest.fixture
@@ -90,29 +72,4 @@ def mocked_confluence_vvt_detailed_page_data(
         ConfluenceVvtConnector,
         "__init__",
         lambda self, _: setattr(self, "session", session),
-    )
-
-
-@pytest.fixture
-def mocked_ldap(monkeypatch: MonkeyPatch) -> None:
-    """Mock the LDAP connector to return resolved persons and units."""
-    monkeypatch.setattr(
-        LDAPConnector,
-        "__init__",
-        lambda self: setattr(self, "_connection", MagicMock()),
-    )
-    monkeypatch.setattr(
-        LDAPConnector,
-        "get_persons",
-        lambda *_, **__: iter(
-            [
-                LDAPPerson(
-                    employeeID="42",
-                    sn="Resolved",
-                    givenName="Renate",
-                    displayName="Resolved, Renate",
-                    objectGUID=UUID(int=1, version=4),
-                )
-            ]
-        ),
     )

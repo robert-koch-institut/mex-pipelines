@@ -21,13 +21,13 @@ from mex.datscha_web.extract import (
 )
 from mex.datscha_web.models.item import DatschaWebItem
 from mex.datscha_web.settings import DatschaWebSettings
-from mex.datscha_web.transform import (
-    transform_datscha_web_items_to_mex_activities,
-    transform_wikidata_organizations_to_extracted_organizations_with_query,
-)
+from mex.datscha_web.transform import transform_datscha_web_items_to_mex_activities
 from mex.filters import filter_by_global_rules
 from mex.pipeline import asset, run_job_in_process
 from mex.sinks import load
+from mex.wikidata.transform import (
+    transform_wikidata_organizations_to_extracted_organizations_with_query,
+)
 
 
 @asset(group_name="datscha_web", deps=["extracted_primary_source_mex"])

@@ -1,19 +1,14 @@
-import json
-from pathlib import Path
 from typing import Any
-from unittest.mock import MagicMock
 from uuid import UUID
 
 import pytest
-import requests
-from pytest import MonkeyPatch
 
-from mex.common.ldap.connector import LDAPConnector
 from mex.common.ldap.models.person import LDAPPerson, LDAPPersonWithQuery
 from mex.common.models import (
     ExtractedAccessPlatform,
     ExtractedActivity,
     ExtractedDistribution,
+    ExtractedOrganization,
     ExtractedPerson,
     ExtractedPrimarySource,
 )
@@ -27,7 +22,6 @@ from mex.common.types import (
     MergedOrganizationalUnitIdentifier,
     MergedPersonIdentifier,
 )
-from mex.drop import DropApiConnector
 from mex.seq_repo.filter import filter_sources_on_latest_sequencing_date
 from mex.seq_repo.model import SeqRepoSource
 from mex.seq_repo.settings import SeqRepoSettings
@@ -407,12 +401,14 @@ def extracted_mex_distribution_dict(
     seq_repo_latest_sources: dict[str, SeqRepoSource],
     extracted_mex_access_platform: ExtractedAccessPlatform,
     seq_repo_distribution: dict[str, Any],
+    extracted_organization_rki: ExtractedOrganization,
 ) -> dict[str, ExtractedDistribution]:
     extracted_mex_distributions = (
         transform_seq_repo_distribution_to_extracted_distribution(
             seq_repo_latest_sources,
             seq_repo_distribution,
             extracted_mex_access_platform,
+            extracted_organization_rki,
             extracted_primary_source_seq_repo,
         )
     )
@@ -515,57 +511,4 @@ def extracted_person() -> ExtractedPerson:
         fullName="Dr. Fictitious, Frieda",
         identifierInPrimarySource="frieda",
         hadPrimarySource=Identifier.generate(seed=40),
-    )
-
-
-@pytest.fixture
-def mocked_ldap(monkeypatch: MonkeyPatch) -> None:
-    """Mock LDAP connector to return a mocked person and actor."""
-    monkeypatch.setattr(
-        LDAPConnector,
-        "__init__",
-        lambda self: setattr(self, "_connection", MagicMock()),
-    )
-    monkeypatch.setattr(
-        LDAPConnector,
-        "get_persons",
-        lambda *_, **__: iter(
-            [
-                LDAPPerson(
-                    employeeID="42",
-                    sn="mustermann",
-                    givenName="max",
-                    displayName="mustermann, max",
-                    objectGUID=UUID(int=4, version=4),
-                    department="FG99",
-                    departmentNumber="FG99",
-                    sAMAccountName="max",
-                )
-            ]
-        ),
-    )
-
-
-@pytest.fixture
-def mocked_drop(monkeypatch: MonkeyPatch) -> None:
-    """Mock the drop api connector to return dummy data."""
-    monkeypatch.setattr(
-        DropApiConnector,
-        "__init__",
-        lambda self: setattr(self, "session", MagicMock(spec=requests.Session)),
-    )
-    monkeypatch.setattr(
-        DropApiConnector,
-        "list_files",
-        lambda *_, **__: ["one"],
-    )
-
-    def get_file_mocked(*_, **__):
-        with open(Path(__file__).parent / "test_data" / "default.json") as handle:
-            return json.load(handle)
-
-    monkeypatch.setattr(
-        DropApiConnector,
-        "get_file",
-        get_file_mocked,
     )

@@ -3,7 +3,11 @@ from itertools import tee
 from mex.common.cli import entrypoint
 from mex.common.ldap.extract import get_merged_ids_by_query_string
 from mex.common.ldap.transform import transform_ldap_persons_with_query_to_mex_persons
-from mex.common.models import ExtractedOrganizationalUnit, ExtractedPrimarySource
+from mex.common.models import (
+    ExtractedActivity,
+    ExtractedOrganizationalUnit,
+    ExtractedPrimarySource,
+)
 from mex.common.primary_source.transform import (
     get_primary_sources_by_name,
 )
@@ -80,7 +84,7 @@ def extracted_confluence_vvt_sources(
     ],
     extracted_primary_source_confluence_vvt: ExtractedPrimarySource,
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
-) -> None:
+) -> list[ExtractedActivity]:
     """Transform and load Confluence VVT sources."""
     mex_sources = transform_confluence_vvt_sources_to_mex_sources(
         confluence_vvt_sources,
@@ -89,6 +93,7 @@ def extracted_confluence_vvt_sources(
         unit_stable_target_ids_by_synonym,
     )
     load(mex_sources)
+    return list(mex_sources)
 
 
 @entrypoint(ConfluenceVvtSettings)

@@ -7,14 +7,15 @@ from mex.common.models import (
     ExtractedAccessPlatform,
     ExtractedActivity,
     ExtractedDistribution,
+    ExtractedOrganization,
     ExtractedPrimarySource,
 )
 from mex.common.testing import Joker
 from mex.common.types import (
     MergedOrganizationalUnitIdentifier,
     MergedPersonIdentifier,
+    TemporalEntity,
     TextLanguage,
-    Timestamp,
 )
 from mex.seq_repo.model import SeqRepoSource
 from mex.seq_repo.transform import (
@@ -79,12 +80,14 @@ def test_transform_seq_repo_distribution_to_extracted_distribution(
     seq_repo_latest_sources: dict[str, SeqRepoSource],
     extracted_mex_access_platform: ExtractedAccessPlatform,
     seq_repo_distribution: dict[str, Any],
+    extracted_organization_rki: ExtractedOrganization,
 ) -> None:
     extracted_mex_distributions = list(
         transform_seq_repo_distribution_to_extracted_distribution(
             seq_repo_latest_sources,
             seq_repo_distribution,
             extracted_mex_access_platform,
+            extracted_organization_rki,
             extracted_primary_source_seq_repo,
         )
     )
@@ -98,7 +101,7 @@ def test_transform_seq_repo_distribution_to_extracted_distribution(
         "accessRestriction": "https://mex.rki.de/item/access-restriction-2",
         "issued": "2023-08-07",
         "mediaType": "https://mex.rki.de/item/mime-type-12",
-        "publisher": Joker(),
+        "publisher": [extracted_organization_rki.stableTargetId],
         "title": "dummy-fastq-file",
     }
 
@@ -124,6 +127,7 @@ def test_transform_seq_repo_resource_to_extracted_resource(
     project_coordinators_merged_ids_by_query_string: dict[
         str, list[MergedPersonIdentifier]
     ],
+    extracted_organization_rki: ExtractedOrganization,
 ) -> None:
     distribution = extracted_mex_distribution_dict["test-sample-id.TEST"]
     activity = extracted_mex_activities_dict["TEST-ID"]
@@ -140,7 +144,7 @@ def test_transform_seq_repo_resource_to_extracted_resource(
             str(project_coordinators_merged_ids_by_query_string["mustermann"][0]),
         ],
         "contributingUnit": [str(unit_stable_target_ids_by_synonym["FG99"])],
-        "created": Timestamp("2023-08-07"),
+        "created": TemporalEntity("2023-08-07"),
         "distribution": [distribution.stableTargetId],
         "instrumentToolOrApparatus": [{"value": "TEST"}],
         "keyword": [
@@ -153,6 +157,7 @@ def test_transform_seq_repo_resource_to_extracted_resource(
             {"value": "Next-Generation Sequencing", "language": "de"},
             {"value": "NGS", "language": "de"},
         ],
+        "publisher": [extracted_organization_rki.stableTargetId],
         "resourceTypeGeneral": ["https://mex.rki.de/item/resource-type-general-1"],
         "resourceTypeSpecific": [
             {"value": "Sequencing Data", "language": "de"},
@@ -183,6 +188,7 @@ def test_transform_seq_repo_resource_to_extracted_resource(
             seq_repo_source_resolved_project_coordinators,
             unit_stable_target_ids_by_synonym,
             project_coordinators_merged_ids_by_query_string,
+            extracted_organization_rki,
             extracted_primary_source_seq_repo,
         )
     )

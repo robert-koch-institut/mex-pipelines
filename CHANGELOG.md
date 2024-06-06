@@ -9,11 +9,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- entrypoint `all-extractors`: run all extractors
+- transform grippeweb resources
+- wikidata aux extractor into seq-repo
+
+### Changes
+
+- update mex-common to 0.26.1
+- move `mex.pipeline` documentation to `__init__` to have it in sphinx
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+- first test does not receive isolated settings but potentially production settings
+- mex-drop api connector trailing slash in send request
+
+### Security
+
+## [0.16.0] - 2024-05-16
+
+### Added
+
 - add settings attributes `drop_api_key` and `drop_api_url`
 - drop api connector for listing and loading files from the drop api
 - add basic docker configuration with dockerfile, ignore and compose
 - implement odk transform functions
-- grippeweb extract
+- grippeweb extract and transform
 - dagster schedules for non-default groups, configurable via setting `schedule`
 - add publisher pipeline to sink  all merged items from mex-backend to ndjson sink as a mock target
 
@@ -24,9 +48,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - make pyodbc a soft dependency (only pipelines that use it may fail)
 - switch from poetry to pdm
 - move MSSQL Server authentication to general settings
-- get seq-repo data via mex-drop connector (was: file)
+- receive one or None organization from wikidata aux extractor
+- adjust Timestamp usage to TemporalEntity
+- move quotation marks (") filtering to mex-common from requested wikidata label
 
 ### Deprecated
+
+- get seq-repo data via mex-drop connector (was: file)
 
 ### Removed
 
@@ -37,8 +65,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - fix some docstring indents and typings
 - ifsg extractor
-
-### Security
 
 ## [0.15.0] - 2024-02-27
 

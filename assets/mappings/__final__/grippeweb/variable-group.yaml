@@ -1,0 +1,53 @@
+# yaml-language-server: $schema=../../__schema__/ExtractedVariableGroup_MappingSchema.json
+
+containedBy:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - rule: Assign 'stable target id' of item described by mappings/../grippeweb/resource_grippeweb
+hadPrimarySource:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - rule: "Assign 'stable target id' of primary source with identifier 'grippeweb' in /raw-data/primary-sources/primary-sources.json."
+identifier:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - rule: Assign identifier.
+identifierInPrimarySource:
+  - fieldInPrimarySource: label of the SQL-table
+    locationInPrimarySource: Tabellen
+    mappingRules:
+    - forValues:
+      - "MEx.vActualQuestion"
+      setValues:
+      - "MEx.vActualQuestion"
+    - forValues:
+      - "MEx.vMasterData"
+      setValues:
+      -  "MEx.vMasterData"
+    - forValues:
+      - "MEx.vWeeklyResponses"
+      setValues:
+      -  "MEx.vWeeklyResponses"
+label:
+  - fieldInPrimarySource: label of the SQL-table
+    locationInPrimarySource: Tabellen
+    mappingRules:
+    - forValues:
+      - "MEx.vActualQuestion"
+      setValues:
+      - language: en
+        value: "Additional Questions"
+    - forValues:
+      - "MEx.vMasterDataMEx"
+      setValues:
+      - langauge: en
+        value: "Master Data"
+    - forValues:
+      - "MEx.vWeeklyResponsesMEx"
+      setValues:
+      - language: en
+        value: "Weekly Responses"
+stableTargetId:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - rule: Assign 'stable target id' of merged item.

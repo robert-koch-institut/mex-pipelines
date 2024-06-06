@@ -4,7 +4,7 @@ from mex.pipeline import run_job_in_process
 
 
 @pytest.mark.usefixtures(
-    "mocked_drop",
+    "mocked_drop_for_seqrepo",
     "mocked_ldap",
     "mocked_wikidata",
 )
