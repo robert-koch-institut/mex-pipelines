@@ -29,7 +29,7 @@ usedIn:
     mappingRules:
     - rule: Assign 'stable target id' of item described by mappings/../grippeweb/resource_grippeweb
 valueSet:
-  - fieldInPrimarySource: Geschlecht
+  - fieldInPrimarySource: GuidTeilnehmer
     locationInPrimarySource: vMasterDataMEx AND vWeeklyResponsesMEx
     examplesInPrimarySource:
     - "NULL"

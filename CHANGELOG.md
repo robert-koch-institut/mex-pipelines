@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - first test does not receive isolated settings but potentially production settings
+- mex-drop api connector trailing slash in send request
 
 ### Security
 
@@ -38,7 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - drop api connector for listing and loading files from the drop api
 - add basic docker configuration with dockerfile, ignore and compose
 - implement odk transform functions
-- grippeweb extract
+- grippeweb extract and transform
 - dagster schedules for non-default groups, configurable via setting `schedule`
 
 ### Changes

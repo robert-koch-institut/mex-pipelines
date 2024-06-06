@@ -6,6 +6,8 @@ from mex.common.models import (
     ExtractedAccessPlatform,
     ExtractedPerson,
     ExtractedPrimarySource,
+    ExtractedResource,
+    ExtractedVariableGroup,
 )
 from mex.common.testing import Joker
 from mex.common.types import (
@@ -19,6 +21,8 @@ from mex.grippeweb.transform import (
     transform_grippeweb_access_platform_to_extracted_access_platform,
     transform_grippeweb_resource_mappings_to_dict,
     transform_grippeweb_resource_mappings_to_extracted_resources,
+    transform_grippeweb_variable_group_to_extracted_variable_groups,
+    transform_grippeweb_variable_to_extracted_variables,
 )
 
 
@@ -149,3 +153,63 @@ def test_transform_grippeweb_resource_mappings_to_extracted_resources(
     assert resource_dict["grippeweb-plus"].isPartOf == [
         resource_dict["grippeweb"].stableTargetId
     ]
+
+
+@pytest.mark.usefixtures("mocked_grippeweb")
+def test_transform_grippeweb_variable_group_to_extracted_variable_groups(
+    grippeweb_variable_group: dict[str, Any],
+    mocked_grippeweb_sql_tables: dict[str, dict[str, list[Any]]],
+    grippeweb_extracted_resource_dict: dict[str, ExtractedResource],
+    extracted_primary_sources: list[ExtractedPrimarySource],
+) -> None:
+    extracted_variable_groups = (
+        transform_grippeweb_variable_group_to_extracted_variable_groups(
+            grippeweb_variable_group,
+            mocked_grippeweb_sql_tables,
+            grippeweb_extracted_resource_dict,
+            extracted_primary_sources["grippeweb"],
+        )
+    )
+    expected = {
+        "hadPrimarySource": extracted_primary_sources["grippeweb"].stableTargetId,
+        "identifierInPrimarySource": "vActualQuestion",
+        "containedBy": [grippeweb_extracted_resource_dict["grippeweb"].stableTargetId],
+        "label": [{"value": "Additional Questions", "language": "en"}],
+        "identifier": Joker(),
+        "stableTargetId": Joker(),
+    }
+    assert (
+        extracted_variable_groups[0].model_dump(
+            exclude_none=True, exclude_defaults=True
+        )
+        == expected
+    )
+
+
+@pytest.mark.usefixtures("mocked_grippeweb")
+def test_transform_grippeweb_variable_to_extracted_variables(
+    grippeweb_variable: dict[str, Any],
+    extracted_variable_groups: list[ExtractedVariableGroup],
+    mocked_grippeweb_sql_tables: dict[str, dict[str, list[Any]]],
+    grippeweb_extracted_resource_dict: dict[str, ExtractedResource],
+    extracted_primary_sources: list[ExtractedPrimarySource],
+) -> None:
+    extracted_variables = transform_grippeweb_variable_to_extracted_variables(
+        grippeweb_variable,
+        extracted_variable_groups,
+        mocked_grippeweb_sql_tables,
+        grippeweb_extracted_resource_dict,
+        extracted_primary_sources["grippeweb"],
+    )[0].model_dump(exclude_none=True, exclude_defaults=True)
+    extracted_variables["valueSet"] = sorted(extracted_variables["valueSet"])
+    expected = {
+        "belongsTo": [extracted_variable_groups[0].stableTargetId],
+        "hadPrimarySource": extracted_primary_sources["grippeweb"].stableTargetId,
+        "identifier": Joker(),
+        "identifierInPrimarySource": "Id",
+        "label": [{"value": "Id"}],
+        "stableTargetId": Joker(),
+        "usedIn": [grippeweb_extracted_resource_dict["grippeweb"].stableTargetId],
+        "valueSet": ["AAA", "BBB"],
+    }
+    assert extracted_variables == expected

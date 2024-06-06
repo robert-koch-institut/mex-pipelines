@@ -35,7 +35,7 @@ class DropApiConnector(HTTPConnector):
         """
         response_json = self.request(
             method="GET",
-            endpoint=f"/{x_system}/",
+            endpoint=f"/{x_system}",
         )
         return cast(
             list[str],

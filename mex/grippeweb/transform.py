@@ -5,6 +5,8 @@ from mex.common.models import (
     ExtractedPerson,
     ExtractedPrimarySource,
     ExtractedResource,
+    ExtractedVariable,
+    ExtractedVariableGroup,
 )
 from mex.common.types import (
     Email,
@@ -244,3 +246,91 @@ def transform_grippeweb_access_platform_to_extracted_access_platform(
         title=title,
         unitInCharge=unit_in_charge,
     )
+
+
+def transform_grippeweb_variable_group_to_extracted_variable_groups(
+    grippeweb_variable_group: dict[str, Any],
+    grippeweb_columns: dict[str, dict[str, list[Any]]],
+    grippeweb_extracted_resource_dict: dict[str, ExtractedResource],
+    extracted_primary_source_grippeweb: ExtractedPrimarySource,
+) -> list[ExtractedVariableGroup]:
+    """Transform Grippeweb variable groups to extracted variable groups.
+
+    Args:
+        grippeweb_variable_group: grippeweb variable group default values
+        grippeweb_columns: grippeweb data by column and tbale
+        grippeweb_extracted_resource_dict: extracted resources by name
+        extracted_primary_source_grippeweb: Extracted primary source
+
+    Returns:
+        list of extracted variable groups
+    """
+    label_by_table_name = {
+        mapping_rules["forValues"][0]: mapping_rules["setValues"][0]
+        for mapping_rules in grippeweb_variable_group["label"][0]["mappingRules"]
+    }
+    return [
+        ExtractedVariableGroup(
+            containedBy=grippeweb_extracted_resource_dict["grippeweb"].stableTargetId,
+            hadPrimarySource=extracted_primary_source_grippeweb.stableTargetId,
+            identifierInPrimarySource=table_name,
+            label=label_by_table_name[f"MEx.{table_name}"],
+        )
+        for table_name in grippeweb_columns.keys()
+    ]
+
+
+def transform_grippeweb_variable_to_extracted_variables(
+    grippeweb_variable: dict[str, Any],
+    grippeweb_extracted_variable_group: list[ExtractedVariableGroup],
+    grippeweb_columns: dict[str, dict[str, list[Any]]],
+    grippeweb_extracted_resource_dict: dict[str, ExtractedResource],
+    extracted_primary_source_grippeweb: ExtractedPrimarySource,
+) -> list[ExtractedVariable]:
+    """Transform Grippeweb variables to extracted variables.
+
+    Args:
+        grippeweb_variable: grippeweb variable default values
+        grippeweb_extracted_variable_group: extracted grippeweb variable groups
+        grippeweb_columns: grippeweb data by column and tbale
+        grippeweb_extracted_resource_dict: extracted resources by name
+        extracted_primary_source_grippeweb: Extracted primary source
+
+    Returns:
+        list of extracted variables
+    """
+    valueset_locations_by_field = {
+        valueset["fieldInPrimarySource"]: valueset["locationInPrimarySource"]
+        for valueset in grippeweb_variable["valueSet"]
+    }
+    variable_group_by_location = {
+        group.identifierInPrimarySource: group.stableTargetId
+        for group in grippeweb_extracted_variable_group
+    }
+    return [
+        ExtractedVariable(
+            belongsTo=(
+                [
+                    variable_group_by_location["vMasterDataMEx"],
+                    variable_group_by_location["vWeeklyResponsesMEx"],
+                ]
+                if location == "vMasterDataMEx AND vWeeklyResponsesMEx"
+                else [variable_group_by_location[location]]
+            ),
+            hadPrimarySource=extracted_primary_source_grippeweb.stableTargetId,
+            identifierInPrimarySource=field,
+            label=field,
+            usedIn=grippeweb_extracted_resource_dict["grippeweb"].stableTargetId,
+            valueSet=list(
+                (
+                    set(grippeweb_columns["vMasterDataMEx"][field]).union(
+                        set(grippeweb_columns["vWeeklyResponsesMEx"][field])
+                    )
+                    if location == "vMasterDataMEx AND vWeeklyResponsesMEx"
+                    else set(grippeweb_columns[location][field])
+                )
+                - set([None])
+            ),
+        )
+        for field, location in valueset_locations_by_field.items()
+    ]
