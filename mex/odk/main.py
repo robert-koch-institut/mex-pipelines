@@ -28,7 +28,7 @@ from mex.odk.transform import (
 from mex.pipeline import asset, run_job_in_process
 from mex.sinks import load
 from mex.wikidata.extract import (
-    get_organization_merged_id_by_query_with_transform_and_load,
+    get_merged_organization_id_by_query_with_transform_and_load,
 )
 
 
@@ -70,7 +70,7 @@ def external_partner_and_publisher_by_label(
         get_external_partner_and_publisher_by_label(odk_resource_mappings)
     )
 
-    return get_organization_merged_id_by_query_with_transform_and_load(
+    return get_merged_organization_id_by_query_with_transform_and_load(
         wikidata_partner_organizations_by_query, extracted_primary_source_wikidata
     )
 

@@ -25,7 +25,7 @@ from mex.ff_projects.transform import transform_ff_projects_source_to_extracted_
 from mex.pipeline import asset, run_job_in_process
 from mex.sinks import load
 from mex.wikidata.extract import (
-    get_organization_merged_id_by_query_with_transform_and_load,
+    get_merged_organization_id_by_query_with_transform_and_load,
 )
 
 
@@ -90,7 +90,7 @@ def ff_projects_organization_ids_by_query_string(
         ff_projects_sources
     )
 
-    return get_organization_merged_id_by_query_with_transform_and_load(
+    return get_merged_organization_id_by_query_with_transform_and_load(
         wikidata_organizations_by_query, extracted_primary_source_wikidata
     )
 

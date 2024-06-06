@@ -7,7 +7,7 @@ from mex.wikidata.transform import (
 )
 
 
-def get_organization_merged_id_by_query_with_transform_and_load(
+def get_merged_organization_id_by_query_with_transform_and_load(
     wikidata_organizations_by_query: dict[str, WikidataOrganization],
     wikidata_primary_source: ExtractedPrimarySource,
 ) -> dict[str, MergedOrganizationIdentifier]:

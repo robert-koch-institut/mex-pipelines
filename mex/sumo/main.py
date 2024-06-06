@@ -58,7 +58,7 @@ from mex.sumo.transform import (
     transform_sumo_activity_to_extracted_activity,
 )
 from mex.wikidata.extract import (
-    get_organization_merged_id_by_query_with_transform_and_load,
+    get_merged_organization_id_by_query_with_transform_and_load,
 )
 
 
@@ -203,7 +203,7 @@ def organization_stable_target_id_by_query_sumo(
     """Extract and load SUMO organizations and return them by stable target ids."""
     sumo_organizations = extract_sumo_organizations(extracted_resources_nokeda_sumo)
 
-    return get_organization_merged_id_by_query_with_transform_and_load(
+    return get_merged_organization_id_by_query_with_transform_and_load(
         sumo_organizations, extracted_primary_source_wikidata
     )
 

@@ -39,7 +39,7 @@ from mex.pipeline import asset, run_job_in_process
 from mex.sinks import load
 from mex.sumo.transform import get_contact_merged_ids_by_emails
 from mex.wikidata.extract import (
-    get_organization_merged_id_by_query_with_transform_and_load,
+    get_merged_organization_id_by_query_with_transform_and_load,
 )
 
 
@@ -138,7 +138,7 @@ def grippeweb_organization_ids_by_query_string(
         grippeweb_resource_mappings
     )
 
-    return get_organization_merged_id_by_query_with_transform_and_load(
+    return get_merged_organization_id_by_query_with_transform_and_load(
         wikidata_organizations_by_query, extracted_primary_source_wikidata
     )
 

@@ -26,7 +26,7 @@ from mex.filters import filter_by_global_rules
 from mex.pipeline import asset, run_job_in_process
 from mex.sinks import load
 from mex.wikidata.extract import (
-    get_organization_merged_id_by_query_with_transform_and_load,
+    get_merged_organization_id_by_query_with_transform_and_load,
 )
 
 
@@ -87,7 +87,7 @@ def datscha_web_organization_ids_by_query_string(
         extracted_datscha_web_items
     )
 
-    return get_organization_merged_id_by_query_with_transform_and_load(
+    return get_merged_organization_id_by_query_with_transform_and_load(
         wikidata_organizations_by_query, extracted_primary_source_wikidata
     )
 
