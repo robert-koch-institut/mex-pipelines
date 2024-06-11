@@ -10,7 +10,7 @@ from mex.drop import DropApiConnector
 
 
 @pytest.fixture
-def mocked_drop_for_seqrepo(monkeypatch: MonkeyPatch) -> None:
+def mocked_drop_for_voxco(monkeypatch: MonkeyPatch) -> None:
     """Mock the drop api connector to return dummy data."""
     monkeypatch.setattr(
         DropApiConnector,
@@ -24,7 +24,7 @@ def mocked_drop_for_seqrepo(monkeypatch: MonkeyPatch) -> None:
     )
 
     def get_file_mocked(*_, **__):
-        with open(Path(__file__).parent / "test_data" / "default.json") as handle:
+        with open(Path(__file__).parent / "test_data" / "test_data.json") as handle:
             return json.load(handle)
 
     monkeypatch.setattr(

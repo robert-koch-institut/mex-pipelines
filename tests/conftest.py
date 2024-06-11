@@ -30,6 +30,7 @@ pytest_plugins = (
     "tests.ifsg.mocked_ifsg",
     "tests.rdmo.mocked_rdmo",
     "tests.seq_repo.mocked_drop_for_seqrepo",
+    "tests.voxco.mocked_drop_for_voxco",
 )
 
 TEST_DATA_DIR = Path(__file__).parent / "test_data"
