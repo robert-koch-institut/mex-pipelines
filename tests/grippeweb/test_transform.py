@@ -117,6 +117,8 @@ def test_transform_grippeweb_resource_mappings_to_dict(
             {"value": "bevölkerungsbasierte Surveillancedaten", "language": "de"}
         ],
         "rights": [{"value": "Verfahren", "language": "de"}],
+        "sizeOfDataBasis": "Meldungen",
+        "spatial": [{"language": "de", "value": "Deutschland"}],
         "stateOfDataProcessing": ["https://mex.rki.de/item/data-processing-state-1"],
         "temporal": "seit 2011",
         "theme": ["https://mex.rki.de/item/theme-35"],
