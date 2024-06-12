@@ -29,8 +29,6 @@ pytest_plugins = (
     "tests.grippeweb.mocked_grippeweb",
     "tests.ifsg.mocked_ifsg",
     "tests.rdmo.mocked_rdmo",
-    "tests.seq_repo.mocked_drop_for_seqrepo",
-    "tests.voxco.mocked_drop_for_voxco",
     "tests.drop.mocked_drop",
 )
 
