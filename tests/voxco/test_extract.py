@@ -4,7 +4,7 @@ from mex.voxco.extract import extract_voxco_variables
 
 
 @pytest.mark.usefixtures(
-    "mocked_drop_for_voxco",
+    "mocked_drop",
 )
 def test_extract_voxco_variables() -> None:
     sources = extract_voxco_variables()
@@ -18,4 +18,4 @@ def test_extract_voxco_variables() -> None:
             "@{Code=1; Text=Februar; Image=; HasOpenEnd=False; Visible=True; Default=False}",
         ],
     }
-    assert sources["one"][0].model_dump() == expected
+    assert sources["voxco_data"][0].model_dump() == expected
