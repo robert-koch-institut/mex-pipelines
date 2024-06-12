@@ -14,11 +14,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - wikidata aux extractor into seq-repo
 - function `get_merged_organization_id_by_query_with_transform_and_load` to
  wikidata.extract module
+- extract voxco data
 
 ### Changes
 
 - update mex-common to 0.26.1
 - move `mex.pipeline` documentation to `__init__` to have it in sphinx
+- consolidate mocked drop connector into one general mock
 
 ### Deprecated
 
