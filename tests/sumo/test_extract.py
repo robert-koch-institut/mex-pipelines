@@ -4,7 +4,6 @@ from uuid import UUID
 
 import pytest
 
-from mex.common.wikidata.models.organization import WikidataOrganization
 from mex.sumo.extract import (
     extract_cc1_data_model_nokeda,
     extract_cc1_data_valuesets,
@@ -14,7 +13,6 @@ from mex.sumo.extract import (
     extract_cc2_feat_projection,
     extract_ldap_contact_points_by_emails,
     extract_ldap_contact_points_by_name,
-    extract_sumo_organizations,
 )
 from mex.sumo.models.cc1_data_model_nokeda import Cc1DataModelNoKeda
 from mex.sumo.models.cc1_data_valuesets import Cc1DataValuesets
@@ -135,16 +133,3 @@ def test_extract_ldap_contact_points_by_name(
 
     extracted = list(extract_ldap_contact_points_by_name(sumo_access_platform))
     assert extracted[0].model_dump() == expected
-
-
-@pytest.mark.usefixtures(
-    "mocked_wikidata",
-)
-def test_extract_sumo_organizations(
-    sumo_resources_nokeda: dict[str, Any],
-    wikidata_organization: WikidataOrganization,
-) -> None:
-    organizations = extract_sumo_organizations(sumo_resources_nokeda)
-    assert organizations == {
-        "Robert Koch-Institut": wikidata_organization,
-    }
