@@ -124,8 +124,5 @@ dmypy.json
 data/
 identity.csv
 schema.json
-work/
-
-# dagster
-data/
 tmp*/
+work/
