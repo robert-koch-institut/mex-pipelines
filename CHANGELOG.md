@@ -9,6 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changes
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [0.17.0] - 2024-06-14
+
+### Added
+
 - entrypoint `all-extractors`: run all extractors
 - transform grippeweb resources
 - wikidata aux extractor into seq-repo
@@ -20,8 +34,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - update mex-common to 0.27.1
 - move `mex.pipeline` documentation to `__init__` to have it in sphinx
 
-### Deprecated
-
 ### Removed
 
 - remove unused organization_stable_target_id_by_query_sumo asset
@@ -30,8 +42,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - first test does not receive isolated settings but potentially production settings
 - mex-drop api connector trailing slash in send request
-
-### Security
 
 ## [0.16.0] - 2024-05-16
 
