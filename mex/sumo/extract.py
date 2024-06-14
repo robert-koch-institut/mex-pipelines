@@ -8,8 +8,6 @@ from mex.common.ldap.connector import LDAPConnector
 from mex.common.ldap.models.actor import LDAPActor
 from mex.common.ldap.models.person import LDAPPersonWithQuery
 from mex.common.ldap.transform import analyse_person_string
-from mex.common.wikidata.extract import search_organization_by_label
-from mex.common.wikidata.models.organization import WikidataOrganization
 from mex.sumo.models.cc1_data_model_nokeda import Cc1DataModelNoKeda
 from mex.sumo.models.cc1_data_valuesets import Cc1DataValuesets
 from mex.sumo.models.cc2_aux_mapping import Cc2AuxMapping
@@ -182,24 +180,3 @@ def extract_ldap_contact_points_by_name(
         )
         if len(persons) == 1 and persons[0].objectGUID:
             yield LDAPPersonWithQuery(person=persons[0], query=names)
-
-
-def extract_sumo_organizations(
-    sumo_sumo_resource_nokeda: dict[str, Any],
-) -> dict[str, WikidataOrganization]:
-    """Search and extract sumo organization from wikidata.
-
-    Args:
-        sumo_sumo_resource_nokeda: sumo resource nokeda
-
-    Returns:
-        Dict with organization label and WikidataOrganization
-    """
-    sumo_resource_organizations = {}
-    publisher = sumo_sumo_resource_nokeda["publisher"][0]["mappingRules"][0][
-        "forValues"
-    ][0]
-    for label in [publisher]:
-        if label and (org := search_organization_by_label(label)):
-            sumo_resource_organizations[label] = org
-    return sumo_resource_organizations
