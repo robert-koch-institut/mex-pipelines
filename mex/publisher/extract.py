@@ -4,7 +4,7 @@ from typing import Any
 from mex.common.backend_api.connector import BackendApiConnector
 
 
-def get_merged_items() -> Generator[Any, Any, Any]:
+def get_merged_items() -> Generator[dict[str, Any], None, None]:
     """Read merged items from backend ."""
     connector = BackendApiConnector.get()
 
@@ -25,4 +25,4 @@ def get_merged_items() -> Generator[Any, Any, Any]:
 
         item_counter += item_number_limit
 
-        yield (response["items"])
+        yield from response["items"]

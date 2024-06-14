@@ -16,10 +16,9 @@ def publish_merged_items() -> None:
 
     open(file_name, "w").close()  # creates an empty file / empties existing file
 
-    item_chuncs = get_merged_items()
+    items = get_merged_items()
 
-    for items in item_chuncs:
-        write_merged_items(file_name, items)
+    write_merged_items(file_name, items)
 
 
 @entrypoint(Settings)
