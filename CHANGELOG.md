@@ -17,9 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- hotfix pydantic version
-
 ### Security
+
+## [0.17.1] - 2024-06-14
+
+### Fixed
+
+- hotfix pydantic version
 
 ## [0.17.0] - 2024-06-14
 
