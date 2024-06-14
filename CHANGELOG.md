@@ -24,6 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- remove unused organization_stable_target_id_by_query_sumo asset
+
 ### Fixed
 
 - first test does not receive isolated settings but potentially production settings
