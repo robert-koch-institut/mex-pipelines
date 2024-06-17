@@ -16,7 +16,6 @@ from mex.common.types import (
     MergedContactPointIdentifier,
     MergedOrganizationalUnitIdentifier,
     MergedOrganizationIdentifier,
-    Text,
     YearMonth,
 )
 from mex.grippeweb.transform import (
@@ -60,6 +59,27 @@ def test_transform_grippeweb_access_platform_to_extracted_access_platform(
     )
 
 
+@pytest.fixture
+def extracted_confluence_vvt_source(
+    extracted_primary_sources: dict[str, ExtractedPrimarySource]
+) -> ExtractedActivity:
+    return ExtractedActivity(
+        hadPrimarySource=extracted_primary_sources["confluence-vvt"].stableTargetId,
+        identifierInPrimarySource="2022-006",
+        contact=["b8MsFK6g26tXE5payCNcCm"],
+        responsibleUnit=["cjna2jitPngp6yIV63cdi9"],
+        title="Test Title",
+        abstract="test description, test test test, test zwecke des vorhabens",
+        activityType=["https://mex.rki.de/item/activity-type-6"],
+        involvedPerson=[
+            "b8MsFK6g26tXE5payCNcCm",
+            "b8MsFK6g26tXE5payCNcCm",
+            "b8MsFK6g26tXE5payCNcCm",
+        ],
+        involvedUnit=["cjna2jitPngp6yIV63cdi9"],
+    )
+
+
 @pytest.mark.usefixtures("mocked_grippeweb")
 def test_transform_grippeweb_resource_mappings_to_dict(
     grippeweb_resource_mappings: list[dict[str, Any]],
@@ -69,41 +89,8 @@ def test_transform_grippeweb_resource_mappings_to_dict(
     extracted_mex_persons_grippeweb: list[ExtractedPerson],
     grippeweb_organization_ids_by_query_string: dict[str, MergedOrganizationIdentifier],
     extracted_mex_functional_units_grippeweb: dict[Email, MergedContactPointIdentifier],
+    extracted_confluence_vvt_source: ExtractedActivity,
 ) -> None:
-    extracted_confluence_vvt_source = ExtractedActivity(
-        hadPrimarySource="dhVuI8dsGq7mwtc1xzj3be",
-        identifierInPrimarySource="2022-006",
-        contact=["b8MsFK6g26tXE5payCNcCm"],
-        responsibleUnit=["cjna2jitPngp6yIV63cdi9"],
-        title=[Text(value="Test Title", language=None)],
-        abstract=[
-            Text(
-                value="test description, test test test, test zwecke des vorhabens",
-                language=None,
-            )
-        ],
-        activityType=["https://mex.rki.de/item/activity-type-6"],
-        alternativeTitle=[],
-        documentation=[],
-        end=[],
-        externalAssociate=[],
-        funderOrCommissioner=[],
-        fundingProgram=[],
-        involvedPerson=[
-            "b8MsFK6g26tXE5payCNcCm",
-            "b8MsFK6g26tXE5payCNcCm",
-            "b8MsFK6g26tXE5payCNcCm",
-        ],
-        involvedUnit=["cjna2jitPngp6yIV63cdi9"],
-        isPartOfActivity=[],
-        publication=[],
-        shortName=[],
-        start=[],
-        succeeds=[],
-        theme=[],
-        website=[],
-    )
-
     resource_dict = transform_grippeweb_resource_mappings_to_dict(
         grippeweb_resource_mappings,
         unit_stable_target_ids_by_synonym,
@@ -178,6 +165,7 @@ def test_transform_grippeweb_resource_mappings_to_extracted_resources(
     extracted_mex_persons_grippeweb: list[ExtractedPerson],
     grippeweb_organization_ids_by_query_string: dict[str, MergedOrganizationIdentifier],
     extracted_mex_functional_units_grippeweb: dict[Email, MergedContactPointIdentifier],
+    extracted_confluence_vvt_source: ExtractedActivity,
 ) -> None:
     resource_dict = transform_grippeweb_resource_mappings_to_extracted_resources(
         grippeweb_resource_mappings,
@@ -187,6 +175,7 @@ def test_transform_grippeweb_resource_mappings_to_extracted_resources(
         extracted_mex_persons_grippeweb,
         grippeweb_organization_ids_by_query_string,
         extracted_mex_functional_units_grippeweb,
+        [extracted_confluence_vvt_source],
     )
     assert resource_dict["grippeweb-plus"].isPartOf == [
         resource_dict["grippeweb"].stableTargetId
