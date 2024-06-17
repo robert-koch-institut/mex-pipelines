@@ -177,3 +177,8 @@ components of the MEx project are open-sourced under the same license as well.
 
 - `pdm run synopse` extracts synopse data from report-server exports
 - based on synopse to MEx mapping commit 6472329
+
+### voxco extractor
+
+- `pdm run voxco` extracts voxco data from voxco JSON files
+- based on voxco to MEx mapping commit 307d275

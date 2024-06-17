@@ -33,12 +33,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - transform grippeweb resources
 - wikidata aux extractor into seq-repo
 - function `get_merged_organization_id_by_query_with_transform_and_load` to
-  wikidata.extract module
+- wikidata.extract module
+- extract voxco data
+
 
 ### Changes
 
 - update mex-common to 0.27.1
 - move `mex.pipeline` documentation to `__init__` to have it in sphinx
+- consolidate mocked drop connector into one general mock
 
 ### Removed
 
