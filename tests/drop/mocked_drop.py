@@ -31,7 +31,7 @@ def mocked_drop(monkeypatch: MonkeyPatch) -> None:
         ],
     )
 
-    def get_file_mocked(self, x_system:str, file_id:str):
+    def get_file_mocked(self, x_system: str, file_id: str):
         with open(
             (
                 Path(__file__).parents[2]
