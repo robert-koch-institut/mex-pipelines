@@ -27,7 +27,6 @@ from mex.grippeweb.transform import (
 )
 
 
-@pytest.mark.usefixtures("mocked_grippeweb")
 def test_transform_grippeweb_access_platform_to_extracted_access_platform(
     grippeweb_access_platform: dict[str, Any],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
@@ -80,7 +79,6 @@ def extracted_confluence_vvt_source(
     )
 
 
-@pytest.mark.usefixtures("mocked_grippeweb")
 def test_transform_grippeweb_resource_mappings_to_dict(
     grippeweb_resource_mappings: list[dict[str, Any]],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
@@ -156,7 +154,6 @@ def test_transform_grippeweb_resource_mappings_to_dict(
     )
 
 
-@pytest.mark.usefixtures("mocked_grippeweb")
 def test_transform_grippeweb_resource_mappings_to_extracted_resources(
     grippeweb_resource_mappings: list[dict[str, Any]],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
@@ -182,7 +179,6 @@ def test_transform_grippeweb_resource_mappings_to_extracted_resources(
     ]
 
 
-@pytest.mark.usefixtures("mocked_grippeweb")
 def test_transform_grippeweb_variable_group_to_extracted_variable_groups(
     grippeweb_variable_group: dict[str, Any],
     mocked_grippeweb_sql_tables: dict[str, dict[str, list[Any]]],
@@ -213,7 +209,6 @@ def test_transform_grippeweb_variable_group_to_extracted_variable_groups(
     )
 
 
-@pytest.mark.usefixtures("mocked_grippeweb")
 def test_transform_grippeweb_variable_to_extracted_variables(
     grippeweb_variable: dict[str, Any],
     extracted_variable_groups: list[ExtractedVariableGroup],
