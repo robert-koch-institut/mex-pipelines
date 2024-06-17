@@ -93,14 +93,16 @@ def test_transform_confluence_vvt_source_items_to_mex_source_mocked(
 
     confluence_primary_source = extracted_primary_sources["confluence-vvt"]
 
-    mex_sources = transform_confluence_vvt_sources_to_mex_sources(
-        confluence_vvt_sources,
-        confluence_primary_source,
-        fake_authors,
-        unit_merged_ids_by_synonym,
+    mex_sources = list(
+        transform_confluence_vvt_sources_to_mex_sources(
+            confluence_vvt_sources,
+            confluence_primary_source,
+            fake_authors,
+            unit_merged_ids_by_synonym,
+        )
     )
 
-    mex_source = next(mex_sources)
+    mex_source = mex_sources[0]
 
     expected = {
         "abstract": [

@@ -4,6 +4,7 @@ import pytest
 
 from mex.common.models import (
     ExtractedAccessPlatform,
+    ExtractedActivity,
     ExtractedPerson,
     ExtractedPrimarySource,
     ExtractedResource,
@@ -15,6 +16,7 @@ from mex.common.types import (
     MergedContactPointIdentifier,
     MergedOrganizationalUnitIdentifier,
     MergedOrganizationIdentifier,
+    Text,
     YearMonth,
 )
 from mex.grippeweb.transform import (
@@ -63,11 +65,45 @@ def test_transform_grippeweb_resource_mappings_to_dict(
     grippeweb_resource_mappings: list[dict[str, Any]],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     grippeweb_extracted_access_platform: ExtractedAccessPlatform,
-    extracted_primary_sources: list[ExtractedPrimarySource],
+    extracted_primary_sources: dict[str, ExtractedPrimarySource],
     extracted_mex_persons_grippeweb: list[ExtractedPerson],
     grippeweb_organization_ids_by_query_string: dict[str, MergedOrganizationIdentifier],
     extracted_mex_functional_units_grippeweb: dict[Email, MergedContactPointIdentifier],
 ) -> None:
+    extracted_confluence_vvt_source = ExtractedActivity(
+        hadPrimarySource="dhVuI8dsGq7mwtc1xzj3be",
+        identifierInPrimarySource="2022-006",
+        contact=["b8MsFK6g26tXE5payCNcCm"],
+        responsibleUnit=["cjna2jitPngp6yIV63cdi9"],
+        title=[Text(value="Test Title", language=None)],
+        abstract=[
+            Text(
+                value="test description, test test test, test zwecke des vorhabens",
+                language=None,
+            )
+        ],
+        activityType=["https://mex.rki.de/item/activity-type-6"],
+        alternativeTitle=[],
+        documentation=[],
+        end=[],
+        externalAssociate=[],
+        funderOrCommissioner=[],
+        fundingProgram=[],
+        involvedPerson=[
+            "b8MsFK6g26tXE5payCNcCm",
+            "b8MsFK6g26tXE5payCNcCm",
+            "b8MsFK6g26tXE5payCNcCm",
+        ],
+        involvedUnit=["cjna2jitPngp6yIV63cdi9"],
+        isPartOfActivity=[],
+        publication=[],
+        shortName=[],
+        start=[],
+        succeeds=[],
+        theme=[],
+        website=[],
+    )
+
     resource_dict = transform_grippeweb_resource_mappings_to_dict(
         grippeweb_resource_mappings,
         unit_stable_target_ids_by_synonym,
@@ -76,6 +112,7 @@ def test_transform_grippeweb_resource_mappings_to_dict(
         extracted_mex_persons_grippeweb,
         grippeweb_organization_ids_by_query_string,
         extracted_mex_functional_units_grippeweb,
+        [extracted_confluence_vvt_source],
     )
     expected = {
         "hadPrimarySource": extracted_primary_sources["grippeweb"].stableTargetId,
@@ -124,6 +161,7 @@ def test_transform_grippeweb_resource_mappings_to_dict(
         "unitInCharge": [unit_stable_target_ids_by_synonym["C1"]],
         "identifier": Joker(),
         "stableTargetId": Joker(),
+        "wasGeneratedBy": extracted_confluence_vvt_source.stableTargetId,
     }
     assert (
         resource_dict["grippeweb"].model_dump(exclude_none=True, exclude_defaults=True)
@@ -136,7 +174,7 @@ def test_transform_grippeweb_resource_mappings_to_extracted_resources(
     grippeweb_resource_mappings: list[dict[str, Any]],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     grippeweb_extracted_access_platform: ExtractedAccessPlatform,
-    extracted_primary_sources: list[ExtractedPrimarySource],
+    extracted_primary_sources: dict[str, ExtractedPrimarySource],
     extracted_mex_persons_grippeweb: list[ExtractedPerson],
     grippeweb_organization_ids_by_query_string: dict[str, MergedOrganizationIdentifier],
     extracted_mex_functional_units_grippeweb: dict[Email, MergedContactPointIdentifier],
@@ -160,7 +198,7 @@ def test_transform_grippeweb_variable_group_to_extracted_variable_groups(
     grippeweb_variable_group: dict[str, Any],
     mocked_grippeweb_sql_tables: dict[str, dict[str, list[Any]]],
     grippeweb_extracted_resource_dict: dict[str, ExtractedResource],
-    extracted_primary_sources: list[ExtractedPrimarySource],
+    extracted_primary_sources: dict[str, ExtractedPrimarySource],
 ) -> None:
     extracted_variable_groups = (
         transform_grippeweb_variable_group_to_extracted_variable_groups(
@@ -192,7 +230,7 @@ def test_transform_grippeweb_variable_to_extracted_variables(
     extracted_variable_groups: list[ExtractedVariableGroup],
     mocked_grippeweb_sql_tables: dict[str, dict[str, list[Any]]],
     grippeweb_extracted_resource_dict: dict[str, ExtractedResource],
-    extracted_primary_sources: list[ExtractedPrimarySource],
+    extracted_primary_sources: dict[str, ExtractedPrimarySource],
 ) -> None:
     extracted_variables = transform_grippeweb_variable_to_extracted_variables(
         grippeweb_variable,
