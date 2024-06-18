@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - update mex-common to 0.26.1
 - move `mex.pipeline` documentation to `__init__` to have it in sphinx
-- make grippeweb extractor explicitely depend on confluence_vvt extractor
+- make dependent extractors explicitly depend on each other (gippeweb on confluence-vvt, biospecimen on synopse, odk on international-projects)
 
 ### Deprecated
 
@@ -29,7 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - first test does not receive isolated settings but potentially production settings
 - mex-drop api connector trailing slash in send request
-- fix confluence_vvt transformation: use interne Vorgangsnummer as identifier
+- fix confluence_vvt transformation: use interne Vorgangsnummer as identifierInPrimarySource
 
 ### Security
 
