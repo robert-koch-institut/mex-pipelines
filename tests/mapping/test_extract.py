@@ -4,9 +4,7 @@ from mex.mapping.extract import extract_mapping_data
 
 
 def test_get_mapping_model() -> None:
-    mapping_path = AssetsPath(
-        "assets/mappings/__final__/test_mapping/access-platform.yaml"
-    )
+    mapping_path = AssetsPath("assets/mappings/__final__/odk/access-platform.yaml")
 
     mapping_model = extract_mapping_data(mapping_path, ExtractedAccessPlatform)
 
