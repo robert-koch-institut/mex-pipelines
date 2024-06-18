@@ -63,7 +63,7 @@ def transform_confluence_vvt_sources_to_mex_sources(
             or involved_person_merged_ids
             or responsible_unit_merged_ids,
             documentation=source.documentation,
-            identifierInPrimarySource=source.identifier,
+            identifierInPrimarySource=source.identifier_in_primary_source,
             involvedPerson=involved_person_merged_ids,
             involvedUnit=involved_unit_merged_ids,
             responsibleUnit=responsible_unit_merged_ids or involved_unit_merged_ids,

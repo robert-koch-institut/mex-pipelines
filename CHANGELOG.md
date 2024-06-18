@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - first test does not receive isolated settings but potentially production settings
 - mex-drop api connector trailing slash in send request
+- fix confluence_vvt transformation: use interne Vorgangsnummer as identifier
 
 ### Security
 
