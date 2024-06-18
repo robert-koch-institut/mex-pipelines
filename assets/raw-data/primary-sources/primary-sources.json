@@ -48,6 +48,9 @@
         "identifier": "report-server"
     },
     {
+        "identifier": "voxco"
+    },
+    {
         "identifier": "wikidata"
     }
 ]

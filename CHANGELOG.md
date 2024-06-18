@@ -9,17 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- entrypoint `all-extractors`: run all extractors
-- transform grippeweb resources
-- wikidata aux extractor into seq-repo
-- function `get_merged_organization_id_by_query_with_transform_and_load` to
- wikidata.extract module
-
 ### Changes
 
-- update mex-common to 0.26.1
-- move `mex.pipeline` documentation to `__init__` to have it in sphinx
-- make dependent extractors explicitly depend on each other (gippeweb on confluence-vvt, biospecimen on synopse, odk on international-projects)
+- make dependent extractors explicitly depend on each other (grippeweb on confluence-vvt, biospecimen on synopse, odk on international-projects)
 
 ### Deprecated
 
@@ -27,11 +19,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- first test does not receive isolated settings but potentially production settings
-- mex-drop api connector trailing slash in send request
 - fix confluence_vvt transformation: use interne Vorgangsnummer as identifierInPrimarySource
 
 ### Security
+
+## [0.17.1] - 2024-06-14
+
+### Fixed
+
+- hotfix pydantic version
+
+## [0.17.0] - 2024-06-14
+
+### Added
+
+- entrypoint `all-extractors`: run all extractors
+- transform grippeweb resources
+- wikidata aux extractor into seq-repo
+- function `get_merged_organization_id_by_query_with_transform_and_load` to
+ wikidata.extract module
+- extract voxco data
+
+
+### Changes
+
+- update mex-common to 0.27.1
+- move `mex.pipeline` documentation to `__init__` to have it in sphinx
+- consolidate mocked drop connector into one general mock
+
+### Removed
+
+- remove unused organization_stable_target_id_by_query_sumo asset
+
+### Fixed
+
+- first test does not receive isolated settings but potentially production settings
+- mex-drop api connector trailing slash in send request
 
 ## [0.16.0] - 2024-05-16
 
