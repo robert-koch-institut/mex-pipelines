@@ -67,9 +67,9 @@ def transform_odk_resources_to_mex_resources(
                 "setValues"
             ]
         was_generated_by = (
-            international_projects_stable_target_id_by_identifier_in_primary_source.get(
-                resource["wasGeneratedBy"][0]["mappingRules"][0]["forValues"][0], None
-            )
+            international_projects_stable_target_id_by_identifier_in_primary_source[
+                resource["wasGeneratedBy"][0]["mappingRules"][0]["forValues"][0]
+            ]
         )
         external_partner = [
             partner
