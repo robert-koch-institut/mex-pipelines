@@ -86,14 +86,16 @@ def extracted_confluence_vvt_sources(
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
 ) -> list[ExtractedActivity]:
     """Transform and load Confluence VVT sources."""
-    mex_sources = transform_confluence_vvt_sources_to_mex_sources(
-        confluence_vvt_sources,
-        extracted_primary_source_confluence_vvt,
-        extracted_confluence_vvt_person_ids_by_query_string,
-        unit_stable_target_ids_by_synonym,
+    mex_sources = list(
+        transform_confluence_vvt_sources_to_mex_sources(
+            confluence_vvt_sources,
+            extracted_primary_source_confluence_vvt,
+            extracted_confluence_vvt_person_ids_by_query_string,
+            unit_stable_target_ids_by_synonym,
+        )
     )
     load(mex_sources)
-    return list(mex_sources)
+    return mex_sources
 
 
 @entrypoint(ConfluenceVvtSettings)
