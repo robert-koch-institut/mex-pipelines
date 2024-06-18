@@ -114,7 +114,7 @@ def test_transform_confluence_vvt_source_items_to_mex_source_activity(
         "contact": [fake_identifier],
         "hadPrimarySource": confluence_primary_source.stableTargetId,
         "identifier": Joker(),
-        "identifierInPrimarySource": "123456",
+        "identifierInPrimarySource": "001-002",
         "involvedPerson": [
             fake_identifier,
             fake_identifier,
