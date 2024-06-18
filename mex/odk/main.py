@@ -3,6 +3,7 @@ from typing import Any
 
 from mex.common.cli import entrypoint
 from mex.common.models import (
+    ExtractedActivity,
     ExtractedPrimarySource,
     ExtractedResource,
     ExtractedVariableGroup,
@@ -79,16 +80,16 @@ def external_partner_and_publisher_by_label(
 def extracted_resources_odk(
     odk_resource_mappings: list[dict[str, Any]],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
-    extracted_primary_source_international_projects: ExtractedPrimarySource,
     external_partner_and_publisher_by_label: dict[str, MergedOrganizationIdentifier],
+    extracted_international_projects_activities: list[ExtractedActivity],
     extracted_primary_source_mex: ExtractedPrimarySource,
 ) -> list[ExtractedResource]:
     """Transform odk resources to mex resource, load to sinks and return."""
     extracted_resources_odk = transform_odk_resources_to_mex_resources(
         odk_resource_mappings,
         unit_stable_target_ids_by_synonym,
-        extracted_primary_source_international_projects,
         external_partner_and_publisher_by_label,
+        extracted_international_projects_activities,
         extracted_primary_source_mex,
     )
     load(extracted_resources_odk)
