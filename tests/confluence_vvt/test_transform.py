@@ -18,13 +18,15 @@ from mex.confluence_vvt.extract import (
     fetch_all_data_page_ids,
     fetch_all_pages_data,
 )
-from mex.confluence_vvt.transform import transform_confluence_vvt_sources_to_mex_sources
+from mex.confluence_vvt.transform import (
+    transform_confluence_vvt_sources_to_mex_activities,
+)
 
 TEST_DATA_DIR = Path(__file__).parent / "test_data"
 
 
 @pytest.mark.integration
-def test_transform_confluence_vvt_source_items_to_mex_source(
+def test_transform_confluence_vvt_source_items_to_mex_activity(
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
     unit_merged_ids_by_synonym: dict[str, Identifier],
 ) -> None:
@@ -50,19 +52,19 @@ def test_transform_confluence_vvt_source_items_to_mex_source(
         ldap_author_gens[0], extracted_primary_sources["ldap"]
     )
 
-    mex_sources = transform_confluence_vvt_sources_to_mex_sources(
+    mex_activities = transform_confluence_vvt_sources_to_mex_activities(
         confluence_vvt_source_gens[1],
         extracted_primary_sources["confluence-vvt"],
         merged_ids_by_query_string,
         unit_merged_ids_by_synonym,
     )
 
-    mex_source = next(mex_sources)
+    mex_activity = next(mex_activities)
 
-    assert mex_source.model_dump(include=set(expected.keys())) == expected
+    assert mex_activity.model_dump(include=set(expected.keys())) == expected
 
 
-def test_transform_confluence_vvt_source_items_to_mex_source_mocked(
+def test_transform_confluence_vvt_source_items_to_mex_source_activity(
     monkeypatch: MonkeyPatch,
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
     unit_merged_ids_by_synonym: dict[str, Identifier],
@@ -93,8 +95,8 @@ def test_transform_confluence_vvt_source_items_to_mex_source_mocked(
 
     confluence_primary_source = extracted_primary_sources["confluence-vvt"]
 
-    mex_sources = list(
-        transform_confluence_vvt_sources_to_mex_sources(
+    mex_activities = list(
+        transform_confluence_vvt_sources_to_mex_activities(
             confluence_vvt_sources,
             confluence_primary_source,
             fake_authors,
@@ -102,7 +104,7 @@ def test_transform_confluence_vvt_source_items_to_mex_source_mocked(
         )
     )
 
-    mex_source = mex_sources[0]
+    mex_activity = mex_activities[0]
 
     expected = {
         "abstract": [
@@ -123,4 +125,4 @@ def test_transform_confluence_vvt_source_items_to_mex_source_mocked(
         "stableTargetId": Joker(),
         "title": [{"value": "Test Title"}],
     }
-    assert mex_source.model_dump(exclude_defaults=True, exclude_none=True) == expected
+    assert mex_activity.model_dump(exclude_defaults=True, exclude_none=True) == expected

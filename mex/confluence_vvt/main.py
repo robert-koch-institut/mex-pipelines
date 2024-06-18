@@ -19,7 +19,9 @@ from mex.confluence_vvt.extract import (
 )
 from mex.confluence_vvt.models.source import ConfluenceVvtSource
 from mex.confluence_vvt.settings import ConfluenceVvtSettings
-from mex.confluence_vvt.transform import transform_confluence_vvt_sources_to_mex_sources
+from mex.confluence_vvt.transform import (
+    transform_confluence_vvt_sources_to_mex_activities,
+)
 from mex.filters import filter_by_global_rules
 from mex.pipeline import asset, run_job_in_process
 from mex.sinks import load
@@ -77,7 +79,7 @@ def extracted_confluence_vvt_person_ids_by_query_string(
 
 
 @asset(group_name="confluence_vvt")
-def extracted_confluence_vvt_sources(
+def extracted_confluence_vvt_activities(
     confluence_vvt_sources: list[ConfluenceVvtSource],
     extracted_confluence_vvt_person_ids_by_query_string: dict[
         str, list[MergedPersonIdentifier]
@@ -85,17 +87,17 @@ def extracted_confluence_vvt_sources(
     extracted_primary_source_confluence_vvt: ExtractedPrimarySource,
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
 ) -> list[ExtractedActivity]:
-    """Transform and load Confluence VVT sources."""
-    mex_sources = list(
-        transform_confluence_vvt_sources_to_mex_sources(
+    """Transform and load Confluence VVT activities."""
+    mex_activities = list(
+        transform_confluence_vvt_sources_to_mex_activities(
             confluence_vvt_sources,
             extracted_primary_source_confluence_vvt,
             extracted_confluence_vvt_person_ids_by_query_string,
             unit_stable_target_ids_by_synonym,
         )
     )
-    load(mex_sources)
-    return mex_sources
+    load(mex_activities)
+    return mex_activities
 
 
 @entrypoint(ConfluenceVvtSettings)
