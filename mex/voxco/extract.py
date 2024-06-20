@@ -34,6 +34,7 @@ def extract_voxco_organizations(
 
     Args:
         voxco_resource_mappings: voxco resource mappings
+
     Returns:
         Dict with organization label and WikidataOrganization
     """

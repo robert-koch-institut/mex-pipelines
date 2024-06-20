@@ -23,7 +23,7 @@ def transform_voxco_resource_mappings_to_extracted_resources(
     extracted_primary_source_voxco: ExtractedPrimarySource,
     # TODO: (MX-1583) international-projects,
 ) -> dict[str, ExtractedResource]:
-    """Transform grippe web values to extracted resources.
+    """Transform voxco resource mappings to extracted resources.
 
     Args:
         voxco_resource_mappings: voxco  resource mappings

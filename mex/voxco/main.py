@@ -69,7 +69,7 @@ def organization_stable_target_id_by_query_voxco(
     voxco_resource_mappings: list[dict[str, Any]],
     extracted_primary_source_wikidata: ExtractedPrimarySource,
 ) -> dict[str, MergedOrganizationIdentifier]:
-    """Extract and load voxco organizations and return them by stable target ids."""
+    """Extract and load voxco organizations and group them by query."""
     voxco_organizations = extract_voxco_organizations(voxco_resource_mappings)
 
     return get_merged_organization_id_by_query_with_transform_and_load(
@@ -83,7 +83,7 @@ def extracted_mex_persons_voxco(
     extracted_primary_source_ldap: ExtractedPrimarySource,
     extracted_organizational_units: list[ExtractedOrganizationalUnit],
 ) -> list[ExtractedPerson]:
-    """Extract ldap persons for voxco from ldap and transform them to mex persons and load them to sinks."""  # noqa: E501
+    """Extract ldap persons for voxco, transform them and load them to sinks."""
     ldap_persons = extract_ldap_persons_voxco(voxco_resource_mappings)
     mex_persons = list(
         transform_ldap_persons_to_mex_persons(
@@ -105,7 +105,7 @@ def extracted_voxco_resource(
     extracted_organization_rki: ExtractedOrganization,
     extracted_primary_source_voxco: ExtractedPrimarySource,
 ) -> dict[str, ExtractedResource]:
-    """Extract voxco resource."""
+    """Transform mex resources, load to them to the sinks and return."""
     mex_resources = transform_voxco_resource_mappings_to_extracted_resources(
         voxco_resource_mappings,
         organization_stable_target_id_by_query_voxco,
