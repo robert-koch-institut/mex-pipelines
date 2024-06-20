@@ -120,12 +120,8 @@ def extracted_activity(
         project_coordinators_merged_ids_by_query_string,
         extracted_primary_source_seq_repo,
     )
-    mex_activities_gens = tee(mex_activities, 2)
-    load(mex_activities_gens[0])
-    return {
-        activity.identifierInPrimarySource: activity
-        for activity in mex_activities_gens[1]
-    }
+    load(mex_activities)
+    return {activity.identifierInPrimarySource: activity for activity in mex_activities}
 
 
 @asset(group_name="seq_repo")
@@ -185,6 +181,7 @@ def seq_repo_resource(
     seq_repo_latest_source: dict[str, SeqRepoSource],
     extracted_distribution: dict[str, ExtractedDistribution],
     extracted_activity: dict[str, ExtractedActivity],
+    seq_repo_extracted_access_platform: ExtractedAccessPlatform,
     seq_repo_source_resolved_project_coordinators: list[LDAPPersonWithQuery],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     project_coordinators_merged_ids_by_query_string: dict[
@@ -204,6 +201,7 @@ def seq_repo_resource(
         seq_repo_latest_source,
         extracted_distribution,
         extracted_activity,
+        seq_repo_extracted_access_platform,
         resource,
         seq_repo_source_resolved_project_coordinators,
         unit_stable_target_ids_by_synonym,

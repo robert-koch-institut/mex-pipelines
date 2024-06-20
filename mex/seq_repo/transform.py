@@ -26,7 +26,7 @@ def transform_seq_repo_activities_to_extracted_activities(
         str, list[MergedPersonIdentifier]
     ],
     extracted_primary_source: ExtractedPrimarySource,
-) -> Generator[ExtractedActivity, None, None]:
+) -> list[ExtractedActivity]:
     """Transform seq-repo activity to ExtractedActivity.
 
     Args:
@@ -40,9 +40,10 @@ def transform_seq_repo_activities_to_extracted_activities(
         extracted_primary_source: Extracted primary source
 
     Returns:
-        Generator for ExtractedActivity
+        list of ExtractedActivity
     """
     theme = seq_repo_activity["theme"][0]["mappingRules"][0]["setValues"]
+    unique_activities = []
 
     for source in seq_repo_sources.values():
         project_coordinators_ids, responsible_units = (
@@ -56,7 +57,8 @@ def transform_seq_repo_activities_to_extracted_activities(
 
         if not responsible_units or not project_coordinators_ids:
             continue
-        yield ExtractedActivity(
+
+        extracted_activity = ExtractedActivity(
             contact=project_coordinators_ids,
             hadPrimarySource=extracted_primary_source.stableTargetId,
             identifierInPrimarySource=source.project_id,
@@ -65,6 +67,11 @@ def transform_seq_repo_activities_to_extracted_activities(
             theme=theme,
             title=source.project_name,
         )
+
+        if extracted_activity not in unique_activities:
+            unique_activities.append(extracted_activity)
+
+    return unique_activities
 
 
 def transform_seq_repo_distribution_to_extracted_distribution(
@@ -109,6 +116,7 @@ def transform_seq_repo_resource_to_extracted_resource(
     seq_repo_sources: dict[str, SeqRepoSource],
     seq_repo_distributions: dict[str, ExtractedDistribution],
     seq_repo_activities: dict[str, ExtractedActivity],
+    mex_access_platform: ExtractedAccessPlatform,
     seq_repo_resource: dict[str, Any],
     seq_repo_source_resolved_project_coordinators: list[LDAPPersonWithQuery],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
@@ -124,6 +132,7 @@ def transform_seq_repo_resource_to_extracted_resource(
         seq_repo_sources: Seq Repo extracted sources
         seq_repo_distributions: Seq Repo extracted distribution
         seq_repo_activities: Seq Repo extracted activity for default values from mapping
+        mex_access_platform: Extracted access platform
         seq_repo_resource: Seq Repo extracted resource
         seq_repo_source_resolved_project_coordinators: Seq Repo sources resolved project
                                             coordinators ldap query results
@@ -180,6 +189,7 @@ def transform_seq_repo_resource_to_extracted_resource(
         )
 
         yield ExtractedResource(
+            accessPlatform=mex_access_platform.stableTargetId,
             accessRestriction=access_restriction,
             accrualPeriodicity=accrual_periodicity,
             anonymizationPseudonymization=anonymization_pseudonymization,
