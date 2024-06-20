@@ -104,7 +104,7 @@ def transform_seq_repo_resource_to_extracted_resource_and_distribution(
         extracted_primary_source: Extracted primary source
 
     Returns:
-        Generator for ExtractedResource
+        lists of ExtractedResource and ExtractedDistribution
     """
     # Resource values from mapping
     access_restriction = seq_repo_resource["accessRestriction"][0]["mappingRules"][0][
