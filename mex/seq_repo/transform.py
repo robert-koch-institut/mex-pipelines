@@ -1,4 +1,3 @@
-from collections.abc import Generator
 from typing import Any
 
 from mex.common.ldap.models.person import LDAPPersonWithQuery
@@ -74,50 +73,12 @@ def transform_seq_repo_activities_to_extracted_activities(
     return unique_activities
 
 
-def transform_seq_repo_distribution_to_extracted_distribution(
+def transform_seq_repo_resource_to_extracted_resource_and_distribution(
     seq_repo_sources: dict[str, SeqRepoSource],
-    seq_repo_distribution: dict[str, Any],
-    mex_access_platform: ExtractedAccessPlatform,
-    extracted_organization_rki: ExtractedOrganization,
-    extracted_primary_source: ExtractedPrimarySource,
-) -> Generator[ExtractedDistribution, None, None]:
-    """Transform seq-repo distribution to ExtractedDistribution.
-
-    Args:
-        seq_repo_sources: Seq Repo extracted sources
-        seq_repo_distribution: Seq Repo extracted distribution
-        mex_access_platform: Extracted access platform
-        extracted_organization_rki: wikidata extracted organization
-        extracted_primary_source: Extracted primary source
-
-    Returns:
-        Generator for ExtractedDistribution
-    """
-    access_restriction = seq_repo_distribution["accessRestriction"][0]["mappingRules"][
-        0
-    ]["setValues"]
-    media_type = seq_repo_distribution["mediaType"][0]["mappingRules"][0]["setValues"]
-    title = seq_repo_distribution["title"][0]["mappingRules"][0]["setValues"]
-
-    for identifier_in_primary_source, source in seq_repo_sources.items():
-        yield ExtractedDistribution(
-            accessService=mex_access_platform.stableTargetId,
-            accessRestriction=access_restriction,
-            hadPrimarySource=extracted_primary_source.stableTargetId,
-            identifierInPrimarySource=identifier_in_primary_source,
-            issued=source.sequencing_date,
-            mediaType=media_type,
-            publisher=extracted_organization_rki.stableTargetId,
-            title=title,
-        )
-
-
-def transform_seq_repo_resource_to_extracted_resource(
-    seq_repo_sources: dict[str, SeqRepoSource],
-    seq_repo_distributions: dict[str, ExtractedDistribution],
     seq_repo_activities: dict[str, ExtractedActivity],
     mex_access_platform: ExtractedAccessPlatform,
     seq_repo_resource: dict[str, Any],
+    seq_repo_distribution: dict[str, Any],
     seq_repo_source_resolved_project_coordinators: list[LDAPPersonWithQuery],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     project_coordinators_merged_ids_by_query_string: dict[
@@ -125,15 +86,15 @@ def transform_seq_repo_resource_to_extracted_resource(
     ],
     extracted_organization_rki: ExtractedOrganization,
     extracted_primary_source: ExtractedPrimarySource,
-) -> Generator[ExtractedResource, None, None]:
+) -> tuple[list[ExtractedResource], list[ExtractedDistribution]]:
     """Transform seq-repo resource to ExtractedResource.
 
     Args:
         seq_repo_sources: Seq Repo extracted sources
-        seq_repo_distributions: Seq Repo extracted distribution
         seq_repo_activities: Seq Repo extracted activity for default values from mapping
         mex_access_platform: Extracted access platform
         seq_repo_resource: Seq Repo extracted resource
+        seq_repo_distribution: Seq Repo extracted distribution
         seq_repo_source_resolved_project_coordinators: Seq Repo sources resolved project
                                             coordinators ldap query results
         unit_stable_target_ids_by_synonym: Unit stable target ids by synonym
@@ -145,6 +106,7 @@ def transform_seq_repo_resource_to_extracted_resource(
     Returns:
         Generator for ExtractedResource
     """
+    # Resource values from mapping
     access_restriction = seq_repo_resource["accessRestriction"][0]["mappingRules"][0][
         "setValues"
     ]
@@ -168,8 +130,16 @@ def transform_seq_repo_resource_to_extracted_resource(
     ][0]["setValues"]
     theme = seq_repo_resource["theme"][0]["mappingRules"][0]["setValues"]
 
+    # Distribution values from mapping
+    access_restriction = seq_repo_distribution["accessRestriction"][0]["mappingRules"][
+        0
+    ]["setValues"]
+    media_type = seq_repo_distribution["mediaType"][0]["mappingRules"][0]["setValues"]
+    title = seq_repo_distribution["title"][0]["mappingRules"][0]["setValues"]
+
+    extracted_resources = []
+    extracted_distributions = []
     for identifier_in_primary_source, source in seq_repo_sources.items():
-        distribution = seq_repo_distributions[identifier_in_primary_source]
         activity = seq_repo_activities.get(source.project_id)
 
         project_coordinators_ids, units_in_charge = (
@@ -188,7 +158,19 @@ def transform_seq_repo_resource_to_extracted_resource(
             source.customer_org_unit_id
         )
 
-        yield ExtractedResource(
+        extracted_distribution = ExtractedDistribution(
+            accessService=mex_access_platform.stableTargetId,
+            accessRestriction=access_restriction,
+            hadPrimarySource=extracted_primary_source.stableTargetId,
+            identifierInPrimarySource=identifier_in_primary_source,
+            issued=source.sequencing_date,
+            mediaType=media_type,
+            publisher=extracted_organization_rki.stableTargetId,
+            title=title,
+        )
+        extracted_distributions.append(extracted_distribution)
+
+        extracted_resource = ExtractedResource(
             accessPlatform=mex_access_platform.stableTargetId,
             accessRestriction=access_restriction,
             accrualPeriodicity=accrual_periodicity,
@@ -196,7 +178,7 @@ def transform_seq_repo_resource_to_extracted_resource(
             contact=project_coordinators_ids,
             contributingUnit=contributing_unit or [],
             created=source.sequencing_date,
-            distribution=distribution.stableTargetId,
+            distribution=extracted_distribution.stableTargetId,
             hadPrimarySource=extracted_primary_source.stableTargetId,
             identifierInPrimarySource=identifier_in_primary_source,
             instrumentToolOrApparatus=source.sequencing_platform,
@@ -212,6 +194,9 @@ def transform_seq_repo_resource_to_extracted_resource(
             unitInCharge=units_in_charge,
             wasGeneratedBy=activity.stableTargetId if activity else None,
         )
+        extracted_resources.append(extracted_resource)
+
+    return extracted_resources, extracted_distributions
 
 
 def transform_seq_repo_access_platform_to_extracted_access_platform(

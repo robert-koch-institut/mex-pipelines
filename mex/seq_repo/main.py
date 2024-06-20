@@ -1,5 +1,3 @@
-from itertools import tee
-
 from mex.common.cli import entrypoint
 from mex.common.ldap.extract import get_merged_ids_by_query_string
 from mex.common.ldap.models.person import LDAPPersonWithQuery
@@ -32,8 +30,7 @@ from mex.seq_repo.settings import SeqRepoSettings
 from mex.seq_repo.transform import (
     transform_seq_repo_access_platform_to_extracted_access_platform,
     transform_seq_repo_activities_to_extracted_activities,
-    transform_seq_repo_distribution_to_extracted_distribution,
-    transform_seq_repo_resource_to_extracted_resource,
+    transform_seq_repo_resource_to_extracted_resource_and_distribution,
 )
 from mex.sinks import load
 
@@ -148,38 +145,8 @@ def seq_repo_extracted_access_platform(
 
 
 @asset(group_name="seq_repo")
-def extracted_distribution(
+def seq_repo_resource_and_distribution(
     seq_repo_latest_source: dict[str, SeqRepoSource],
-    extracted_primary_source_seq_repo: ExtractedPrimarySource,
-    extracted_organization_rki: ExtractedOrganization,
-    seq_repo_extracted_access_platform: ExtractedAccessPlatform,
-) -> dict[str, ExtractedDistribution]:
-    """Extract distribution from Seq-Repo."""
-    settings = SeqRepoSettings.get()
-    distribution = extract_mapping_data(
-        settings.mapping_path / "distribution.yaml",
-        ExtractedDistribution,
-    )
-    mex_distributions = transform_seq_repo_distribution_to_extracted_distribution(
-        seq_repo_latest_source,
-        distribution,
-        seq_repo_extracted_access_platform,
-        extracted_organization_rki,
-        extracted_primary_source_seq_repo,
-    )
-
-    mex_distributions_gens = tee(mex_distributions, 2)
-    load(mex_distributions_gens[0])
-    return {
-        distribution.identifierInPrimarySource: distribution
-        for distribution in mex_distributions_gens[1]
-    }
-
-
-@asset(group_name="seq_repo")
-def seq_repo_resource(
-    seq_repo_latest_source: dict[str, SeqRepoSource],
-    extracted_distribution: dict[str, ExtractedDistribution],
     extracted_activity: dict[str, ExtractedActivity],
     seq_repo_extracted_access_platform: ExtractedAccessPlatform,
     seq_repo_source_resolved_project_coordinators: list[LDAPPersonWithQuery],
@@ -190,30 +157,36 @@ def seq_repo_resource(
     extracted_organization_rki: ExtractedOrganization,
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
 ) -> list[ExtractedResource]:
-    """Extract resource from Seq-Repo."""
+    """Extract resource and distribution from Seq-Repo."""
     settings = SeqRepoSettings.get()
     resource = extract_mapping_data(
         settings.mapping_path / "resource.yaml",
         ExtractedResource,
     )
-
-    mex_resources = transform_seq_repo_resource_to_extracted_resource(
-        seq_repo_latest_source,
-        extracted_distribution,
-        extracted_activity,
-        seq_repo_extracted_access_platform,
-        resource,
-        seq_repo_source_resolved_project_coordinators,
-        unit_stable_target_ids_by_synonym,
-        project_coordinators_merged_ids_by_query_string,
-        extracted_organization_rki,
-        extracted_primary_source_seq_repo,
+    distribution = extract_mapping_data(
+        settings.mapping_path / "distribution.yaml",
+        ExtractedDistribution,
     )
 
-    mex_sources_list = list(mex_resources)
-    load(mex_sources_list)
+    mex_resources, mex_distributions = (
+        transform_seq_repo_resource_to_extracted_resource_and_distribution(
+            seq_repo_latest_source,
+            extracted_activity,
+            seq_repo_extracted_access_platform,
+            resource,
+            distribution,
+            seq_repo_source_resolved_project_coordinators,
+            unit_stable_target_ids_by_synonym,
+            project_coordinators_merged_ids_by_query_string,
+            extracted_organization_rki,
+            extracted_primary_source_seq_repo,
+        )
+    )
 
-    return list(mex_sources_list)
+    load(mex_resources)
+    load(mex_distributions)
+
+    return mex_resources
 
 
 @entrypoint(SeqRepoSettings)
