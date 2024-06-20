@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes
 
+- combine seq-repo distribution and resource extraction in one asset
+
 ### Deprecated
 
 ### Removed
@@ -35,7 +37,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - function `get_merged_organization_id_by_query_with_transform_and_load` to
 - wikidata.extract module
 - extract voxco data
-
 
 ### Changes
 
