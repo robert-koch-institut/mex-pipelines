@@ -1,3 +1,4 @@
+import pathlib
 from typing import Any
 
 import pytest
@@ -16,6 +17,14 @@ def mocked_backend(monkeypatch: MonkeyPatch) -> None:
         params: dict[str, str] | None = None,
         **kwargs: Any,
     ) -> dict[str, Any]:
-        return {"total": 0, "items": []}
+        return {
+            "total": 1,
+            "items": [{"Test": 1, "NochNTest": 2}, {"bla": "blub", "foo": "bar"}],
+        }
 
     monkeypatch.setattr(BackendApiConnector, "request", mocked_request)
+
+
+@pytest.fixture(scope="session")
+def ndjson_path(tmp_path_factory) -> pathlib.Path:
+    return tmp_path_factory.mktemp("test") / "publisher.ndjson"

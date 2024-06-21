@@ -7,5 +7,6 @@ from mex.publisher.extract import get_merged_items
 def test_get_merged_items_mocked() -> None:
     item_generator = get_merged_items()
     items = list(item_generator)
-
-    assert len(items) == 0
+    assert len(items) == 2
+    assert isinstance(items[0], dict)
+    assert items == [{"Test": 1, "NochNTest": 2}, {"bla": "blub", "foo": "bar"}]
