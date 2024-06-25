@@ -46,7 +46,7 @@ jobs:
       - name: Install requirements
         run: make setup
 
-      - name: setup commit signing
+      - name: Setup commit signing
         uses: erichesse/mex-setup-commit-signing@v4
         env:
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
