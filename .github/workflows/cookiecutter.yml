@@ -47,10 +47,12 @@ jobs:
         run: make setup
 
       - name: setup commit signing
-        uses: erichesse/mex-setup-commit-signing@v2
+        uses: erichesse/mex-setup-commit-signing@v3
         env:
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
           SIGNING_PUB: ${{ secrets.SIGNING_PUB }}
+          MEX_BOT_EMAIL: ${{ vars.MEX_BOT_EMAIL }}
+          MEX_BOT_USER: ${{ vars.MEX_BOT_USER }}
 
       - name: Update template
         env:
