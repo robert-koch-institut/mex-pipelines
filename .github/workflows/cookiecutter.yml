@@ -18,6 +18,8 @@ env:
   PIP_PREFER_BINARY: on
 
 jobs:
+  call-workflow:
+    uses: ./.github/workflows/configure-git.yml
   cruft:
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -45,9 +47,6 @@ jobs:
 
       - name: Install requirements
         run: make setup
-
-      - call-workflow:
-        uses: .github\workflows\configure-git.yml
 
       - name: Update template
         env:
