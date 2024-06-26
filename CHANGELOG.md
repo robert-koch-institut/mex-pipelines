@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- transform voxco resources and variables
+
 ### Changes
 
 - combine seq-repo distribution and resource extraction in one asset
