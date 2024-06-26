@@ -87,7 +87,7 @@ def transform_seq_repo_resource_to_extracted_resource_and_distribution(
     extracted_organization_rki: ExtractedOrganization,
     extracted_primary_source: ExtractedPrimarySource,
 ) -> tuple[list[ExtractedResource], list[ExtractedDistribution]]:
-    """Transform seq-repo resource and distributions.
+    """Transform seq-repo resources and distributions.
 
     transform seq-repo resources to ExtractedResource and
     transform seq-repo distributions to ExtractedDistribution.
