@@ -26,7 +26,7 @@ def transform_seq_repo_activities_to_extracted_activities(
     ],
     extracted_primary_source: ExtractedPrimarySource,
 ) -> list[ExtractedActivity]:
-    """Transform seq-repo activity to ExtractedActivity.
+    """Transform seq-repo activities to list of unique ExtractedActivity.
 
     Args:
         seq_repo_sources: Seq Repo extracted sources
@@ -39,7 +39,7 @@ def transform_seq_repo_activities_to_extracted_activities(
         extracted_primary_source: Extracted primary source
 
     Returns:
-        list of ExtractedActivity
+        list of unique ExtractedActivity
     """
     theme = seq_repo_activity["theme"][0]["mappingRules"][0]["setValues"]
     unique_activities = []
