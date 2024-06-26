@@ -39,12 +39,12 @@ def extract_voxco_organizations(
         Dict with organization label and WikidataOrganization
     """
     voxco_resource_organizations = {}
-    publisher = [
+    external_partners = [
         mapping["externalPartner"][0]["mappingRules"][0]["forValues"][0]
         for mapping in voxco_resource_mappings
         if mapping.get("externalPartner")
     ]
-    for external_partner in publisher:
+    for external_partner in external_partners:
         if external_partner and (org := search_organization_by_label(external_partner)):
             voxco_resource_organizations[external_partner] = org
     return voxco_resource_organizations
