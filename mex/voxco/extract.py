@@ -63,7 +63,6 @@ def extract_ldap_persons_voxco(
     """
     ldap = LDAPConnector.get()
     return [
-        ldap.get_person(mail=mail[1])
+        ldap.get_person(mail=mapping["contact"][0]["mappingRules"][0]["forValues"][1])
         for mapping in voxco_resource_mappings
-        for mail in mapping["contact"][0]["mappingRules"][0]["forValues"]
     ]

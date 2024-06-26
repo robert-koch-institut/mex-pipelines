@@ -48,21 +48,31 @@ def transform_voxco_resource_mappings_to_extracted_resources(
         access_restriction = resource["accessRestriction"][0]["mappingRules"][0][
             "setValues"
         ]
-        anonymization_pseudonymization = resource["anonymizationPseudonymization"][0][
-            "mappingRules"
-        ][0]["setValues"]
+        if anonymization_pseudonymization_top_level := resource.get(
+            "anonymizationPseudonymization"
+        ):
+            anonymization_pseudonymization = anonymization_pseudonymization_top_level[
+                0
+            ]["mappingRules"][0]["setValues"]
+        else:
+            anonymization_pseudonymization = None
         contact = mex_persons_stable_target_id_by_email[
             resource["contact"][0]["mappingRules"][0]["forValues"][1]
         ]
-        description = resource["description"][0]["mappingRules"][0]["setValues"] or None
+        if description_top_level := resource.get("description"):
+            description = description_top_level[0]["mappingRules"][0]["setValues"]
+        else:
+            description = None
         external_partner = organization_stable_target_id_by_query_voxco.get(
             resource["contact"][0]["mappingRules"][0]["forValues"][0]
         )
         identifier_in_primary_source = resource["identifierInPrimarySource"][0][
             "mappingRules"
         ][0]["setValues"][0]
-
-        keyword = resource["keyword"][0]["mappingRules"][0]["setValues"]
+        if keyword_top_level := resource.get("keyword"):
+            keyword = keyword_top_level[0]["mappingRules"][0]["setValues"]
+        else:
+            keyword = None
         language = resource["language"][0]["mappingRules"][0]["setValues"]
         mesh_id = resource["meshId"][0]["mappingRules"][0]["setValues"]
         method = resource["method"][0]["mappingRules"][0]["setValues"]
