@@ -7,8 +7,6 @@ from mex.common.ldap.models.person import LDAPPerson, LDAPPersonWithQuery
 from mex.common.models import (
     ExtractedAccessPlatform,
     ExtractedActivity,
-    ExtractedDistribution,
-    ExtractedOrganization,
     ExtractedPerson,
     ExtractedPrimarySource,
 )
@@ -28,7 +26,6 @@ from mex.seq_repo.settings import SeqRepoSettings
 from mex.seq_repo.transform import (
     transform_seq_repo_access_platform_to_extracted_access_platform,
     transform_seq_repo_activities_to_extracted_activities,
-    transform_seq_repo_distribution_to_extracted_distribution,
 )
 
 
@@ -392,29 +389,6 @@ def extracted_mex_activities_dict(
     return {
         activity.identifierInPrimarySource: activity
         for activity in extracted_mex_activities
-    }
-
-
-@pytest.fixture
-def extracted_mex_distribution_dict(
-    extracted_primary_source_seq_repo: ExtractedPrimarySource,
-    seq_repo_latest_sources: dict[str, SeqRepoSource],
-    extracted_mex_access_platform: ExtractedAccessPlatform,
-    seq_repo_distribution: dict[str, Any],
-    extracted_organization_rki: ExtractedOrganization,
-) -> dict[str, ExtractedDistribution]:
-    extracted_mex_distributions = (
-        transform_seq_repo_distribution_to_extracted_distribution(
-            seq_repo_latest_sources,
-            seq_repo_distribution,
-            extracted_mex_access_platform,
-            extracted_organization_rki,
-            extracted_primary_source_seq_repo,
-        )
-    )
-    return {
-        distribution.identifierInPrimarySource: distribution
-        for distribution in extracted_mex_distributions
     }
 
 
