@@ -3,15 +3,15 @@ from typing import Any, TypeVar
 import pytest
 from pydantic import BaseModel
 
-from mex.common.models import (
-    ExtractedPerson,
-)
+from mex.common.models import ExtractedPerson, ExtractedResource
 from mex.common.types import (
     MergedContactPointIdentifier,
     MergedOrganizationalUnitIdentifier,
     MergedOrganizationIdentifier,
     MergedPrimarySourceIdentifier,
+    Text,
 )
+from mex.voxco.model import VoxcoVariable
 
 ModelT = TypeVar("ModelT", bound=BaseModel)
 
@@ -571,3 +571,55 @@ def voxco_resource_mappings() -> list[dict[str, Any]]:
             ],
         },
     ]
+
+
+@pytest.fixture
+def extracted_voxco_resources() -> dict[str, ExtractedResource]:
+    return {
+        "voxco-plus": ExtractedResource(
+            hadPrimarySource=MergedPrimarySourceIdentifier.generate(21),
+            identifierInPrimarySource="voxco-plus",
+            accessRestriction="https://mex.rki.de/item/access-restriction-2",
+            theme=["https://mex.rki.de/item/theme-35"],
+            title=[Text(value="voxco-Plus", language="de")],
+            anonymizationPseudonymization=[
+                "https://mex.rki.de/item/anonymization-pseudonymization-2"
+            ],
+            contact=[MergedOrganizationalUnitIdentifier.generate(22)],
+            description=[
+                Text(value="Erreger-spezifische Zusatzinformationen", language="de")
+            ],
+            keyword=[Text(value="Surveillance", language="de")],
+            language=["https://mex.rki.de/item/language-1"],
+            meshId=[
+                "http://id.nlm.nih.gov/mesh/D012140",
+                "http://id.nlm.nih.gov/mesh/D012141",
+                "http://id.nlm.nih.gov/mesh/D007251",
+            ],
+            method=[Text(value="Selbstabstriche", language="de")],
+            qualityInformation=[Text(value="description", language="de")],
+            resourceTypeGeneral=["https://mex.rki.de/item/resource-type-general-10"],
+            rights=[Text(value="Die Daten", language="de")],
+            spatial=[Text(value="Deutschland", language="de")],
+            entityType="ExtractedResource",
+            unitInCharge=[MergedOrganizationalUnitIdentifier.generate(23)],
+        )
+    }
+
+
+@pytest.fixture
+def voxco_variables() -> dict[str, list[VoxcoVariable]]:
+    return {
+        "resource_voxco-plus": [
+            VoxcoVariable(
+                Id=50614,
+                DataType="Text",
+                Type="Discrete",
+                QuestionText="Monat",
+                Choices=[
+                    "@{Code=1; Text=Januar; Image=; HasOpenEnd=False; Visible=True; Default=False}",
+                    "@{Code=1; Text=Februar; Image=; HasOpenEnd=False; Visible=True; Default=False}",
+                ],
+            )
+        ]
+    }

@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- transform voxco resources
+- transform voxco resources and variables
 
 ### Changes
 

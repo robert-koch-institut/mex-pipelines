@@ -4,13 +4,19 @@ from mex.common.models import (
     ExtractedOrganization,
     ExtractedPerson,
     ExtractedPrimarySource,
+    ExtractedResource,
+    ExtractedVariable,
 )
 from mex.common.testing import Joker
 from mex.common.types import (
     MergedOrganizationalUnitIdentifier,
     MergedOrganizationIdentifier,
 )
-from mex.voxco.transform import transform_voxco_resource_mappings_to_extracted_resources
+from mex.voxco.model import VoxcoVariable
+from mex.voxco.transform import (
+    transform_voxco_resource_mappings_to_extracted_resources,
+    transform_voxco_variable_mappings_to_extracted_variables,
+)
 
 
 def test_transform_voxco_resource_mappings_to_extracted_resources(
@@ -64,5 +70,29 @@ def test_transform_voxco_resource_mappings_to_extracted_resources(
 
     assert (
         resource_dict["voxco-plus"].model_dump(exclude_none=True, exclude_defaults=True)
+        == expected
+    )
+
+
+def test_transform_voxco_variable_mappings_to_extracted_variables(
+    extracted_voxco_resources: dict[str, ExtractedResource],
+    voxco_variables: dict[str, list[VoxcoVariable]],
+    extracted_primary_sources: ExtractedPrimarySource,
+) -> list[ExtractedVariable]:
+    extracted_variables = transform_voxco_variable_mappings_to_extracted_variables(
+        extracted_voxco_resources, voxco_variables, extracted_primary_sources["voxco"]
+    )
+    expected = {
+        "hadPrimarySource": extracted_primary_sources["voxco"].stableTargetId,
+        "identifierInPrimarySource": "50614",
+        "label": [{"value": "Monat"}],
+        "usedIn": [extracted_voxco_resources["voxco-plus"].stableTargetId],
+        "description": [{"value": "Discrete", "language": "de"}],
+        "valueSet": ["Januar", "Februar"],
+        "identifier": Joker(),
+        "stableTargetId": Joker(),
+    }
+    assert (
+        extracted_variables[0].model_dump(exclude_none=True, exclude_defaults=True)
         == expected
     )

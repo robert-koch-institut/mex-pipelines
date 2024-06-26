@@ -29,7 +29,10 @@ from mex.voxco.extract import (
 )
 from mex.voxco.model import VoxcoVariable
 from mex.voxco.settings import VoxcoSettings
-from mex.voxco.transform import transform_voxco_resource_mappings_to_extracted_resources
+from mex.voxco.transform import (
+    transform_voxco_resource_mappings_to_extracted_resources,
+    transform_voxco_variable_mappings_to_extracted_variables,
+)
 from mex.wikidata.extract import (
     get_merged_organization_id_by_query_with_transform_and_load,
 )
@@ -49,7 +52,7 @@ def extracted_primary_source_voxco(
 
 
 @asset(group_name="voxco")
-def voxco_sources() -> dict[str, list[VoxcoVariable]]:
+def voxco_variables() -> dict[str, list[VoxcoVariable]]:
     """Extract voxco variables by json file names."""
     return extract_voxco_variables()
 
@@ -95,7 +98,7 @@ def extracted_mex_persons_voxco(
 
 
 @asset(group_name="voxco")
-def extracted_voxco_resource(
+def extracted_voxco_resources(
     voxco_resource_mappings: list[dict[str, Any]],
     organization_stable_target_id_by_query_voxco: dict[
         str, MergedOrganizationIdentifier
@@ -117,6 +120,18 @@ def extracted_voxco_resource(
     load(mex_resources.values())
 
     return mex_resources
+
+
+def extracted_variables_voxco(
+    extracted_voxco_resources: dict[str, ExtractedResource],
+    voxco_variables: dict[str, list[VoxcoVariable]],
+    extracted_primary_source_voxco: ExtractedPrimarySource,
+) -> None:
+    """Transform voxco variables and load them to the sinks."""
+    extracted_variables = transform_voxco_variable_mappings_to_extracted_variables(
+        extracted_voxco_resources, voxco_variables, extracted_primary_source_voxco
+    )
+    load(extracted_variables)
 
 
 @entrypoint(VoxcoSettings)

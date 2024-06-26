@@ -5,11 +5,13 @@ from mex.common.models import (
     ExtractedPerson,
     ExtractedPrimarySource,
     ExtractedResource,
+    ExtractedVariable,
 )
 from mex.common.types import (
     MergedOrganizationalUnitIdentifier,
     MergedOrganizationIdentifier,
 )
+from mex.voxco.model import VoxcoVariable
 
 
 def transform_voxco_resource_mappings_to_extracted_resources(
@@ -103,3 +105,36 @@ def transform_voxco_resource_mappings_to_extracted_resources(
             # TODO: (blocked by MX-1583) wasGeneratedBy = was_generated_by
         )
     return resource_dict
+
+
+def transform_voxco_variable_mappings_to_extracted_variables(
+    extracted_voxco_resources: dict[str, ExtractedResource],
+    voxco_variables: dict[str, list[VoxcoVariable]],
+    extracted_primary_source_voxco: ExtractedPrimarySource,
+) -> list[ExtractedVariable]:
+    """Transform voxco variable mappings to extracted variables.
+
+    Args:
+        extracted_voxco_resources: extracted voxco resources
+        voxco_variables: list of voxco variables by associated resource
+        extracted_primary_source_voxco: extracted voxco primary source
+
+    Returns:
+        list of extracted variables
+    """
+    return [
+        ExtractedVariable(
+            hadPrimarySource=extracted_primary_source_voxco.stableTargetId,
+            identifierInPrimarySource=str(variable.Id),
+            description=variable.Type,
+            label=variable.QuestionText,
+            usedIn=resource.stableTargetId,
+            valueSet=[
+                choice.split("Text=")[1].split(";")[0] for choice in variable.Choices
+            ],
+        )
+        for resource in extracted_voxco_resources.values()
+        for variable in voxco_variables[
+            f"resource_{resource.identifierInPrimarySource}"
+        ]
+    ]
