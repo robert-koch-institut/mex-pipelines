@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes
 
-- make dependent extractors explicitly depend on each other (grippeweb on confluence-vvt, biospecimen on synopse, odk on international-projects)
+- make dependent extractors explicitly depend on each other
+  (grippeweb on confluence-vvt, biospecimen on synopse, odk on international-projects)
 
 ### Deprecated
 
