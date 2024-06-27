@@ -19,7 +19,7 @@ from mex.confluence_vvt.extract import (
     fetch_all_pages_data,
 )
 from mex.confluence_vvt.transform import (
-    transform_confluence_vvt_sources_to_mex_activities,
+    transform_confluence_vvt_sources_to_extracted_activities,
 )
 
 TEST_DATA_DIR = Path(__file__).parent / "test_data"
@@ -52,7 +52,7 @@ def test_transform_confluence_vvt_source_items_to_mex_activity(
         ldap_author_gens[0], extracted_primary_sources["ldap"]
     )
 
-    mex_activities = transform_confluence_vvt_sources_to_mex_activities(
+    mex_activities = transform_confluence_vvt_sources_to_extracted_activities(
         confluence_vvt_source_gens[1],
         extracted_primary_sources["confluence-vvt"],
         merged_ids_by_query_string,
@@ -96,7 +96,7 @@ def test_transform_confluence_vvt_source_items_to_mex_source_activity(
     confluence_primary_source = extracted_primary_sources["confluence-vvt"]
 
     mex_activities = list(
-        transform_confluence_vvt_sources_to_mex_activities(
+        transform_confluence_vvt_sources_to_extracted_activities(
             confluence_vvt_sources,
             confluence_primary_source,
             fake_authors,

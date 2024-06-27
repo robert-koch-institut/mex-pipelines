@@ -7,7 +7,7 @@ from mex.confluence_vvt.models.source import ConfluenceVvtSource
 
 
 @watch
-def transform_confluence_vvt_sources_to_mex_activities(
+def transform_confluence_vvt_sources_to_extracted_activities(
     confluence_vvt_sources: Iterable[ConfluenceVvtSource],
     extracted_primary_source: ExtractedPrimarySource,
     merged_ids_by_query_string: dict[Hashable, list[Identifier]],

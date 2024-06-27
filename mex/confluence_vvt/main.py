@@ -20,7 +20,7 @@ from mex.confluence_vvt.extract import (
 from mex.confluence_vvt.models.source import ConfluenceVvtSource
 from mex.confluence_vvt.settings import ConfluenceVvtSettings
 from mex.confluence_vvt.transform import (
-    transform_confluence_vvt_sources_to_mex_activities,
+    transform_confluence_vvt_sources_to_extracted_activities,
 )
 from mex.filters import filter_by_global_rules
 from mex.pipeline import asset, run_job_in_process
@@ -89,7 +89,7 @@ def extracted_confluence_vvt_activities(
 ) -> list[ExtractedActivity]:
     """Transform and load Confluence VVT activities."""
     mex_activities = list(
-        transform_confluence_vvt_sources_to_mex_activities(
+        transform_confluence_vvt_sources_to_extracted_activities(
             confluence_vvt_sources,
             extracted_primary_source_confluence_vvt,
             extracted_confluence_vvt_person_ids_by_query_string,
