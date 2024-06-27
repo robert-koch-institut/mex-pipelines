@@ -104,11 +104,12 @@ def test_transform_odk_resources_to_mex_resources(
     extracted_international_projects_activities: list[ExtractedActivity],
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
 ) -> None:
-    international_project_stable_target_id = [  # noqa: RUF015
-        activity
-        for activity in extracted_international_projects_activities
-        if activity.identifierInPrimarySource == "0000-1000"
-    ][0].stableTargetId
+    international_project_stable_target_id = next(
+        filter(
+            lambda x: x.identifierInPrimarySource == "0000-1000",
+            extracted_international_projects_activities,
+        )
+    ).stableTargetId
 
     resources = transform_odk_resources_to_mex_resources(
         odk_resource_mappings,

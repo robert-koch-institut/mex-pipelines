@@ -74,11 +74,12 @@ def test_transform_biospecimen_resource_to_mex_resource(
     unit_stable_target_ids = MagicMock()
     unit_stable_target_ids.get.side_effect = lambda _: Identifier.generate(seed=42)
 
-    synopse_merged_id = [  # noqa: RUF015
-        activity
-        for activity in extracted_synopse_activities
-        if activity.identifierInPrimarySource == "1234567"
-    ][0].stableTargetId
+    synopse_merged_id = next(
+        filter(
+            lambda x: x.identifierInPrimarySource == "1234567",
+            extracted_synopse_activities,
+        )
+    ).stableTargetId
 
     mex_sources = transform_biospecimen_resource_to_mex_resource(
         biospecimen_resources,
