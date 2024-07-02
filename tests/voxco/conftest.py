@@ -610,7 +610,7 @@ def extracted_voxco_resources() -> dict[str, ExtractedResource]:
 @pytest.fixture
 def voxco_variables() -> dict[str, list[VoxcoVariable]]:
     return {
-        "resource_voxco-plus": [
+        "project_voxco-plus": [
             VoxcoVariable(
                 Id=50614,
                 DataType="Text",
@@ -620,6 +620,7 @@ def voxco_variables() -> dict[str, list[VoxcoVariable]]:
                     "@{Code=1; Text=Januar; Image=; HasOpenEnd=False; Visible=True; Default=False}",
                     "@{Code=1; Text=Februar; Image=; HasOpenEnd=False; Visible=True; Default=False}",
                 ],
+                Text="Tag",
             )
         ]
     }

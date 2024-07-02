@@ -41,6 +41,9 @@ def test_transform_voxco_resource_mappings_to_extracted_resources(
         "hadPrimarySource": extracted_primary_sources["voxco"].stableTargetId,
         "identifierInPrimarySource": "voxco-plus",
         "accessRestriction": "https://mex.rki.de/item/access-restriction-2",
+        "externalPartner": [
+            organization_stable_target_id_by_query_voxco["Robert Koch-Institut"]
+        ],
         "contact": [extracted_mex_persons_voxco[0].stableTargetId],
         "theme": ["https://mex.rki.de/item/theme-35"],
         "title": [{"value": "voxco-Plus", "language": "de"}],
