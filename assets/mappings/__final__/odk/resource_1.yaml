@@ -13,7 +13,8 @@ identifierInPrimarySource:
   mappingRules:
   - setValues:
     - test_raw_data
-    rule: Set value as indicated.
+    rule: Use value as it is.
+  comment: identifierInPrimarySource also for the corresponding activity extracted from international projects
 stableTargetId:
 - fieldInPrimarySource: n/a
   mappingRules:
@@ -23,31 +24,50 @@ accessRestriction:
   mappingRules:
   - setValues:
     - https://mex.rki.de/item/access-restriction-2
-    rule: Set value as indicated.
+    rule: Use value as it is.
+alternativeTitle:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - setValues:
+    - value: dolor
+      language: en
+    - value: sit
+      language: de
+    rule: Set values as indicated.
+  comment: null
 contact:
 - fieldInPrimarySource: n/a
   mappingRules:
   - forValues:
     - C1
-    rule: Match value
+    rule: Match value with corresponding identifier using organigram extractor.
+contributingUnit:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - forValues:
+    - C1
+    rule: Match value with corresponding identifier using organigram extractor.
 description:
 - fieldInPrimarySource: n/a
   mappingRules:
   - setValues:
-    - value: voluptua
+    - value: amet
       language: en
     rule: Set value as indicated.
 externalPartner:
 - fieldInPrimarySource: n/a
   mappingRules:
   - forValues:
-    - At
-    rule: Use values
+    - "consetetur"
+    - " sadipscing  "
+    rule: Use value
 keyword:
 - fieldInPrimarySource: n/a
   mappingRules:
   - setValues:
-    - value: vero eos
+    - value: elitr
+    - value: sed
+    - value: diam
       language: en
     rule: Set values as indicated.
 language:
@@ -55,28 +75,35 @@ language:
   mappingRules:
   - setValues:
     - https://mex.rki.de/item/language-2
-    rule: Set values as indicated.
-  comment: Add https://mex.rki.de/item/language-3
+    rule: Set value as indicated.
 meshId:
 - fieldInPrimarySource: n/a
   mappingRules:
   - setValues:
     - http://id.nlm.nih.gov/mesh/D000086382 #COVID-19
     rule: Set values as indicated.
+  comment: null
 method:
 - fieldInPrimarySource: n/a
   mappingRules:
   - setValues:
-    - value: et accusam
+    - value: nonumy
       language: en
-    - value: et justo
+    - value: eirmod
       language: de
     rule: Set values as indicated.
+methodDescription:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - setValues:
+    - value: tempor
+      language: en
+    rule: Set value as indicated.
 publisher:
 - fieldInPrimarySource: n/a
   mappingRules:
   - forValues:
-    - duo dolores
+    - invidunt
     rule: Use value to match with wikidata extractor.
 resourceTypeGeneral:
 - fieldInPrimarySource: n/a
@@ -88,22 +115,33 @@ rights:
 - fieldInPrimarySource: n/a
   mappingRules:
   - setValues:
-    - value: et ea rebum
+    - value: "ut labore"
       language: de
     rule: Set value as indicated.
+sizeOfDataBasis:
+- fieldInPrimarySource: n/a
+  mappingRules:
+  - setValues:
+    - et dolore
+    rule: Set value as indicated
+  comment: null
 spatial:
 - fieldInPrimarySource: n/a
   mappingRules:
   - setValues:
-    - value: Stet
+    - value: magna
+      language: de
+    - value: magna
       language: en
     rule: Set values as indicated.
+  comment: null
 temporal:
 - fieldInPrimarySource: n/a
   mappingRules:
   - setValues:
-    - 2021-05-01 - 2021-12-31
-    rule: Set values as indicated.
+    - 2021-07-27 - 2021-12-31
+    rule: Set value as indicated.
+  comment: null
 theme:
 - fieldInPrimarySource: n/a
   mappingRules:
@@ -115,12 +153,11 @@ title:
 - fieldInPrimarySource: n/a
   mappingRules:
   - setValues:
-    - value:  clita
+    - value: aliquyam
       language: en
-    - value:  kasd
-      language: en
+    - value: erat
+      language: de
     rule: Set values as indicated.
-  comment: n/a
 unitInCharge:
 - fieldInPrimarySource: n/a
   mappingRules:
@@ -131,5 +168,5 @@ wasGeneratedBy:
 - fieldInPrimarySource: n/a
   mappingRules:
   - forValues:
-    - testAAbr
-    rule: Use value to match with identifierInPrimarySource in international projects. Assign stableTargetId of the matching item.
+    - 0000-1000
+    rule: Use value

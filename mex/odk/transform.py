@@ -1,7 +1,7 @@
 from typing import Any
 
-from mex.common.identity import get_provider
 from mex.common.models import (
+    ExtractedActivity,
     ExtractedPrimarySource,
     ExtractedResource,
     ExtractedVariable,
@@ -17,8 +17,8 @@ from mex.odk.model import ODKData
 def transform_odk_resources_to_mex_resources(
     odk_resource_mappings: list[dict[str, Any]],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
-    extracted_primary_source_international_projects: ExtractedPrimarySource,
     external_partner_and_publisher_by_label: dict[str, MergedOrganizationIdentifier],
+    extracted_international_projects_activities: list[ExtractedActivity],
     extracted_primary_source_mex: ExtractedPrimarySource,
 ) -> list[ExtractedResource]:
     """Transform odk resources to mex resources.
@@ -28,12 +28,17 @@ def transform_odk_resources_to_mex_resources(
         unit_stable_target_ids_by_synonym: dict of OrganizationalUnitIds
         extracted_primary_source_international_projects: primary source
         external_partner_and_publisher_by_label: dict of wikidata OrganizationIDs
+        extracted_international_projects_activities:
+          list of extracted international projects activities
         extracted_primary_source_mex: mex primary source
 
     Returns:
         list of mex resources
     """
-    provider = get_provider()
+    international_projects_stable_target_id_by_identifier_in_primary_source = {
+        activity.identifierInPrimarySource: activity.stableTargetId
+        for activity in extracted_international_projects_activities
+    }
 
     resources = []
     for resource in odk_resource_mappings:
@@ -61,16 +66,11 @@ def transform_odk_resources_to_mex_resources(
             size_of_data_basis = resource["sizeOfDataBasis"][0]["mappingRules"][0][
                 "setValues"
             ]
-
-        identity = provider.fetch(
-            had_primary_source=extracted_primary_source_international_projects.stableTargetId,
-            identifier_in_primary_source=resource["wasGeneratedBy"][0]["mappingRules"][
-                0
-            ]["forValues"][0],
+        was_generated_by = (
+            international_projects_stable_target_id_by_identifier_in_primary_source[
+                resource["wasGeneratedBy"][0]["mappingRules"][0]["forValues"][0]
+            ]
         )
-        was_generated_by = None
-        if identity:
-            was_generated_by = identity[0].stableTargetId
         external_partner = [
             partner
             for name in resource["externalPartner"][0]["mappingRules"][0]["forValues"]

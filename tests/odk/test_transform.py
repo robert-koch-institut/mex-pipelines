@@ -1,13 +1,16 @@
 from typing import Any
 
-from mex.common.identity import get_provider
+import pytest
+
 from mex.common.models import (
+    ExtractedActivity,
     ExtractedPrimarySource,
     ExtractedResource,
     ExtractedVariableGroup,
 )
 from mex.common.testing import Joker
 from mex.common.types import (
+    Link,
     MergedOrganizationalUnitIdentifier,
     MergedOrganizationIdentifier,
 )
@@ -20,23 +23,99 @@ from mex.odk.transform import (
 )
 
 
+@pytest.fixture
+def extracted_international_projects_activities() -> list[ExtractedActivity]:
+    return [
+        ExtractedActivity(
+            hadPrimarySource="fSwk5o6nXHVMdFuPHH0hRk",
+            identifierInPrimarySource="0000-1000",
+            contact=["bFQoRhcVH5DHUU", "bFQoRhcVH5DHUL"],
+            responsibleUnit=["bFQoRhcVH5DHUL"],
+            title="This is a test project full title",
+            activityType=[
+                "https://mex.rki.de/item/activity-type-2",
+                "https://mex.rki.de/item/activity-type-1",
+            ],
+            alternativeTitle="testAAbr",
+            end="2021-12-31",
+            externalAssociate=["bFQoRhcVH5DHU8"],
+            funderOrCommissioner=["bFQoRhcVH5DHU8"],
+            involvedPerson=["bFQoRhcVH5DHUU"],
+            involvedUnit=["bFQoRhcVH5DHUL"],
+            shortName="testAAbr",
+            start="2021-07-27",
+            theme=["https://mex.rki.de/item/theme-27"],
+            website=[],
+        ),
+        ExtractedActivity(
+            hadPrimarySource="fSwk5o6nXHVMdFuPHH0hRk",
+            identifierInPrimarySource="0000-1001",
+            contact=["bFQoRhcVH5DHUU", "bFQoRhcVH5DHUL"],
+            responsibleUnit=["bFQoRhcVH5DHUL"],
+            title="This is a test project full title 2",
+            activityType=[
+                "https://mex.rki.de/item/activity-type-2",
+                "https://mex.rki.de/item/activity-type-1",
+            ],
+            alternativeTitle="testAAbr2",
+            end="2025-12-31",
+            funderOrCommissioner=["bFQoRhcVH5DHU8"],
+            fundingProgram=["GHPP2"],
+            involvedPerson=["bFQoRhcVH5DHUU"],
+            shortName="testAAbr2",
+            start="2023-01-01",
+            theme=[
+                "https://mex.rki.de/item/theme-27",
+                "https://mex.rki.de/item/theme-1",
+            ],
+        ),
+        ExtractedActivity(
+            hadPrimarySource="fSwk5o6nXHVMdFuPHH0hRk",
+            identifierInPrimarySource="0000-1002",
+            contact=["bFQoRhcVH5DHUU", "bFQoRhcVH5DHUL"],
+            responsibleUnit=["bFQoRhcVH5DHUL"],
+            title="This is a test project full title 4",
+            activityType=[
+                "https://mex.rki.de/item/activity-type-2",
+                "https://mex.rki.de/item/activity-type-1",
+            ],
+            alternativeTitle="testAAbr3",
+            end="2022-12-31",
+            funderOrCommissioner=["bFQoRhcVH5DHU8"],
+            fundingProgram=["None"],
+            involvedPerson=["bFQoRhcVH5DHUU"],
+            involvedUnit=["bFQoRhcVH5DHUL"],
+            shortName="testAAbr3",
+            start="2021-08-01",
+            theme=[
+                "https://mex.rki.de/item/theme-27",
+                "https://mex.rki.de/item/theme-36",
+                "https://mex.rki.de/item/theme-1",
+            ],
+            website=[Link(language=None, title=None, url="None")],
+        ),
+    ]
+
+
 def test_transform_odk_resources_to_mex_resources(
     odk_resource_mappings: list[dict[str, Any]],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     external_partner_and_publisher_by_label: dict[str, MergedOrganizationIdentifier],
+    extracted_international_projects_activities: list[ExtractedActivity],
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
 ) -> None:
-    identity_provider = get_provider()
-    identity = identity_provider.assign(
-        extracted_primary_sources["international-projects"].stableTargetId,
-        "testAAbr",
-    )  # "testAAbr" is the default value from test mapping
+    international_project_stable_target_id = next(
+        filter(
+            lambda x: x.identifierInPrimarySource == "0000-1000",
+            extracted_international_projects_activities,
+        )
+    ).stableTargetId
 
     resources = transform_odk_resources_to_mex_resources(
         odk_resource_mappings,
         unit_stable_target_ids_by_synonym,
-        extracted_primary_sources["international-projects"],
         external_partner_and_publisher_by_label,
+        extracted_international_projects_activities,
         extracted_primary_sources["mex"],
     )
     expected = {
@@ -89,15 +168,15 @@ def test_transform_odk_resources_to_mex_resources(
             {"value": "erat", "language": "de"},
         ],
         "unitInCharge": [unit_stable_target_ids_by_synonym["C1"]],
-        "wasGeneratedBy": identity.stableTargetId,
+        "wasGeneratedBy": international_project_stable_target_id,
     }
     assert resources[0].model_dump(exclude_defaults=True) == expected
 
     resources_without_organizations = transform_odk_resources_to_mex_resources(
         odk_resource_mappings,
         unit_stable_target_ids_by_synonym,
-        extracted_primary_sources["international-projects"],
         {},
+        extracted_international_projects_activities,
         extracted_primary_sources["mex"],
     )
     assert resources_without_organizations[0].model_dump()["publisher"] == []
