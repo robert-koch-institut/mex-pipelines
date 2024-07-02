@@ -1,6 +1,7 @@
 from typing import Any
 
 from mex.common.models import (
+    ExtractedActivity,
     ExtractedOrganization,
     ExtractedPerson,
     ExtractedPrimarySource,
@@ -28,6 +29,7 @@ def test_transform_voxco_resource_mappings_to_extracted_resources(
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     extracted_organization_rki: ExtractedOrganization,
     extracted_primary_sources: ExtractedPrimarySource,
+    extracted_international_projects_activities: list[ExtractedActivity],
 ) -> None:
     resource_dict = transform_voxco_resource_mappings_to_extracted_resources(
         voxco_resource_mappings,
@@ -36,6 +38,7 @@ def test_transform_voxco_resource_mappings_to_extracted_resources(
         unit_stable_target_ids_by_synonym,
         extracted_organization_rki,
         extracted_primary_sources["voxco"],
+        extracted_international_projects_activities,
     )
     expected = {
         "hadPrimarySource": extracted_primary_sources["voxco"].stableTargetId,
@@ -69,6 +72,7 @@ def test_transform_voxco_resource_mappings_to_extracted_resources(
         "spatial": [{"value": "Deutschland", "language": "de"}],
         "identifier": Joker(),
         "stableTargetId": Joker(),
+        "wasGeneratedBy": extracted_international_projects_activities[0].stableTargetId,
     }
 
     assert (
