@@ -1,6 +1,8 @@
 from pydantic import AnyUrl, Field, SecretStr
 from pydantic_core import Url
+from pydantic_settings import SettingsConfigDict
 
+from mex.artificial.settings import ArtificialSettings
 from mex.common.settings import BaseSettings
 from mex.common.types import IdentityProvider
 from mex.types import ExtractorIdentityProvider
@@ -8,6 +10,8 @@ from mex.types import ExtractorIdentityProvider
 
 class Settings(BaseSettings):
     """Settings definition class for extractors and related scripts."""
+
+    model_config = SettingsConfigDict(env_nested_delimiter="_")
 
     skip_partners: list[str] = Field(
         ["test"],
@@ -61,3 +65,4 @@ class Settings(BaseSettings):
             "dsn-connection-string-attribute"
         ),
     )
+    artificial: ArtificialSettings = ArtificialSettings()

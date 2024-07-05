@@ -9,7 +9,6 @@ from mex.artificial.identity import (
     create_identities,
     restore_identities,
 )
-from mex.artificial.settings import ArtificialSettings
 from mex.common.identity import get_provider
 from mex.common.identity.memory import MemoryIdentityProvider
 from mex.common.models import (
@@ -19,6 +18,7 @@ from mex.common.models import (
 )
 from mex.common.testing import Joker
 from mex.common.types import MergedPrimarySourceIdentifier
+from mex.settings import Settings
 
 
 def test_restore_identities() -> None:
@@ -65,7 +65,12 @@ def test_get_offset_int() -> None:
 
     # ensure the distance between the offsets is greater than the allowed total
     min_distance = min([abs(j - i) for i, j in pairwise(offsets)])
-    max_allowed = ArtificialSettings.model_fields["count"].metadata[-1].lt
+    max_allowed = (
+        Settings.model_fields["artificial"]
+        .default.model_fields["count"]
+        .metadata[-1]
+        .lt
+    )
     assert min_distance > max_allowed
 
 
