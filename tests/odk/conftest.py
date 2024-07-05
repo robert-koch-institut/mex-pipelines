@@ -440,7 +440,7 @@ def odk_resource_mappings() -> list[dict[str, Any]]:
                     "examplesInPrimarySource": None,
                     "mappingRules": [
                         {
-                            "forValues": ["testAAbr"],
+                            "forValues": ["0000-1000"],
                             "setValues": None,
                             "rule": "Use value",
                         }
@@ -456,10 +456,10 @@ def odk_resource_mappings() -> list[dict[str, Any]]:
 def external_partner_and_publisher_by_label() -> (
     dict[str, MergedOrganizationIdentifier]
 ):
-    """Mocked external partne and publisher dict for OrganizationIDs."""
+    """Mocked external partner and publisher dict for OrganizationIDs."""
     return {
-        "invidunt": MergedOrganizationalUnitIdentifier.generate(42),
-        "consetetur": MergedOrganizationalUnitIdentifier.generate(43),
+        "invidunt": MergedOrganizationIdentifier.generate(42),
+        "consetetur": MergedOrganizationIdentifier.generate(43),
     }
 
 
