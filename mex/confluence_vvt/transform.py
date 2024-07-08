@@ -7,13 +7,13 @@ from mex.confluence_vvt.models.source import ConfluenceVvtSource
 
 
 @watch
-def transform_confluence_vvt_sources_to_mex_sources(
+def transform_confluence_vvt_sources_to_extracted_activities(
     confluence_vvt_sources: Iterable[ConfluenceVvtSource],
     extracted_primary_source: ExtractedPrimarySource,
     merged_ids_by_query_string: dict[Hashable, list[Identifier]],
     unit_merged_ids_by_synonym: dict[str, Identifier],
 ) -> Generator[ExtractedActivity, None, None]:
-    """Transform Confluence-vvt sources to extracted sources.
+    """Transform Confluence-vvt sources to extracted activities.
 
     Args:
         confluence_vvt_sources: Confluence-vvt sources
@@ -63,7 +63,7 @@ def transform_confluence_vvt_sources_to_mex_sources(
             or involved_person_merged_ids
             or responsible_unit_merged_ids,
             documentation=source.documentation,
-            identifierInPrimarySource=source.identifier,
+            identifierInPrimarySource=source.identifier_in_primary_source,
             involvedPerson=involved_person_merged_ids,
             involvedUnit=involved_unit_merged_ids,
             responsibleUnit=responsible_unit_merged_ids or involved_unit_merged_ids,

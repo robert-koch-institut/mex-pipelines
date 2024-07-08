@@ -2,10 +2,10 @@ from collections.abc import Generator, Iterable
 from typing import cast
 
 from mex.biospecimen.models.source import BiospecimenResource
-from mex.common.identity import get_provider
 from mex.common.logging import watch
 from mex.common.models import (
     ExtractedAccessPlatform,
+    ExtractedActivity,
     ExtractedOrganization,
     ExtractedPerson,
     ExtractedResource,
@@ -25,27 +25,30 @@ from mex.common.types import (
 def transform_biospecimen_resource_to_mex_resource(
     biospecimen_resources: Iterable[BiospecimenResource],
     extracted_platform_biospecimen: ExtractedAccessPlatform,
-    extracted_platform_report_server: ExtractedAccessPlatform,
     unit_stable_target_ids_by_synonym: dict[str, Identifier],
     mex_persons: Iterable[ExtractedPerson],
     extracted_organization_rki: ExtractedOrganization,
+    extracted_synopse_activities: Iterable[ExtractedActivity],
 ) -> Generator[ExtractedResource, None, None]:
     """Transform Biospecimen resources to extracted resources.
 
     Args:
         biospecimen_resources: Biospecimen resources
         extracted_platform_biospecimen: Extracted platform for Biospecimen
-        extracted_platform_report_server: Extracted platform for report server
         unit_stable_target_ids_by_synonym: Unit stable target ids by synonym
         mex_persons: Generator for ExtractedPerson
+        extracted_synopse_activities: extracted synopse activitiesq
         extracted_organization_rki: extractded organization
 
     Returns:
         Generator for ExtractedResource instances
     """
-    identity_provider = get_provider()
     person_stable_target_id_by_email = {
         str(p.email[0]): Identifier(p.stableTargetId) for p in mex_persons
+    }
+    sysnopse_stable_target_id_by_studien_id = {
+        activity.identifierInPrimarySource: activity.stableTargetId
+        for activity in extracted_synopse_activities
     }
     for resource in biospecimen_resources:
         if resource.anonymisiert_pseudonymisiert:
@@ -75,15 +78,9 @@ def transform_biospecimen_resource_to_mex_resource(
                 contact = k
             elif k := unit_stable_target_ids_by_synonym.get(kontakt):
                 contact = k
-
-        source_identities = identity_provider.fetch(
-            had_primary_source=extracted_platform_report_server.stableTargetId,
-            identifier_in_primary_source=resource.studienbezug[0],
+        was_generated_by = sysnopse_stable_target_id_by_studien_id.get(
+            resource.studienbezug[0], None
         )
-        if source_identities:
-            was_generated_by = source_identities[0].stableTargetId
-        else:
-            was_generated_by = None
         if resource.weiterfuehrende_dokumentation_url_oder_dateipfad:
             documentation = Link(
                 language="de",

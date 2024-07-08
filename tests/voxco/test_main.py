@@ -9,5 +9,5 @@ from mex.pipeline import run_job_in_process
     "mocked_wikidata",
 )
 def test_job() -> None:
-    result = run_job_in_process("seq_repo")
+    result = run_job_in_process("voxco")
     assert result.success
