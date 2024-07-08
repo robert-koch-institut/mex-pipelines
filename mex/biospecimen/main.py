@@ -8,6 +8,7 @@ from mex.biospecimen.transform import transform_biospecimen_resource_to_mex_reso
 from mex.common.cli import entrypoint
 from mex.common.ldap.transform import transform_ldap_persons_to_mex_persons
 from mex.common.models import (
+    ExtractedActivity,
     ExtractedOrganization,
     ExtractedOrganizationalUnit,
     ExtractedPerson,
@@ -58,21 +59,21 @@ def extracted_mex_persons(
 @asset(group_name="biospecimen")
 def extracted_biospecimen_resources(
     biospecimen_resources: list[BiospecimenResource],
-    extracted_primary_source_report_server: ExtractedPrimarySource,
     extracted_primary_source_biospecimen: ExtractedPrimarySource,
     extracted_mex_persons: list[ExtractedPerson],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     extracted_organization_rki: ExtractedOrganization,
+    extracted_synopse_activities: list[ExtractedActivity],
 ) -> list[ExtractedResource]:
     """Transform biospecimen resources to extracted resources and load them to the sinks."""  # noqa: E501
     mex_sources = list(
         transform_biospecimen_resource_to_mex_resource(
             biospecimen_resources,
             extracted_primary_source_biospecimen,
-            extracted_primary_source_report_server,
             unit_stable_target_ids_by_synonym,
             extracted_mex_persons,
             extracted_organization_rki,
+            extracted_synopse_activities,
         )
     )
     load(mex_sources)
