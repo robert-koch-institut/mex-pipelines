@@ -23,9 +23,6 @@ from mex.common.types import (
     MergedContactPointIdentifier,
     MergedOrganizationalUnitIdentifier,
 )
-from mex.common.wikidata.transform import (
-    transform_wikidata_organizations_to_extracted_organizations,
-)
 from mex.mapping.extract import extract_mapping_data
 from mex.pipeline import asset, run_job_in_process
 from mex.sinks import load
@@ -38,8 +35,6 @@ from mex.sumo.extract import (
     extract_cc2_feat_projection,
     extract_ldap_contact_points_by_emails,
     extract_ldap_contact_points_by_name,
-    extract_sumo_organizations,
-    get_organization_merged_id_by_query,
 )
 from mex.sumo.filter import filter_and_log_cc2_aux_model
 from mex.sumo.models.cc1_data_model_nokeda import Cc1DataModelNoKeda
@@ -193,24 +188,6 @@ def extracted_cc2_aux_model_sumo(
 def extracted_cc2_feat_projection() -> list[Cc2FeatProjection]:
     """Extract Cc2 features from SUMO data."""
     return list(extract_cc2_feat_projection())
-
-
-@asset(group_name="sumo")
-def organization_stable_target_id_by_query_sumo(
-    extracted_resources_nokeda_sumo: dict[str, Any],
-    extracted_primary_source_wikidata: ExtractedPrimarySource,
-) -> dict[str, str]:
-    """Extract and load SUMO organizations and return them by stable target ids."""
-    sumo_organizations = extract_sumo_organizations(extracted_resources_nokeda_sumo)
-    mex_extracted_organizations = list(
-        transform_wikidata_organizations_to_extracted_organizations(
-            sumo_organizations.values(), extracted_primary_source_wikidata
-        )
-    )
-    load(mex_extracted_organizations)
-    return get_organization_merged_id_by_query(
-        sumo_organizations, extracted_primary_source_wikidata
-    )
 
 
 @asset(group_name="sumo")

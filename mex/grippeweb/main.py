@@ -8,6 +8,7 @@ from mex.common.ldap.transform import (
 )
 from mex.common.models import (
     ExtractedAccessPlatform,
+    ExtractedActivity,
     ExtractedOrganizationalUnit,
     ExtractedPerson,
     ExtractedPrimarySource,
@@ -41,8 +42,8 @@ from mex.mapping.extract import extract_mapping_data
 from mex.pipeline import asset, run_job_in_process
 from mex.sinks import load
 from mex.sumo.transform import get_contact_merged_ids_by_emails
-from mex.wikidata.transform import (
-    transform_wikidata_organizations_to_extracted_organizations_with_query,
+from mex.wikidata.extract import (
+    get_merged_organization_id_by_query_with_transform_and_load,
 )
 
 
@@ -150,17 +151,9 @@ def grippeweb_organization_ids_by_query_string(
         grippeweb_resource_mappings
     )
 
-    extracted_organizations_by_query = (
-        transform_wikidata_organizations_to_extracted_organizations_with_query(
-            wikidata_organizations_by_query, extracted_primary_source_wikidata
-        )
+    return get_merged_organization_id_by_query_with_transform_and_load(
+        wikidata_organizations_by_query, extracted_primary_source_wikidata
     )
-    load(extracted_organizations_by_query.values())
-
-    return {
-        query: MergedOrganizationIdentifier(organization.stableTargetId)
-        for query, organization in extracted_organizations_by_query.items()
-    }
 
 
 @asset(group_name="grippeweb")
@@ -192,7 +185,7 @@ def grippeweb_extracted_resource_dict(
     extracted_mex_persons_grippeweb: list[ExtractedPerson],
     grippeweb_organization_ids_by_query_string: dict[str, MergedOrganizationIdentifier],
     extracted_mex_functional_units_grippeweb: dict[Email, MergedContactPointIdentifier],
-    # TODO: (MX-1583) extracted_confluence_vvt_sources: list[ExtractedActivity]
+    extracted_confluence_vvt_activities: list[ExtractedActivity],
 ) -> dict[str, ExtractedResource]:
     """Transform Grippeweb default values to extracted resources and load to sinks."""
     extracted_resources = transform_grippeweb_resource_mappings_to_extracted_resources(
@@ -203,7 +196,7 @@ def grippeweb_extracted_resource_dict(
         extracted_mex_persons_grippeweb,
         grippeweb_organization_ids_by_query_string,
         extracted_mex_functional_units_grippeweb,
-        # TODO: (blocked by MX-1583) extracted_confluence_vvt_sources,
+        extracted_confluence_vvt_activities,
     )
     load(list(extracted_resources.values()))
     return extracted_resources

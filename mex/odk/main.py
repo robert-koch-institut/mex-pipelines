@@ -3,6 +3,7 @@ from typing import Any
 
 from mex.common.cli import entrypoint
 from mex.common.models import (
+    ExtractedActivity,
     ExtractedPrimarySource,
     ExtractedResource,
     ExtractedVariableGroup,
@@ -12,14 +13,10 @@ from mex.common.types import (
     MergedOrganizationalUnitIdentifier,
     MergedOrganizationIdentifier,
 )
-from mex.common.wikidata.transform import (
-    transform_wikidata_organizations_to_extracted_organizations,
-)
 from mex.mapping.extract import extract_mapping_data
 from mex.odk.extract import (
     extract_odk_raw_data,
     get_external_partner_and_publisher_by_label,
-    get_organization_merged_id_by_query,
 )
 from mex.odk.model import ODKData
 from mex.odk.settings import ODKSettings
@@ -31,6 +28,9 @@ from mex.odk.transform import (
 )
 from mex.pipeline import asset, run_job_in_process
 from mex.sinks import load
+from mex.wikidata.extract import (
+    get_merged_organization_id_by_query_with_transform_and_load,
+)
 
 
 @asset(group_name="odk", deps=["extracted_primary_source_mex"])
@@ -71,15 +71,7 @@ def external_partner_and_publisher_by_label(
         get_external_partner_and_publisher_by_label(odk_resource_mappings)
     )
 
-    mex_extracted_organizations_partner_organizations = (
-        transform_wikidata_organizations_to_extracted_organizations(
-            wikidata_partner_organizations_by_query.values(),
-            extracted_primary_source_wikidata,
-        )
-    )
-    load(mex_extracted_organizations_partner_organizations)
-
-    return get_organization_merged_id_by_query(
+    return get_merged_organization_id_by_query_with_transform_and_load(
         wikidata_partner_organizations_by_query, extracted_primary_source_wikidata
     )
 
@@ -88,16 +80,16 @@ def external_partner_and_publisher_by_label(
 def extracted_resources_odk(
     odk_resource_mappings: list[dict[str, Any]],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
-    extracted_primary_source_international_projects: ExtractedPrimarySource,
     external_partner_and_publisher_by_label: dict[str, MergedOrganizationIdentifier],
+    extracted_international_projects_activities: list[ExtractedActivity],
     extracted_primary_source_mex: ExtractedPrimarySource,
 ) -> list[ExtractedResource]:
     """Transform odk resources to mex resource, load to sinks and return."""
     extracted_resources_odk = transform_odk_resources_to_mex_resources(
         odk_resource_mappings,
         unit_stable_target_ids_by_synonym,
-        extracted_primary_source_international_projects,
         external_partner_and_publisher_by_label,
+        extracted_international_projects_activities,
         extracted_primary_source_mex,
     )
     load(extracted_resources_odk)

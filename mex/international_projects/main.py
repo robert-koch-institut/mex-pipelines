@@ -1,22 +1,22 @@
 from mex.common.cli import entrypoint
 from mex.common.ldap.extract import get_merged_ids_by_query_string
 from mex.common.ldap.transform import transform_ldap_persons_with_query_to_mex_persons
-from mex.common.models import ExtractedOrganizationalUnit, ExtractedPrimarySource
+from mex.common.models import (
+    ExtractedActivity,
+    ExtractedOrganizationalUnit,
+    ExtractedPrimarySource,
+)
 from mex.common.primary_source.transform import get_primary_sources_by_name
 from mex.common.types import (
     MergedOrganizationalUnitIdentifier,
     MergedOrganizationIdentifier,
     MergedPersonIdentifier,
 )
-from mex.common.wikidata.transform import (
-    transform_wikidata_organizations_to_extracted_organizations,
-)
 from mex.international_projects.extract import (
     extract_international_projects_funding_sources,
     extract_international_projects_partner_organizations,
     extract_international_projects_project_leaders,
     extract_international_projects_sources,
-    get_organization_merged_id_by_query,
 )
 from mex.international_projects.models.source import InternationalProjectsSource
 from mex.international_projects.settings import InternationalProjectsSettings
@@ -25,6 +25,9 @@ from mex.international_projects.transform import (
 )
 from mex.pipeline import asset, run_job_in_process
 from mex.sinks import load
+from mex.wikidata.extract import (
+    get_merged_organization_id_by_query_with_transform_and_load,
+)
 
 
 @asset(group_name="international_projects", deps=["extracted_primary_source_mex"])
@@ -75,15 +78,8 @@ def international_projects_funding_sources_ids_by_query(
     wikidata_funding_sources_by_query = extract_international_projects_funding_sources(
         international_projects_sources
     )
-    mex_extracted_organizations_funding_sources = (
-        transform_wikidata_organizations_to_extracted_organizations(
-            wikidata_funding_sources_by_query.values(),
-            extracted_primary_source_wikidata,
-        )
-    )
-    load(mex_extracted_organizations_funding_sources)
 
-    return get_organization_merged_id_by_query(
+    return get_merged_organization_id_by_query_with_transform_and_load(
         wikidata_funding_sources_by_query, extracted_primary_source_wikidata
     )
 
@@ -99,21 +95,14 @@ def international_projects_partner_organization_ids_by_query(
             international_projects_sources
         )
     )
-    mex_extracted_organizations_partner_organizations = (
-        transform_wikidata_organizations_to_extracted_organizations(
-            wikidata_partner_organizations_by_query.values(),
-            extracted_primary_source_wikidata,
-        )
-    )
-    load(mex_extracted_organizations_partner_organizations)
 
-    return get_organization_merged_id_by_query(
+    return get_merged_organization_id_by_query_with_transform_and_load(
         wikidata_partner_organizations_by_query, extracted_primary_source_wikidata
     )
 
 
 @asset(group_name="international_projects")
-def extract_international_projects(
+def extracted_international_projects_activities(
     international_projects_sources: list[InternationalProjectsSource],
     extracted_primary_source_international_projects: ExtractedPrimarySource,
     international_projects_person_ids_by_query: dict[str, list[MergedPersonIdentifier]],
@@ -124,17 +113,20 @@ def extract_international_projects(
     international_projects_partner_organization_ids_by_query: dict[
         str, MergedOrganizationIdentifier
     ],
-) -> None:
-    """Transform projects to extracted activities and load them to the sinks."""
-    mex_sources = transform_international_projects_sources_to_extracted_activities(
-        international_projects_sources,
-        extracted_primary_source_international_projects,
-        international_projects_person_ids_by_query,
-        unit_stable_target_ids_by_synonym,
-        international_projects_funding_sources_ids_by_query,
-        international_projects_partner_organization_ids_by_query,
+) -> list[ExtractedActivity]:
+    """Transform projects to extracted activities, load and return them."""
+    mex_sources = list(
+        transform_international_projects_sources_to_extracted_activities(
+            international_projects_sources,
+            extracted_primary_source_international_projects,
+            international_projects_person_ids_by_query,
+            unit_stable_target_ids_by_synonym,
+            international_projects_funding_sources_ids_by_query,
+            international_projects_partner_organization_ids_by_query,
+        )
     )
     load(mex_sources)
+    return mex_sources
 
 
 @entrypoint(InternationalProjectsSettings)

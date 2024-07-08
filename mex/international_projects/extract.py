@@ -4,14 +4,11 @@ from typing import Any
 
 import pandas as pd
 
-from mex.common.identity import get_provider
 from mex.common.ldap.connector import LDAPConnector
 from mex.common.ldap.models.person import LDAPPersonWithQuery
 from mex.common.ldap.transform import analyse_person_string
 from mex.common.logging import logger, watch
-from mex.common.models import ExtractedPrimarySource
 from mex.common.types import (
-    MergedOrganizationIdentifier,
     TemporalEntity,
     TemporalEntityPrecision,
     YearMonthDay,
@@ -179,35 +176,6 @@ def extract_international_projects_partner_organizations(
                 if wikidata_org := search_organization_by_label(org):
                     found_orgs[org] = wikidata_org
     return found_orgs
-
-
-def get_organization_merged_id_by_query(
-    wikidata_organizations_by_query: dict[str, WikidataOrganization],
-    wikidata_primary_source: ExtractedPrimarySource,
-) -> dict[str, MergedOrganizationIdentifier]:
-    """Return a mapping from organizations to their stable target ID.
-
-    There may be multiple entries per unit mapping to the same stable target ID.
-
-    Args:
-        wikidata_organizations_by_query: Extracted organizations by query string
-        wikidata_primary_source: Primary source item for wikidata
-
-    Returns:
-        Dict with organization label and stable target ID
-    """
-    identity_provider = get_provider()
-    organization_stable_target_id_by_query = {}
-    for query, wikidata_organization in wikidata_organizations_by_query.items():
-        identities = identity_provider.fetch(
-            had_primary_source=wikidata_primary_source.stableTargetId,
-            identifier_in_primary_source=wikidata_organization.identifier,
-        )
-        if identities:
-            organization_stable_target_id_by_query[query] = (
-                MergedOrganizationIdentifier(identities[0].stableTargetId)
-            )
-    return organization_stable_target_id_by_query
 
 
 def get_temporal_entity_from_cell(

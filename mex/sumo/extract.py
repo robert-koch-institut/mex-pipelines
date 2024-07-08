@@ -4,14 +4,10 @@ from typing import Any
 import numpy as np
 from pandas import ExcelFile
 
-from mex.common.identity import get_provider
 from mex.common.ldap.connector import LDAPConnector
 from mex.common.ldap.models.actor import LDAPActor
 from mex.common.ldap.models.person import LDAPPersonWithQuery
 from mex.common.ldap.transform import analyse_person_string
-from mex.common.models import ExtractedPrimarySource
-from mex.common.wikidata.extract import search_organization_by_label
-from mex.common.wikidata.models.organization import WikidataOrganization
 from mex.sumo.models.cc1_data_model_nokeda import Cc1DataModelNoKeda
 from mex.sumo.models.cc1_data_valuesets import Cc1DataValuesets
 from mex.sumo.models.cc2_aux_mapping import Cc2AuxMapping
@@ -184,54 +180,3 @@ def extract_ldap_contact_points_by_name(
         )
         if len(persons) == 1 and persons[0].objectGUID:
             yield LDAPPersonWithQuery(person=persons[0], query=names)
-
-
-def extract_sumo_organizations(
-    sumo_sumo_resource_nokeda: dict[str, Any],
-) -> dict[str, WikidataOrganization]:
-    """Search and extract sumo organization from wikidata.
-
-    Args:
-        sumo_sumo_resource_nokeda: sumo resource nokeda
-
-    Returns:
-        Dict with organization label and WikidataOrganization
-    """
-    sumo_resource_organizations = {}
-    publisher = sumo_sumo_resource_nokeda["publisher"][0]["mappingRules"][0][
-        "forValues"
-    ][0]
-    for label in [publisher]:
-        if label and (org := search_organization_by_label(label)):
-            sumo_resource_organizations[label] = org
-    return sumo_resource_organizations
-
-
-def get_organization_merged_id_by_query(
-    sumo_organizations: dict[str, WikidataOrganization],
-    wikidata_primary_source: ExtractedPrimarySource,
-) -> dict[str, str]:
-    """Return a mapping from organizations to their stable target ID.
-
-    There may be multiple entries per unit mapping to the same stable target ID.
-
-    Args:
-        sumo_organizations: Iterable of extracted organizations
-        wikidata_primary_source: Primary source item for wikidata
-
-    Returns:
-        Dict with organization label and stable target ID
-    """
-    identity_provider = get_provider()
-    organization_stable_target_id_by_query = {}
-    for query, wikidata_organization in sumo_organizations.items():
-        identities = identity_provider.fetch(
-            had_primary_source=wikidata_primary_source.stableTargetId,
-            identifier_in_primary_source=wikidata_organization.identifier,
-        )
-        if identities:
-            organization_stable_target_id_by_query[query] = str(
-                identities[0].stableTargetId
-            )
-
-    return organization_stable_target_id_by_query

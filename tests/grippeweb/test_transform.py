@@ -4,6 +4,7 @@ import pytest
 
 from mex.common.models import (
     ExtractedAccessPlatform,
+    ExtractedActivity,
     ExtractedPerson,
     ExtractedPrimarySource,
     ExtractedResource,
@@ -26,7 +27,6 @@ from mex.grippeweb.transform import (
 )
 
 
-@pytest.mark.usefixtures("mocked_grippeweb")
 def test_transform_grippeweb_access_platform_to_extracted_access_platform(
     grippeweb_access_platform: dict[str, Any],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
@@ -58,15 +58,36 @@ def test_transform_grippeweb_access_platform_to_extracted_access_platform(
     )
 
 
-@pytest.mark.usefixtures("mocked_grippeweb")
+@pytest.fixture
+def extracted_confluence_vvt_source(
+    extracted_primary_sources: dict[str, ExtractedPrimarySource]
+) -> ExtractedActivity:
+    return ExtractedActivity(
+        hadPrimarySource=extracted_primary_sources["confluence-vvt"].stableTargetId,
+        identifierInPrimarySource="2022-006",
+        contact=["b8MsFK6g26tXE5payCNcCm"],
+        responsibleUnit=["cjna2jitPngp6yIV63cdi9"],
+        title="Test Title",
+        abstract="test description, test test test, test zwecke des vorhabens",
+        activityType=["https://mex.rki.de/item/activity-type-6"],
+        involvedPerson=[
+            "b8MsFK6g26tXE5payCNcCm",
+            "b8MsFK6g26tXE5payCNcCm",
+            "b8MsFK6g26tXE5payCNcCm",
+        ],
+        involvedUnit=["cjna2jitPngp6yIV63cdi9"],
+    )
+
+
 def test_transform_grippeweb_resource_mappings_to_dict(
     grippeweb_resource_mappings: list[dict[str, Any]],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     grippeweb_extracted_access_platform: ExtractedAccessPlatform,
-    extracted_primary_sources: list[ExtractedPrimarySource],
+    extracted_primary_sources: dict[str, ExtractedPrimarySource],
     extracted_mex_persons_grippeweb: list[ExtractedPerson],
     grippeweb_organization_ids_by_query_string: dict[str, MergedOrganizationIdentifier],
     extracted_mex_functional_units_grippeweb: dict[Email, MergedContactPointIdentifier],
+    extracted_confluence_vvt_source: ExtractedActivity,
 ) -> None:
     resource_dict = transform_grippeweb_resource_mappings_to_dict(
         grippeweb_resource_mappings,
@@ -76,6 +97,7 @@ def test_transform_grippeweb_resource_mappings_to_dict(
         extracted_mex_persons_grippeweb,
         grippeweb_organization_ids_by_query_string,
         extracted_mex_functional_units_grippeweb,
+        [extracted_confluence_vvt_source],
     )
     expected = {
         "hadPrimarySource": extracted_primary_sources["grippeweb"].stableTargetId,
@@ -117,6 +139,8 @@ def test_transform_grippeweb_resource_mappings_to_dict(
             {"value": "bevölkerungsbasierte Surveillancedaten", "language": "de"}
         ],
         "rights": [{"value": "Verfahren", "language": "de"}],
+        "sizeOfDataBasis": "Meldungen",
+        "spatial": [{"language": "de", "value": "Deutschland"}],
         "stateOfDataProcessing": ["https://mex.rki.de/item/data-processing-state-1"],
         "temporal": "seit 2011",
         "theme": ["https://mex.rki.de/item/theme-35"],
@@ -124,6 +148,7 @@ def test_transform_grippeweb_resource_mappings_to_dict(
         "unitInCharge": [unit_stable_target_ids_by_synonym["C1"]],
         "identifier": Joker(),
         "stableTargetId": Joker(),
+        "wasGeneratedBy": extracted_confluence_vvt_source.stableTargetId,
     }
     assert (
         resource_dict["grippeweb"].model_dump(exclude_none=True, exclude_defaults=True)
@@ -131,15 +156,15 @@ def test_transform_grippeweb_resource_mappings_to_dict(
     )
 
 
-@pytest.mark.usefixtures("mocked_grippeweb")
 def test_transform_grippeweb_resource_mappings_to_extracted_resources(
     grippeweb_resource_mappings: list[dict[str, Any]],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     grippeweb_extracted_access_platform: ExtractedAccessPlatform,
-    extracted_primary_sources: list[ExtractedPrimarySource],
+    extracted_primary_sources: dict[str, ExtractedPrimarySource],
     extracted_mex_persons_grippeweb: list[ExtractedPerson],
     grippeweb_organization_ids_by_query_string: dict[str, MergedOrganizationIdentifier],
     extracted_mex_functional_units_grippeweb: dict[Email, MergedContactPointIdentifier],
+    extracted_confluence_vvt_source: ExtractedActivity,
 ) -> None:
     resource_dict = transform_grippeweb_resource_mappings_to_extracted_resources(
         grippeweb_resource_mappings,
@@ -149,18 +174,18 @@ def test_transform_grippeweb_resource_mappings_to_extracted_resources(
         extracted_mex_persons_grippeweb,
         grippeweb_organization_ids_by_query_string,
         extracted_mex_functional_units_grippeweb,
+        [extracted_confluence_vvt_source],
     )
     assert resource_dict["grippeweb-plus"].isPartOf == [
         resource_dict["grippeweb"].stableTargetId
     ]
 
 
-@pytest.mark.usefixtures("mocked_grippeweb")
 def test_transform_grippeweb_variable_group_to_extracted_variable_groups(
     grippeweb_variable_group: dict[str, Any],
     mocked_grippeweb_sql_tables: dict[str, dict[str, list[Any]]],
     grippeweb_extracted_resource_dict: dict[str, ExtractedResource],
-    extracted_primary_sources: list[ExtractedPrimarySource],
+    extracted_primary_sources: dict[str, ExtractedPrimarySource],
 ) -> None:
     extracted_variable_groups = (
         transform_grippeweb_variable_group_to_extracted_variable_groups(
@@ -186,13 +211,12 @@ def test_transform_grippeweb_variable_group_to_extracted_variable_groups(
     )
 
 
-@pytest.mark.usefixtures("mocked_grippeweb")
 def test_transform_grippeweb_variable_to_extracted_variables(
     grippeweb_variable: dict[str, Any],
     extracted_variable_groups: list[ExtractedVariableGroup],
     mocked_grippeweb_sql_tables: dict[str, dict[str, list[Any]]],
     grippeweb_extracted_resource_dict: dict[str, ExtractedResource],
-    extracted_primary_sources: list[ExtractedPrimarySource],
+    extracted_primary_sources: dict[str, ExtractedPrimarySource],
 ) -> None:
     extracted_variables = transform_grippeweb_variable_to_extracted_variables(
         grippeweb_variable,
