@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.2"
-content_hash = "sha256:84ed8d13e28812d2db4d033c996a366f83f77278866ab0bbee9a5eafde333294"
+content_hash = "sha256:bd7720afffb7d388fed7c5a4de5e91d9f591eee305feae87bad2dd1a6158b6a1"
 
 [[package]]
 name = "alabaster"
@@ -577,7 +577,7 @@ files = [
 
 [[package]]
 name = "faker"
-version = "25.8.0"
+version = "25.9.2"
 requires_python = ">=3.8"
 summary = "Faker is a Python package that generates fake data for you."
 groups = ["default"]
@@ -585,8 +585,8 @@ dependencies = [
     "python-dateutil>=2.4",
 ]
 files = [
-    {file = "Faker-25.8.0-py3-none-any.whl", hash = "sha256:4c40b34a9c569018d4f9d6366d71a4da8a883d5ddf2b23197be5370f29b7e1b6"},
-    {file = "Faker-25.8.0.tar.gz", hash = "sha256:bdec5f2fb057d244ebef6e0ed318fea4dcbdf32c3a1a010766fc45f5d68fc68d"},
+    {file = "Faker-25.9.2-py3-none-any.whl", hash = "sha256:7f8cbd179a7351648bea31f53d021a2bdfdeb59e9b830e121a635916615e0ecd"},
+    {file = "Faker-25.9.2.tar.gz", hash = "sha256:ca94843600a4089a91394023fef014bb41fee509f8c4beef1530018373e770fb"},
 ]
 
 [[package]]
