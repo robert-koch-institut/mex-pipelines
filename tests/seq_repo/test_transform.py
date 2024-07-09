@@ -6,7 +6,6 @@ from mex.common.ldap.models.person import LDAPPersonWithQuery
 from mex.common.models import (
     ExtractedAccessPlatform,
     ExtractedActivity,
-    ExtractedDistribution,
     ExtractedOrganization,
     ExtractedPrimarySource,
 )
@@ -14,15 +13,13 @@ from mex.common.testing import Joker
 from mex.common.types import (
     MergedOrganizationalUnitIdentifier,
     MergedPersonIdentifier,
-    TemporalEntity,
     TextLanguage,
 )
 from mex.seq_repo.model import SeqRepoSource
 from mex.seq_repo.transform import (
     transform_seq_repo_access_platform_to_extracted_access_platform,
     transform_seq_repo_activities_to_extracted_activities,
-    transform_seq_repo_distribution_to_extracted_distribution,
-    transform_seq_repo_resource_to_extracted_resource,
+    transform_seq_repo_resource_to_extracted_resource_and_distribution,
 )
 
 
@@ -75,53 +72,16 @@ def test_transform_seq_repo_activities_to_extracted_activities(
     )
 
 
-def test_transform_seq_repo_distribution_to_extracted_distribution(
-    extracted_primary_source_seq_repo: ExtractedPrimarySource,
-    seq_repo_latest_sources: dict[str, SeqRepoSource],
-    extracted_mex_access_platform: ExtractedAccessPlatform,
-    seq_repo_distribution: dict[str, Any],
-    extracted_organization_rki: ExtractedOrganization,
-) -> None:
-    extracted_mex_distributions = list(
-        transform_seq_repo_distribution_to_extracted_distribution(
-            seq_repo_latest_sources,
-            seq_repo_distribution,
-            extracted_mex_access_platform,
-            extracted_organization_rki,
-            extracted_primary_source_seq_repo,
-        )
-    )
-
-    expected = {
-        "identifier": Joker(),
-        "hadPrimarySource": extracted_primary_source_seq_repo.stableTargetId,
-        "identifierInPrimarySource": "test-sample-id.TEST",
-        "stableTargetId": Joker(),
-        "accessService": extracted_mex_access_platform.stableTargetId,
-        "accessRestriction": "https://mex.rki.de/item/access-restriction-2",
-        "issued": "2023-08-07",
-        "mediaType": "https://mex.rki.de/item/mime-type-12",
-        "publisher": [extracted_organization_rki.stableTargetId],
-        "title": "dummy-fastq-file",
-    }
-
-    assert (
-        extracted_mex_distributions[0].model_dump(
-            exclude_none=True, exclude_defaults=True
-        )
-        == expected
-    )
-
-
 @pytest.mark.usefixtures(
     "mocked_ldap",
 )
-def test_transform_seq_repo_resource_to_extracted_resource(
+def test_transform_seq_repo_resource_to_extracted_resource_and_distribution(
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
     seq_repo_latest_sources: dict[str, SeqRepoSource],
-    extracted_mex_distribution_dict: dict[str, ExtractedDistribution],
+    seq_repo_distribution: dict[str, Any],
     extracted_mex_activities_dict: dict[str, ExtractedActivity],
     seq_repo_resource: dict[str, Any],
+    extracted_mex_access_platform: ExtractedAccessPlatform,
     seq_repo_source_resolved_project_coordinators: list[LDAPPersonWithQuery],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     project_coordinators_merged_ids_by_query_string: dict[
@@ -129,9 +89,9 @@ def test_transform_seq_repo_resource_to_extracted_resource(
     ],
     extracted_organization_rki: ExtractedOrganization,
 ) -> None:
-    distribution = extracted_mex_distribution_dict["test-sample-id.TEST"]
     activity = extracted_mex_activities_dict["TEST-ID"]
-    expected = {
+    expected_resource = {
+        "accessPlatform": [extracted_mex_access_platform.stableTargetId],
         "hadPrimarySource": extracted_primary_source_seq_repo.stableTargetId,
         "identifierInPrimarySource": "test-sample-id.TEST",
         "accessRestriction": "https://mex.rki.de/item/access-restriction-2",
@@ -144,8 +104,8 @@ def test_transform_seq_repo_resource_to_extracted_resource(
             str(project_coordinators_merged_ids_by_query_string["mustermann"][0]),
         ],
         "contributingUnit": [str(unit_stable_target_ids_by_synonym["FG99"])],
-        "created": TemporalEntity("2023-08-07"),
-        "distribution": [distribution.stableTargetId],
+        "created": "2023-08-07",
+        "distribution": [Joker()],
         "instrumentToolOrApparatus": [{"value": "TEST"}],
         "keyword": [
             {
@@ -179,12 +139,25 @@ def test_transform_seq_repo_resource_to_extracted_resource(
         "identifier": Joker(),
         "stableTargetId": Joker(),
     }
-    extracted_mex_resources = list(
-        transform_seq_repo_resource_to_extracted_resource(
+    expected_distribution = {
+        "hadPrimarySource": extracted_primary_source_seq_repo.stableTargetId,
+        "identifierInPrimarySource": "test-sample-id.TEST",
+        "accessRestriction": "https://mex.rki.de/item/access-restriction-2",
+        "issued": "2023-08-07",
+        "title": "dummy-fastq-file",
+        "accessService": "gLB9vC2lPMy5rCmuot99xu",
+        "mediaType": "https://mex.rki.de/item/mime-type-12",
+        "publisher": [extracted_organization_rki.stableTargetId],
+        "identifier": Joker(),
+        "stableTargetId": Joker(),
+    }
+    mex_resources, mex_distributions = (
+        transform_seq_repo_resource_to_extracted_resource_and_distribution(
             seq_repo_latest_sources,
-            extracted_mex_distribution_dict,
             extracted_mex_activities_dict,
+            extracted_mex_access_platform,
             seq_repo_resource,
+            seq_repo_distribution,
             seq_repo_source_resolved_project_coordinators,
             unit_stable_target_ids_by_synonym,
             project_coordinators_merged_ids_by_query_string,
@@ -192,9 +165,15 @@ def test_transform_seq_repo_resource_to_extracted_resource(
             extracted_primary_source_seq_repo,
         )
     )
+
     assert (
-        extracted_mex_resources[0].model_dump(exclude_none=True, exclude_defaults=True)
-        == expected
+        mex_distributions[0].model_dump(exclude_none=True, exclude_defaults=True)
+        == expected_distribution
+    )
+
+    assert (
+        mex_resources[0].model_dump(exclude_none=True, exclude_defaults=True)
+        == expected_resource
     )
 
 
