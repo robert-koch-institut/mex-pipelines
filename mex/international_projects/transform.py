@@ -20,7 +20,7 @@ THEME_BY_ACTIVITY_OR_TOPIC = {
     "Conducting research": Theme["RESEARCH"],
     "Supporting global governance structures and processes": Theme["PUBLIC_HEALTH"],
     "Public health systems": Theme["PUBLIC_HEALTH"],
-    "Non-communicable diseases": Theme["NON_COMMUNICABLE_DISEASE"],
+    "Non-communicable diseases": Theme["NON_COMMUNICABLE_DISEASES"],
     "Laboratory diagnostics": Theme["LABORATORY"],
     "One Health": Theme["ONE_HEALTH"],
     "Surveillance (infectious diseases)": Theme["PUBLIC_HEALTH"],
