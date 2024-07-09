@@ -94,14 +94,14 @@ def test_transform_international_projects_source_to_mex_source(
             "",
             "Crisis management",
             "",
-            [Theme["PUBLIC_HEALTH"], Theme["NON_COMMUNICABLE_DISEASE"]],
+            [Theme["PUBLIC_HEALTH"], Theme["NON_COMMUNICABLE_DISEASES"]],
         ),
         (
             "",
             "Laboratory diagnostics",
             "",
             "Non-communicable diseases",
-            [Theme["NON_COMMUNICABLE_DISEASE"], Theme["LABORATORY"]],
+            [Theme["NON_COMMUNICABLE_DISEASES"], Theme["LABORATORY"]],
         ),
     ],
 )
