@@ -22,6 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- remove mypy ignores for arg-type and call-arg
+
 ### Fixed
 
 - fix confluence_vvt transformation: use interne Vorgangsnummer as identifierInPrimarySource
