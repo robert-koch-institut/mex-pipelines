@@ -82,10 +82,6 @@ plugins = ["pydantic.mypy"]
 module = "requests_ntlm.*"
 ignore_missing_imports = true
 
-[[tool.mypy.overrides]]
-module = ["mex.*.transform", "mex.*.extract"]
-disable_error_code = ["arg-type", "call-arg"]
-
 [tool.pdm]
 distribution = true
 
