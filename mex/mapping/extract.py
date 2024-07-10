@@ -1,4 +1,4 @@
-from pathlib import Path
+from os import PathLike
 from typing import Any
 
 import yaml
@@ -7,7 +7,9 @@ from pydantic import BaseModel
 from mex.common.models import MAPPING_MODEL_BY_EXTRACTED_CLASS_NAME
 
 
-def extract_mapping_data(path: Path, model_type: type[BaseModel]) -> dict[str, Any]:
+def extract_mapping_data(
+    path: PathLike[str], model_type: type[BaseModel]
+) -> dict[str, Any]:
     """Return a mapping model with default values.
 
     Args:
