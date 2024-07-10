@@ -156,12 +156,12 @@ def get_variable_groups_from_raw_data(
                     "file_name": file.file_name,
                 }
                 label_survey_dict = {
-                    label_name: label[row_index]
+                    label_name: str(label[row_index])
                     for label_name, label in file.label_survey.items()
                     if isinstance(label[row_index], str)
                 }
                 hint_dict = {
-                    hint_name: hint[row_index]
+                    hint_name: str(hint[row_index])
                     for hint_name, hint in file.hint.items()
                     if isinstance(hint[row_index], str)
                 }

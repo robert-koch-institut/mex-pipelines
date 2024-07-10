@@ -13,7 +13,7 @@ dependencies = [
     "dagster-webserver==1.7.12",
     "dagster==1.7.12",
     "faker==26.0.0",
-    "mex-common@git+https://github.com/robert-koch-institut/mex-common.git@feature/mx-1435-computed-fields-explicit",
+    "mex-common @ git+https://github.com/robert-koch-institut/mex-common.git@feature/mx-1435-computed-fields-explicit",
     "numpy==1.26.4",
     "openpyxl==3.1.5",
     "pandas==2.2.2",
