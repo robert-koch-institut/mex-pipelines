@@ -3,8 +3,10 @@ from pydantic_core import Url
 from pydantic_settings import SettingsConfigDict
 
 from mex.artificial.settings import ArtificialSettings
+from mex.biospecimen.settings import BiospecimenSettings
 from mex.common.settings import BaseSettings
 from mex.common.types import IdentityProvider
+from mex.synopse.settings import SynopseSettings
 from mex.types import ExtractorIdentityProvider
 
 
@@ -66,3 +68,5 @@ class Settings(BaseSettings):
         ),
     )
     artificial: ArtificialSettings = ArtificialSettings()
+    biospecimen: BiospecimenSettings = BiospecimenSettings()
+    synopse: SynopseSettings = SynopseSettings()
