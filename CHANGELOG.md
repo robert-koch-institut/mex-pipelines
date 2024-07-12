@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - duplicate seq-repo activities are filtered out
 - make dependent extractors explicitly depend on each other
   (grippeweb on confluence-vvt, biospecimen on synopse, odk on international-projects)
+- add publisher pipeline to sink  all merged items from mex-backend to ndjson sink as a mock target
 
 ### Deprecated
 
@@ -71,7 +72,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - implement odk transform functions
 - grippeweb extract and transform
 - dagster schedules for non-default groups, configurable via setting `schedule`
-- add publisher pipeline to sink  all merged items from mex-backend to ndjson sink as a mock target
 
 ### Changes
 
