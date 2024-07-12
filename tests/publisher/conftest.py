@@ -19,7 +19,7 @@ def mocked_backend(monkeypatch: MonkeyPatch) -> None:
     ) -> dict[str, Any]:
         return {
             "total": 1,
-            "items": [{"Test": 1, "NochNTest": 2}, {"bla": "blub", "foo": "bar"}],
+            "items": [{"Test": 1, "AnotherTest": 2}, {"bla": "blub", "foo": "bar"}],
         }
 
     monkeypatch.setattr(BackendApiConnector, "request", mocked_request)
