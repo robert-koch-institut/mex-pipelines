@@ -3,7 +3,6 @@ from collections import defaultdict
 from collections.abc import Generator, Hashable, Iterable
 from itertools import groupby, tee
 from pathlib import PureWindowsPath
-from typing import cast
 
 from mex.common.logging import watch
 from mex.common.models import (
@@ -22,7 +21,6 @@ from mex.common.types import (
     Identifier,
     Language,
     Link,
-    MergedActivityIdentifier,
     MergedOrganizationalUnitIdentifier,
     MergedResourceIdentifier,
     ResourceTypeGeneral,
@@ -571,13 +569,15 @@ def transform_synopse_projects_to_mex_activities(
         if anschlussprojekt := anschlussprojekt_by_activity_stable_target_id.get(
             activity.stableTargetId
         ):
-            activity.succeeds = [
-                cast(
-                    MergedActivityIdentifier,
-                    activity_stable_target_id_by_short_name[anschlussprojekt],
-                )
-            ]
-    yield from activities
+            activity = ExtractedActivity.model_validate(
+                {
+                    **activity.model_dump(),
+                    "succeeds": activity_stable_target_id_by_short_name[
+                        anschlussprojekt
+                    ],
+                }
+            )
+        yield activity
 
 
 def transform_synopse_project_to_activity(

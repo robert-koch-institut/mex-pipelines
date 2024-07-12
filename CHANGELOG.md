@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - duplicate seq-repo activities are filtered out
 - make dependent extractors explicitly depend on each other
   (grippeweb on confluence-vvt, biospecimen on synopse, odk on international-projects)
-- add publisher pipeline to sink  all merged items from mex-backend to ndjson sink as a mock target
+- add publisher pipeline to pull all merged items from backend and write them to ndjson
 
 ### Deprecated
 
@@ -28,7 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- fix confluence_vvt transformation: use interne Vorgangsnummer as identifierInPrimarySource
+- fix confluence_vvt: use interne Vorgangsnummer as identifierInPrimarySource
 - remaining issues in voxco extractor
 
 ### Security
