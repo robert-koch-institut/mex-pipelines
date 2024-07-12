@@ -5,7 +5,7 @@ from mex.common.backend_api.connector import BackendApiConnector
 
 
 def get_merged_items() -> Generator[dict[str, Any], None, None]:
-    """Read merged items from backend ."""
+    """Read merged items from backend."""
     connector = BackendApiConnector.get()
 
     response = connector.request(
