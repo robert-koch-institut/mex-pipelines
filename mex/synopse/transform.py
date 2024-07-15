@@ -569,6 +569,8 @@ def transform_synopse_projects_to_mex_activities(
         if anschlussprojekt := anschlussprojekt_by_activity_stable_target_id.get(
             activity.stableTargetId
         ):
+            # need to copy the activity to be able to set `succeeds` field,
+            # see `mex.common.models.BaseModel.verify_computed_field_consistency`
             activity = ExtractedActivity.model_validate(
                 {
                     **activity.model_dump(),

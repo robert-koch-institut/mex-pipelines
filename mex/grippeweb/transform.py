@@ -55,9 +55,12 @@ def transform_grippeweb_resource_mappings_to_extracted_resources(
         extracted_mex_functional_units_grippeweb,
         extracted_confluence_vvt_activities,
     )
-    resource_dict["grippeweb-plus"].isPartOf = [
-        resource_dict["grippeweb"].stableTargetId
-    ]
+    resource_dict["grippeweb-plus"] = ExtractedResource.model_validate(
+        {
+            **resource_dict["grippeweb-plus"].model_dump(),
+            "isPartOf": [resource_dict["grippeweb"].stableTargetId],
+        }
+    )
     return resource_dict
 
 
@@ -265,7 +268,7 @@ def transform_grippeweb_variable_group_to_extracted_variable_groups(
 
     Args:
         grippeweb_variable_group: grippeweb variable group default values
-        grippeweb_columns: grippeweb data by column and tbale
+        grippeweb_columns: grippeweb data by column and table
         grippeweb_extracted_resource_dict: extracted resources by name
         extracted_primary_source_grippeweb: Extracted primary source
 
@@ -299,7 +302,7 @@ def transform_grippeweb_variable_to_extracted_variables(
     Args:
         grippeweb_variable: grippeweb variable default values
         grippeweb_extracted_variable_group: extracted grippeweb variable groups
-        grippeweb_columns: grippeweb data by column and tbale
+        grippeweb_columns: grippeweb data by column and table
         grippeweb_extracted_resource_dict: extracted resources by name
         extracted_primary_source_grippeweb: Extracted primary source
 
