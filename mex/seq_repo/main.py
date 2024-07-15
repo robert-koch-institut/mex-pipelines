@@ -26,12 +26,12 @@ from mex.seq_repo.extract import (
 )
 from mex.seq_repo.filter import filter_sources_on_latest_sequencing_date
 from mex.seq_repo.model import SeqRepoSource
-from mex.seq_repo.settings import SeqRepoSettings
 from mex.seq_repo.transform import (
     transform_seq_repo_access_platform_to_extracted_access_platform,
     transform_seq_repo_activities_to_extracted_activities,
     transform_seq_repo_resource_to_extracted_resource_and_distribution,
 )
+from mex.settings import Settings
 from mex.sinks import load
 
 
@@ -104,9 +104,9 @@ def extracted_activity(
     ],
 ) -> dict[str, ExtractedActivity]:
     """Extract activities from Seq-Repo."""
-    settings = SeqRepoSettings.get()
+    settings = Settings.get()
     activity = extract_mapping_data(
-        settings.mapping_path / "activity.yaml", ExtractedActivity
+        settings.seq_repo.mapping_path / "activity.yaml", ExtractedActivity
     )
 
     mex_activities = transform_seq_repo_activities_to_extracted_activities(
@@ -127,9 +127,9 @@ def seq_repo_extracted_access_platform(
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
 ) -> ExtractedAccessPlatform:
     """Extract access platform from Seq-Repo."""
-    settings = SeqRepoSettings.get()
+    settings = Settings.get()
     access_platform = extract_mapping_data(
-        settings.mapping_path / "access-platform.yaml",
+        settings.seq_repo.mapping_path / "access-platform.yaml",
         ExtractedAccessPlatform,
     )
     mex_access_platform = (
@@ -158,13 +158,13 @@ def seq_repo_resource_and_distribution(
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
 ) -> list[ExtractedResource]:
     """Extract resource and distribution from Seq-Repo."""
-    settings = SeqRepoSettings.get()
+    settings = Settings.get()
     resource = extract_mapping_data(
-        settings.mapping_path / "resource.yaml",
+        settings.seq_repo.mapping_path / "resource.yaml",
         ExtractedResource,
     )
     distribution = extract_mapping_data(
-        settings.mapping_path / "distribution.yaml",
+        settings.seq_repo.mapping_path / "distribution.yaml",
         ExtractedDistribution,
     )
 
@@ -189,7 +189,7 @@ def seq_repo_resource_and_distribution(
     return mex_resources
 
 
-@entrypoint(SeqRepoSettings)
+@entrypoint(Settings)
 def run() -> None:
     """Run the seq-repo extractor job in-process."""
     run_job_in_process("seq_repo")
