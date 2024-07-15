@@ -14,7 +14,7 @@ from mex.ifsg.models.meta_item import MetaItem
 from mex.ifsg.models.meta_schema2field import MetaSchema2Field
 from mex.ifsg.models.meta_schema2type import MetaSchema2Type
 from mex.ifsg.models.meta_type import MetaType
-from mex.ifsg.settings import IFSGSettings
+from mex.settings import Settings
 
 
 class NoOpPyodbc:
@@ -48,7 +48,7 @@ class IFSGConnector(BaseConnector):
 
     def __init__(self) -> None:
         """Create a new connector instance."""
-        settings = IFSGSettings.get()
+        settings = Settings.get()
         if platform.system() != "Windows":  # pragma: no cover
             process = Popen(
                 ["kinit", settings.kerberos_user, "-V"],  # noqa: S603, S607

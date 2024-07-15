@@ -10,6 +10,7 @@ from mex.confluence_vvt.settings import ConfluenceVvtSettings
 from mex.datscha_web.settings import DatschaWebSettings
 from mex.ff_projects.settings import FFProjectsSettings
 from mex.grippeweb.settings import GrippewebSettings
+from mex.ifsg.settings import IFSGSettings
 from mex.synopse.settings import SynopseSettings
 from mex.types import ExtractorIdentityProvider
 
@@ -77,4 +78,5 @@ class Settings(BaseSettings):
     datscha_web: DatschaWebSettings = DatschaWebSettings()
     ff_projects: FFProjectsSettings = FFProjectsSettings()
     grippeweb: GrippewebSettings = GrippewebSettings()
+    ifsg: IFSGSettings = IFSGSettings()
     synopse: SynopseSettings = SynopseSettings()

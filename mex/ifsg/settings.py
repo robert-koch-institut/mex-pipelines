@@ -1,14 +1,12 @@
 from pydantic import Field
-from pydantic_settings import SettingsConfigDict
 
+from mex.common.models import BaseModel
 from mex.common.types import AssetsPath
-from mex.settings import Settings
 
 
-class IFSGSettings(Settings):
-    """Settings definition for the infection protection act data."""
+class IFSGSettings(BaseModel):
+    """Settings submodel definition for the infection protection act data."""
 
-    model_config = SettingsConfigDict(env_prefix="ifsg_")
     mapping_path: AssetsPath = Field(
         AssetsPath("mappings/__final__/ifsg"),
         description=(
