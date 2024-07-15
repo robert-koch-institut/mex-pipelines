@@ -11,6 +11,7 @@ from mex.datscha_web.settings import DatschaWebSettings
 from mex.ff_projects.settings import FFProjectsSettings
 from mex.grippeweb.settings import GrippewebSettings
 from mex.ifsg.settings import IFSGSettings
+from mex.international_projects.settings import InternationalProjectsSettings
 from mex.synopse.settings import SynopseSettings
 from mex.types import ExtractorIdentityProvider
 
@@ -79,4 +80,7 @@ class Settings(BaseSettings):
     ff_projects: FFProjectsSettings = FFProjectsSettings()
     grippeweb: GrippewebSettings = GrippewebSettings()
     ifsg: IFSGSettings = IFSGSettings()
+    international_projects: InternationalProjectsSettings = (
+        InternationalProjectsSettings()
+    )
     synopse: SynopseSettings = SynopseSettings()
