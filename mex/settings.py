@@ -15,6 +15,7 @@ from mex.international_projects.settings import InternationalProjectsSettings
 from mex.odk.settings import ODKSettings
 from mex.rdmo.settings import RDMOSettings
 from mex.seq_repo.settings import SeqRepoSettings
+from mex.sumo.settings import SumoSettings
 from mex.synopse.settings import SynopseSettings
 from mex.types import ExtractorIdentityProvider
 
@@ -89,4 +90,5 @@ class Settings(BaseSettings):
     odk: ODKSettings = ODKSettings()
     rdmo: RDMOSettings = RDMOSettings()
     seq_repo: SeqRepoSettings = SeqRepoSettings()
+    sumo: SumoSettings = SumoSettings()
     synopse: SynopseSettings = SynopseSettings()
