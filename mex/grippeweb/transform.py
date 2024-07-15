@@ -265,7 +265,7 @@ def transform_grippeweb_variable_group_to_extracted_variable_groups(
 
     Args:
         grippeweb_variable_group: grippeweb variable group default values
-        grippeweb_columns: grippeweb data by column and tbale
+        grippeweb_columns: grippeweb data by column and table
         grippeweb_extracted_resource_dict: extracted resources by name
         extracted_primary_source_grippeweb: Extracted primary source
 
@@ -299,7 +299,7 @@ def transform_grippeweb_variable_to_extracted_variables(
     Args:
         grippeweb_variable: grippeweb variable default values
         grippeweb_extracted_variable_group: extracted grippeweb variable groups
-        grippeweb_columns: grippeweb data by column and tbale
+        grippeweb_columns: grippeweb data by column and table
         grippeweb_extracted_resource_dict: extracted resources by name
         extracted_primary_source_grippeweb: Extracted primary source
 

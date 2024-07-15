@@ -23,8 +23,8 @@ class GrippewebConnector(BaseConnector):
 
         settings = GrippewebSettings.get()
         if platform.system() != "Windows":  # pragma: no cover
-            process = Popen(
-                ["kinit", settings.kerberos_user, "-V"],  # noqa: S603, S607
+            process = Popen(  # noqa: S603
+                ["kinit", settings.kerberos_user, "-V"],  # noqa: S607
                 stdout=PIPE,
                 stdin=PIPE,
                 stderr=STDOUT,

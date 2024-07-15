@@ -9,17 +9,6 @@ def test_get_mapping_model() -> None:
     mapping_model = extract_mapping_data(mapping_path, ExtractedAccessPlatform)
 
     expected = {
-        "identifier": [
-            {
-                "fieldInPrimarySource": "n/a",
-                "locationInPrimarySource": None,
-                "examplesInPrimarySource": None,
-                "mappingRules": [
-                    {"forValues": None, "setValues": None, "rule": "Assign identifier."}
-                ],
-                "comment": None,
-            }
-        ],
         "hadPrimarySource": [
             {
                 "fieldInPrimarySource": "n/a",
@@ -45,21 +34,6 @@ def test_get_mapping_model() -> None:
                         "forValues": None,
                         "setValues": ["sumo-db"],
                         "rule": "Use value as it is.",
-                    }
-                ],
-                "comment": None,
-            }
-        ],
-        "stableTargetId": [
-            {
-                "fieldInPrimarySource": "n/a",
-                "locationInPrimarySource": None,
-                "examplesInPrimarySource": None,
-                "mappingRules": [
-                    {
-                        "forValues": None,
-                        "setValues": None,
-                        "rule": "Assign 'stable target id'  of merged item.",
                     }
                 ],
                 "comment": None,
