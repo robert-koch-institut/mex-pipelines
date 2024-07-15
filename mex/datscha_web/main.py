@@ -20,10 +20,10 @@ from mex.datscha_web.extract import (
     extract_datscha_web_source_contacts,
 )
 from mex.datscha_web.models.item import DatschaWebItem
-from mex.datscha_web.settings import DatschaWebSettings
 from mex.datscha_web.transform import transform_datscha_web_items_to_mex_activities
 from mex.filters import filter_by_global_rules
 from mex.pipeline import asset, run_job_in_process
+from mex.settings import Settings
 from mex.sinks import load
 from mex.wikidata.extract import (
     get_merged_organization_id_by_query_with_transform_and_load,
@@ -116,7 +116,7 @@ def extract_datscha_web(
     return mex_sources
 
 
-@entrypoint(DatschaWebSettings)
+@entrypoint(Settings)
 def run() -> None:
     """Run the datscha-web extractor job in-process."""
     run_job_in_process("datscha_web")

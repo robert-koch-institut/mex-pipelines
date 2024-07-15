@@ -7,6 +7,7 @@ from mex.biospecimen.settings import BiospecimenSettings
 from mex.common.settings import BaseSettings
 from mex.common.types import IdentityProvider
 from mex.confluence_vvt.settings import ConfluenceVvtSettings
+from mex.datscha_web.settings import DatschaWebSettings
 from mex.synopse.settings import SynopseSettings
 from mex.types import ExtractorIdentityProvider
 
@@ -14,7 +15,7 @@ from mex.types import ExtractorIdentityProvider
 class Settings(BaseSettings):
     """Settings definition class for extractors and related scripts."""
 
-    model_config = SettingsConfigDict(env_nested_delimiter="_")
+    model_config = SettingsConfigDict(env_nested_delimiter="__")
 
     skip_partners: list[str] = Field(
         ["test"],
@@ -71,4 +72,5 @@ class Settings(BaseSettings):
     artificial: ArtificialSettings = ArtificialSettings()
     biospecimen: BiospecimenSettings = BiospecimenSettings()
     confluence_vvt: ConfluenceVvtSettings = ConfluenceVvtSettings()
+    datscha_web: DatschaWebSettings = DatschaWebSettings()
     synopse: SynopseSettings = SynopseSettings()

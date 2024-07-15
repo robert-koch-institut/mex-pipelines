@@ -7,7 +7,7 @@ from mex.datscha_web.parse_html import (
     parse_item_urls_from_overview_html,
     parse_single_item_html,
 )
-from mex.datscha_web.settings import DatschaWebSettings
+from mex.settings import Settings
 
 
 class DatschaWebConnector(HTTPConnector):
@@ -15,17 +15,17 @@ class DatschaWebConnector(HTTPConnector):
 
     def _set_url(self) -> None:
         """Set url of the host."""
-        settings = DatschaWebSettings.get()
-        self.url = settings.url
+        settings = Settings.get()
+        self.url = settings.datscha_web.url
 
     def _set_authentication(self) -> None:
         """Authenticate to the host."""
-        settings = DatschaWebSettings.get()
+        settings = Settings.get()
         credentials = {
-            "vorname": settings.vorname.get_secret_value(),
-            "nachname": settings.nachname.get_secret_value(),
-            "pw": settings.pw.get_secret_value(),
-            "organisation": settings.organisation,
+            "vorname": settings.datscha_web.vorname.get_secret_value(),
+            "nachname": settings.datscha_web.nachname.get_secret_value(),
+            "pw": settings.datscha_web.pw.get_secret_value(),
+            "organisation": settings.datscha_web.organisation,
         }
 
         response = self.session.post(
