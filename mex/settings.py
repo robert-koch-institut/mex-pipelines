@@ -8,6 +8,7 @@ from mex.common.settings import BaseSettings
 from mex.common.types import IdentityProvider
 from mex.confluence_vvt.settings import ConfluenceVvtSettings
 from mex.datscha_web.settings import DatschaWebSettings
+from mex.ff_projects.settings import FFProjectsSettings
 from mex.synopse.settings import SynopseSettings
 from mex.types import ExtractorIdentityProvider
 
@@ -73,4 +74,5 @@ class Settings(BaseSettings):
     biospecimen: BiospecimenSettings = BiospecimenSettings()
     confluence_vvt: ConfluenceVvtSettings = ConfluenceVvtSettings()
     datscha_web: DatschaWebSettings = DatschaWebSettings()
+    ff_projects: FFProjectsSettings = FFProjectsSettings()
     synopse: SynopseSettings = SynopseSettings()
