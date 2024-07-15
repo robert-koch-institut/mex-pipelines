@@ -4,8 +4,8 @@
 [metadata]
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
-lock_version = "4.4.2"
-content_hash = "sha256:7014e453ccf5f512cfe10fa2dba87042774a579fa410728e8937185260a0829c"
+lock_version = "4.4.1"
+content_hash = "sha256:011ba87a5254d21962510a7461f8f062fe5d73d23a24af3c176506776567be5c"
 
 [[package]]
 name = "alabaster"
@@ -1016,11 +1016,11 @@ files = [
 
 [[package]]
 name = "mex-common"
-version = "0.28.0"
+version = "0.29.1"
 requires_python = "<3.13,>=3.11"
 git = "https://github.com/robert-koch-institut/mex-common.git"
 ref = "feature/mx-1596-simplify-settings-handling"
-revision = "028619a4d117052a1b3ff11ac53506e621ea8c8b"
+revision = "679c81c30060347b3e1e7db53abe31b891e6cc8c"
 summary = "Common library for MEx python projects."
 groups = ["default"]
 dependencies = [
@@ -1032,7 +1032,7 @@ dependencies = [
     "numpy==1.26.4",
     "pandas==2.2.2",
     "pyarrow==16.1.0",
-    "pydantic-settings==2.3.3",
+    "pydantic-settings==2.3.4",
     "pydantic==2.7.4",
     "requests==2.32.3",
 ]
@@ -1573,7 +1573,7 @@ files = [
 
 [[package]]
 name = "pydantic-settings"
-version = "2.3.3"
+version = "2.3.4"
 requires_python = ">=3.8"
 summary = "Settings management using Pydantic"
 groups = ["default"]
@@ -1582,8 +1582,8 @@ dependencies = [
     "python-dotenv>=0.21.0",
 ]
 files = [
-    {file = "pydantic_settings-2.3.3-py3-none-any.whl", hash = "sha256:e4ed62ad851670975ec11285141db888fd24947f9440bd4380d7d8788d4965de"},
-    {file = "pydantic_settings-2.3.3.tar.gz", hash = "sha256:87fda838b64b5039b970cd47c3e8a1ee460ce136278ff672980af21516f6e6ce"},
+    {file = "pydantic_settings-2.3.4-py3-none-any.whl", hash = "sha256:11ad8bacb68a045f00e4f862c7a718c8a9ec766aa8fd4c32e39a0594b207b53a"},
+    {file = "pydantic_settings-2.3.4.tar.gz", hash = "sha256:c5802e3d62b78e82522319bbc9b8f8ffb28ad1c988a99311d04f2a6051fca0a7"},
 ]
 
 [[package]]
