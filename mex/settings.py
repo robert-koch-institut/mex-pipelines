@@ -1,6 +1,5 @@
 from pydantic import AnyUrl, Field, SecretStr
 from pydantic_core import Url
-from pydantic_settings import SettingsConfigDict
 
 from mex.artificial.settings import ArtificialSettings
 from mex.biospecimen.settings import BiospecimenSettings
@@ -24,8 +23,6 @@ from mex.voxco.settings import VoxcoSettings
 
 class Settings(BaseSettings):
     """Settings definition class for extractors and related scripts."""
-
-    model_config = SettingsConfigDict(env_nested_delimiter="__")
 
     skip_partners: list[str] = Field(
         ["test"],
