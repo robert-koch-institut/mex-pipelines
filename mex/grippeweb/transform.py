@@ -55,6 +55,8 @@ def transform_grippeweb_resource_mappings_to_extracted_resources(
         extracted_mex_functional_units_grippeweb,
         extracted_confluence_vvt_activities,
     )
+    # need to copy the activity to be able to set `succeeds` field,
+    # see `mex.common.models.BaseModel.verify_computed_field_consistency`
     resource_dict["grippeweb-plus"] = ExtractedResource.model_validate(
         {
             **resource_dict["grippeweb-plus"].model_dump(),
