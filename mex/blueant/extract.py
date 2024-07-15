@@ -2,11 +2,11 @@ from collections.abc import Generator, Iterable
 
 from mex.blueant.connector import BlueAntConnector
 from mex.blueant.models.source import BlueAntSource
-from mex.blueant.settings import BlueAntSettings
 from mex.common.exceptions import MExError
 from mex.common.ldap.connector import LDAPConnector
 from mex.common.ldap.models.person import LDAPPerson
 from mex.common.logging import watch
+from mex.settings import Settings
 
 
 @watch
@@ -79,14 +79,14 @@ def remove_prefixes_from_name(name: str) -> str:
         name: string containing project label
 
     Settings:
-        delete_prefixes: delete prefixes of labels starting with these terms
+        blueant.delete_prefixes: delete prefixes of labels starting with these terms
 
     Return:
         string cleaned of prefixes
     """
-    settings = BlueAntSettings.get()
+    settings = Settings.get()
 
-    for prefix in settings.delete_prefixes:
+    for prefix in settings.blueant.delete_prefixes:
         name = name.removeprefix(prefix)
 
     return name

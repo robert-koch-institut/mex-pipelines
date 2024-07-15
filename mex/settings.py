@@ -4,6 +4,7 @@ from pydantic_settings import SettingsConfigDict
 
 from mex.artificial.settings import ArtificialSettings
 from mex.biospecimen.settings import BiospecimenSettings
+from mex.blueant.settings import BlueAntSettings
 from mex.common.settings import BaseSettings
 from mex.common.types import IdentityProvider
 from mex.confluence_vvt.settings import ConfluenceVvtSettings
@@ -80,6 +81,7 @@ class Settings(BaseSettings):
     )
     artificial: ArtificialSettings = ArtificialSettings()
     biospecimen: BiospecimenSettings = BiospecimenSettings()
+    blueant: BlueAntSettings = BlueAntSettings()
     confluence_vvt: ConfluenceVvtSettings = ConfluenceVvtSettings()
     datscha_web: DatschaWebSettings = DatschaWebSettings()
     ff_projects: FFProjectsSettings = FFProjectsSettings()
