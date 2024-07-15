@@ -1,14 +1,11 @@
 from pydantic import Field
-from pydantic_settings import SettingsConfigDict
 
+from mex.common.models import BaseModel
 from mex.common.types import AssetsPath
-from mex.settings import Settings
 
 
-class ODKSettings(Settings):
-    """Settings definition for odk data extraction."""
-
-    model_config = SettingsConfigDict(env_prefix="odk_")
+class ODKSettings(BaseModel):
+    """Settings submodel definition for odk data extraction."""
 
     raw_data_path: AssetsPath = Field(
         AssetsPath("raw-data/odk"),

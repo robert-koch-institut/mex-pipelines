@@ -12,6 +12,7 @@ from mex.ff_projects.settings import FFProjectsSettings
 from mex.grippeweb.settings import GrippewebSettings
 from mex.ifsg.settings import IFSGSettings
 from mex.international_projects.settings import InternationalProjectsSettings
+from mex.odk.settings import ODKSettings
 from mex.synopse.settings import SynopseSettings
 from mex.types import ExtractorIdentityProvider
 
@@ -83,4 +84,5 @@ class Settings(BaseSettings):
     international_projects: InternationalProjectsSettings = (
         InternationalProjectsSettings()
     )
+    odk: ODKSettings = ODKSettings()
     synopse: SynopseSettings = SynopseSettings()
