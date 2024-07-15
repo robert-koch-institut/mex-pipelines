@@ -4,7 +4,7 @@ from typing import Any
 
 from mex.common.connector import BaseConnector
 from mex.common.logging import echo
-from mex.grippeweb.settings import GrippewebSettings
+from mex.settings import Settings
 
 QUERY_BY_TABLE_NAME = {
     "vActualQuestion": "SELECT * FROM GrippeWeb.MEx.vActualQuestion",
@@ -21,7 +21,7 @@ class GrippewebConnector(BaseConnector):
         # https://github.com/mkleehammer/pyodbc/wiki/Install#installing-on-linux
         import pyodbc  # type: ignore[import-not-found]
 
-        settings = GrippewebSettings.get()
+        settings = Settings.get()
         if platform.system() != "Windows":  # pragma: no cover
             process = Popen(
                 ["kinit", settings.kerberos_user, "-V"],  # noqa: S603, S607
@@ -35,7 +35,7 @@ class GrippewebConnector(BaseConnector):
             )
             echo(stdout, fg="green")
             echo(stderr, fg="red")
-        self._connection = pyodbc.connect(settings.mssql_connection_dsn)
+        self._connection = pyodbc.connect(settings.grippeweb.mssql_connection_dsn)
 
     def parse_columns_by_column_name(self, table_name: str) -> dict[str, list[Any]]:
         """Execute whitelisted queries and zip results to column name."""
