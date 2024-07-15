@@ -18,6 +18,7 @@ from mex.seq_repo.settings import SeqRepoSettings
 from mex.sumo.settings import SumoSettings
 from mex.synopse.settings import SynopseSettings
 from mex.types import ExtractorIdentityProvider
+from mex.voxco.settings import VoxcoSettings
 
 
 class Settings(BaseSettings):
@@ -91,4 +92,5 @@ class Settings(BaseSettings):
     rdmo: RDMOSettings = RDMOSettings()
     seq_repo: SeqRepoSettings = SeqRepoSettings()
     sumo: SumoSettings = SumoSettings()
+    voxco: VoxcoSettings = VoxcoSettings()
     synopse: SynopseSettings = SynopseSettings()
