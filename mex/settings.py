@@ -6,6 +6,7 @@ from mex.artificial.settings import ArtificialSettings
 from mex.biospecimen.settings import BiospecimenSettings
 from mex.common.settings import BaseSettings
 from mex.common.types import IdentityProvider
+from mex.confluence_vvt.settings import ConfluenceVvtSettings
 from mex.synopse.settings import SynopseSettings
 from mex.types import ExtractorIdentityProvider
 
@@ -69,4 +70,5 @@ class Settings(BaseSettings):
     )
     artificial: ArtificialSettings = ArtificialSettings()
     biospecimen: BiospecimenSettings = BiospecimenSettings()
+    confluence_vvt: ConfluenceVvtSettings = ConfluenceVvtSettings()
     synopse: SynopseSettings = SynopseSettings()
