@@ -14,3 +14,11 @@ class IFSGSettings(BaseModel):
             "values, absolute path or relative to `assets_dir`."
         ),
     )
+    mssql_connection_dsn: str = Field(
+        "DRIVER={ODBC Driver 18 for SQL Server};SERVER=domain.tld;DATABASE=database",
+        description=(
+            "Connection string for the ODBC Driver for SQL Server: "
+            "https://learn.microsoft.com/en-us/sql/connect/odbc/"
+            "dsn-connection-string-attribute"
+        ),
+    )

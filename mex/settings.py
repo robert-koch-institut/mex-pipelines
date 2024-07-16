@@ -59,7 +59,6 @@ class Settings(BaseSettings):
         description="A valid cron string defining when to run extractor jobs",
         validation_alias="MEX_SCHEDULE",
     )
-
     kerberos_user: str = Field(
         "user@domain.tld",
         description="Kerberos user to authenticate against MSSQL server.",
@@ -67,14 +66,6 @@ class Settings(BaseSettings):
     kerberos_password: SecretStr = Field(
         SecretStr("password"),
         description="Kerberos password to authenticate against MSSQL server.",
-    )
-    mssql_connection_dsn: str = Field(
-        "DRIVER={ODBC Driver 18 for SQL Server};SERVER=domain.tld;DATABASE=database",
-        description=(
-            "Connection string for the ODBC Driver for SQL Server: "
-            "https://learn.microsoft.com/en-us/sql/connect/odbc/"
-            "dsn-connection-string-attribute"
-        ),
     )
     artificial: ArtificialSettings = ArtificialSettings()
     biospecimen: BiospecimenSettings = BiospecimenSettings()

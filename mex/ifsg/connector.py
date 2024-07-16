@@ -62,7 +62,7 @@ class IFSGConnector(BaseConnector):
             )
             echo(stdout, fg="green")
             echo(stderr, fg="red")
-        self._connection = pyodbc.connect(settings.mssql_connection_dsn)
+        self._connection = pyodbc.connect(settings.ifsg.mssql_connection_dsn)
 
     def parse_rows(self, model: type[BaseModel]) -> list[dict[str, Any]]:
         """Execute whitelisted queries and zip results to column name."""
