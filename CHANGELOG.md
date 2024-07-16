@@ -18,7 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - make dependent extractors explicitly depend on each other
   (grippeweb on confluence-vvt, biospecimen on synopse, odk on international-projects)
 - add publisher pipeline to pull all merged items from backend and write them to ndjson
-
+- BREAKING: integrate extractor specific settings in main extractor settings class.
+  Environment variables change from `EXTRACTOR_PARAMETER` to `MEX_EXTRACTOR__PARAMETER`,
+  access from `ExtractorSettings.parameter` to `settings.extractor.parameter`.
 ### Deprecated
 
 ### Removed
