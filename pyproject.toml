@@ -9,11 +9,11 @@ urls = { Repository = "https://github.com/robert-koch-institut/mex-extractors" }
 requires-python = "<3.13,>=3.11"
 dependencies = [
     "beautifulsoup4==4.12.3",
-    "dagster-postgres==0.23.12",
-    "dagster-webserver==1.7.12",
-    "dagster==1.7.12",
+    "dagster-postgres==0.23.13",
+    "dagster-webserver==1.7.13",
+    "dagster==1.7.13",
     "faker==26.0.0",
-    "mex-common@git+https://github.com/robert-koch-institut/mex-common.git@0.28.0",
+    "mex-common @ git+https://github.com/robert-koch-institut/mex-common.git@0.29.1",
     "numpy==1.26.4",
     "openpyxl==3.1.5",
     "pandas==2.2.2",
@@ -34,7 +34,7 @@ optional-dependencies.dev = [
     "pytest-random-order==1.1.1",
     "pytest-xdist==3.6.1",
     "pytest==8.2.2",
-    "ruff==0.5.0",
+    "ruff==0.5.1",
     "sphinx==7.3.7",
     "types-beautifulsoup4==4.12.0.20240511",
     "types-pytz==2024.1.0.20240417",
@@ -61,6 +61,7 @@ sumo = "mex.sumo.main:run"
 sync-persons = "mex.ldap.main:run"
 synopse = "mex.synopse.main:run"
 voxco = "mex.voxco.main:run"
+publisher = "mex.publisher.main:run"
 
 [tool.cruft]
 template = "https://github.com/robert-koch-institut/mex-template"
@@ -81,10 +82,6 @@ plugins = ["pydantic.mypy"]
 [[tool.mypy.overrides]]
 module = "requests_ntlm.*"
 ignore_missing_imports = true
-
-[[tool.mypy.overrides]]
-module = ["mex.*.transform", "mex.*.extract"]
-disable_error_code = ["arg-type", "call-arg"]
 
 [tool.pdm]
 distribution = true
@@ -176,5 +173,5 @@ known-first-party = ["mex", "tests"]
 convention = "google"
 
 [build-system]
-requires = ["pdm-backend==2.3.1"]
+requires = ["pdm-backend==2.3.2"]
 build-backend = "pdm.backend"
