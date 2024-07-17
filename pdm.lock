@@ -4,8 +4,8 @@
 [metadata]
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
-lock_version = "4.4.2"
-content_hash = "sha256:951fbed59c031ac192ffe64f65cb137dc40c52d91bb8f01602850b8ee323a320"
+lock_version = "4.4.1"
+content_hash = "sha256:593cd2f9801b6e062d2113e9efc51f3cc95a35a71b69020434334e4e181b8752"
 
 [[package]]
 name = "alabaster"
@@ -400,7 +400,7 @@ files = [
 
 [[package]]
 name = "dagster"
-version = "1.7.12"
+version = "1.7.13"
 requires_python = "<3.13,>=3.8"
 summary = "Dagster is an orchestration platform for the development, production, and observation of data assets."
 groups = ["default"]
@@ -411,7 +411,7 @@ dependencies = [
     "click>=5.0",
     "coloredlogs<=14.0,>=6.1",
     "croniter>=0.3.34",
-    "dagster-pipes==1.7.12",
+    "dagster-pipes==1.7.13",
     "docstring-parser",
     "filelock",
     "grpcio-health-checking>=1.44.0",
@@ -422,7 +422,6 @@ dependencies = [
     "protobuf<5,>=4; python_version >= \"3.11\"",
     "psutil>=1.0; platform_system == \"Windows\"",
     "pydantic!=1.10.7,<3,>1.10.0",
-    "python-dateutil",
     "python-dotenv",
     "pytz",
     "pywin32!=226; platform_system == \"Windows\"",
@@ -441,70 +440,70 @@ dependencies = [
     "watchdog>=0.8.3",
 ]
 files = [
-    {file = "dagster-1.7.12-py3-none-any.whl", hash = "sha256:f1341314c4298d7a6b165301b011a230e499534dce3dd0e0b354e59eab4550ff"},
-    {file = "dagster-1.7.12.tar.gz", hash = "sha256:051297e42a54775df3b469569376d850f03d7ff238219ec4390c31e26a7dec9e"},
+    {file = "dagster-1.7.13-py3-none-any.whl", hash = "sha256:0d8abadab72d7ea617655b08ff51eee8071a4b2694a7fc697ec9f8e3e3403176"},
+    {file = "dagster-1.7.13.tar.gz", hash = "sha256:3a246bc6658ae2deadf96e7f5055210bf07a54817767243ed8ec9c72c876e633"},
 ]
 
 [[package]]
 name = "dagster-graphql"
-version = "1.7.12"
+version = "1.7.13"
 requires_python = "<3.13,>=3.8"
 summary = "The GraphQL frontend to python dagster."
 groups = ["default"]
 dependencies = [
-    "dagster==1.7.12",
+    "dagster==1.7.13",
     "gql[requests]<4,>=3",
     "graphene<4,>=3",
     "requests",
     "starlette",
 ]
 files = [
-    {file = "dagster-graphql-1.7.12.tar.gz", hash = "sha256:9d6cd1e3a18ab67da2de44b24ce2c1e37a7442c946e8a6f6b092b8362ceabe94"},
-    {file = "dagster_graphql-1.7.12-py3-none-any.whl", hash = "sha256:00bb09a2040c719dfd286ab80ea5aa1e9036a609b448dad95b3d3b12159dcab3"},
+    {file = "dagster-graphql-1.7.13.tar.gz", hash = "sha256:735381993feaba4d54630c52cdcffb139e558a6389f1ed2441ed4356cd4ee2e9"},
+    {file = "dagster_graphql-1.7.13-py3-none-any.whl", hash = "sha256:169c0ac2c4ad771a0a6936afe19ce5f06a563d331e997bf148bb8e07c678d1e8"},
 ]
 
 [[package]]
 name = "dagster-pipes"
-version = "1.7.12"
+version = "1.7.13"
 requires_python = "<3.13,>=3.8"
 summary = "Toolkit for Dagster integrations with transform logic outside of Dagster"
 groups = ["default"]
 files = [
-    {file = "dagster-pipes-1.7.12.tar.gz", hash = "sha256:3d5c0ab1ed30fad9e074254fcb6f8ecb0642fb495aede6c062752efdc7ad0ef4"},
-    {file = "dagster_pipes-1.7.12-py3-none-any.whl", hash = "sha256:0fcd79acb948cede064fbd3db85b7772067de472134fe57250e3d0639f2ecda9"},
+    {file = "dagster-pipes-1.7.13.tar.gz", hash = "sha256:4a70baca8e78045045aedf5dc9319005d1c6eb8e3e84a8f6a5c58ea157853aef"},
+    {file = "dagster_pipes-1.7.13-py3-none-any.whl", hash = "sha256:84011a3b8d294c5dc060bc574fa458b0582a1a98954ea12b83fe5196f71dc5ce"},
 ]
 
 [[package]]
 name = "dagster-postgres"
-version = "0.23.12"
+version = "0.23.13"
 requires_python = "<3.13,>=3.8"
 summary = "A Dagster integration for postgres"
 groups = ["default"]
 dependencies = [
-    "dagster==1.7.12",
+    "dagster==1.7.13",
     "psycopg2-binary",
 ]
 files = [
-    {file = "dagster-postgres-0.23.12.tar.gz", hash = "sha256:47717c63d79f45b657eb1ac74434ef8ff1016757a1f08850c62b4c96c1c104c8"},
-    {file = "dagster_postgres-0.23.12-py3-none-any.whl", hash = "sha256:1f2185503668d71d723e8a71e6c585c8523893141b0a8c214b1d01561b2de4c3"},
+    {file = "dagster-postgres-0.23.13.tar.gz", hash = "sha256:2c6c07ffafd1e622132d42d7ac853ab07938f3f0f3d0a344caa52d5c80fe3bb2"},
+    {file = "dagster_postgres-0.23.13-py3-none-any.whl", hash = "sha256:ad7ebbd4b4fcccdf78d8ec22f8e8fbb1af567542cca4fbe57498c5369a2b11bc"},
 ]
 
 [[package]]
 name = "dagster-webserver"
-version = "1.7.12"
+version = "1.7.13"
 requires_python = "<3.13,>=3.8"
 summary = "Web UI for dagster."
 groups = ["default"]
 dependencies = [
     "click<9.0,>=7.0",
-    "dagster-graphql==1.7.12",
-    "dagster==1.7.12",
+    "dagster-graphql==1.7.13",
+    "dagster==1.7.13",
     "starlette!=0.36.0",
     "uvicorn[standard]",
 ]
 files = [
-    {file = "dagster-webserver-1.7.12.tar.gz", hash = "sha256:bab3e7da28e2de12dcdfea4bba135f3e5c0c1eb11a3cd1eb67e8f823625aa318"},
-    {file = "dagster_webserver-1.7.12-py3-none-any.whl", hash = "sha256:ba2dfdb00b1e7ccb7bc91f11cfa5fc974d366c63d50f70bb6b18e716d7f2a73c"},
+    {file = "dagster-webserver-1.7.13.tar.gz", hash = "sha256:e8c9042cf464fe6fbe490f80ed70b12790611faf478fce3a3e08c1b6429feabf"},
+    {file = "dagster_webserver-1.7.13-py3-none-any.whl", hash = "sha256:2ae4ea43e4157addaed477082e748ac306dde2dcab96005e2ca39552f57f7384"},
 ]
 
 [[package]]
@@ -1016,11 +1015,11 @@ files = [
 
 [[package]]
 name = "mex-common"
-version = "0.28.0"
+version = "0.29.1"
 requires_python = "<3.13,>=3.11"
 git = "https://github.com/robert-koch-institut/mex-common.git"
-ref = "0.28.0"
-revision = "f53fefaa79e84a1198eeb0e0a8a90a27c0ea9382"
+ref = "0.29.1"
+revision = "effd23a00b11bf54dd4301cbb51698912599fc3d"
 summary = "Common library for MEx python projects."
 groups = ["default"]
 dependencies = [
@@ -1032,7 +1031,7 @@ dependencies = [
     "numpy==1.26.4",
     "pandas==2.2.2",
     "pyarrow==16.1.0",
-    "pydantic-settings==2.3.3",
+    "pydantic-settings==2.3.4",
     "pydantic==2.7.4",
     "requests==2.32.3",
 ]
@@ -1574,7 +1573,7 @@ files = [
 
 [[package]]
 name = "pydantic-settings"
-version = "2.3.3"
+version = "2.3.4"
 requires_python = ">=3.8"
 summary = "Settings management using Pydantic"
 groups = ["default"]
@@ -1583,8 +1582,8 @@ dependencies = [
     "python-dotenv>=0.21.0",
 ]
 files = [
-    {file = "pydantic_settings-2.3.3-py3-none-any.whl", hash = "sha256:e4ed62ad851670975ec11285141db888fd24947f9440bd4380d7d8788d4965de"},
-    {file = "pydantic_settings-2.3.3.tar.gz", hash = "sha256:87fda838b64b5039b970cd47c3e8a1ee460ce136278ff672980af21516f6e6ce"},
+    {file = "pydantic_settings-2.3.4-py3-none-any.whl", hash = "sha256:11ad8bacb68a045f00e4f862c7a718c8a9ec766aa8fd4c32e39a0594b207b53a"},
+    {file = "pydantic_settings-2.3.4.tar.gz", hash = "sha256:c5802e3d62b78e82522319bbc9b8f8ffb28ad1c988a99311d04f2a6051fca0a7"},
 ]
 
 [[package]]
