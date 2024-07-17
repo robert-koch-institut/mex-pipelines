@@ -21,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - BREAKING: integrate extractor specific settings in main extractor settings class.
   Environment variables change from `EXTRACTOR_PARAMETER` to `MEX_EXTRACTOR__PARAMETER`,
   access from `ExtractorSettings.parameter` to `settings.extractor.parameter`.
+- update mex-common to 0.31.0
+
 ### Deprecated
 
 ### Removed
