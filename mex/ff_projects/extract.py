@@ -17,7 +17,7 @@ from mex.common.types import (
 from mex.common.wikidata.extract import search_organization_by_label
 from mex.common.wikidata.models.organization import WikidataOrganization
 from mex.ff_projects.models.source import FFProjectsSource
-from mex.ff_projects.settings import FFProjectsSettings
+from mex.settings import Settings
 
 
 @watch
@@ -25,14 +25,15 @@ def extract_ff_projects_sources() -> Generator[FFProjectsSource, None, None]:
     """Extract FF Projects sources by loading data from MS-Excel file.
 
     Settings:
-        file_path: Path to the ff-projects list, absolute or relative to `assets_dir`
+        ff_projects.file_path: Path to the ff-projects list, absolute or relative to
+          `assets_dir`
 
     Returns:
         Generator for FF Projects sources
     """
-    settings = FFProjectsSettings.get()
+    settings = Settings.get()
     df = pd.read_excel(
-        settings.file_path,
+        settings.ff_projects.file_path,
         keep_default_na=False,
         parse_dates=True,
     )

@@ -18,15 +18,8 @@ from mex.common.organigram.transform import (
 )
 from mex.common.types import MergedOrganizationalUnitIdentifier
 from mex.confluence_vvt.connector import ConfluenceVvtConnector
-from mex.confluence_vvt.settings import ConfluenceVvtSettings
 
 TEST_DATA_DIR = Path(__file__).parent / "test_data"
-
-
-@pytest.fixture(autouse=True)
-def settings() -> ConfluenceVvtSettings:
-    """Load the settings for this pytest session."""
-    return ConfluenceVvtSettings.get()
 
 
 @pytest.fixture

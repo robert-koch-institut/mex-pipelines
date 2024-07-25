@@ -3,7 +3,6 @@ from collections.abc import Sequence
 
 from faker import Faker
 
-from mex.artificial.settings import ArtificialSettings
 from mex.common.identity import Identity, get_provider
 from mex.common.identity.memory import MemoryIdentityProvider
 from mex.common.models import (
@@ -11,6 +10,7 @@ from mex.common.models import (
     ExtractedData,
 )
 from mex.common.types import MergedPrimarySourceIdentifier
+from mex.settings import Settings
 
 IdentityMap = dict[str, list[Identity]]
 
@@ -52,12 +52,12 @@ def _create_numeric_ids(
         faker: Instance of faker
         weights: Mapping from extracted data classes to an integer weight. The weights
                  control how many items per class are created, but the weights are
-                 normalized to keep the total below `Settings.count`.
+                 normalized to keep the total below `Settings.artificial.count`.
 
     Returns:
         Dict with entity types and lists of numeric ids
     """
-    settings = ArtificialSettings.get()
+    settings = Settings.get()
     # compile a list of model classes (each model class can appear multiple times)
     # by adding some models more often than others, we can influence the likelihood
     # of `random_choices` picking that class from the list of models
@@ -65,7 +65,9 @@ def _create_numeric_ids(
         model for model, weight in weights.items() for _ in range(weight)
     ]
     # pick a random selection of model classes from the weighted model class list
-    choices = list(faker.random_choices(weighted_model_class_list, settings.count))
+    choices = list(
+        faker.random_choices(weighted_model_class_list, settings.artificial.count)
+    )
     # count the picks, but use at least 2 so we can fulfill required references
     counts = {model: max(2, choices.count(model)) for model in weights}
     # build a static offset integer per class to spread out the id ranges
@@ -91,7 +93,7 @@ def create_identities(
         faker: Instance of faker
         weights: Mapping from extracted data classes to an integer weight. The weights
                 control how many items per class are created, but the weights are
-                normalized to keep the total below `Settings.count`.
+                normalized to keep the total below `Settings.artificial.count`.
 
     Returns:
         Dict with entity types and lists of Identities
@@ -115,7 +117,7 @@ def create_identities(
                 # the first primary source is extracted from this placeholder ID
                 primary_source_id = MEX_PRIMARY_SOURCE_STABLE_TARGET_ID
             # TODO: allow for a configured percentage of items to have the same
-            #       stable target ID (using `ArtificialSettings.matched`)
+            #       stable target ID (using `Settings.artificial.matched`)
             identity = identity_provider.assign(
                 primary_source_id, f"{entity_type}-{numeric_id}"
             )

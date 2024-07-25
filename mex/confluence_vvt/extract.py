@@ -9,7 +9,7 @@ from mex.common.logging import watch
 from mex.confluence_vvt.connector import ConfluenceVvtConnector
 from mex.confluence_vvt.models.source import ConfluenceVvtSource
 from mex.confluence_vvt.parse_html import parse_data_html_page
-from mex.confluence_vvt.settings import ConfluenceVvtSettings
+from mex.settings import Settings
 
 
 @watch
@@ -17,7 +17,8 @@ def fetch_all_data_page_ids() -> Generator[str, None, None]:
     """Fetch all the ids for data pages.
 
     Settings:
-        url: Confluence-vvt base url
+        confluence_vvt.url: Confluence-vvt base url
+        confluence_vvt.overview_page_id: page id of the overview page
 
     Raises:
         MExError: When the pagination limit is exceeded
@@ -26,14 +27,14 @@ def fetch_all_data_page_ids() -> Generator[str, None, None]:
         Generator for page IDs
     """
     connector = ConfluenceVvtConnector.get()
-    settings = ConfluenceVvtSettings.get()
+    settings = Settings.get()
 
     limit = 100
     for start in range(0, 10**6, limit):
         response = connector.session.get(
             urljoin(
-                settings.url,
-                f"rest/api/content/{settings.overview_page_id}"
+                settings.confluence_vvt.url,
+                f"rest/api/content/{settings.confluence_vvt.overview_page_id}"
                 f"/child/page?limit={limit}&start={start}",
             )
         )
@@ -63,11 +64,14 @@ def fetch_all_pages_data(
         Generator for ConfluenceVvtSource items
     """
     connector = ConfluenceVvtConnector.get()
-    settings = ConfluenceVvtSettings.get()
+    settings = Settings.get()
 
     for page_id in page_ids:
         response = connector.session.get(
-            urljoin(settings.url, f"rest/api/content/{page_id}?expand=body.view"),
+            urljoin(
+                settings.confluence_vvt.url,
+                f"rest/api/content/{page_id}?expand=body.view",
+            ),
         )
         response.raise_for_status()
         json_data = response.json()

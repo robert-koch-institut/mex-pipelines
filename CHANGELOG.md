@@ -17,14 +17,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - duplicate seq-repo activities are filtered out
 - make dependent extractors explicitly depend on each other
   (grippeweb on confluence-vvt, biospecimen on synopse, odk on international-projects)
+- add publisher pipeline to pull all merged items from backend and write them to ndjson
+- BREAKING: integrate extractor specific settings in main extractor settings class.
+  Environment variables change from `EXTRACTOR_PARAMETER` to `MEX_EXTRACTOR__PARAMETER`,
+  access from `ExtractorSettings.parameter` to `settings.extractor.parameter`.
+- update mex-common to 0.32.0
 
 ### Deprecated
 
 ### Removed
 
+- remove mypy ignores for arg-type and call-arg
+- remove unused ldap module with is_person_in_identity_map_and_ldap function
+
 ### Fixed
 
-- fix confluence_vvt transformation: use interne Vorgangsnummer as identifierInPrimarySource
+- fix confluence_vvt: use interne Vorgangsnummer as identifierInPrimarySource
 - remaining issues in voxco extractor
 
 ### Security

@@ -6,11 +6,11 @@ from typing import Any
 from pandas import DataFrame, ExcelFile, Series
 
 from mex.biospecimen.models.source import BiospecimenResource
-from mex.biospecimen.settings import BiospecimenSettings
 from mex.common.exceptions import MExError
 from mex.common.ldap.connector import LDAPConnector
 from mex.common.ldap.models.person import LDAPPerson
 from mex.common.logging import watch
+from mex.settings import Settings
 
 
 @watch
@@ -49,8 +49,10 @@ def extract_biospecimen_resources() -> Generator[BiospecimenResource, None, None
     Returns:
         Generator for Biospecimen resources
     """
-    settings = BiospecimenSettings.get()
-    file_path_list = glob(str(settings.dir_path / "**" / "*.xlsx"), recursive=True)
+    settings = Settings.get()
+    file_path_list = glob(
+        str(settings.biospecimen.dir_path / "**" / "*.xlsx"), recursive=True
+    )
     for file_path in file_path_list:
         xls = ExcelFile(file_path)
         sheets = xls.book.worksheets
@@ -150,9 +152,9 @@ def extract_biospecimen_resource(
     Returns:
         Biospecimen resource
     """
-    settings = BiospecimenSettings.get()
-    key_col = settings.key_col
-    val_col = settings.val_col
+    settings = Settings.get()
+    key_col = settings.biospecimen.key_col
+    val_col = settings.biospecimen.val_col
 
     zugriffsbeschraenkung = get_values(
         resource, key_col, val_col, "Zugriffsbeschränkung"

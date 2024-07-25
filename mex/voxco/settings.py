@@ -1,14 +1,11 @@
 from pydantic import Field
-from pydantic_settings import SettingsConfigDict
 
+from mex.common.models import BaseModel
 from mex.common.types import AssetsPath
-from mex.settings import Settings
 
 
-class VoxcoSettings(Settings):
-    """Settings for the Voxco extractor."""
-
-    model_config = SettingsConfigDict(env_prefix="voxco_")
+class VoxcoSettings(BaseModel):
+    """Settings submodel for the Voxco extractor."""
 
     mapping_path: AssetsPath = Field(
         AssetsPath("mappings/__final__/voxco"),

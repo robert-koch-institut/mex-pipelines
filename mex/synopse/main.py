@@ -21,6 +21,7 @@ from mex.common.types import (
     MergedResourceIdentifier,
 )
 from mex.pipeline import asset, run_job_in_process
+from mex.settings import Settings
 from mex.sinks import load
 from mex.synopse.extract import (
     extract_projects,
@@ -33,7 +34,6 @@ from mex.synopse.models.project import SynopseProject
 from mex.synopse.models.study import SynopseStudy
 from mex.synopse.models.study_overview import SynopseStudyOverview
 from mex.synopse.models.variable import SynopseVariable
-from mex.synopse.settings import SynopseSettings
 from mex.synopse.transform import (
     split_off_extended_data_use_variables,
     transform_overviews_to_resource_lookup,
@@ -315,7 +315,7 @@ def extracted_synopse_variables(
     load(extracted_variables)
 
 
-@entrypoint(SynopseSettings)
+@entrypoint(Settings)
 def run() -> None:
     """Run the synopse extractor job in-process."""
     run_job_in_process("synopse")

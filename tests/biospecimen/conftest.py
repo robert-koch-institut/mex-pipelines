@@ -1,19 +1,12 @@
 import pytest
 
 from mex.biospecimen.models.source import BiospecimenResource
-from mex.biospecimen.settings import BiospecimenSettings
 from mex.common.models import ExtractedPerson
 from mex.common.types import Identifier
 
 
-@pytest.fixture(autouse=True)
-def settings() -> BiospecimenSettings:
-    """Load the settings for this pytest session."""
-    return BiospecimenSettings.get()
-
-
 @pytest.fixture
-def biospecimen_resources() -> BiospecimenResource:
+def biospecimen_resources() -> list[BiospecimenResource]:
     """Return a dummy biospecimen resource for testing."""
     return [
         BiospecimenResource(

@@ -1,15 +1,8 @@
 import pytest
 
 from mex.blueant.models.source import BlueAntSource
-from mex.blueant.settings import BlueAntSettings
 from mex.common.models import ExtractedPerson
 from mex.common.types import Identifier, TemporalEntity
-
-
-@pytest.fixture(autouse=True)
-def settings() -> BlueAntSettings:
-    """Load the settings for this pytest session."""
-    return BlueAntSettings.get()
 
 
 @pytest.fixture

@@ -1,7 +1,6 @@
 from mex.blueant.extract import extract_blueant_project_leaders, extract_blueant_sources
 from mex.blueant.filter import filter_and_log_blueant_sources
 from mex.blueant.models.source import BlueAntSource
-from mex.blueant.settings import BlueAntSettings
 from mex.blueant.transform import transform_blueant_sources_to_extracted_activities
 from mex.common.cli import entrypoint
 from mex.common.ldap.extract import get_merged_ids_by_employee_ids
@@ -11,6 +10,7 @@ from mex.common.primary_source.transform import get_primary_sources_by_name
 from mex.common.types import MergedOrganizationalUnitIdentifier, MergedPersonIdentifier
 from mex.filters import filter_by_global_rules
 from mex.pipeline import asset, run_job_in_process
+from mex.settings import Settings
 from mex.sinks import load
 
 
@@ -77,7 +77,7 @@ def extracted_blueant_activities(
     load(extracted_activities)
 
 
-@entrypoint(BlueAntSettings)
+@entrypoint(Settings)
 def run() -> None:
     """Run the blueant extractor job in-process."""
     run_job_in_process("blueant")

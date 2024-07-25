@@ -19,7 +19,6 @@ from mex.odk.extract import (
     get_external_partner_and_publisher_by_label,
 )
 from mex.odk.model import ODKData
-from mex.odk.settings import ODKSettings
 from mex.odk.transform import (
     get_variable_groups_from_raw_data,
     transform_odk_data_to_extracted_variables,
@@ -27,6 +26,7 @@ from mex.odk.transform import (
     transform_odk_variable_groups_to_extracted_variable_groups,
 )
 from mex.pipeline import asset, run_job_in_process
+from mex.settings import Settings
 from mex.sinks import load
 from mex.wikidata.extract import (
     get_merged_organization_id_by_query_with_transform_and_load,
@@ -54,10 +54,10 @@ def odk_raw_data() -> list[ODKData]:
 @asset(group_name="odk")
 def odk_resource_mappings() -> list[dict[str, Any]]:
     """Extract odk resource mappings."""
-    settings = ODKSettings.get()
+    settings = Settings.get()
     return [
         extract_mapping_data(file, ExtractedResource)
-        for file in Path(settings.mapping_path).glob("resource_*.yaml")
+        for file in Path(settings.odk.mapping_path).glob("resource_*.yaml")
     ]
 
 
@@ -141,7 +141,7 @@ def extracted_variables_odk(
     load(extracted_variables)
 
 
-@entrypoint(ODKSettings)
+@entrypoint(Settings)
 def run() -> None:
     """Run the odk extractor job in-process."""
     run_job_in_process("odk")
