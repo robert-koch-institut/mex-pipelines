@@ -31,7 +31,6 @@ from mex.grippeweb.extract import (
     extract_ldap_actors_for_functional_accounts,
     extract_ldap_persons,
 )
-from mex.grippeweb.settings import GrippewebSettings
 from mex.grippeweb.transform import (
     transform_grippeweb_access_platform_to_extracted_access_platform,
     transform_grippeweb_resource_mappings_to_extracted_resources,
@@ -40,6 +39,7 @@ from mex.grippeweb.transform import (
 )
 from mex.mapping.extract import extract_mapping_data
 from mex.pipeline import asset, run_job_in_process
+from mex.settings import Settings
 from mex.sinks import load
 from mex.sumo.transform import get_contact_merged_ids_by_emails
 from mex.wikidata.extract import (
@@ -69,37 +69,38 @@ def grippeweb_columns() -> dict[str, dict[str, list[Any]]]:
 @asset(group_name="grippeweb")
 def grippeweb_access_platform() -> dict[str, Any]:
     """Extract Grippeweb `access_platform` default values."""
-    settings = GrippewebSettings.get()
+    settings = Settings.get()
     return extract_mapping_data(
-        settings.mapping_path / "access-platform.yaml", ExtractedAccessPlatform
+        settings.grippeweb.mapping_path / "access-platform.yaml",
+        ExtractedAccessPlatform,
     )
 
 
 @asset(group_name="grippeweb")
 def grippeweb_resource_mappings() -> list[dict[str, Any]]:
     """Extract Grippeweb resource mappings."""
-    settings = GrippewebSettings.get()
+    settings = Settings.get()
     return [
         extract_mapping_data(file, ExtractedResource)
-        for file in Path(settings.mapping_path).glob("resource_*.yaml")
+        for file in Path(settings.grippeweb.mapping_path).glob("resource_*.yaml")
     ]
 
 
 @asset(group_name="grippeweb")
 def grippeweb_variable() -> dict[str, Any]:
     """Extract Grippeweb `variable` default values."""
-    settings = GrippewebSettings.get()
+    settings = Settings.get()
     return extract_mapping_data(
-        settings.mapping_path / "variable.yaml", ExtractedVariable
+        settings.grippeweb.mapping_path / "variable.yaml", ExtractedVariable
     )
 
 
 @asset(group_name="grippeweb")
 def grippeweb_variable_group() -> dict[str, Any]:
     """Extract Grippeweb `variable_group` default values."""
-    settings = GrippewebSettings.get()
+    settings = Settings.get()
     return extract_mapping_data(
-        settings.mapping_path / "variable-group.yaml", ExtractedVariableGroup
+        settings.grippeweb.mapping_path / "variable-group.yaml", ExtractedVariableGroup
     )
 
 
@@ -241,7 +242,7 @@ def grippeweb_extracted_variable(
     load(extracted_variables)
 
 
-@entrypoint(GrippewebSettings)
+@entrypoint(Settings)
 def run() -> None:
     """Run the Grippeweb extractor job in-process."""
     run_job_in_process("grippeweb")

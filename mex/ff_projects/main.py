@@ -20,9 +20,9 @@ from mex.ff_projects.extract import (
 )
 from mex.ff_projects.filter import filter_and_log_ff_projects_sources
 from mex.ff_projects.models.source import FFProjectsSource
-from mex.ff_projects.settings import FFProjectsSettings
 from mex.ff_projects.transform import transform_ff_projects_source_to_extracted_activity
 from mex.pipeline import asset, run_job_in_process
+from mex.settings import Settings
 from mex.sinks import load
 from mex.wikidata.extract import (
     get_merged_organization_id_by_query_with_transform_and_load,
@@ -120,7 +120,7 @@ def extract_ff_projects(
     return extracted_activities
 
 
-@entrypoint(FFProjectsSettings)
+@entrypoint(Settings)
 def run() -> None:
     """Run the ff-projects extractor job in-process."""
     run_job_in_process("ff_projects")

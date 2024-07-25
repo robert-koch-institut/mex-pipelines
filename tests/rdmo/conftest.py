@@ -2,13 +2,6 @@ import pytest
 
 from mex.common.models import ExtractedPerson
 from mex.common.types import Identifier
-from mex.rdmo.settings import RDMOSettings
-
-
-@pytest.fixture(autouse=True)
-def settings() -> RDMOSettings:
-    """Load the settings for this pytest session."""
-    return RDMOSettings.get()
 
 
 @pytest.fixture

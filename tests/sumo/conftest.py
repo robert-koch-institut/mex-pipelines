@@ -25,13 +25,6 @@ from mex.sumo.models.cc2_aux_mapping import Cc2AuxMapping
 from mex.sumo.models.cc2_aux_model import Cc2AuxModel
 from mex.sumo.models.cc2_aux_valuesets import Cc2AuxValuesets
 from mex.sumo.models.cc2_feat_projection import Cc2FeatProjection
-from mex.sumo.settings import SumoSettings
-
-
-@pytest.fixture(autouse=True)
-def settings() -> SumoSettings:
-    """Load the settings for this pytest session."""
-    return SumoSettings.get()
 
 
 @pytest.fixture

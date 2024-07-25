@@ -5,7 +5,7 @@ from requests_ntlm import HttpNtlmAuth
 
 from mex.common.connector import HTTPConnector
 from mex.common.exceptions import MExError
-from mex.synopse.settings import SynopseSettings
+from mex.settings import Settings
 
 
 class ReportServerConnector(HTTPConnector):
@@ -16,15 +16,15 @@ class ReportServerConnector(HTTPConnector):
 
     def _set_url(self) -> None:
         """Set url of the host."""
-        settings = SynopseSettings.get()
-        self.url = settings.report_server_url
+        settings = Settings.get()
+        self.url = settings.synopse.report_server_url
 
     def _set_authentication(self) -> None:
         """Authenticate to the host."""
-        settings = SynopseSettings.get()
+        settings = Settings.get()
         self.session.auth = HttpNtlmAuth(
-            settings.report_server_username.get_secret_value(),
-            settings.report_server_password.get_secret_value(),
+            settings.synopse.report_server_username.get_secret_value(),
+            settings.synopse.report_server_password.get_secret_value(),
         )
 
     def _check_availability(self) -> None:

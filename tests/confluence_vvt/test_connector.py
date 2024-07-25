@@ -10,7 +10,7 @@ from mex.confluence_vvt.connector import ConfluenceVvtConnector
 
 @pytest.fixture
 def mocked_confluence_vvt(monkeypatch: MonkeyPatch) -> MagicMock:
-    """Mock the ConfluenceVvtSettings with a MagicMock session and return that."""
+    """Mock the ConfluenceVvt session with a MagicMock session and return that."""
     mocked_session = MagicMock(spec=requests.Session)
     mocked_session.request = MagicMock(
         return_value=Mock(spec=requests.Response, status_code=200)

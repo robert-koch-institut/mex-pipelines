@@ -1,14 +1,11 @@
 from pydantic import Field
-from pydantic_settings import SettingsConfigDict
 
+from mex.common.models import BaseModel
 from mex.common.types import AssetsPath
-from mex.settings import Settings
 
 
-class SumoSettings(Settings):
-    """Settings for the SUMO extractor."""
-
-    model_config = SettingsConfigDict(env_prefix="sumo_")
+class SumoSettings(BaseModel):
+    """Settings submodel for the SUMO extractor."""
 
     raw_data_path: AssetsPath = Field(
         AssetsPath("raw-data/sumo"),

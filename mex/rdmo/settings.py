@@ -1,13 +1,10 @@
 from pydantic import Field, SecretStr
-from pydantic_settings import SettingsConfigDict
 
-from mex.settings import Settings
+from mex.common.models import BaseModel
 
 
-class RDMOSettings(Settings):
-    """RDMO settings definition for the RDMO extractor."""
-
-    model_config = SettingsConfigDict(env_prefix="rdmo_")
+class RDMOSettings(BaseModel):
+    """RDMO settings submodel definition for the RDMO extractor."""
 
     url: str = Field("https://rdmo/", description="RDMO instance URL")
     username: SecretStr = Field(

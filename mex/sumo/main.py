@@ -25,6 +25,7 @@ from mex.common.types import (
 )
 from mex.mapping.extract import extract_mapping_data
 from mex.pipeline import asset, run_job_in_process
+from mex.settings import Settings
 from mex.sinks import load
 from mex.sumo.extract import (
     extract_cc1_data_model_nokeda,
@@ -40,7 +41,6 @@ from mex.sumo.filter import filter_and_log_cc2_aux_model
 from mex.sumo.models.cc1_data_model_nokeda import Cc1DataModelNoKeda
 from mex.sumo.models.cc2_aux_model import Cc2AuxModel
 from mex.sumo.models.cc2_feat_projection import Cc2FeatProjection
-from mex.sumo.settings import SumoSettings
 from mex.sumo.transform import (
     get_contact_merged_ids_by_emails,
     get_contact_merged_ids_by_names,
@@ -77,9 +77,9 @@ def transformed_sumo_access_platform(
     extracted_primary_source_sumo: ExtractedPrimarySource,
 ) -> None:
     """Transform and load SUMO access platform and related LDAP actors."""
-    settings = SumoSettings.get()
+    settings = Settings.get()
     sumo_access_platform = extract_mapping_data(
-        settings.mapping_path / "access-platform.yaml",
+        settings.sumo.mapping_path / "access-platform.yaml",
         ExtractedAccessPlatform,
     )
     ldap_contact_points_access_platform = extract_ldap_contact_points_by_name(
@@ -134,9 +134,9 @@ def transformed_activity_sumo(
     extracted_primary_source_sumo: ExtractedPrimarySource,
 ) -> ExtractedActivity:
     """Extract, transform and load SUMO activity."""
-    settings = SumoSettings.get()
+    settings = Settings.get()
     sumo_activity = extract_mapping_data(
-        settings.mapping_path / "activity.yaml", ExtractedActivity
+        settings.sumo.mapping_path / "activity.yaml", ExtractedActivity
     )
     transformed_activity = transform_sumo_activity_to_extracted_activity(
         sumo_activity,
@@ -151,18 +151,18 @@ def transformed_activity_sumo(
 @asset(group_name="sumo")
 def extracted_resources_nokeda_sumo() -> dict[str, Any]:
     """Extract Nokeda Resource from SUMO."""
-    settings = SumoSettings.get()
+    settings = Settings.get()
     return extract_mapping_data(
-        settings.mapping_path / "resource_nokeda.yaml", ExtractedResource
+        settings.sumo.mapping_path / "resource_nokeda.yaml", ExtractedResource
     )
 
 
 @asset(group_name="sumo")
 def extracted_resources_feat_sumo() -> dict[str, Any]:
     """Extract Resource feat from SUMO."""
-    settings = SumoSettings.get()
+    settings = Settings.get()
     return extract_mapping_data(
-        settings.mapping_path / "resource_feat-model.yaml",
+        settings.sumo.mapping_path / "resource_feat-model.yaml",
         ExtractedResource,
     )
 
@@ -355,7 +355,7 @@ def transformed_sumo_feat_projection_variables(
     return transformed_feat_projection_variable
 
 
-@entrypoint(SumoSettings)
+@entrypoint(Settings)
 def run() -> None:
     """Run the sumo extractor job in-process."""
     run_job_in_process("sumo")

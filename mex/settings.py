@@ -1,9 +1,24 @@
 from pydantic import AnyUrl, Field, SecretStr
 from pydantic_core import Url
 
+from mex.artificial.settings import ArtificialSettings
+from mex.biospecimen.settings import BiospecimenSettings
+from mex.blueant.settings import BlueAntSettings
 from mex.common.settings import BaseSettings
 from mex.common.types import IdentityProvider
+from mex.confluence_vvt.settings import ConfluenceVvtSettings
+from mex.datscha_web.settings import DatschaWebSettings
+from mex.ff_projects.settings import FFProjectsSettings
+from mex.grippeweb.settings import GrippewebSettings
+from mex.ifsg.settings import IFSGSettings
+from mex.international_projects.settings import InternationalProjectsSettings
+from mex.odk.settings import ODKSettings
+from mex.rdmo.settings import RDMOSettings
+from mex.seq_repo.settings import SeqRepoSettings
+from mex.sumo.settings import SumoSettings
+from mex.synopse.settings import SynopseSettings
 from mex.types import ExtractorIdentityProvider
+from mex.voxco.settings import VoxcoSettings
 
 
 class Settings(BaseSettings):
@@ -44,7 +59,6 @@ class Settings(BaseSettings):
         description="A valid cron string defining when to run extractor jobs",
         validation_alias="MEX_SCHEDULE",
     )
-
     kerberos_user: str = Field(
         "user@domain.tld",
         description="Kerberos user to authenticate against MSSQL server.",
@@ -53,11 +67,20 @@ class Settings(BaseSettings):
         SecretStr("password"),
         description="Kerberos password to authenticate against MSSQL server.",
     )
-    mssql_connection_dsn: str = Field(
-        "DRIVER={ODBC Driver 18 for SQL Server};SERVER=domain.tld;DATABASE=database",
-        description=(
-            "Connection string for the ODBC Driver for SQL Server: "
-            "https://learn.microsoft.com/en-us/sql/connect/odbc/"
-            "dsn-connection-string-attribute"
-        ),
+    artificial: ArtificialSettings = ArtificialSettings()
+    biospecimen: BiospecimenSettings = BiospecimenSettings()
+    blueant: BlueAntSettings = BlueAntSettings()
+    confluence_vvt: ConfluenceVvtSettings = ConfluenceVvtSettings()
+    datscha_web: DatschaWebSettings = DatschaWebSettings()
+    ff_projects: FFProjectsSettings = FFProjectsSettings()
+    grippeweb: GrippewebSettings = GrippewebSettings()
+    ifsg: IFSGSettings = IFSGSettings()
+    international_projects: InternationalProjectsSettings = (
+        InternationalProjectsSettings()
     )
+    odk: ODKSettings = ODKSettings()
+    rdmo: RDMOSettings = RDMOSettings()
+    seq_repo: SeqRepoSettings = SeqRepoSettings()
+    sumo: SumoSettings = SumoSettings()
+    voxco: VoxcoSettings = VoxcoSettings()
+    synopse: SynopseSettings = SynopseSettings()
