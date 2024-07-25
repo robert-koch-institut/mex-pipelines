@@ -16,7 +16,7 @@ from mex.common.types import (
 from mex.common.wikidata.extract import search_organization_by_label
 from mex.common.wikidata.models.organization import WikidataOrganization
 from mex.international_projects.models.source import InternationalProjectsSource
-from mex.international_projects.settings import InternationalProjectsSettings
+from mex.settings import Settings
 
 
 @watch
@@ -28,7 +28,7 @@ def extract_international_projects_sources() -> (
     Returns:
         Generator for international projects sources
     """
-    settings = InternationalProjectsSettings.get()
+    settings = Settings.get()
     # silence openpyxl warning:
     # `UserWarning: Data Validation extension is not supported and will be removed`
     # we do not use excels data validation functionality
@@ -39,7 +39,7 @@ def extract_international_projects_sources() -> (
             category=UserWarning,
         )
         df = pd.read_excel(
-            settings.file_path,
+            settings.international_projects.file_path,
             keep_default_na=False,
             parse_dates=True,
             header=1,

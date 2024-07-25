@@ -18,12 +18,12 @@ from mex.confluence_vvt.extract import (
     fetch_all_pages_data,
 )
 from mex.confluence_vvt.models.source import ConfluenceVvtSource
-from mex.confluence_vvt.settings import ConfluenceVvtSettings
 from mex.confluence_vvt.transform import (
     transform_confluence_vvt_sources_to_extracted_activities,
 )
 from mex.filters import filter_by_global_rules
 from mex.pipeline import asset, run_job_in_process
+from mex.settings import Settings
 from mex.sinks import load
 
 
@@ -100,7 +100,7 @@ def extracted_confluence_vvt_activities(
     return mex_activities
 
 
-@entrypoint(ConfluenceVvtSettings)
+@entrypoint(Settings)
 def run() -> None:
     """Run the confluence-vvt extractor job in-process."""
     run_job_in_process("confluence_vvt")

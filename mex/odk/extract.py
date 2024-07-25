@@ -6,22 +6,22 @@ from pandas import DataFrame, ExcelFile
 from mex.common.wikidata.extract import search_organization_by_label
 from mex.common.wikidata.models.organization import WikidataOrganization
 from mex.odk.model import ODKData
-from mex.odk.settings import ODKSettings
+from mex.settings import Settings
 
 
 def extract_odk_raw_data() -> list[ODKData]:
     """Extract odk raw data by loading data from MS-Excel file.
 
     Settings:
-        raw_data_path: Path to the odk raw data,
+        odk.raw_data_path: Path to the odk raw data,
                        absolute or relative to `assets_dir`
 
     Returns:
         list of ODK data.
     """
-    settings = ODKSettings.get()
+    settings = Settings.get()
     raw_data = []
-    for file in Path(settings.raw_data_path).glob("*.xlsx"):
+    for file in Path(settings.odk.raw_data_path).glob("*.xlsx"):
         xls = ExcelFile(file)
 
         choices_sheet = xls.parse(

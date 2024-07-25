@@ -1,5 +1,5 @@
 from mex.common.connector import HTTPConnector
-from mex.confluence_vvt.settings import ConfluenceVvtSettings
+from mex.settings import Settings
 
 
 class ConfluenceVvtConnector(HTTPConnector):
@@ -7,13 +7,13 @@ class ConfluenceVvtConnector(HTTPConnector):
 
     def _set_url(self) -> None:
         """Set url of the host."""
-        settings = ConfluenceVvtSettings.get()
-        self.url = settings.url
+        settings = Settings.get()
+        self.url = settings.confluence_vvt.url
 
     def _set_authentication(self) -> None:
         """Authenticate to the host."""
-        settings = ConfluenceVvtSettings.get()
+        settings = Settings.get()
         self.session.auth = (
-            settings.username.get_secret_value(),
-            settings.password.get_secret_value(),
+            settings.confluence_vvt.username.get_secret_value(),
+            settings.confluence_vvt.password.get_secret_value(),
         )

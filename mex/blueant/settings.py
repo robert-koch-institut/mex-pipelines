@@ -1,13 +1,10 @@
 from pydantic import Field, SecretStr
-from pydantic_settings import SettingsConfigDict
 
-from mex.settings import Settings
+from mex.common.models import BaseModel
 
 
-class BlueAntSettings(Settings):
-    """Blue Ant settings definition for the Blue Ant extractor."""
-
-    model_config = SettingsConfigDict(env_prefix="blueant_")
+class BlueAntSettings(BaseModel):
+    """Blue Ant settings submodel definition for the Blue Ant extractor."""
 
     api_key: SecretStr = Field(
         SecretStr("api-key"),

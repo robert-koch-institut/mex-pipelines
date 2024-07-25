@@ -12,8 +12,8 @@ from mex.common.primary_source.transform import (
 from mex.pipeline import asset, run_job_in_process
 from mex.rdmo.extract import extract_rdmo_source_contacts, extract_rdmo_sources
 from mex.rdmo.models.source import RDMOSource
-from mex.rdmo.settings import RDMOSettings
 from mex.rdmo.transform import transform_rdmo_sources_to_extracted_activities
+from mex.settings import Settings
 from mex.sinks import load
 
 
@@ -70,7 +70,7 @@ def rdmo_activities(
     return extracted_activities
 
 
-@entrypoint(RDMOSettings)
+@entrypoint(Settings)
 def run() -> None:
     """Run the RDMO extractor job in-process."""
     run_job_in_process("rdmo")

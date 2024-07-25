@@ -1,14 +1,11 @@
 from pydantic import Field, SecretStr
-from pydantic_settings import SettingsConfigDict
 
+from mex.common.models import BaseModel
 from mex.common.types import AssetsPath
-from mex.settings import Settings
 
 
-class SynopseSettings(Settings):
-    """Synopse settings definition for the Synopse extractor."""
-
-    model_config = SettingsConfigDict(env_prefix="synopse_")
+class SynopseSettings(BaseModel):
+    """Synopse settings submodel definition for the Synopse extractor."""
 
     report_server_url: str = Field(
         "https://report-server/", description="Report Server instance URL"

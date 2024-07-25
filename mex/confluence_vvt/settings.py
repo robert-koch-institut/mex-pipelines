@@ -1,13 +1,10 @@
 from pydantic import Field, SecretStr
-from pydantic_settings import SettingsConfigDict
 
-from mex.settings import Settings
+from mex.common.models import BaseModel
 
 
-class ConfluenceVvtSettings(Settings):
-    """Confluence-vvt settings definition for the Confluence-vvt extractor."""
-
-    model_config = SettingsConfigDict(env_prefix="confluence_vvt_")
+class ConfluenceVvtSettings(BaseModel):
+    """Confluence-vvt settings submodule definition for the Confluence-vvt extractor."""
 
     url: str = Field("https://confluence.vvt", description="URL of Confluence-vvt.")
     username: SecretStr = Field(

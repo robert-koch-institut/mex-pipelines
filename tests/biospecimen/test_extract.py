@@ -13,8 +13,8 @@ from mex.biospecimen.extract import (
     get_year_from_zeitlicher_bezug,
 )
 from mex.biospecimen.models.source import BiospecimenResource
-from mex.biospecimen.settings import BiospecimenSettings
 from mex.common.ldap.models.person import LDAPPerson
+from mex.settings import Settings
 
 
 @pytest.mark.usefixtures("mocked_ldap")
@@ -116,9 +116,9 @@ def test_get_clean_string(series: Series, expected_clean_string: str) -> None:
 
 
 def test_get_year_from_zeitlicher_bezug() -> None:
-    settings = BiospecimenSettings.get()
-    key_col = settings.key_col
-    val_col = settings.val_col
+    settings = Settings.get()
+    key_col = settings.biospecimen.key_col
+    val_col = settings.biospecimen.val_col
 
     test_df = None
     zeitlicher_bezug = get_year_from_zeitlicher_bezug(

@@ -11,7 +11,6 @@ from faker.providers.python import Provider as PythonFakerProvider
 from pydantic.fields import FieldInfo
 
 from mex.artificial.identity import IdentityMap
-from mex.artificial.settings import ArtificialSettings
 from mex.common.identity import Identity
 from mex.common.models import ExtractedData
 from mex.common.types import (
@@ -25,6 +24,7 @@ from mex.common.types import (
     TemporalEntityPrecision,
     Text,
 )
+from mex.settings import Settings
 
 
 class BuilderProvider(PythonFakerProvider):
@@ -190,8 +190,12 @@ class TextProvider(PythonFakerProvider):
 
     def text_object(self) -> Text:
         """Return a random text paragraph with an auto-detected language."""
-        settings = ArtificialSettings.get()
-        return Text(value=self.generator.paragraph(self.pyint(1, settings.chattiness)))
+        settings = Settings.get()
+        return Text(
+            value=self.generator.paragraph(
+                self.pyint(1, settings.artificial.chattiness)
+            )
+        )
 
 
 class PatternProvider(BaseFakerProvider):
@@ -214,8 +218,8 @@ class PatternProvider(BaseFakerProvider):
     def __init__(self, factory: Any) -> None:
         """Initialize the provider by loading the contents of the `mesh_file`."""
         super().__init__(factory)
-        settings = ArtificialSettings.get()
-        with open(str(settings.mesh_file), mode="br") as fh:
+        settings = Settings.get()
+        with open(str(settings.artificial.mesh_file), mode="br") as fh:
             self._mesh_ids = re.findall(
                 r"UI = (D[0-9]+)", fh.read().decode(errors="ignore")
             )

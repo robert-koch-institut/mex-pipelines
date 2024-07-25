@@ -12,13 +12,6 @@ from mex.common.types import (
     MergedOrganizationalUnitIdentifier,
     MergedPrimarySourceIdentifier,
 )
-from mex.international_projects.settings import InternationalProjectsSettings
-
-
-@pytest.fixture(autouse=True)
-def settings() -> InternationalProjectsSettings:
-    """Load the settings for this pytest session."""
-    return InternationalProjectsSettings.get()
 
 
 @pytest.fixture

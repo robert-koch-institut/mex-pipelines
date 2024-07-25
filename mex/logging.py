@@ -15,7 +15,10 @@ def log_filter(
         reason: string explaining the reason for filtering
     """
     logger.info(
-        f"[source filtered] reason: {reason}, "
-        f"had_primary_source: {primary_source_id}, "
-        f"identifier_in_primary_source: {identifier_in_primary_source}"
+        "[source filtered] reason: %s, "
+        "had_primary_source: %s, "
+        "identifier_in_primary_source: %s",
+        reason,
+        primary_source_id,
+        identifier_in_primary_source,
     )
