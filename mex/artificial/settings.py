@@ -1,14 +1,11 @@
 from pydantic import Field
-from pydantic_settings import SettingsConfigDict
 
+from mex.common.models import BaseModel
 from mex.common.types import AssetsPath
-from mex.settings import Settings
 
 
-class ArtificialSettings(Settings):
-    """Artificial settings definition for the artificial data creator."""
-
-    model_config = SettingsConfigDict(env_prefix="artificial_")
+class ArtificialSettings(BaseModel):
+    """Artificial settings submodel definition for the artificial data creator."""
 
     count: int = Field(
         100,

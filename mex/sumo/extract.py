@@ -8,26 +8,26 @@ from mex.common.ldap.connector import LDAPConnector
 from mex.common.ldap.models.actor import LDAPActor
 from mex.common.ldap.models.person import LDAPPersonWithQuery
 from mex.common.ldap.transform import analyse_person_string
+from mex.settings import Settings
 from mex.sumo.models.cc1_data_model_nokeda import Cc1DataModelNoKeda
 from mex.sumo.models.cc1_data_valuesets import Cc1DataValuesets
 from mex.sumo.models.cc2_aux_mapping import Cc2AuxMapping
 from mex.sumo.models.cc2_aux_model import Cc2AuxModel
 from mex.sumo.models.cc2_aux_valuesets import Cc2AuxValuesets
 from mex.sumo.models.cc2_feat_projection import Cc2FeatProjection
-from mex.sumo.settings import SumoSettings
 
 
 def extract_cc1_data_valuesets() -> Generator[Cc1DataValuesets, None, None]:
     """Extract data from cc1_data_valuesets_v3.0.3.xlsx file.
 
     Settings:
-        raw_data_path: path to directory holding sumo raw data.
+        sumo.raw_data_path: path to directory holding sumo raw data.
 
     Returns:
         Generator of cc1_data_valuesets instances
     """
-    settings = SumoSettings.get()
-    excel_path = settings.raw_data_path / "cc1_data_valuesets_v3.0.3.xlsx"
+    settings = Settings.get()
+    excel_path = settings.sumo.raw_data_path / "cc1_data_valuesets_v3.0.3.xlsx"
     excel_file = ExcelFile(excel_path)
     for sheet_name in excel_file.sheet_names:
         data_valuesets = excel_file.parse(sheet_name=sheet_name)
@@ -41,13 +41,13 @@ def extract_cc1_data_model_nokeda() -> Generator[Cc1DataModelNoKeda, None, None]
     """Extract data from cc1_data_model_NoKeda_v3.0.3.xlsx file.
 
     Settings:
-        raw_data_path: path to directory holding sumo raw data.
+        sumo.raw_data_path: path to directory holding sumo raw data.
 
     Returns:
         Generator of Cc1DataModelNoKeda instances
     """
-    settings = SumoSettings.get()
-    excel_path = settings.raw_data_path / "cc1_data_model_NoKeda_v3.0.3.xlsx"
+    settings = Settings.get()
+    excel_path = settings.sumo.raw_data_path / "cc1_data_model_NoKeda_v3.0.3.xlsx"
     excel_file = ExcelFile(excel_path)
     sheet_name = "datamodel NoKeda"
     data_model_nokeda = excel_file.parse(sheet_name=sheet_name)
@@ -59,13 +59,13 @@ def extract_cc2_aux_model() -> Generator[Cc2AuxModel, None, None]:
     """Extract data from cc2_aux_model_v3.0.3.xlsx file.
 
     Settings:
-        raw_data_path: path to directory holding sumo raw data.
+        sumo.raw_data_path: path to directory holding sumo raw data.
 
     Returns:
         Generator of cc2_aux_model instances
     """
-    settings = SumoSettings.get()
-    excel_path = settings.raw_data_path / "cc2_aux_model_v3.0.3.xlsx"
+    settings = Settings.get()
+    excel_path = settings.sumo.raw_data_path / "cc2_aux_model_v3.0.3.xlsx"
     excel_file = ExcelFile(excel_path)
     sheet_name = "datamodel aux"
     aux_model = excel_file.parse(sheet_name=sheet_name)
@@ -82,13 +82,13 @@ def extract_cc2_aux_mapping(
         sumo_cc2_aux_model: Cc2AuxModel variables
 
     Settings:
-        raw_data_path: path to directory holding sumo raw data.
+        sumo.raw_data_path: path to directory holding sumo raw data.
 
     Returns:
         Generator of cc2_aux_mapping instances
     """
-    settings = SumoSettings.get()
-    excel_path = settings.raw_data_path / "cc2_aux_mapping_v3.0.3.xlsx"
+    settings = Settings.get()
+    excel_path = settings.sumo.raw_data_path / "cc2_aux_mapping_v3.0.3.xlsx"
     excel_file = ExcelFile(excel_path)
     for row in sumo_cc2_aux_model:
         sheet_name = row.depends_on_nokeda_variable
@@ -103,13 +103,13 @@ def extract_cc2_aux_valuesets() -> Generator[Cc2AuxValuesets, None, None]:
     """Extract data from cc2_aux_valuesets_v3.0.3.xlsx file.
 
     Settings:
-        raw_data_path: path to directory holding sumo raw data.
+        sumo.raw_data_path: path to directory holding sumo raw data.
 
     Returns:
         Generator of cc2_aux_valuesets instances
     """
-    settings = SumoSettings.get()
-    excel_path = settings.raw_data_path / "cc2_aux_valuesets_v3.0.3.xlsx"
+    settings = Settings.get()
+    excel_path = settings.sumo.raw_data_path / "cc2_aux_valuesets_v3.0.3.xlsx"
     excel_file = ExcelFile(excel_path)
     sheet_name = "aux_cedis_groups"
     aux_valuesets = excel_file.parse(sheet_name=sheet_name)
@@ -121,13 +121,13 @@ def extract_cc2_feat_projection() -> Generator[Cc2FeatProjection, None, None]:
     """Extract data from cc2_feat_projection_v3.0.3.xlsx file.
 
     Settings:
-        raw_data_path: path to directory holding sumo raw data.
+        sumo.raw_data_path: path to directory holding sumo raw data.
 
     Returns:
         Generator of cc2_feat_projection instances
     """
-    settings = SumoSettings.get()
-    excel_path = settings.raw_data_path / "cc2_feat_projection_v3.0.3.xlsx"
+    settings = Settings.get()
+    excel_path = settings.sumo.raw_data_path / "cc2_feat_projection_v3.0.3.xlsx"
     excel_file = ExcelFile(excel_path)
     sheet_name = "feat_syndrome"
     aux_valuesets = excel_file.parse(sheet_name=sheet_name)

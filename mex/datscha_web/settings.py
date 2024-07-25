@@ -1,13 +1,10 @@
 from pydantic import Field, SecretStr
-from pydantic_settings import SettingsConfigDict
 
-from mex.settings import Settings
+from mex.common.models import BaseModel
 
 
-class DatschaWebSettings(Settings):
-    """Custom settings definition for datscha web extractor."""
-
-    model_config = SettingsConfigDict(env_prefix="datscha_web_")
+class DatschaWebSettings(BaseModel):
+    """Settings submodel definition for datscha web extractor."""
 
     url: str = Field("https://datscha/", description="URL of datscha web service.")
     vorname: SecretStr = Field(

@@ -3,7 +3,6 @@ from mex.biospecimen.extract import (
     extract_biospecimen_resources,
 )
 from mex.biospecimen.models.source import BiospecimenResource
-from mex.biospecimen.settings import BiospecimenSettings
 from mex.biospecimen.transform import transform_biospecimen_resource_to_mex_resource
 from mex.common.cli import entrypoint
 from mex.common.ldap.transform import transform_ldap_persons_to_mex_persons
@@ -18,6 +17,7 @@ from mex.common.models import (
 from mex.common.primary_source.transform import get_primary_sources_by_name
 from mex.common.types import MergedOrganizationalUnitIdentifier
 from mex.pipeline import asset, run_job_in_process
+from mex.settings import Settings
 from mex.sinks import load
 
 
@@ -80,7 +80,7 @@ def extracted_biospecimen_resources(
     return mex_sources
 
 
-@entrypoint(BiospecimenSettings)
+@entrypoint(Settings)
 def run() -> None:
     """Run the biospecimen extractor job in-process."""
     run_job_in_process("biospecimen")

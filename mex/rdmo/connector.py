@@ -6,7 +6,7 @@ from mex.common.connector import HTTPConnector
 from mex.common.exceptions import MExError
 from mex.rdmo.models.question import RDMOOption, RDMOQuestion, RDMOValue
 from mex.rdmo.models.source import RDMOSource
-from mex.rdmo.settings import RDMOSettings
+from mex.settings import Settings
 
 
 class RDMOConnector(HTTPConnector):
@@ -14,15 +14,15 @@ class RDMOConnector(HTTPConnector):
 
     def _set_url(self) -> None:
         """Set url of the host."""
-        settings = RDMOSettings.get()
-        self.url = settings.url
+        settings = Settings.get()
+        self.url = settings.rdmo.url
 
     def _set_authentication(self) -> None:
         """Authenticate to the host."""
-        settings = RDMOSettings.get()
+        settings = Settings.get()
         credentials = {
-            "username": settings.username.get_secret_value(),
-            "password": settings.password.get_secret_value(),
+            "username": settings.rdmo.username.get_secret_value(),
+            "password": settings.rdmo.password.get_secret_value(),
             "next": "/",
         }
 

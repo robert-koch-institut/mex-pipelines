@@ -1,14 +1,11 @@
 from pydantic import Field
-from pydantic_settings import SettingsConfigDict
 
+from mex.common.models import BaseModel
 from mex.common.types import AssetsPath
-from mex.settings import Settings
 
 
-class BiospecimenSettings(Settings):
-    """Settings for the Biospecimen extractor."""
-
-    model_config = SettingsConfigDict(env_prefix="biospecimen_")
+class BiospecimenSettings(BaseModel):
+    """Settings submodel for the Biospecimen extractor."""
 
     dir_path: AssetsPath = Field(
         AssetsPath("raw-data/biospecimen"),

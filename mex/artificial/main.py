@@ -9,7 +9,6 @@ from mex.artificial.provider import (
     TemporalEntityProvider,
     TextProvider,
 )
-from mex.artificial.settings import ArtificialSettings
 from mex.common.cli import entrypoint
 from mex.common.models import (
     EXTRACTED_MODEL_CLASSES,
@@ -26,15 +25,16 @@ from mex.common.models import (
     ExtractedVariableGroup,
 )
 from mex.pipeline import asset, run_job_in_process
+from mex.settings import Settings
 from mex.sinks import load
 
 
 @asset(group_name="artificial")
 def faker() -> Faker:
     """Create and initialize a new faker instance."""
-    settings = ArtificialSettings.get()
-    faker = Faker(settings.locale)
-    faker.seed_instance(settings.seed)
+    settings = Settings.get()
+    faker = Faker(settings.artificial.locale)
+    faker.seed_instance(settings.artificial.seed)
     return faker
 
 
@@ -80,7 +80,7 @@ def artificial_data(factories: Faker, identities: IdentityMap) -> None:
         load(factories.extracted_data(model))
 
 
-@entrypoint(ArtificialSettings)
+@entrypoint(Settings)
 def run() -> None:
     """Run the artificial data job in-process."""
     run_job_in_process("artificial")
