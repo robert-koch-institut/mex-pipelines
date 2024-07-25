@@ -5,7 +5,7 @@ from typing import Any
 from pydantic import BaseModel
 
 from mex.common.connector import BaseConnector
-from mex.common.logging import echo
+from mex.common.logging import logger
 from mex.ifsg.models.meta_catalogue2item import MetaCatalogue2Item
 from mex.ifsg.models.meta_catalogue2item2schema import MetaCatalogue2Item2Schema
 from mex.ifsg.models.meta_disease import MetaDisease
@@ -60,8 +60,8 @@ class IFSGConnector(BaseConnector):
             stdout, stderr = process.communicate(
                 input=settings.kerberos_password.get_secret_value()
             )
-            echo(stdout, fg="green")
-            echo(stderr, fg="red")
+            logger.info(stdout)
+            logger.error(stderr)
         self._connection = pyodbc.connect(settings.ifsg.mssql_connection_dsn)
 
     def parse_rows(self, model: type[BaseModel]) -> list[dict[str, Any]]:

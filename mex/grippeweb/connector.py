@@ -3,7 +3,7 @@ from subprocess import PIPE, STDOUT, Popen
 from typing import Any
 
 from mex.common.connector import BaseConnector
-from mex.common.logging import echo
+from mex.common.logging import logger
 from mex.settings import Settings
 
 QUERY_BY_TABLE_NAME = {
@@ -33,8 +33,8 @@ class GrippewebConnector(BaseConnector):
             stdout, stderr = process.communicate(
                 input=settings.kerberos_password.get_secret_value()
             )
-            echo(stdout, fg="green")
-            echo(stderr, fg="red")
+            logger.info(stdout)
+            logger.error(stderr)
         self._connection = pyodbc.connect(settings.grippeweb.mssql_connection_dsn)
 
     def parse_columns_by_column_name(self, table_name: str) -> dict[str, list[Any]]:

@@ -1,4 +1,4 @@
-from mex.common.logging import echo
+from mex.common.logging import logger
 from mex.common.types import Identifier
 
 
@@ -14,8 +14,11 @@ def log_filter(
         primary_source_id: identifier of the primary source
         reason: string explaining the reason for filtering
     """
-    echo(
-        f"[source filtered] reason: {reason}, "
-        f"had_primary_source: {primary_source_id}, "
-        f"identifier_in_primary_source: {identifier_in_primary_source}"
+    logger.info(
+        "[source filtered] reason: %s, "
+        "had_primary_source: %s, "
+        "identifier_in_primary_source: %s",
+        reason,
+        primary_source_id,
+        identifier_in_primary_source,
     )
