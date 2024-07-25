@@ -35,7 +35,7 @@ class GrippewebConnector(BaseConnector):
             )
             logger.info(stdout)
             logger.error(stderr)
-        self._connection = pyodbc.connect(settings.mssql_connection_dsn)
+        self._connection = pyodbc.connect(settings.grippeweb.mssql_connection_dsn)
 
     def parse_columns_by_column_name(self, table_name: str) -> dict[str, list[Any]]:
         """Execute whitelisted queries and zip results to column name."""
