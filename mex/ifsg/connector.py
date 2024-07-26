@@ -5,7 +5,7 @@ from typing import Any
 from pydantic import BaseModel
 
 from mex.common.connector import BaseConnector
-from mex.common.logging import echo
+from mex.common.logging import logger
 from mex.ifsg.models.meta_catalogue2item import MetaCatalogue2Item
 from mex.ifsg.models.meta_catalogue2item2schema import MetaCatalogue2Item2Schema
 from mex.ifsg.models.meta_disease import MetaDisease
@@ -14,7 +14,7 @@ from mex.ifsg.models.meta_item import MetaItem
 from mex.ifsg.models.meta_schema2field import MetaSchema2Field
 from mex.ifsg.models.meta_schema2type import MetaSchema2Type
 from mex.ifsg.models.meta_type import MetaType
-from mex.ifsg.settings import IFSGSettings
+from mex.settings import Settings
 
 
 class NoOpPyodbc:
@@ -48,10 +48,10 @@ class IFSGConnector(BaseConnector):
 
     def __init__(self) -> None:
         """Create a new connector instance."""
-        settings = IFSGSettings.get()
+        settings = Settings.get()
         if platform.system() != "Windows":  # pragma: no cover
-            process = Popen(
-                ["kinit", settings.kerberos_user, "-V"],  # noqa: S603, S607
+            process = Popen(  # noqa: S603
+                ["kinit", settings.kerberos_user, "-V"],  # noqa: S607
                 stdout=PIPE,
                 stdin=PIPE,
                 stderr=STDOUT,
@@ -60,9 +60,9 @@ class IFSGConnector(BaseConnector):
             stdout, stderr = process.communicate(
                 input=settings.kerberos_password.get_secret_value()
             )
-            echo(stdout, fg="green")
-            echo(stderr, fg="red")
-        self._connection = pyodbc.connect(settings.mssql_connection_dsn)
+            logger.info(stdout)
+            logger.error(stderr)
+        self._connection = pyodbc.connect(settings.ifsg.mssql_connection_dsn)
 
     def parse_rows(self, model: type[BaseModel]) -> list[dict[str, Any]]:
         """Execute whitelisted queries and zip results to column name."""

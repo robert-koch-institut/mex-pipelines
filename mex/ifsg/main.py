@@ -29,7 +29,6 @@ from mex.ifsg.models.meta_item import MetaItem
 from mex.ifsg.models.meta_schema2field import MetaSchema2Field
 from mex.ifsg.models.meta_schema2type import MetaSchema2Type
 from mex.ifsg.models.meta_type import MetaType
-from mex.ifsg.settings import IFSGSettings
 from mex.ifsg.transform import (
     transform_ifsg_data_to_mex_variable_group,
     transform_ifsg_data_to_mex_variables,
@@ -39,6 +38,7 @@ from mex.ifsg.transform import (
 )
 from mex.mapping.extract import extract_mapping_data
 from mex.pipeline import asset, run_job_in_process
+from mex.settings import Settings
 from mex.sinks import load
 
 
@@ -147,36 +147,36 @@ def meta_type() -> list[MetaType]:
 @asset(group_name="ifsg")
 def resource_disease() -> dict[str, Any]:
     """Extract `resource_disease` default values."""
-    settings = IFSGSettings.get()
+    settings = Settings.get()
     return extract_mapping_data(
-        settings.mapping_path / "resource_disease.yaml", ExtractedResource
+        settings.ifsg.mapping_path / "resource_disease.yaml", ExtractedResource
     )
 
 
 @asset(group_name="ifsg")
 def resource_parent() -> dict[str, Any]:
     """Extract `resource_parent` default values."""
-    settings = IFSGSettings.get()
+    settings = Settings.get()
     return extract_mapping_data(
-        settings.mapping_path / "resource_parent.yaml", ExtractedResource
+        settings.ifsg.mapping_path / "resource_parent.yaml", ExtractedResource
     )
 
 
 @asset(group_name="ifsg")
 def resource_state() -> dict[str, Any]:
     """Extract `resource_state` default values."""
-    settings = IFSGSettings.get()
+    settings = Settings.get()
     return extract_mapping_data(
-        settings.mapping_path / "resource_state.yaml", ExtractedResource
+        settings.ifsg.mapping_path / "resource_state.yaml", ExtractedResource
     )
 
 
 @asset(group_name="ifsg")
 def ifsg_variable_group() -> dict[str, Any]:
     """Extract `ifsg_variable_group` default values."""
-    settings = IFSGSettings.get()
+    settings = Settings.get()
     return extract_mapping_data(
-        settings.mapping_path / "variable-group.yaml",
+        settings.ifsg.mapping_path / "variable-group.yaml",
         ExtractedVariableGroup,
     )
 
@@ -291,7 +291,7 @@ def extracted_ifsg_variable(
     load(extracted_variables)
 
 
-@entrypoint(IFSGSettings)
+@entrypoint(Settings)
 def run() -> None:
     """Run the IFSG extractor job in-process."""
     run_job_in_process("ifsg")

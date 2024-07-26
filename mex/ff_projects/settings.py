@@ -1,14 +1,11 @@
 from pydantic import Field
-from pydantic_settings import SettingsConfigDict
 
+from mex.common.models import BaseModel
 from mex.common.types import AssetsPath
-from mex.settings import Settings
 
 
-class FFProjectsSettings(Settings):
-    """Settings for the FF Projects extractor."""
-
-    model_config = SettingsConfigDict(env_prefix="ff_projects_")
+class FFProjectsSettings(BaseModel):
+    """Settings submodel for the FF Projects extractor."""
 
     file_path: AssetsPath = Field(
         AssetsPath("raw-data/ff-projects/ff-projects.xlsx"),

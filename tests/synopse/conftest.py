@@ -25,17 +25,10 @@ from mex.synopse.models.project import SynopseProject
 from mex.synopse.models.study import SynopseStudy
 from mex.synopse.models.study_overview import SynopseStudyOverview
 from mex.synopse.models.variable import SynopseVariable
-from mex.synopse.settings import SynopseSettings
 from mex.synopse.transform import (
     transform_overviews_to_resource_lookup,
     transform_synopse_variables_to_mex_variable_groups,
 )
-
-
-@pytest.fixture(autouse=True)
-def settings() -> SynopseSettings:
-    """Load the settings for this pytest session."""
-    return SynopseSettings.get()
 
 
 @pytest.fixture

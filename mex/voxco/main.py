@@ -22,6 +22,7 @@ from mex.common.types import (
 )
 from mex.mapping.extract import extract_mapping_data
 from mex.pipeline import asset, run_job_in_process
+from mex.settings import Settings
 from mex.sinks import load
 from mex.voxco.extract import (
     extract_ldap_persons_voxco,
@@ -29,7 +30,6 @@ from mex.voxco.extract import (
     extract_voxco_variables,
 )
 from mex.voxco.model import VoxcoVariable
-from mex.voxco.settings import VoxcoSettings
 from mex.voxco.transform import (
     transform_voxco_resource_mappings_to_extracted_resources,
     transform_voxco_variable_mappings_to_extracted_variables,
@@ -61,10 +61,10 @@ def voxco_variables() -> dict[str, list[VoxcoVariable]]:
 @asset(group_name="voxco")
 def voxco_resource_mappings() -> list[dict[str, Any]]:
     """Extract voxco resource mappings."""
-    settings = VoxcoSettings.get()
+    settings = Settings.get()
     return [
         extract_mapping_data(file, ExtractedResource)
-        for file in Path(settings.mapping_path).glob("resource_*.yaml")
+        for file in Path(settings.voxco.mapping_path).glob("resource_*.yaml")
     ]
 
 
@@ -138,7 +138,7 @@ def extracted_variables_voxco(
     load(extracted_variables)
 
 
-@entrypoint(VoxcoSettings)
+@entrypoint(Settings)
 def run() -> None:
     """Run the voxco extractor job in-process."""
     run_job_in_process("voxco")

@@ -1,14 +1,11 @@
 from pydantic import Field
-from pydantic_settings import SettingsConfigDict
 
+from mex.common.models import BaseModel
 from mex.common.types import AssetsPath
-from mex.settings import Settings
 
 
-class SeqRepoSettings(Settings):
-    """Settings for the SeqRepo extractor."""
-
-    model_config = SettingsConfigDict(env_prefix="seq_repo_")
+class SeqRepoSettings(BaseModel):
+    """Settings submodel for the SeqRepo extractor."""
 
     mapping_path: AssetsPath = Field(
         AssetsPath("mappings/__final__/seq-repo"),

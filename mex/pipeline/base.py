@@ -53,7 +53,9 @@ def load_job_definitions() -> Definitions:
     jobs.append(
         define_asset_job(
             "all_extractors",
-            AssetSelection.groups(*group_names).upstream(),
+            AssetSelection.groups(
+                *(group_name for group_name in group_names if group_name != "publisher")
+            ).upstream(),
         )
     )
     return Definitions(

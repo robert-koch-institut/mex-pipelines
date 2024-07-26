@@ -11,12 +11,14 @@ from mex.common.models import (
 )
 from mex.common.testing import Joker
 from mex.common.types import (
+    AccessRestriction,
     Identifier,
     Link,
     MergedOrganizationalUnitIdentifier,
     TemporalEntity,
     Text,
     TextLanguage,
+    Theme,
 )
 from mex.synopse.models.project import SynopseProject
 from mex.synopse.models.study import SynopseStudy
@@ -167,20 +169,32 @@ def test_transform_overviews_to_resource_lookup() -> None:
         ),
     ]
     study_resources = [
-        ExtractedResource.model_construct(
+        ExtractedResource(
             title="Found in overview",
             identifierInPrimarySource="studie1-17-set1",
-            stableTargetId=Identifier.generate(seed=123),
+            hadPrimarySource=Identifier.generate(),
+            accessRestriction=AccessRestriction["OPEN"],
+            contact=[Identifier.generate()],
+            unitInCharge=[Identifier.generate()],
+            theme=Theme["PUBLIC_HEALTH"],
         ),
-        ExtractedResource.model_construct(
+        ExtractedResource(
             title="Found in overview too",
             identifierInPrimarySource="studie1-18-set2",
-            stableTargetId=Identifier.generate(seed=124),
+            hadPrimarySource=Identifier.generate(),
+            accessRestriction=AccessRestriction["OPEN"],
+            contact=[Identifier.generate()],
+            unitInCharge=[Identifier.generate()],
+            theme=Theme["HEALTH_AND_SOCIETY"],
         ),
-        ExtractedResource.model_construct(
+        ExtractedResource(
             title="Not found in overview",
             identifierInPrimarySource="not-found",
-            stableTargetId=Identifier.generate(seed=234),
+            hadPrimarySource=Identifier.generate(),
+            accessRestriction=AccessRestriction["OPEN"],
+            contact=[Identifier.generate()],
+            unitInCharge=[Identifier.generate()],
+            theme=Theme["DIGITAL_PUBLIC_HEALTH"],
         ),
     ]
     expected_lookup = {
