@@ -10,37 +10,37 @@ from mex.common.types import (
 )
 from mex.ff_projects.models.source import FFProjectsSource
 
-RKI_AZ_TYPES = {
-    "1360": [
-        ActivityType["CONTRACT_RESEARCH"],
-        ActivityType["THIRD_PARTY_FUNDED_PROJECT"],
-    ],
-    "1361": [
-        ActivityType["CONTRACT_RESEARCH"],
-        ActivityType["INTERNATIONAL_PROJECT"],
-        ActivityType["THIRD_PARTY_FUNDED_PROJECT"],
-    ],
-    "1363": [
-        ActivityType["INTERNATIONAL_PROJECT"],
-        ActivityType["THIRD_PARTY_FUNDED_PROJECT"],
-    ],
-    "1364": [
-        ActivityType["THIRD_PARTY_FUNDED_PROJECT"],
-    ],
-    "1365": [
-        ActivityType["THIRD_PARTY_FUNDED_PROJECT"],
-    ],
-    "1367": [
-        ActivityType["THIRD_PARTY_FUNDED_PROJECT"],
-    ],
-    "1368": [
-        ActivityType["THIRD_PARTY_FUNDED_PROJECT"],
-    ],
-    "1362": [
-        ActivityType["SPECIAL_RESEARCH_PROJECT"],
-    ],
-    "1369": [ActivityType["OTHER"]],
-}
+# RKI_AZ_TYPES = {
+#     "1360": [
+#         ActivityType["CONTRACT_RESEARCH"],
+#         ActivityType["THIRD_PARTY_FUNDED_PROJECT"],
+#     ],
+#     "1361": [
+#         ActivityType["CONTRACT_RESEARCH"],
+#         ActivityType["INTERNATIONAL_PROJECT"],
+#         ActivityType["THIRD_PARTY_FUNDED_PROJECT"],
+#     ],
+#     "1363": [
+#         ActivityType["INTERNATIONAL_PROJECT"],
+#         ActivityType["THIRD_PARTY_FUNDED_PROJECT"],
+#     ],
+#     "1364": [
+#         ActivityType["THIRD_PARTY_FUNDED_PROJECT"],
+#     ],
+#     "1365": [
+#         ActivityType["THIRD_PARTY_FUNDED_PROJECT"],
+#     ],
+#     "1367": [
+#         ActivityType["THIRD_PARTY_FUNDED_PROJECT"],
+#     ],
+#     "1368": [
+#         ActivityType["THIRD_PARTY_FUNDED_PROJECT"],
+#     ],
+#     "1362": [
+#         ActivityType["SPECIAL_RESEARCH_PROJECT"],
+#     ],
+#     "1369": [ActivityType["OTHER"]],
+# }
 
 
 def get_rki_az_types(rki_azs: str) -> list[ActivityType]:

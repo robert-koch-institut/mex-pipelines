@@ -1,10 +1,8 @@
-from collections import defaultdict
 from collections.abc import Generator, Hashable, Iterable
 
 from mex.common.logging import watch
 from mex.common.models import ExtractedActivity, ExtractedPrimarySource
 from mex.common.types import (
-    ActivityType,
     Link,
     MergedOrganizationalUnitIdentifier,
     MergedOrganizationIdentifier,
@@ -13,32 +11,32 @@ from mex.common.types import (
 )
 from mex.international_projects.models.source import InternationalProjectsSource
 
-THEME_BY_ACTIVITY_OR_TOPIC = {
-    "Other": Theme["PUBLIC_HEALTH"],
-    "Crisis management": Theme["PUBLIC_HEALTH"],
-    "Capacity building including trainings": Theme["PUBLIC_HEALTH"],
-    "Conducting research": Theme["RESEARCH"],
-    "Supporting global governance structures and processes": Theme["PUBLIC_HEALTH"],
-    "Public health systems": Theme["PUBLIC_HEALTH"],
-    "Non-communicable diseases": Theme["NON_COMMUNICABLE_DISEASES"],
-    "Laboratory diagnostics": Theme["LABORATORY"],
-    "One Health": Theme["ONE_HEALTH"],
-    "Surveillance (infectious diseases)": Theme["PUBLIC_HEALTH"],
-    "Vaccines/vaccinations": Theme["PUBLIC_HEALTH"],
-}
-ACTIVITY_TYPES_BY_FUNDING_TYPE = defaultdict(
-    lambda: [ActivityType["INTERNATIONAL_PROJECT"]],
-    {
-        "Third party funded": [
-            ActivityType["INTERNATIONAL_PROJECT"],
-            ActivityType["THIRD_PARTY_FUNDED_PROJECT"],
-        ],
-        "RKI funded": [
-            ActivityType["INTERNATIONAL_PROJECT"],
-            ActivityType["RKI_INTERNAL_PROJECT"],
-        ],
-    },
-)
+# THEME_BY_ACTIVITY_OR_TOPIC = {
+#     "Other": Theme["PUBLIC_HEALTH"],
+#     "Crisis management": Theme["PUBLIC_HEALTH"],
+#     "Capacity building including trainings": Theme["PUBLIC_HEALTH"],
+#     "Conducting research": Theme["RESEARCH"],
+#     "Supporting global governance structures and processes": Theme["PUBLIC_HEALTH"],
+#     "Public health systems": Theme["PUBLIC_HEALTH"],
+#     "Non-communicable diseases": Theme["NON_COMMUNICABLE_DISEASES"],
+#     "Laboratory diagnostics": Theme["LABORATORY"],
+#     "One Health": Theme["ONE_HEALTH"],
+#     "Surveillance (infectious diseases)": Theme["PUBLIC_HEALTH"],
+#     "Vaccines/vaccinations": Theme["PUBLIC_HEALTH"],
+# }
+# ACTIVITY_TYPES_BY_FUNDING_TYPE = defaultdict(
+#     lambda: [ActivityType["INTERNATIONAL_PROJECT"]],
+#     {
+#         "Third party funded": [
+#             ActivityType["INTERNATIONAL_PROJECT"],
+#             ActivityType["THIRD_PARTY_FUNDED_PROJECT"],
+#         ],
+#         "RKI funded": [
+#             ActivityType["INTERNATIONAL_PROJECT"],
+#             ActivityType["RKI_INTERNAL_PROJECT"],
+#         ],
+#     },
+# )
 
 
 def transform_international_projects_source_to_extracted_activity(
