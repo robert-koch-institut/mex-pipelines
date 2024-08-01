@@ -115,7 +115,7 @@ rights:
     mappingRules:
       - setValues:
           - language: de
-            value: "Gesundheitsdaten sind besonders sensibel und haben einen hohen Schutzbedarf. Da es sich dabei oftmals um personenbezogene Daten handelt, welche durch die DSGVO (Datenschutzgrundverordnung) geschützt sind, können sie nicht ohne weiteres frei zur Verfügung gestellt werden. Eine Weitergabe und Verarbeitung dieser Daten ist daher prinzipiell zunächst ausgeschlossen, kann aber unter bestimmten Voraussetzungen und Bedingungen möglich sein. Ob und in welcher Form Daten zur Verfügung gestellt werden können, unterliegt daher einer Einzelfallprüfung. Um die Bearbeitung zu vereinfachen, sollten bei der ersten Kontaktaufnahme folgende Informationen enthalten sein: antragstellende Person und Institution, Name und Kennung des Datensatzes, Verwendungszweck mit kurzer Beschreibung des Forschungsvorhabens und bis wann der Datensatz benötigt wird."
+            value: "Gesundheitsdaten"
 spatial:
   - fieldInPrimarySource: n/a
     mappingRules:
@@ -129,7 +129,7 @@ temporal:
     - "2009"
     - "2012"
     mappingRules:
-    - rule: "Use the field 'StudienID' to identify the correct study in 'projekt_und_studienverwaltung.csv'. Then construct the value by merging the two field into one, following the format 'YYYY - YYYY'. 'Projektbeginn' must be the first and 'Projektende' the second value."
+    - rule: "Use the field"
 theme:
   - fieldInPrimarySource: StudienID
     locationInPrimarySource: projekt_und_studienverwaltung.csv

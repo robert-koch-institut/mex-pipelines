@@ -18,6 +18,7 @@ from mex.common.organigram.extract import (
 )
 from mex.common.types import (
     MergedOrganizationalUnitIdentifier,
+    MergedOrganizationIdentifier,
     MergedPersonIdentifier,
     MergedResourceIdentifier,
 )
@@ -29,6 +30,7 @@ from mex.synopse.extract import (
     extract_projects,
     extract_study_data,
     extract_study_overviews,
+    extract_synopse_organizations,
     extract_synopse_project_contributors,
     extract_variables,
 )
@@ -45,6 +47,9 @@ from mex.synopse.transform import (
     transform_synopse_studies_into_access_platforms,
     transform_synopse_variables_to_mex_variable_groups,
     transform_synopse_variables_to_mex_variables,
+)
+from mex.wikidata.extract import (
+    get_merged_organization_id_by_query_with_transform_and_load,
 )
 
 
@@ -178,6 +183,18 @@ def extracted_synopse_contributor_stable_target_ids_by_name(
 
 
 @asset(group_name="synopse")
+def synopse_organization_ids_by_query_string(
+    extracted_primary_source_wikidata: ExtractedPrimarySource,
+    synopse_projects: list[SynopseProject],
+) -> dict[str, MergedOrganizationIdentifier]:
+    """Extract organizations for FF Projects from wikidata and group them by query."""
+    wikidata_organizations_by_query = extract_synopse_organizations(synopse_projects)
+    return get_merged_organization_id_by_query_with_transform_and_load(
+        wikidata_organizations_by_query, extracted_primary_source_wikidata
+    )
+
+
+@asset(group_name="synopse")
 def extracted_synopse_resource_stable_target_ids_by_synopse_id(
     synopse_projects: list[SynopseProject],
     synopse_studies: list[SynopseStudy],
@@ -281,6 +298,7 @@ def extracted_synopse_activities(
         str, list[MergedPersonIdentifier]
     ],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
+    synopse_organization_ids_by_query_string: dict[str, MergedOrganizationIdentifier],
 ) -> list[ExtractedActivity]:
     """Transforms Synopse data to extracted activities and load result."""
     settings = Settings.get()
@@ -296,6 +314,7 @@ def extracted_synopse_activities(
             extracted_synopse_contributor_stable_target_ids_by_name,
             unit_stable_target_ids_by_synonym,
             synopse_activity,
+            synopse_organization_ids_by_query_string,
         )
     )
     load(transformed_activities)

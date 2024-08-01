@@ -18,6 +18,7 @@ from mex.common.types import (
     Identifier,
     Language,
     Link,
+    MergedOrganizationIdentifier,
     MergedResourceIdentifier,
     PersonalData,
     ResourceCreationMethod,
@@ -81,6 +82,7 @@ def synopse_variables_raw() -> list[dict[str, str | int | float | None]]:
             "valInstrument": "Health Questionnaire , Frage 18",
             "textbox21": "Angeborene Fehlbildung",
             "textbox24": "KHEfehlb",
+            "textbox11": "Zahl",
         },
         {  # var 1, auspraegung 2
             "textbox49": -98,
@@ -94,6 +96,7 @@ def synopse_variables_raw() -> list[dict[str, str | int | float | None]]:
             "valInstrument": None,
             "textbox21": "Angeborene Fehlbildung",
             "textbox24": "KHEfehlb",
+            "textbox11": "Text",
         },
         {  # var 2, missing var label, valInstrument
             "textbox49": 1,
@@ -107,6 +110,7 @@ def synopse_variables_raw() -> list[dict[str, str | int | float | None]]:
             "valInstrument": None,
             "textbox21": None,
             "textbox24": "KHEfiebB",
+            "textbox11": "Zahl",
         },
         {  # var 3, no auspraegung
             "textbox49": None,
@@ -120,6 +124,7 @@ def synopse_variables_raw() -> list[dict[str, str | int | float | None]]:
             "valInstrument": None,
             "textbox21": "no auspraegung",
             "textbox24": "no_auspraegung",
+            "textbox11": "Text",
         },
         {  # var 4, different value in textbox5
             "textbox49": None,
@@ -133,6 +138,7 @@ def synopse_variables_raw() -> list[dict[str, str | int | float | None]]:
             "valInstrument": None,
             "textbox21": "no auspraegung",
             "textbox24": "no_auspraegung",
+            "textbox11": "Zahl",
         },
         {  # var 5, different studie_id, same thema
             "textbox49": None,
@@ -146,6 +152,7 @@ def synopse_variables_raw() -> list[dict[str, str | int | float | None]]:
             "valInstrument": None,
             "textbox21": "no auspraegung",
             "textbox24": "no_auspraegung",
+            "textbox11": "Text",
         },
     ]
 
@@ -316,6 +323,15 @@ def keyword_text_by_study_id(synopse_studies) -> dict[str, list[Text]]:
 def synopse_study(synopse_studies: list[SynopseStudy]) -> SynopseStudy:
     """Return a Synopse Study."""
     return synopse_studies[0]
+
+
+@pytest.fixture()
+def synopse_organization_ids_by_query_string() -> (
+    dict[str, MergedOrganizationIdentifier]
+):
+    """Return merged organizations id by org name."""
+    organization_id = MergedOrganizationIdentifier.generate(seed=44)
+    return {"Test-Institute": organization_id}
 
 
 @pytest.fixture()
@@ -755,7 +771,7 @@ def synopse_resource_extended_data_use() -> dict[str, Any]:
                         "forValues": None,
                         "setValues": [
                             {
-                                "value": "Gesundheitsdaten ",
+                                "value": "Gesundheitsdaten",
                                 "language": "de",
                             }
                         ],
@@ -922,7 +938,7 @@ def synopse_resource() -> dict[str, Any]:
                         "forValues": None,
                         "setValues": [
                             {
-                                "value": "Gesundheitsdaten sind besonders sensibel und haben einen hohen Schutzbedarf. Da es sich dabei oftmals um personenbezogene Daten handelt, welche durch die DSGVO (Datenschutzgrundverordnung) geschützt sind, können sie nicht ohne weiteres frei zur Verfügung gestellt werden. Eine Weitergabe und Verarbeitung dieser Daten ist daher prinzipiell zunächst ausgeschlossen, kann aber unter bestimmten Voraussetzungen und Bedingungen möglich sein. Ob und in welcher Form Daten zur Verfügung gestellt werden können, unterliegt daher einer Einzelfallprüfung. Um die Bearbeitung zu vereinfachen, sollten bei der ersten Kontaktaufnahme folgende Informationen enthalten sein: antragstellende Person und Institution, Name und Kennung des Datensatzes, Verwendungszweck mit kurzer Beschreibung des Forschungsvorhabens und bis wann der Datensatz benötigt wird.",
+                                "value": "Gesundheitsdaten",
                                 "language": "de",
                             }
                         ],

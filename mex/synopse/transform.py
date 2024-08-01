@@ -1,5 +1,4 @@
 import re
-from collections import defaultdict
 from collections.abc import Generator, Hashable, Iterable
 from itertools import groupby, tee
 from pathlib import PureWindowsPath
@@ -20,6 +19,7 @@ from mex.common.types import (
     Link,
     MergedActivityIdentifier,
     MergedOrganizationalUnitIdentifier,
+    MergedOrganizationIdentifier,
     MergedResourceIdentifier,
     TemporalEntity,
     Text,
@@ -29,15 +29,6 @@ from mex.synopse.models.project import SynopseProject
 from mex.synopse.models.study import SynopseStudy
 from mex.synopse.models.study_overview import SynopseStudyOverview
 from mex.synopse.models.variable import SynopseVariable
-
-VARIABLE_DATA_TYPE_MAP = defaultdict(
-    lambda: "https://mex.rki.de/item/data-type-2",
-    {
-        "Text": "https://mex.rki.de/item/data-type-2",
-        "Zahl": "https://mex.rki.de/item/data-type-1",
-        None: "https://mex.rki.de/item/data-type-2",
-    },
-)
 
 
 def split_off_extended_data_use_variables(
@@ -176,7 +167,7 @@ def transform_synopse_variables_belonging_to_same_variable_group_to_mex_variable
         yield ExtractedVariable(
             belongsTo=belongs_to.stableTargetId,
             codingSystem=variable.val_instrument,
-            dataType=VARIABLE_DATA_TYPE_MAP[variable.datentyp],
+            dataType=variable.datentyp,
             description=(
                 Text(value=variable.originalfrage, language=TextLanguage("de"))
                 if variable.originalfrage
@@ -307,6 +298,9 @@ def transform_synopse_data_to_mex_resources(
     access_platform_by_identifier_in_primary_source = {
         p.identifierInPrimarySource: p for p in extracted_access_platforms
     }
+    synopse_studien_art_typ_by_study_ids = {
+        p.studien_id: p.studienart_studientyp for p in synopse_projects
+    }
 
     for study in synopse_studies:
         access_platform = (
@@ -326,6 +320,18 @@ def transform_synopse_data_to_mex_resources(
         if documentation_by_study_id:
             documentation = documentation_by_study_id[study.studien_id]
         extracted_activity = extracted_activities_by_study_ids.get(study.studien_id)
+        theme = (
+            synopse_resource_extended_data_use["theme"][0]["mappingRules"][0][
+                "setValues"
+            ]
+            if study.studien_id
+            in synopse_resource_extended_data_use["theme"][0]["mappingRules"][0][
+                "forValues"
+            ]
+            else synopse_resource_extended_data_use["theme"][0]["mappingRules"][1][
+                "setValues"
+            ]
+        )
         yield ExtractedResource(
             accessPlatform=access_platform,
             accessRestriction=synopse_resource_extended_data_use["accessRestriction"][
@@ -343,6 +349,7 @@ def transform_synopse_data_to_mex_resources(
             created=created,
             description=description,
             documentation=documentation,
+            hasLegalBasis=[study.rechte] if study.rechte else [],
             hasPersonalData=synopse_resource_extended_data_use["hasPersonalData"][0][
                 "mappingRules"
             ][0]["setValues"],
@@ -361,8 +368,13 @@ def transform_synopse_data_to_mex_resources(
             resourceTypeGeneral=synopse_resource_extended_data_use[
                 "resourceTypeGeneral"
             ][0]["mappingRules"][0]["setValues"],
-            rights=study.rechte,
-            spatial="Deutschland",
+            resourceTypeSpecific=synopse_studien_art_typ_by_study_ids[study.studien_id],
+            rights=synopse_resource_extended_data_use["rights"][0]["mappingRules"][0][
+                "setValues"
+            ],
+            spatial=synopse_resource_extended_data_use["spatial"][0]["mappingRules"][0][
+                "setValues"
+            ],
             temporal=(
                 " - ".join(
                     [
@@ -375,9 +387,7 @@ def transform_synopse_data_to_mex_resources(
                 and extracted_activity.end
                 else None
             ),
-            theme=synopse_resource_extended_data_use["theme"][0]["mappingRules"][0][
-                "setValues"
-            ],
+            theme=theme,
             title=Text(value=study.titel_datenset, language=TextLanguage("de")),
             unitInCharge=unit_in_charge,
             wasGeneratedBy=(
@@ -533,6 +543,7 @@ def transform_synopse_projects_to_mex_activities(
     contributor_merged_ids_by_name: dict[Hashable, list[Identifier]],
     unit_merged_ids_by_synonym: dict[str, Identifier],
     synopse_activity: dict[str, Any],
+    synopse_organization_ids_by_query_string: dict[str, MergedOrganizationIdentifier],
 ) -> Generator[ExtractedActivity, None, None]:
     """Transform synopse projects into MEx activities.
 
@@ -543,6 +554,7 @@ def transform_synopse_projects_to_mex_activities(
         contributor_merged_ids_by_name: Mapping from person names to contributor IDs
         unit_merged_ids_by_synonym: Map from unit acronyms and labels to their merged ID
         synopse_activity: synopse activity default values
+        synopse_organization_ids_by_query_string: merged organization ids by org name
 
     Returns:
         Generator for extracted activities
@@ -566,6 +578,7 @@ def transform_synopse_projects_to_mex_activities(
             contributor_merged_ids_by_name,
             unit_merged_ids_by_synonym,
             synopse_activity,
+            synopse_organization_ids_by_query_string,
         )
         if anschlussprojekt:
             anschlussprojekt_by_activity_stable_target_id[activity.stableTargetId] = (
@@ -597,6 +610,7 @@ def transform_synopse_project_to_activity(
     contributor_merged_ids_by_name: dict[Hashable, list[Identifier]],
     unit_merged_ids_by_synonym: dict[str, Identifier],
     synopse_activity: dict[str, Any],
+    synopse_organization_ids_by_query_string: dict[str, MergedOrganizationIdentifier],
 ) -> ExtractedActivity:
     """Transform a synopse project into a MEx activity.
 
@@ -607,6 +621,8 @@ def transform_synopse_project_to_activity(
         contributor_merged_ids_by_name: Mapping from person names to contributor IDs
         unit_merged_ids_by_synonym: Map from unit acronyms and labels to their merged ID
         synopse_activity: synopse activity default values
+        synopse_organization_ids_by_query_string: merged organization ids by org name
+
     Returns:
         extracted activity
     """
@@ -633,6 +649,36 @@ def transform_synopse_project_to_activity(
         for email in synopse_project.get_contacts()
         if email in contact_merged_ids_by_emails
     ]
+    external_associate = (
+        synopse_organization_ids_by_query_string[synopse_project.externe_partner]
+        if synopse_project.externe_partner
+        in synopse_organization_ids_by_query_string.keys()
+        else (
+            ExtractedOrganization(
+                officialName=synopse_project.externe_partner,
+                identifierInPrimarySource=synopse_project.externe_partner,
+                hadPrimarySource=extracted_primary_source.stableTargetId,
+            )
+            if synopse_project.externe_partner
+            else []
+        )
+    )
+    funder_or_commissioner = (
+        synopse_organization_ids_by_query_string[
+            synopse_project.foerderinstitution_oder_auftraggeber
+        ]
+        if synopse_project.foerderinstitution_oder_auftraggeber
+        in synopse_organization_ids_by_query_string.keys()
+        else (
+            ExtractedOrganization(
+                officialName=synopse_project.foerderinstitution_oder_auftraggeber,
+                identifierInPrimarySource=synopse_project.foerderinstitution_oder_auftraggeber,
+                hadPrimarySource=extracted_primary_source.stableTargetId,
+            )
+            if synopse_project.foerderinstitution_oder_auftraggeber
+            else []
+        )
+    )
     involved_person = contributor_merged_ids_by_name[synopse_project.beitragende]
     return ExtractedActivity(
         abstract=synopse_project.beschreibung_der_studie,
@@ -646,10 +692,8 @@ def transform_synopse_project_to_activity(
             if synopse_project.projektende
             else None
         ),
-        externalAssociate=None,
-        # TODO resolve organization from project.externe_partner
-        funderOrCommissioner=None,
-        # TODO resolve organization from project.foerderinstitution_oder_auftraggeber,
+        externalAssociate=external_associate,
+        funderOrCommissioner=funder_or_commissioner,
         hadPrimarySource=extracted_primary_source.stableTargetId,
         identifierInPrimarySource=synopse_project.studien_id,
         involvedPerson=involved_person,
