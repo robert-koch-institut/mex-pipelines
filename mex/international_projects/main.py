@@ -22,6 +22,7 @@ from mex.international_projects.models.source import InternationalProjectsSource
 from mex.international_projects.transform import (
     transform_international_projects_sources_to_extracted_activities,
 )
+from mex.mapping.extract import extract_mapping_data
 from mex.pipeline import asset, run_job_in_process
 from mex.settings import Settings
 from mex.sinks import load
@@ -115,9 +116,16 @@ def extracted_international_projects_activities(
     ],
 ) -> list[ExtractedActivity]:
     """Transform projects to extracted activities, load and return them."""
+    settings = Settings.get()
+    activity = extract_mapping_data(
+        settings.international_projects.mapping_path / "activity.yaml",
+        ExtractedActivity,
+    )
+
     mex_sources = list(
         transform_international_projects_sources_to_extracted_activities(
             international_projects_sources,
+            activity,
             extracted_primary_source_international_projects,
             international_projects_person_ids_by_query,
             unit_stable_target_ids_by_synonym,
