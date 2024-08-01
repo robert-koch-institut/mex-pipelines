@@ -10,6 +10,7 @@ from mex.common.models import (
     ExtractedOrganization,
     ExtractedOrganizationalUnit,
     ExtractedPrimarySource,
+    ExtractedResource,
     ExtractedVariableGroup,
 )
 from mex.common.organigram.extract import (
@@ -20,6 +21,7 @@ from mex.common.types import (
     MergedPersonIdentifier,
     MergedResourceIdentifier,
 )
+from mex.mapping.extract import extract_mapping_data
 from mex.pipeline import asset, run_job_in_process
 from mex.settings import Settings
 from mex.sinks import load
@@ -192,6 +194,11 @@ def extracted_synopse_resource_stable_target_ids_by_synopse_id(
 
     Also transforms Synopse data to extracted resources
     """
+    settings = Settings.get()
+    synopse_resource_extended_data_use = extract_mapping_data(
+        settings.synopse.mapping_path / "resource_extended-data-use.yaml",
+        ExtractedResource,
+    )
     transformed_study_data_regular_resources = (
         transform_synopse_data_regular_to_mex_resources(
             synopse_studies,
@@ -202,12 +209,18 @@ def extracted_synopse_resource_stable_target_ids_by_synopse_id(
             extracted_primary_source_report_server,
             unit_stable_target_ids_by_synonym,
             extracted_organization_rki,
+            synopse_resource_extended_data_use,
         )
     )
     transformed_study_data_regular_resource_gens = tee(
         transformed_study_data_regular_resources, 2
     )
     load(transformed_study_data_regular_resource_gens[0])
+    settings = Settings.get()
+    synopse_resource = extract_mapping_data(
+        settings.synopse.mapping_path / "resource.yaml",
+        ExtractedResource,
+    )
     transformed_study_data_resources_extended_data_use = (
         transform_synopse_data_extended_data_use_to_mex_resources(
             synopse_studies,
@@ -218,6 +231,7 @@ def extracted_synopse_resource_stable_target_ids_by_synopse_id(
             extracted_primary_source_report_server,
             unit_stable_target_ids_by_synonym,
             extracted_organization_rki,
+            synopse_resource,
         )
     )
     transformed_study_data_resource_extended_data_use_gens = tee(
@@ -241,11 +255,17 @@ def extracted_synopse_access_platforms(
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
 ) -> list[ExtractedAccessPlatform]:
     """Transform Synopse data to extracted access platforms and load result."""
+    settings = Settings.get()
+    synopse_access_platform = extract_mapping_data(
+        settings.synopse.mapping_path / "access-platform.yaml",
+        ExtractedAccessPlatform,
+    )
     transformed_access_platforms = list(
         transform_synopse_studies_into_access_platforms(
             synopse_studies,
             unit_stable_target_ids_by_synonym,
             extracted_primary_source_report_server,
+            synopse_access_platform,
         )
     )
     load(transformed_access_platforms)
@@ -263,6 +283,11 @@ def extracted_synopse_activities(
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
 ) -> list[ExtractedActivity]:
     """Transforms Synopse data to extracted activities and load result."""
+    settings = Settings.get()
+    synopse_activity = extract_mapping_data(
+        settings.synopse.mapping_path / "activity.yaml",
+        ExtractedActivity,
+    )
     transformed_activities = list(
         transform_synopse_projects_to_mex_activities(
             synopse_projects,
@@ -270,6 +295,7 @@ def extracted_synopse_activities(
             unit_stable_target_ids_by_emails,
             extracted_synopse_contributor_stable_target_ids_by_name,
             unit_stable_target_ids_by_synonym,
+            synopse_activity,
         )
     )
     load(transformed_activities)

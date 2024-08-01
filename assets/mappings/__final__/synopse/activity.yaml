@@ -1,0 +1,142 @@
+# yaml-language-server: $schema=../../__schema__/ExtractedActivity_MappingSchema.json
+
+abstract:
+  - fieldInPrimarySource: BeschreibungStudie
+    locationInPrimarySource: projekt_und_studienverwaltung.csv
+    examplesInPrimarySource:
+    - 'Mit KiGGS Welle 2 hat das Robert Koch-Institut von 2014 bis August 2017 erneut
+      aktuelle und umfassende Daten zur Gesundheit der in Deutschland lebenden Kinder,
+      Jugendlichen und jungen Erwachsenen erhoben.
+      Das Studienprogramm umfasste neben Befragungen für einen Teil der eingeladenen
+      Teilnehmerinnen und Teilnehmer auch körperliche Untersuchungen, Tests sowie Laboruntersuchungen
+      von Blut- und Urinproben.
+      Laufzeit: September 2014 bis August 2017
+      Teilnehmende: 15.023 Teilnehmende (Querschnitt KiGGS Welle 2), 10.853 (KiGGS-Kohorte
+      in KiGGS Welle 2)
+      Alter: 0 bis 29 Jahre
+      Untersuchungsorte: 167 Städte und Gemeinden in Deutschland
+      Inhaltliche Schwerpunkte von KiGGS Welle 2 waren Gesundheitsstatus, Gesundheitsverhalten,
+      Lebensbedingungen, Schutz- und Risikofaktoren und Inanspruchnahme von Leistungen
+      des Gesundheitssystems.
+      Laufzeit: 1997 bis 1999
+      Befragte: 7.124 Personen
+      Alter: 18 bis 79 Jahre '
+    mappingRules:
+      - rule: Assign 'de' as default for language property of the text object.
+activityType:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - setValues:
+      - https://mex.rki.de/item/activity-type-6 # Other
+contact:
+  - fieldInPrimarySource: Kontakt
+    locationInPrimarySource: projekt_und_studienverwaltung.csv
+    examplesInPrimarySource:
+    - edz@rki.de
+    - fdz@rki.de
+    mappingRules:
+      - rule: Use value and match it using ldap extractor.
+documentation:
+  - fieldInPrimarySource: Projektdokumentation
+    locationInPrimarySource: projekt_und_studienverwaltung.csv
+    examplesInPrimarySource:
+    - "S:\Projekte\\Abt2_Daten\\SURVEYS\\KiGGS2\\Dokumentation.\n-
+      Fragebogen-Ausschnitte\n- Labor\n- Manuals\n- Untersuchungsorte\n- Publikationen\n-
+      Dateninformation\n- Releaseiniformation\n- Datensatzbeschreibung\n- Releaseinformation\n-
+      Variablenübersicht"
+    mappingRules:
+    - rule: 'Use the path starting with "S:\\ "as the url property of the link object. Use the text following "-" as the title property of the link object. Example: "language": "de", "title":"- Fragebogen-Ausschnitte - Labor - Manuals - Untersuchungsorte - Publikationen - Dateninformation - Releaseiniformation - Datensatzbeschreibung - Releaseinformation - Variablenübersicht","url": "S:\\Projekte\\Abt2_Daten\\SURVEYS\\KiGGS2\\Dokumentation\".'
+end:
+  - fieldInPrimarySource: Projektende
+    locationInPrimarySource: projekt_und_studienverwaltung.csv
+    examplesInPrimarySource:
+    - "2003"
+    - "2009"
+    mappingRules:
+      - rule: Extract original value.
+externalAssociate:
+  - fieldInPrimarySource: Partner_extern
+    locationInPrimarySource: projekt_und_studienverwaltung.csv
+    examplesInPrimarySource:
+    - 'Modul Kiesel: Bundesinstituts für Risikobewertung\n- Modul Momo: Karlsruher Institut für Technologie\n- Moudul Bella:  Uniklinik Hamburg Eppendorf",\n"USUMA GmbH"'
+    mappingRules:
+    - rule: Match values using wikidata extractor. To match the organizations, ignore the part befor the `:`. Expect multiple entries on newlines. If wikidata match fails (no match), create new organization with value as officialName.
+funderOrCommissioner:
+  - fieldInPrimarySource: Auftraggeber
+    locationInPrimarySource: projekt_und_studienverwaltung.csv
+    examplesInPrimarySource:
+    - Bundesministerium für Gesundheit (BMG)
+    mappingRules:
+      - rule: Match values using wikidata extractor. If wikidata match fails (no match), create new organization with value as officialName.
+hadPrimarySource:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+      - rule: "Assign 'stable target id' of primary source with identifier 'report-server' in /raw-data/primary-sources/primary-sources.json."
+identifierInPrimarySource:
+  - fieldInPrimarySource: StudienID
+    locationInPrimarySource: projekt_und_studienverwaltung.csv
+    examplesInPrimarySource:
+    - "1120141"
+    - "1219981"
+    mappingRules:
+      - rule: Extract original value.
+involvedPerson:
+  - fieldInPrimarySource: Beitragende
+    locationInPrimarySource: projekt_und_studienverwaltung.csv
+    examplesInPrimarySource:
+    - Jane Doe
+    - Dr. Jane Doe
+    mappingRules:
+      - rule: Use value to match using ldap extractor.
+involvedUnit:
+  - fieldInPrimarySource: Partner_intern
+    locationInPrimarySource: projekt_und_studienverwaltung.csv
+    examplesInPrimarySource:
+    - FG23
+    mappingRules:
+      - rule: Use value to match with identifer in /raw-data/organigram/organizational-units.json.
+responsibleUnit:
+  - fieldInPrimarySource: VerantwortlicheOE
+    locationInPrimarySource: projekt_und_studienverwaltung.csv
+    examplesInPrimarySource:
+    - fg23
+    mappingRules:
+      - rule: Use value to match with identifer in /raw-data/organigram/organizational-units.json. If unit unit cannot be resovled, set to C1.
+shortName:
+  - fieldInPrimarySource: Studie
+    locationInPrimarySource: projekt_und_studienverwaltung.csv
+    examplesInPrimarySource:
+    - KiGGS
+    - KiGGS Welle 2
+    mappingRules:
+      - rule: Extract original value.
+start:
+  - fieldInPrimarySource: Projektbeginn
+    locationInPrimarySource: projekt_und_studienverwaltung.csv
+    examplesInPrimarySource:
+    - "2003"
+    - "2009"
+    mappingRules:
+      - rule: Extract original value.
+succeeds:
+  - fieldInPrimarySource: Anschlussprojekt
+    locationInPrimarySource: projekt_und_studienverwaltung.csv
+    examplesInPrimarySource:
+    - KiGGS-Basiserhebung
+    mappingRules:
+    - rule: match with the field `Studie` OR skip this until C1 updates the data.
+        (We want to have `StudienID` inside the field).
+theme:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - setValues:
+      - https://mex.rki.de/item/theme-36 # Non-Communicable Diseases
+title:
+  - fieldInPrimarySource: ProjektStudientitel
+    locationInPrimarySource: projekt_und_studienverwaltung.csv
+    examplesInPrimarySource:
+    - Studie zur Gesundheit von Kindern und Jugendlichen in Deutschland
+      Welle 2
+    mappingRules:
+    - rule: Assign 'de' as default for the language property of the text object. If no value is given in field 'ProjektStudientitel' extract value from field
+        'Studie'. Extract value only, if field 'ProjektStudientitel' is empty.

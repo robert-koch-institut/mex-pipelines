@@ -1,4 +1,5 @@
 from itertools import groupby
+from typing import Any
 from uuid import UUID
 
 import pytest
@@ -15,7 +16,13 @@ from mex.common.models import (
 from mex.common.types import (
     AccessRestriction,
     Identifier,
+    Language,
     Link,
+    MergedResourceIdentifier,
+    PersonalData,
+    ResourceCreationMethod,
+    ResourceTypeGeneral,
+    TechnicalAccessibility,
     TemporalEntity,
     Text,
     TextLanguage,
@@ -145,7 +152,7 @@ def synopse_variables_raw() -> list[dict[str, str | int | float | None]]:
 
 @pytest.fixture()
 def synopse_variables(
-    synopse_variables_raw: list[dict[str, str | int]]
+    synopse_variables_raw: list[dict[str, str | int]],
 ) -> list[SynopseVariable]:
     """Return a list Synopse Variables."""
     return [SynopseVariable.model_validate(v) for v in synopse_variables_raw]
@@ -205,7 +212,7 @@ def synopse_variables_extended_data_use_raw() -> (
 
 @pytest.fixture()
 def synopse_variables_extended_data_use(
-    synopse_variables_extended_data_use_raw: list[dict[str, str | int]]
+    synopse_variables_extended_data_use_raw: list[dict[str, str | int]],
 ) -> list[SynopseVariable]:
     """Return a list Synopse Variables."""
     return [
@@ -406,7 +413,7 @@ def extracted_activity(
         responsibleUnit=[Identifier.generate(seed=13)],
         shortName=[{"value": "BBCCDD_00"}],
         start=[TemporalEntity("2000")],
-        theme=["https://mex.rki.de/item/theme-35"],
+        theme=["https://mex.rki.de/item/theme-36"],
         title=[Text(language=TextLanguage.DE, value="Studie zu Lorem und Ipsum")],
     )
 
@@ -422,7 +429,7 @@ def extracted_resources() -> list[ExtractedResource]:
             contact=UUID(int=5, version=4),
             hadPrimarySource=UUID(int=5, version=4),
             identifierInPrimarySource="23456-17-set1",
-            theme=Theme("https://mex.rki.de/item/theme-1"),
+            theme="https://mex.rki.de/item/theme-11",
             title="Found in overview",
             unitInCharge=UUID(int=6, version=4),
         ),
@@ -433,7 +440,7 @@ def extracted_resources() -> list[ExtractedResource]:
             contact=UUID(int=5, version=4),
             hadPrimarySource=UUID(int=5, version=4),
             identifierInPrimarySource="12345-12-set2",
-            theme=Theme("https://mex.rki.de/item/theme-1"),
+            theme="https://mex.rki.de/item/theme-11",
             title="The other one",
             unitInCharge=UUID(int=6, version=4),
         ),
@@ -444,7 +451,7 @@ def extracted_resources() -> list[ExtractedResource]:
             contact=UUID(int=5, version=4),
             hadPrimarySource=UUID(int=5, version=4),
             identifierInPrimarySource="12345-13-set13",
-            theme=Theme("https://mex.rki.de/item/theme-1"),
+            theme="https://mex.rki.de/item/theme-11",
             title="The other one",
             unitInCharge=UUID(int=6, version=4),
         ),
@@ -510,7 +517,7 @@ def synopse_overviews() -> list[SynopseStudyOverview]:
 def resource_ids_by_synopse_id(
     extracted_resources: list[ExtractedResource],
     synopse_overviews: list[SynopseStudyOverview],
-) -> dict[str, list[Identifier]]:
+) -> dict[str, list[MergedResourceIdentifier]]:
     """Return a lookup from study ID to list of resource IDs."""
     return transform_overviews_to_resource_lookup(
         synopse_overviews, extracted_resources
@@ -531,3 +538,414 @@ def extracted_variable_groups(
             resource_ids_by_synopse_id,
         )
     )
+
+
+@pytest.fixture()
+def synopse_access_platform() -> dict[str, Any]:
+    """Return a dict with access platform default values."""
+    return {
+        "technicalAccessibility": [
+            {
+                "fieldInPrimarySource": "n/a",
+                "locationInPrimarySource": None,
+                "examplesInPrimarySource": None,
+                "mappingRules": [
+                    {
+                        "forValues": None,
+                        "setValues": [TechnicalAccessibility["INTERNAL"]],
+                        "rule": None,
+                    }
+                ],
+                "comment": "internal",
+            }
+        ],
+        "contact": [
+            {
+                "fieldInPrimarySource": "n/a",
+                "locationInPrimarySource": None,
+                "examplesInPrimarySource": None,
+                "mappingRules": [
+                    {
+                        "forValues": ["C1"],
+                        "setValues": None,
+                        "rule": "Use value",
+                    }
+                ],
+                "comment": None,
+            }
+        ],
+        "unitInCharge": [
+            {
+                "fieldInPrimarySource": "n/a",
+                "locationInPrimarySource": None,
+                "examplesInPrimarySource": None,
+                "mappingRules": [
+                    {
+                        "forValues": ["C1"],
+                        "setValues": None,
+                        "rule": "Use value ",
+                    }
+                ],
+                "comment": None,
+            }
+        ],
+    }
+
+
+@pytest.fixture()
+def synopse_activity() -> dict[str, Any]:
+    """Return a dict with activity default values."""
+    return {
+        "activityType": [
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {"setValues": ["https://mex.rki.de/item/activity-type-6"]}
+                ],
+                "comment": "Sonstige",
+            }
+        ],
+        "theme": [
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [{"setValues": ["https://mex.rki.de/item/theme-36"]}],
+                "comment": "Studien und Surveillance",
+            }
+        ],
+    }
+
+
+@pytest.fixture()
+def synopse_resource_extended_data_use() -> dict[str, Any]:
+    """Return a dict with resource extended data use default values."""
+    return {
+        "accessRestriction": [
+            {
+                "fieldInPrimarySource": "Zugangsbeschraenkung",
+                "locationInPrimarySource": None,
+                "examplesInPrimarySource": ["restriktiv"],
+                "mappingRules": [
+                    {
+                        "forValues": ["restriktiv"],
+                        "setValues": [AccessRestriction["RESTRICTED"]],
+                        "rule": None,
+                    }
+                ],
+                "comment": None,
+            }
+        ],
+        "hasPersonalData": [
+            {
+                "fieldInPrimarySource": "n/a",
+                "locationInPrimarySource": None,
+                "examplesInPrimarySource": None,
+                "mappingRules": [
+                    {
+                        "forValues": None,
+                        "setValues": [PersonalData["PERSONAL_DATA"]],
+                        "rule": None,
+                    }
+                ],
+                "comment": None,
+            }
+        ],
+        "contact": [
+            {
+                "fieldInPrimarySource": "n/a",
+                "locationInPrimarySource": None,
+                "examplesInPrimarySource": None,
+                "mappingRules": [
+                    {
+                        "forValues": ["C1"],
+                        "setValues": None,
+                        "rule": "Use value",
+                    }
+                ],
+                "comment": None,
+            }
+        ],
+        "theme": [
+            {
+                "fieldInPrimarySource": "StudienID",
+                "locationInPrimarySource": "projekt_und_studienverwaltung.csv",
+                "examplesInPrimarySource": None,
+                "mappingRules": [
+                    {
+                        "forValues": ["7202001", "7202002", "7202003", "7202004"],
+                        "setValues": [
+                            Theme["NON_COMMUNICABLE_DISEASES_AND_HEALTH_SURVEILLANCE"]
+                        ],
+                        "rule": None,
+                    },
+                    {
+                        "forValues": None,
+                        "setValues": [Theme["INFECTIOUS_DISEASES_AND_EPIDEMIOLOGY"]],
+                        "rule": "For",
+                    },
+                ],
+                "comment": None,
+            }
+        ],
+        "unitInCharge": [
+            {
+                "fieldInPrimarySource": "n/a",
+                "locationInPrimarySource": None,
+                "examplesInPrimarySource": None,
+                "mappingRules": [
+                    {
+                        "forValues": ["C1"],
+                        "setValues": None,
+                        "rule": "Use value",
+                    }
+                ],
+                "comment": None,
+            }
+        ],
+        "language": [
+            {
+                "fieldInPrimarySource": "n/a",
+                "locationInPrimarySource": None,
+                "examplesInPrimarySource": None,
+                "mappingRules": [
+                    {"forValues": None, "setValues": [Language["GERMAN"]], "rule": None}
+                ],
+                "comment": "Deutsch",
+            }
+        ],
+        "qualityInformation": None,
+        "resourceCreationMethod": [
+            {
+                "fieldInPrimarySource": "n/a",
+                "locationInPrimarySource": None,
+                "examplesInPrimarySource": None,
+                "mappingRules": [
+                    {
+                        "forValues": None,
+                        "setValues": [
+                            ResourceCreationMethod["STUDIES_SURVEYS_AND_INTERVIEWS"]
+                        ],
+                        "rule": None,
+                    }
+                ],
+                "comment": None,
+            }
+        ],
+        "resourceTypeGeneral": [
+            {
+                "fieldInPrimarySource": "n/a",
+                "locationInPrimarySource": None,
+                "examplesInPrimarySource": None,
+                "mappingRules": [
+                    {
+                        "forValues": None,
+                        "setValues": [ResourceTypeGeneral["DATA_COLLECTION"]],
+                        "rule": None,
+                    }
+                ],
+                "comment": None,
+            }
+        ],
+        "rights": [
+            {
+                "fieldInPrimarySource": "n/a",
+                "locationInPrimarySource": None,
+                "examplesInPrimarySource": None,
+                "mappingRules": [
+                    {
+                        "forValues": None,
+                        "setValues": [
+                            {
+                                "value": "Gesundheitsdaten ",
+                                "language": "de",
+                            }
+                        ],
+                        "rule": None,
+                    }
+                ],
+                "comment": None,
+            }
+        ],
+        "spatial": [
+            {
+                "fieldInPrimarySource": "n/a",
+                "locationInPrimarySource": None,
+                "examplesInPrimarySource": None,
+                "mappingRules": [
+                    {
+                        "forValues": None,
+                        "setValues": [{"value": "Deutschland", "language": "de"}],
+                        "rule": None,
+                    }
+                ],
+                "comment": None,
+            }
+        ],
+    }
+
+
+@pytest.fixture()
+def synopse_resource() -> dict[str, Any]:
+    """Return a dict with resource extended data use default values."""
+    return {
+        "accessRestriction": [
+            {
+                "fieldInPrimarySource": "Zugangsbeschraenkung",
+                "locationInPrimarySource": None,
+                "examplesInPrimarySource": None,
+                "mappingRules": [
+                    {
+                        "forValues": ["restriktiv"],
+                        "setValues": [AccessRestriction["RESTRICTED"]],
+                        "rule": None,
+                    }
+                ],
+                "comment": None,
+            }
+        ],
+        "hasPersonalData": [
+            {
+                "fieldInPrimarySource": "n/a",
+                "locationInPrimarySource": None,
+                "examplesInPrimarySource": None,
+                "mappingRules": [
+                    {
+                        "forValues": None,
+                        "setValues": [PersonalData["PERSONAL_DATA"]],
+                        "rule": None,
+                    }
+                ],
+                "comment": None,
+            }
+        ],
+        "contact": [
+            {
+                "fieldInPrimarySource": "n/a",
+                "locationInPrimarySource": None,
+                "examplesInPrimarySource": None,
+                "mappingRules": [
+                    {
+                        "forValues": ["C1"],
+                        "setValues": None,
+                        "rule": "Use value to match with identifer in /raw-data/organigram/organizational-units.json.",
+                    }
+                ],
+                "comment": None,
+            }
+        ],
+        "theme": [
+            {
+                "fieldInPrimarySource": "StudienID",
+                "locationInPrimarySource": "projekt_und_studienverwaltung.csv",
+                "examplesInPrimarySource": None,
+                "mappingRules": [
+                    {
+                        "forValues": ["7202001", "7202002", "7202003", "7202004"],
+                        "setValues": [
+                            Theme["NON_COMMUNICABLE_DISEASES_AND_HEALTH_SURVEILLANCE"]
+                        ],
+                        "rule": None,
+                    },
+                    {
+                        "forValues": None,
+                        "setValues": [Theme["INFECTIOUS_DISEASES_AND_EPIDEMIOLOGY"]],
+                        "rule": 'For all other StudienID set value as mentioned below in "setValues".',
+                    },
+                ],
+                "comment": None,
+            }
+        ],
+        "unitInCharge": [
+            {
+                "fieldInPrimarySource": "n/a",
+                "locationInPrimarySource": None,
+                "examplesInPrimarySource": None,
+                "mappingRules": [
+                    {
+                        "forValues": ["C1"],
+                        "setValues": None,
+                        "rule": "Use value to match with identifier in /raw-data/organigram/organizational-units.json.",
+                    }
+                ],
+                "comment": None,
+            }
+        ],
+        "language": [
+            {
+                "fieldInPrimarySource": "n/a",
+                "locationInPrimarySource": None,
+                "examplesInPrimarySource": None,
+                "mappingRules": [
+                    {"forValues": None, "setValues": [Language["GERMAN"]], "rule": None}
+                ],
+                "comment": None,
+            }
+        ],
+        "resourceCreationMethod": [
+            {
+                "fieldInPrimarySource": "n/a",
+                "locationInPrimarySource": None,
+                "examplesInPrimarySource": None,
+                "mappingRules": [
+                    {
+                        "forValues": None,
+                        "setValues": [
+                            ResourceCreationMethod["STUDIES_SURVEYS_AND_INTERVIEWS"]
+                        ],
+                        "rule": None,
+                    }
+                ],
+                "comment": None,
+            }
+        ],
+        "resourceTypeGeneral": [
+            {
+                "fieldInPrimarySource": "n/a",
+                "locationInPrimarySource": None,
+                "examplesInPrimarySource": None,
+                "mappingRules": [
+                    {
+                        "forValues": None,
+                        "setValues": [ResourceTypeGeneral["DATA_COLLECTION"]],
+                        "rule": None,
+                    }
+                ],
+                "comment": None,
+            }
+        ],
+        "rights": [
+            {
+                "fieldInPrimarySource": "n/a",
+                "locationInPrimarySource": None,
+                "examplesInPrimarySource": None,
+                "mappingRules": [
+                    {
+                        "forValues": None,
+                        "setValues": [
+                            {
+                                "value": "Gesundheitsdaten sind besonders sensibel und haben einen hohen Schutzbedarf. Da es sich dabei oftmals um personenbezogene Daten handelt, welche durch die DSGVO (Datenschutzgrundverordnung) geschützt sind, können sie nicht ohne weiteres frei zur Verfügung gestellt werden. Eine Weitergabe und Verarbeitung dieser Daten ist daher prinzipiell zunächst ausgeschlossen, kann aber unter bestimmten Voraussetzungen und Bedingungen möglich sein. Ob und in welcher Form Daten zur Verfügung gestellt werden können, unterliegt daher einer Einzelfallprüfung. Um die Bearbeitung zu vereinfachen, sollten bei der ersten Kontaktaufnahme folgende Informationen enthalten sein: antragstellende Person und Institution, Name und Kennung des Datensatzes, Verwendungszweck mit kurzer Beschreibung des Forschungsvorhabens und bis wann der Datensatz benötigt wird.",
+                                "language": "de",
+                            }
+                        ],
+                        "rule": None,
+                    }
+                ],
+                "comment": None,
+            }
+        ],
+        "spatial": [
+            {
+                "fieldInPrimarySource": "n/a",
+                "locationInPrimarySource": None,
+                "examplesInPrimarySource": None,
+                "mappingRules": [
+                    {
+                        "forValues": None,
+                        "setValues": [{"value": "Deutschland", "language": "de"}],
+                        "rule": None,
+                    }
+                ],
+                "comment": None,
+            }
+        ],
+        "stateOfDataProcessing": None,
+    }

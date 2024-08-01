@@ -42,3 +42,10 @@ class SynopseSettings(BaseModel):
             "Path of the export in CSV format, absolute or relative to `asset_dir`"
         ),
     )
+    mapping_path: AssetsPath = Field(
+        AssetsPath("mappings/__final__/synopse"),
+        description=(
+            "Path to the directory with the synopse mapping files"
+            "values, absolute path or relative to `assets_dir`."
+        ),
+    )

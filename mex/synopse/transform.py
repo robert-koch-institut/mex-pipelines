@@ -3,7 +3,7 @@ from collections import defaultdict
 from collections.abc import Generator, Hashable, Iterable
 from itertools import groupby, tee
 from pathlib import PureWindowsPath
-from typing import cast
+from typing import Any, cast
 
 from mex.common.logging import watch
 from mex.common.models import (
@@ -16,20 +16,14 @@ from mex.common.models import (
     ExtractedVariableGroup,
 )
 from mex.common.types import (
-    AccessRestriction,
-    ActivityType,
     Identifier,
-    Language,
     Link,
     MergedActivityIdentifier,
     MergedOrganizationalUnitIdentifier,
     MergedResourceIdentifier,
-    ResourceTypeGeneral,
-    TechnicalAccessibility,
     TemporalEntity,
     Text,
     TextLanguage,
-    Theme,
 )
 from mex.synopse.models.project import SynopseProject
 from mex.synopse.models.study import SynopseStudy
@@ -79,6 +73,7 @@ def transform_synopse_studies_into_access_platforms(
     synopse_studies: Iterable[SynopseStudy],
     unit_merged_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     extracted_primary_source: ExtractedPrimarySource,
+    synopse_access_platform: dict[str, Any],
 ) -> Generator[ExtractedAccessPlatform, None, None]:
     """Transform synopse studies into access platforms.
 
@@ -86,6 +81,8 @@ def transform_synopse_studies_into_access_platforms(
         synopse_studies: Iterable of Synopse Studies
         unit_merged_ids_by_synonym: Map from unit acronyms and labels to their merged ID
         extracted_primary_source: Extracted report server primary source
+        synopse_access_platform: access platform default values
+
     Returns:
         extracted access platform
     """
@@ -102,15 +99,21 @@ def transform_synopse_studies_into_access_platforms(
             landing_page = Link(url=plattform_adresse)
 
         yield ExtractedAccessPlatform(
-            contact=unit_merged_ids_by_synonym["FG 99"],
+            contact=unit_merged_ids_by_synonym[
+                synopse_access_platform["contact"][0]["mappingRules"][0]["forValues"][0]
+            ],
             hadPrimarySource=extracted_primary_source.stableTargetId,
             identifierInPrimarySource=plattform_adresse,
             landingPage=landing_page,
-            technicalAccessibility=TechnicalAccessibility(
-                "https://mex.rki.de/item/technical-accessibility-1"
-            ),
+            technicalAccessibility=synopse_access_platform["technicalAccessibility"][0][
+                "mappingRules"
+            ][0]["setValues"][0],
             title=plattform_adresse,
-            unitInCharge=unit_merged_ids_by_synonym["FG 99"],
+            unitInCharge=unit_merged_ids_by_synonym[
+                synopse_access_platform["unitInCharge"][0]["mappingRules"][0][
+                    "forValues"
+                ][0]
+            ],
         )
 
 
@@ -272,6 +275,7 @@ def transform_synopse_data_to_mex_resources(
     description_by_study_id: dict[str, str] | None,
     documentation_by_study_id: dict[str, Link] | None,
     keyword_text_by_study_id: dict[str, list[Text]],
+    synopse_resource_extended_data_use: dict[str, Any],
 ) -> Generator[ExtractedResource, None, None]:
     """Transform Synopse Studies to MEx resources.
 
@@ -287,23 +291,19 @@ def transform_synopse_data_to_mex_resources(
         description_by_study_id: Description Text by study ID
         documentation_by_study_id: Documentation Link by study ID
         keyword_text_by_study_id: List of keywords by study ID
+        synopse_resource_extended_data_use: resource extended data use default values
 
     Returns:
         Generator for extracted resources
     """
-    resource_type_mapping = {
-        "none": "https://mex.rki.de/item/resource-type-general-3",
-        "monitoring studie": "https://mex.rki.de/item/resource-type-general-4",
-        "add on studie": "https://mex.rki.de/item/resource-type-general-6",
-        "ad on studie": "https://mex.rki.de/item/resource-type-general-6",
-        "ad hoc studie": "https://mex.rki.de/item/resource-type-general-7",
-        "machbarkeitsstudie": "https://mex.rki.de/item/resource-type-general-5",
-    }
-    synopse_projects_by_study_ids = {p.studien_id: p for p in synopse_projects}
     extracted_activities_by_study_ids = {
         a.identifierInPrimarySource: a for a in extracted_activities
     }
-    unit_in_charge = unit_merged_ids_by_synonym["FG 99"]
+    unit_in_charge = unit_merged_ids_by_synonym[
+        synopse_resource_extended_data_use["unitInCharge"][0]["mappingRules"][0][
+            "forValues"
+        ][0]
+    ]
     access_platform_by_identifier_in_primary_source = {
         p.identifierInPrimarySource: p for p in extracted_access_platforms
     }
@@ -326,21 +326,11 @@ def transform_synopse_data_to_mex_resources(
         if documentation_by_study_id:
             documentation = documentation_by_study_id[study.studien_id]
         extracted_activity = extracted_activities_by_study_ids.get(study.studien_id)
-        synopse_project = synopse_projects_by_study_ids.get(study.studien_id)
-        studienart_studientyp = (
-            synopse_project.studienart_studientyp.lower().replace("-", " ")
-            if synopse_project
-            else "none"
-        )
-
-        resource_type_general = ResourceTypeGeneral(
-            resource_type_mapping[studienart_studientyp]
-        )
         yield ExtractedResource(
             accessPlatform=access_platform,
-            accessRestriction=AccessRestriction(
-                "https://mex.rki.de/item/access-restriction-2"
-            ),
+            accessRestriction=synopse_resource_extended_data_use["accessRestriction"][
+                0
+            ]["mappingRules"][0]["setValues"],
             contact=unit_in_charge,
             contributingUnit=(
                 extracted_activity.involvedUnit + extracted_activity.responsibleUnit
@@ -353,14 +343,24 @@ def transform_synopse_data_to_mex_resources(
             created=created,
             description=description,
             documentation=documentation,
+            hasPersonalData=synopse_resource_extended_data_use["hasPersonalData"][0][
+                "mappingRules"
+            ][0]["setValues"],
             hadPrimarySource=extracted_primary_source.stableTargetId,
             identifierInPrimarySource=(
                 f"{study.studien_id}-{study.ds_typ_id}-{study.titel_datenset}"
             ),
             keyword=keyword_text_by_study_id[study.studien_id],
-            language=Language["GERMAN"],
+            language=synopse_resource_extended_data_use["language"][0]["mappingRules"][
+                0
+            ]["setValues"],
             publisher=[extracted_organization.stableTargetId],
-            resourceTypeGeneral=resource_type_general,
+            resourceCreationMethod=synopse_resource_extended_data_use[
+                "resourceCreationMethod"
+            ][0]["mappingRules"][0]["setValues"],
+            resourceTypeGeneral=synopse_resource_extended_data_use[
+                "resourceTypeGeneral"
+            ][0]["mappingRules"][0]["setValues"],
             rights=study.rechte,
             spatial="Deutschland",
             temporal=(
@@ -375,7 +375,9 @@ def transform_synopse_data_to_mex_resources(
                 and extracted_activity.end
                 else None
             ),
-            theme=Theme("https://mex.rki.de/item/theme-35"),
+            theme=synopse_resource_extended_data_use["theme"][0]["mappingRules"][0][
+                "setValues"
+            ],
             title=Text(value=study.titel_datenset, language=TextLanguage("de")),
             unitInCharge=unit_in_charge,
             wasGeneratedBy=(
@@ -394,6 +396,7 @@ def transform_synopse_data_regular_to_mex_resources(
     extracted_primary_source: ExtractedPrimarySource,
     unit_merged_ids_by_synonym: dict[str, Identifier],
     extracted_organization: ExtractedOrganization,
+    synopse_resource_extended_data_use: dict[str, Any],
 ) -> Generator[ExtractedResource, None, None]:
     """Transform Synopse Studies to MEx resources.
 
@@ -407,6 +410,7 @@ def transform_synopse_data_regular_to_mex_resources(
         extracted_primary_source: Extracted report server platform
         unit_merged_ids_by_synonym: Map from unit acronyms and labels to their merged ID
         extracted_organization: extracted organization
+        synopse_resource_extended_data_use: resource extended data use default values
 
     Returns:
         Generator for extracted resources
@@ -457,6 +461,7 @@ def transform_synopse_data_regular_to_mex_resources(
         description_by_study_id,
         documentation_by_study_id,
         keyword_text_by_study_id,
+        synopse_resource_extended_data_use,
     )
 
 
@@ -470,6 +475,7 @@ def transform_synopse_data_extended_data_use_to_mex_resources(
     extracted_primary_source: ExtractedPrimarySource,
     unit_merged_ids_by_synonym: dict[str, Identifier],
     extracted_organization: ExtractedOrganization,
+    synopse_resource: dict[str, Any],
 ) -> Generator[ExtractedResource, None, None]:
     """Transform Synopse Studies to MEx resources.
 
@@ -483,6 +489,7 @@ def transform_synopse_data_extended_data_use_to_mex_resources(
         extracted_primary_source: Extracted report server platform
         unit_merged_ids_by_synonym: Map from unit acronyms and labels to their merged ID
         extracted_organization: extracted organization
+        synopse_resource: resource default values
 
     Returns:
         Generator for extracted resources
@@ -514,6 +521,7 @@ def transform_synopse_data_extended_data_use_to_mex_resources(
         None,
         None,
         keyword_text_by_study_id,
+        synopse_resource,
     )
 
 
@@ -524,6 +532,7 @@ def transform_synopse_projects_to_mex_activities(
     contact_merged_ids_by_emails: dict[str, Identifier],
     contributor_merged_ids_by_name: dict[Hashable, list[Identifier]],
     unit_merged_ids_by_synonym: dict[str, Identifier],
+    synopse_activity: dict[str, Any],
 ) -> Generator[ExtractedActivity, None, None]:
     """Transform synopse projects into MEx activities.
 
@@ -533,6 +542,7 @@ def transform_synopse_projects_to_mex_activities(
         contact_merged_ids_by_emails: Mapping from LDAP emails to contact IDs
         contributor_merged_ids_by_name: Mapping from person names to contributor IDs
         unit_merged_ids_by_synonym: Map from unit acronyms and labels to their merged ID
+        synopse_activity: synopse activity default values
 
     Returns:
         Generator for extracted activities
@@ -555,6 +565,7 @@ def transform_synopse_projects_to_mex_activities(
             contact_merged_ids_by_emails,
             contributor_merged_ids_by_name,
             unit_merged_ids_by_synonym,
+            synopse_activity,
         )
         if anschlussprojekt:
             anschlussprojekt_by_activity_stable_target_id[activity.stableTargetId] = (
@@ -585,6 +596,7 @@ def transform_synopse_project_to_activity(
     contact_merged_ids_by_emails: dict[str, Identifier],
     contributor_merged_ids_by_name: dict[Hashable, list[Identifier]],
     unit_merged_ids_by_synonym: dict[str, Identifier],
+    synopse_activity: dict[str, Any],
 ) -> ExtractedActivity:
     """Transform a synopse project into a MEx activity.
 
@@ -594,7 +606,7 @@ def transform_synopse_project_to_activity(
         contact_merged_ids_by_emails: Mapping from LDAP emails to contact IDs
         contributor_merged_ids_by_name: Mapping from person names to contributor IDs
         unit_merged_ids_by_synonym: Map from unit acronyms and labels to their merged ID
-
+        synopse_activity: synopse activity default values
     Returns:
         extracted activity
     """
@@ -615,7 +627,7 @@ def transform_synopse_project_to_activity(
     ]
     responsible_unit = unit_merged_ids_by_synonym.get(
         synopse_project.verantwortliche_oe or ""
-    ) or unit_merged_ids_by_synonym.get("FG99")
+    ) or unit_merged_ids_by_synonym.get("FG21")
     contact = [
         contact_merged_ids_by_emails[email]
         for email in synopse_project.get_contacts()
@@ -624,7 +636,9 @@ def transform_synopse_project_to_activity(
     involved_person = contributor_merged_ids_by_name[synopse_project.beitragende]
     return ExtractedActivity(
         abstract=synopse_project.beschreibung_der_studie,
-        activityType=ActivityType("https://mex.rki.de/item/activity-type-6"),
+        activityType=synopse_activity["activityType"][0]["mappingRules"][0][
+            "setValues"
+        ],
         contact=contact,
         documentation=documentation,
         end=(
@@ -647,7 +661,7 @@ def transform_synopse_project_to_activity(
             if synopse_project.projektbeginn
             else None
         ),
-        theme=Theme("https://mex.rki.de/item/theme-35"),
+        theme=synopse_activity["theme"][0]["mappingRules"][0]["setValues"],
         title=synopse_project.project_studientitel
         or synopse_project.akronym_des_studientitels,
     )
