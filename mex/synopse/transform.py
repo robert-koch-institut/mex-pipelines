@@ -25,6 +25,7 @@ from mex.common.types import (
     Text,
     TextLanguage,
 )
+from mex.sinks import load
 from mex.synopse.models.project import SynopseProject
 from mex.synopse.models.study import SynopseStudy
 from mex.synopse.models.study_overview import SynopseStudyOverview
@@ -368,7 +369,10 @@ def transform_synopse_data_to_mex_resources(
             resourceTypeGeneral=synopse_resource_extended_data_use[
                 "resourceTypeGeneral"
             ][0]["mappingRules"][0]["setValues"],
-            resourceTypeSpecific=synopse_studien_art_typ_by_study_ids[study.studien_id],
+            resourceTypeSpecific=synopse_studien_art_typ_by_study_ids.get(
+                study.studien_id
+            )
+            or [],
             rights=synopse_resource_extended_data_use["rights"][0]["mappingRules"][0][
                 "setValues"
             ],
@@ -649,36 +653,46 @@ def transform_synopse_project_to_activity(
         for email in synopse_project.get_contacts()
         if email in contact_merged_ids_by_emails
     ]
-    external_associate = (
-        synopse_organization_ids_by_query_string[synopse_project.externe_partner]
-        if synopse_project.externe_partner
+    if (
+        synopse_project.externe_partner
         in synopse_organization_ids_by_query_string.keys()
-        else (
-            ExtractedOrganization(
-                officialName=synopse_project.externe_partner,
-                identifierInPrimarySource=synopse_project.externe_partner,
-                hadPrimarySource=extracted_primary_source.stableTargetId,
-            )
-            if synopse_project.externe_partner
-            else []
-        )
-    )
-    funder_or_commissioner = (
-        synopse_organization_ids_by_query_string[
-            synopse_project.foerderinstitution_oder_auftraggeber
+    ):
+        external_associate = [
+            synopse_organization_ids_by_query_string[synopse_project.externe_partner]
         ]
-        if synopse_project.foerderinstitution_oder_auftraggeber
-        in synopse_organization_ids_by_query_string.keys()
-        else (
-            ExtractedOrganization(
-                officialName=synopse_project.foerderinstitution_oder_auftraggeber,
-                identifierInPrimarySource=synopse_project.foerderinstitution_oder_auftraggeber,
-                hadPrimarySource=extracted_primary_source.stableTargetId,
-            )
-            if synopse_project.foerderinstitution_oder_auftraggeber
-            else []
+    elif synopse_project.externe_partner:
+        extracted_organization = ExtractedOrganization(
+            officialName=synopse_project.externe_partner,
+            identifierInPrimarySource=synopse_project.externe_partner,
+            hadPrimarySource=extracted_primary_source.stableTargetId,
         )
-    )
+        load([extracted_organization])
+        external_associate = [
+            MergedOrganizationIdentifier(extracted_organization.stableTargetId)
+        ]
+    else:
+        external_associate = []
+    if (
+        synopse_project.foerderinstitution_oder_auftraggeber
+        in synopse_organization_ids_by_query_string.keys()
+    ):
+        funder_or_commissioner = [
+            synopse_organization_ids_by_query_string[
+                synopse_project.foerderinstitution_oder_auftraggeber
+            ]
+        ]
+    elif synopse_project.foerderinstitution_oder_auftraggeber:
+        extracted_organization = ExtractedOrganization(
+            officialName=synopse_project.foerderinstitution_oder_auftraggeber,
+            identifierInPrimarySource=synopse_project.foerderinstitution_oder_auftraggeber,
+            hadPrimarySource=extracted_primary_source.stableTargetId,
+        )
+        load([extracted_organization])
+        funder_or_commissioner = [
+            MergedOrganizationIdentifier(extracted_organization.stableTargetId)
+        ]
+    else:
+        funder_or_commissioner = []
     involved_person = contributor_merged_ids_by_name[synopse_project.beitragende]
     return ExtractedActivity(
         abstract=synopse_project.beschreibung_der_studie,
