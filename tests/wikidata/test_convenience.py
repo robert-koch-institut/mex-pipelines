@@ -41,3 +41,34 @@ def test_get_merged_organization_id_by_query_with_extract_transform_and_load(
     mocked_load.assert_called_once_with([extracted_wikidata_organization])
 
     assert returned == MergedOrganizationIdentifier("ga6xh6pgMwgq7DC7r6Wjqg")
+
+    # transformation returns no organization
+    mocked_transform_wikidata_organization_to_extracted_organization = Mock(
+        return_value=None
+    )
+    monkeypatch.setattr(
+        convenience,
+        "transform_wikidata_organization_to_extracted_organization",
+        mocked_transform_wikidata_organization_to_extracted_organization,
+    )
+    returned = get_merged_organization_id_by_query_with_extract_transform_and_load(
+        query_string, wikidata_primary_source
+    )
+    assert returned is None
+    mocked_load.assert_called_once()
+    mocked_transform_wikidata_organization_to_extracted_organization.assert_called_once_with(
+        wikidata_organization, wikidata_primary_source
+    )
+
+    # search returns no organization
+    mocked_search_organization_by_label = Mock(return_value=None)
+    monkeypatch.setattr(
+        convenience, "search_organization_by_label", mocked_search_organization_by_label
+    )
+    returned = get_merged_organization_id_by_query_with_extract_transform_and_load(
+        query_string, wikidata_primary_source
+    )
+    assert returned is None
+    mocked_load.assert_called_once()
+    mocked_transform_wikidata_organization_to_extracted_organization.assert_called_once()
+    mocked_search_organization_by_label.assert_called_once_with(query_string)
