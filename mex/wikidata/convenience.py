@@ -30,10 +30,8 @@ def get_merged_organization_id_by_query_with_extract_transform_and_load(
            Wikidata lookup.
          None if multiple matches / no organization is found
     """
-    try:
-        return _ORGANIZATION_BY_QUERY_CACHE[query_string]
-    except KeyError:
-        pass
+    if organization_id := _ORGANIZATION_BY_QUERY_CACHE.get(query_string):
+        return organization_id
 
     found_organization = search_organization_by_label(query_string)
 
