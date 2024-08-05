@@ -11,6 +11,7 @@ from mex.common.wikidata.transform import (
 )
 from mex.wikidata import convenience
 from mex.wikidata.convenience import (
+    _ORGANIZATION_BY_QUERY_CACHE,
     get_merged_organization_id_by_query_with_extract_transform_and_load,
 )
 
@@ -59,12 +60,25 @@ def test_get_merged_organization_id_by_query_with_extract_transform_and_load_moc
     )
     mocked_load.assert_called_once_with([extracted_wikidata_organization])
 
+    # make sure caching works
+    mocked_search_organization_by_label.reset_mock()
+    mocked_transform_wikidata_organization_to_extracted_organization.reset_mock()
+    mocked_load.reset_mock()
+    returned = get_merged_organization_id_by_query_with_extract_transform_and_load(
+        query_string, wikidata_primary_source
+    )
+    assert returned == extracted_wikidata_organization.stableTargetId
+    mocked_search_organization_by_label.assert_not_called()
+    mocked_transform_wikidata_organization_to_extracted_organization.assert_not_called()
+    mocked_load.assert_not_called()
+
     # transformation returns no organization
     mocked_search_organization_by_label.reset_mock()
     mocked_transform_wikidata_organization_to_extracted_organization.side_effect = None
     mocked_transform_wikidata_organization_to_extracted_organization.return_value = None
     mocked_transform_wikidata_organization_to_extracted_organization.reset_mock()
     mocked_load.reset_mock()
+    _ORGANIZATION_BY_QUERY_CACHE.clear()
     returned = get_merged_organization_id_by_query_with_extract_transform_and_load(
         query_string, wikidata_primary_source
     )
@@ -81,6 +95,7 @@ def test_get_merged_organization_id_by_query_with_extract_transform_and_load_moc
     mocked_search_organization_by_label.reset_mock()
     mocked_transform_wikidata_organization_to_extracted_organization.reset_mock()
     mocked_load.reset_mock()
+    _ORGANIZATION_BY_QUERY_CACHE.clear()
     returned = get_merged_organization_id_by_query_with_extract_transform_and_load(
         query_string, wikidata_primary_source
     )

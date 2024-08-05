@@ -6,6 +6,8 @@ from mex.common.wikidata.transform import (
 )
 from mex.sinks import load
 
+_ORGANIZATION_BY_QUERY_CACHE: dict[str, MergedOrganizationIdentifier] = {}
+
 
 def get_merged_organization_id_by_query_with_extract_transform_and_load(
     query_string: str,
@@ -22,6 +24,11 @@ def get_merged_organization_id_by_query_with_extract_transform_and_load(
         is found in Wikidata lookup.
         None if multiple matches / no organization is found
     """
+    try:
+        return _ORGANIZATION_BY_QUERY_CACHE[query_string]
+    except KeyError:
+        pass
+
     found_organization = search_organization_by_label(query_string)
 
     if found_organization is None:
@@ -35,5 +42,7 @@ def get_merged_organization_id_by_query_with_extract_transform_and_load(
         return None
 
     load([extracted_organization])
+
+    _ORGANIZATION_BY_QUERY_CACHE[query_string] = extracted_organization.stableTargetId
 
     return extracted_organization.stableTargetId
