@@ -1,10 +1,11 @@
-from mex.common.models import ExtractedPrimarySource
+from collections.abc import Callable, Iterable
+
+from mex.common.models import ExtractedData, ExtractedPrimarySource
 from mex.common.types import MergedOrganizationIdentifier
 from mex.common.wikidata.extract import search_organization_by_label
 from mex.common.wikidata.transform import (
     transform_wikidata_organization_to_extracted_organization,
 )
-from mex.sinks import load
 
 _ORGANIZATION_BY_QUERY_CACHE: dict[str, MergedOrganizationIdentifier] = {}
 
@@ -12,17 +13,22 @@ _ORGANIZATION_BY_QUERY_CACHE: dict[str, MergedOrganizationIdentifier] = {}
 def get_merged_organization_id_by_query_with_extract_transform_and_load(
     query_string: str,
     wikidata_primary_source: ExtractedPrimarySource,
+    load_function: Callable[[Iterable[ExtractedData]], None],
 ) -> MergedOrganizationIdentifier | None:
-    """Looks up and loads a WikidataOrganization and returns its stableTargetId.
+    """Get stableTargetId of an organization matching the query string.
 
-    An organization is searched for in wikidata, transformed into an
-    ExtractedOrganization and loaded into the configured sink.
-    Also it's stable target id is returned.
+    Search wikidata for organization, transform it into an ExtractedOrganization and
+      load it using the provided load_function.
+
+    Args:
+         query_string: query string to search in wikidata
+         wikidata_primary_source: wikidata primary source
+         load_function: function to pass ExtractedOrganization to
 
     Returns:
-        Extracted WikidataOrganization stableTargetId if one matching organization
-        is found in Wikidata lookup.
-        None if multiple matches / no organization is found
+         ExtractedOrganization stableTargetId if one matching organization is found in
+           Wikidata lookup.
+         None if multiple matches / no organization is found
     """
     try:
         return _ORGANIZATION_BY_QUERY_CACHE[query_string]
@@ -41,7 +47,7 @@ def get_merged_organization_id_by_query_with_extract_transform_and_load(
     if extracted_organization is None:
         return None
 
-    load([extracted_organization])
+    load_function([extracted_organization])
 
     _ORGANIZATION_BY_QUERY_CACHE[query_string] = extracted_organization.stableTargetId
 
