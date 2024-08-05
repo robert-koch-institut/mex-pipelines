@@ -18,7 +18,7 @@ from mex.wikidata.convenience import (
 @pytest.mark.usefixtures(
     "mocked_wikidata",
 )
-def test_get_merged_organization_id_by_query_with_extract_transform_and_load(
+def test_get_merged_organization_id_by_query_with_extract_transform_and_load_mocked(
     wikidata_organization: WikidataOrganization,
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
     monkeypatch: MonkeyPatch,
@@ -88,3 +88,14 @@ def test_get_merged_organization_id_by_query_with_extract_transform_and_load(
     mocked_search_organization_by_label.assert_called_once_with(query_string)
     mocked_transform_wikidata_organization_to_extracted_organization.assert_not_called()
     mocked_load.assert_not_called()
+
+
+@pytest.mark.integration
+def test_get_merged_organization_id_by_query_with_extract_transform_and_load(
+    extracted_primary_sources: dict[str, ExtractedPrimarySource],
+) -> None:
+    wikidata_primary_source = extracted_primary_sources["wikidata"]
+    returned = get_merged_organization_id_by_query_with_extract_transform_and_load(
+        "Robert Koch-Institut", wikidata_primary_source
+    )
+    assert returned == "ga6xh6pgMwgq7DC7r6Wjqg"
