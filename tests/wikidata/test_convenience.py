@@ -1,5 +1,6 @@
 from unittest.mock import Mock
 
+import pytest
 from pytest import MonkeyPatch
 
 from mex.common.models import ExtractedPrimarySource
@@ -11,14 +12,17 @@ from mex.wikidata.convenience import (
 )
 
 
+@pytest.mark.usefixtures(
+    "mocked_wikidata",
+)
 def test_get_merged_organization_id_by_query_with_extract_transform_and_load(
     wikidata_organization: WikidataOrganization,
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
     monkeypatch: MonkeyPatch,
 ) -> None:
 
-    query_string = "wikidata"
-    wikidata_primary_source = extracted_primary_sources[query_string]
+    query_string = "Robert Koch-Institut"
+    wikidata_primary_source = extracted_primary_sources["wikidata"]
 
     mocked_load = Mock()
     monkeypatch.setattr(convenience, "load", mocked_load)
