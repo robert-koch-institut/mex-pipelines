@@ -14,8 +14,8 @@ from mex.common.types import (
     MergedOrganizationalUnitIdentifier,
     MergedOrganizationIdentifier,
 )
-from mex.odk.model import ODKData
-from mex.odk.transform import (
+from mex.extractors.odk.model import ODKData
+from mex.extractors.odk.transform import (
     get_variable_groups_from_raw_data,
     transform_odk_data_to_extracted_variables,
     transform_odk_resources_to_mex_resources,

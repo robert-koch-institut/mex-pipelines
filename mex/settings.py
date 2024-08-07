@@ -8,17 +8,17 @@ from mex.extractors.biospecimen.settings import BiospecimenSettings
 from mex.extractors.blueant.settings import BlueAntSettings
 from mex.extractors.confluence_vvt.settings import ConfluenceVvtSettings
 from mex.extractors.datscha_web.settings import DatschaWebSettings
-from mex.ff_projects.settings import FFProjectsSettings
-from mex.grippeweb.settings import GrippewebSettings
-from mex.ifsg.settings import IFSGSettings
-from mex.international_projects.settings import InternationalProjectsSettings
-from mex.odk.settings import ODKSettings
-from mex.rdmo.settings import RDMOSettings
-from mex.seq_repo.settings import SeqRepoSettings
-from mex.sumo.settings import SumoSettings
-from mex.synopse.settings import SynopseSettings
+from mex.extractors.ff_projects.settings import FFProjectsSettings
+from mex.extractors.grippeweb.settings import GrippewebSettings
+from mex.extractors.ifsg.settings import IFSGSettings
+from mex.extractors.international_projects.settings import InternationalProjectsSettings
+from mex.extractors.odk.settings import ODKSettings
+from mex.extractors.rdmo.settings import RDMOSettings
+from mex.extractors.seq_repo.settings import SeqRepoSettings
+from mex.extractors.sumo.settings import SumoSettings
+from mex.extractors.synopse.settings import SynopseSettings
+from mex.extractors.voxco.settings import VoxcoSettings
 from mex.types import ExtractorIdentityProvider
-from mex.voxco.settings import VoxcoSettings
 
 
 class Settings(BaseSettings):

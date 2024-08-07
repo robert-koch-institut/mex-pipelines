@@ -7,8 +7,10 @@ from mex.common.types import (
     TextLanguage,
     YearMonthDay,
 )
-from mex.international_projects.extract import extract_international_projects_sources
-from mex.international_projects.transform import (
+from mex.extractors.international_projects.extract import (
+    extract_international_projects_sources,
+)
+from mex.extractors.international_projects.transform import (
     transform_international_projects_sources_to_extracted_activities,
 )
 
