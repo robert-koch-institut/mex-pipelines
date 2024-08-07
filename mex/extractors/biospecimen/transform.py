@@ -1,7 +1,6 @@
 from collections.abc import Generator, Iterable
 from typing import cast
 
-from mex.biospecimen.models.source import BiospecimenResource
 from mex.common.logging import watch
 from mex.common.models import (
     ExtractedAccessPlatform,
@@ -19,6 +18,7 @@ from mex.common.types import (
     TemporalEntity,
     Theme,
 )
+from mex.extractors.biospecimen.models.source import BiospecimenResource
 
 
 @watch

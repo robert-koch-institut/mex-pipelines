@@ -6,7 +6,7 @@ from mex.common.models import (
     ExtractedPrimarySource,
 )
 from mex.common.types import Identifier
-from mex.datscha_web.models.item import DatschaWebItem
+from mex.extractors.datscha_web.models.item import DatschaWebItem
 
 
 @watch

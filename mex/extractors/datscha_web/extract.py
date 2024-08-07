@@ -6,8 +6,8 @@ from mex.common.ldap.transform import analyse_person_string
 from mex.common.logging import watch
 from mex.common.wikidata.extract import search_organization_by_label
 from mex.common.wikidata.models.organization import WikidataOrganization
-from mex.datscha_web.connector import DatschaWebConnector
-from mex.datscha_web.models.item import DatschaWebItem
+from mex.extractors.datscha_web.connector import DatschaWebConnector
+from mex.extractors.datscha_web.models.item import DatschaWebItem
 
 
 @watch

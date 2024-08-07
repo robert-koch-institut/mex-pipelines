@@ -10,8 +10,8 @@ In order to decrease the vendor-lock, we try to restrict the use of dagster APIs
 software-defined assets
 -----------------------
 
-Each pipeline should have a `main` module, e.g. `mex.artificial.main`, that contains
-all steps needed for a successful execution. Each "step" should be marked as a
+Each pipeline should have a `main` module, e.g. `mex.extractors.artificial.main`, that
+contains all steps needed for a successful execution. Each "step" should be marked as a
 software-defined asset using the decorator exposed by `mex.pipeline.asset` and should be
 assigned to a group with a name unique to the pipeline.
 

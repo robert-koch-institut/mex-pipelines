@@ -1,14 +1,5 @@
 from faker import Faker
 
-from mex.artificial.identity import IdentityMap, create_identities, restore_identities
-from mex.artificial.provider import (
-    BuilderProvider,
-    IdentityProvider,
-    LinkProvider,
-    PatternProvider,
-    TemporalEntityProvider,
-    TextProvider,
-)
 from mex.common.cli import entrypoint
 from mex.common.models import (
     EXTRACTED_MODEL_CLASSES,
@@ -23,6 +14,19 @@ from mex.common.models import (
     ExtractedResource,
     ExtractedVariable,
     ExtractedVariableGroup,
+)
+from mex.extractors.artificial.identity import (
+    IdentityMap,
+    create_identities,
+    restore_identities,
+)
+from mex.extractors.artificial.provider import (
+    BuilderProvider,
+    IdentityProvider,
+    LinkProvider,
+    PatternProvider,
+    TemporalEntityProvider,
+    TextProvider,
 )
 from mex.pipeline import asset, run_job_in_process
 from mex.settings import Settings

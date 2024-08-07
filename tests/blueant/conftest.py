@@ -1,8 +1,8 @@
 import pytest
 
-from mex.blueant.models.source import BlueAntSource
 from mex.common.models import ExtractedPerson
 from mex.common.types import Identifier, TemporalEntity
+from mex.extractors.blueant.models.source import BlueAntSource
 
 
 @pytest.fixture

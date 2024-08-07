@@ -4,8 +4,8 @@ from unittest.mock import MagicMock
 import pytest
 from pytest import MonkeyPatch
 
-from mex.datscha_web.connector import DatschaWebConnector
-from mex.datscha_web.models.item import DatschaWebItem
+from mex.extractors.datscha_web.connector import DatschaWebConnector
+from mex.extractors.datscha_web.models.item import DatschaWebItem
 
 
 @pytest.fixture

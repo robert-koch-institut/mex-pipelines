@@ -14,13 +14,15 @@ from mex.common.types import (
     MergedOrganizationIdentifier,
     MergedPersonIdentifier,
 )
-from mex.datscha_web.extract import (
+from mex.extractors.datscha_web.extract import (
     extract_datscha_web_items,
     extract_datscha_web_organizations,
     extract_datscha_web_source_contacts,
 )
-from mex.datscha_web.models.item import DatschaWebItem
-from mex.datscha_web.transform import transform_datscha_web_items_to_mex_activities
+from mex.extractors.datscha_web.models.item import DatschaWebItem
+from mex.extractors.datscha_web.transform import (
+    transform_datscha_web_items_to_mex_activities,
+)
 from mex.filters import filter_by_global_rules
 from mex.pipeline import asset, run_job_in_process
 from mex.settings import Settings

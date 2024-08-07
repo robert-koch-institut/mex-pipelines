@@ -10,7 +10,6 @@ from faker.providers.internet import Provider as InternetFakerProvider
 from faker.providers.python import Provider as PythonFakerProvider
 from pydantic.fields import FieldInfo
 
-from mex.artificial.identity import IdentityMap
 from mex.common.identity import Identity
 from mex.common.models import ExtractedData
 from mex.common.types import (
@@ -24,6 +23,7 @@ from mex.common.types import (
     TemporalEntityPrecision,
     Text,
 )
+from mex.extractors.artificial.identity import IdentityMap
 from mex.settings import Settings
 
 

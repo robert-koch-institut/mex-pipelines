@@ -5,11 +5,11 @@ from typing import Any
 
 from pandas import DataFrame, ExcelFile, Series
 
-from mex.biospecimen.models.source import BiospecimenResource
 from mex.common.exceptions import MExError
 from mex.common.ldap.connector import LDAPConnector
 from mex.common.ldap.models.person import LDAPPerson
 from mex.common.logging import watch
+from mex.extractors.biospecimen.models.source import BiospecimenResource
 from mex.settings import Settings
 
 

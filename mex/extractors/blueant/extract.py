@@ -1,11 +1,11 @@
 from collections.abc import Generator, Iterable
 
-from mex.blueant.connector import BlueAntConnector
-from mex.blueant.models.source import BlueAntSource
 from mex.common.exceptions import MExError
 from mex.common.ldap.connector import LDAPConnector
 from mex.common.ldap.models.person import LDAPPerson
 from mex.common.logging import watch
+from mex.extractors.blueant.connector import BlueAntConnector
+from mex.extractors.blueant.models.source import BlueAntSource
 from mex.settings import Settings
 
 

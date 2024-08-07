@@ -6,9 +6,9 @@ from mex.common.ldap.connector import LDAPConnector
 from mex.common.ldap.models.person import LDAPPersonWithQuery
 from mex.common.ldap.transform import analyse_person_string
 from mex.common.logging import watch
-from mex.confluence_vvt.connector import ConfluenceVvtConnector
-from mex.confluence_vvt.models.source import ConfluenceVvtSource
-from mex.confluence_vvt.parse_html import parse_data_html_page
+from mex.extractors.confluence_vvt.connector import ConfluenceVvtConnector
+from mex.extractors.confluence_vvt.models.source import ConfluenceVvtSource
+from mex.extractors.confluence_vvt.parse_html import parse_data_html_page
 from mex.settings import Settings
 
 

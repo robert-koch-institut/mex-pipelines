@@ -2,8 +2,8 @@ from urllib.parse import urljoin
 
 from mex.common.connector import HTTPConnector
 from mex.common.exceptions import MExError
-from mex.datscha_web.models.item import DatschaWebItem
-from mex.datscha_web.parse_html import (
+from mex.extractors.datscha_web.models.item import DatschaWebItem
+from mex.extractors.datscha_web.parse_html import (
     parse_item_urls_from_overview_html,
     parse_single_item_html,
 )

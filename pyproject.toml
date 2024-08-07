@@ -44,11 +44,11 @@ optional-dependencies.dev = [
 
 [project.scripts]
 all-extractors = "mex.main:run"
-artificial = "mex.artificial.main:run"
-biospecimen = "mex.biospecimen.main:run"
-blueant = "mex.blueant.main:run"
-confluence-vvt = "mex.confluence_vvt.main:run"
-datscha-web = "mex.datscha_web.main:run"
+artificial = "mex.extractors.artificial.main:run"
+biospecimen = "mex.extractors.biospecimen.main:run"
+blueant = "mex.extractors.blueant.main:run"
+confluence-vvt = "mex.extractors.confluence_vvt.main:run"
+datscha-web = "mex.extractors.datscha_web.main:run"
 ff-projects = "mex.ff_projects.main:run"
 grippeweb = "mex.grippeweb.main:run"
 ifsg = "mex.ifsg.main:run"

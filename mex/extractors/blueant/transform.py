@@ -1,10 +1,10 @@
 from collections.abc import Generator, Hashable, Iterable
 
-from mex.blueant.models.source import BlueAntSource
 from mex.common.logging import watch
 from mex.common.models import ExtractedActivity, ExtractedPrimarySource
 from mex.common.types import ActivityType, Identifier, Theme
 from mex.common.utils import contains_any
+from mex.extractors.blueant.models.source import BlueAntSource
 
 INTERNATIONAL_PROJECT_DEPARTMENTS = [
     "ZIG",

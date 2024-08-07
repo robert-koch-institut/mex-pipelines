@@ -4,7 +4,7 @@ from urllib.parse import urljoin
 from bs4 import BeautifulSoup, Tag
 
 from mex.common.exceptions import MExError
-from mex.datscha_web.models.item import DatschaWebItem
+from mex.extractors.datscha_web.models.item import DatschaWebItem
 
 
 def parse_item_urls_from_overview_html(html_data: str, url: str) -> list[str]:

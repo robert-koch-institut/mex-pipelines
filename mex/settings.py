@@ -1,13 +1,13 @@
 from pydantic import AnyUrl, Field, SecretStr
 from pydantic_core import Url
 
-from mex.artificial.settings import ArtificialSettings
-from mex.biospecimen.settings import BiospecimenSettings
-from mex.blueant.settings import BlueAntSettings
 from mex.common.settings import BaseSettings
 from mex.common.types import IdentityProvider
-from mex.confluence_vvt.settings import ConfluenceVvtSettings
-from mex.datscha_web.settings import DatschaWebSettings
+from mex.extractors.artificial.settings import ArtificialSettings
+from mex.extractors.biospecimen.settings import BiospecimenSettings
+from mex.extractors.blueant.settings import BlueAntSettings
+from mex.extractors.confluence_vvt.settings import ConfluenceVvtSettings
+from mex.extractors.datscha_web.settings import DatschaWebSettings
 from mex.ff_projects.settings import FFProjectsSettings
 from mex.grippeweb.settings import GrippewebSettings
 from mex.ifsg.settings import IFSGSettings
