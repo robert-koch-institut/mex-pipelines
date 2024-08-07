@@ -267,7 +267,8 @@ def transform_synopse_data_to_mex_resources(
     description_by_study_id: dict[str, str] | None,
     documentation_by_study_id: dict[str, Link] | None,
     keyword_text_by_study_id: dict[str, list[Text]],
-    synopse_resource_extended_data_use: dict[str, Any],
+    synopse_resource: dict[str, Any],
+    identifier_in_primary_source_by_study_id: dict[str, str],
 ) -> Generator[ExtractedResource, None, None]:
     """Transform Synopse Studies to MEx resources.
 
@@ -283,7 +284,8 @@ def transform_synopse_data_to_mex_resources(
         description_by_study_id: Description Text by study ID
         documentation_by_study_id: Documentation Link by study ID
         keyword_text_by_study_id: List of keywords by study ID
-        synopse_resource_extended_data_use: resource extended data use default values
+        synopse_resource: resource default values
+        identifier_in_primary_source_by_study_id: identifierInPrimarySource by study ID
 
     Returns:
         Generator for extracted resources
@@ -292,9 +294,7 @@ def transform_synopse_data_to_mex_resources(
         a.identifierInPrimarySource: a for a in extracted_activities
     }
     unit_in_charge = unit_merged_ids_by_synonym[
-        synopse_resource_extended_data_use["unitInCharge"][0]["mappingRules"][0][
-            "forValues"
-        ][0]
+        synopse_resource["unitInCharge"][0]["mappingRules"][0]["forValues"][0]
     ]
     access_platform_by_identifier_in_primary_source = {
         p.identifierInPrimarySource: p for p in extracted_access_platforms
@@ -322,22 +322,16 @@ def transform_synopse_data_to_mex_resources(
             documentation = documentation_by_study_id[study.studien_id]
         extracted_activity = extracted_activities_by_study_ids.get(study.studien_id)
         theme = (
-            synopse_resource_extended_data_use["theme"][0]["mappingRules"][0][
-                "setValues"
-            ]
+            synopse_resource["theme"][0]["mappingRules"][0]["setValues"]
             if study.studien_id
-            in synopse_resource_extended_data_use["theme"][0]["mappingRules"][0][
-                "forValues"
-            ]
-            else synopse_resource_extended_data_use["theme"][0]["mappingRules"][1][
-                "setValues"
-            ]
+            in synopse_resource["theme"][0]["mappingRules"][0]["forValues"]
+            else synopse_resource["theme"][0]["mappingRules"][1]["setValues"]
         )
         yield ExtractedResource(
             accessPlatform=access_platform,
-            accessRestriction=synopse_resource_extended_data_use["accessRestriction"][
+            accessRestriction=synopse_resource["accessRestriction"][0]["mappingRules"][
                 0
-            ]["mappingRules"][0]["setValues"],
+            ]["setValues"],
             contact=unit_in_charge,
             contributingUnit=(
                 extracted_activity.involvedUnit + extracted_activity.responsibleUnit
@@ -351,34 +345,28 @@ def transform_synopse_data_to_mex_resources(
             description=description,
             documentation=documentation,
             hasLegalBasis=[study.rechte] if study.rechte else [],
-            hasPersonalData=synopse_resource_extended_data_use["hasPersonalData"][0][
+            hasPersonalData=synopse_resource["hasPersonalData"][0]["mappingRules"][0][
+                "setValues"
+            ],
+            hadPrimarySource=extracted_primary_source.stableTargetId,
+            identifierInPrimarySource=identifier_in_primary_source_by_study_id[
+                study.studien_id
+            ],
+            keyword=keyword_text_by_study_id[study.studien_id],
+            language=synopse_resource["language"][0]["mappingRules"][0]["setValues"],
+            publisher=[extracted_organization.stableTargetId],
+            resourceCreationMethod=synopse_resource["resourceCreationMethod"][0][
                 "mappingRules"
             ][0]["setValues"],
-            hadPrimarySource=extracted_primary_source.stableTargetId,
-            identifierInPrimarySource=(
-                f"{study.studien_id}-{study.ds_typ_id}-{study.titel_datenset}"
-            ),
-            keyword=keyword_text_by_study_id[study.studien_id],
-            language=synopse_resource_extended_data_use["language"][0]["mappingRules"][
-                0
-            ]["setValues"],
-            publisher=[extracted_organization.stableTargetId],
-            resourceCreationMethod=synopse_resource_extended_data_use[
-                "resourceCreationMethod"
-            ][0]["mappingRules"][0]["setValues"],
-            resourceTypeGeneral=synopse_resource_extended_data_use[
-                "resourceTypeGeneral"
-            ][0]["mappingRules"][0]["setValues"],
+            resourceTypeGeneral=synopse_resource["resourceTypeGeneral"][0][
+                "mappingRules"
+            ][0]["setValues"],
             resourceTypeSpecific=synopse_studien_art_typ_by_study_ids.get(
                 study.studien_id
             )
             or [],
-            rights=synopse_resource_extended_data_use["rights"][0]["mappingRules"][0][
-                "setValues"
-            ],
-            spatial=synopse_resource_extended_data_use["spatial"][0]["mappingRules"][0][
-                "setValues"
-            ],
+            rights=synopse_resource["rights"][0]["mappingRules"][0]["setValues"],
+            spatial=synopse_resource["spatial"][0]["mappingRules"][0]["setValues"],
             temporal=(
                 " - ".join(
                     [
@@ -410,7 +398,7 @@ def transform_synopse_data_regular_to_mex_resources(
     extracted_primary_source: ExtractedPrimarySource,
     unit_merged_ids_by_synonym: dict[str, Identifier],
     extracted_organization: ExtractedOrganization,
-    synopse_resource_extended_data_use: dict[str, Any],
+    synopse_resource: dict[str, Any],
 ) -> Generator[ExtractedResource, None, None]:
     """Transform Synopse Studies to MEx resources.
 
@@ -424,7 +412,7 @@ def transform_synopse_data_regular_to_mex_resources(
         extracted_primary_source: Extracted report server platform
         unit_merged_ids_by_synonym: Map from unit acronyms and labels to their merged ID
         extracted_organization: extracted organization
-        synopse_resource_extended_data_use: resource extended data use default values
+        synopse_resource: resource extended data use default values
 
     Returns:
         Generator for extracted resources
@@ -433,6 +421,7 @@ def transform_synopse_data_regular_to_mex_resources(
     created_by_study_id: dict[str, str | None] = {}
     description_by_study_id: dict[str, str | None] = {}
     documentation_by_study_id: dict[str, Link | None] = {}
+    identifier_in_primary_source_by_study_id: dict[str, str] = {}
     keyword_text_by_study_id: dict[str, list[Text]] = {}
     for study in synopse_studies_gens[0]:
         created_by_study_id[study.studien_id] = study.erstellungs_datum
@@ -462,6 +451,9 @@ def transform_synopse_data_regular_to_mex_resources(
             Text(value=word, language=TextLanguage.DE) for word in keywords_plain
         ]
         keyword_text_by_study_id[study.studien_id] = keyword_text
+        identifier_in_primary_source_by_study_id[study.studien_id] = (
+            f"{study.studien_id}-{study.ds_typ_id}-{study.titel_datenset}"
+        )
 
     yield from transform_synopse_data_to_mex_resources(
         synopse_studies_gens[1],
@@ -475,7 +467,8 @@ def transform_synopse_data_regular_to_mex_resources(
         description_by_study_id,
         documentation_by_study_id,
         keyword_text_by_study_id,
-        synopse_resource_extended_data_use,
+        synopse_resource,
+        identifier_in_primary_source_by_study_id,
     )
 
 
@@ -508,6 +501,7 @@ def transform_synopse_data_extended_data_use_to_mex_resources(
     Returns:
         Generator for extracted resources
     """
+    identifier_in_primary_source_by_study_id: dict[str, str] = {}
     synopse_studies_gens = tee(synopse_studies, 2)
     keyword_text_by_study_id: dict[str, list[Text]] = {}
     for study in synopse_studies_gens[0]:
@@ -523,6 +517,9 @@ def transform_synopse_data_extended_data_use_to_mex_resources(
             Text(value=word, language=TextLanguage.DE) for word in keywords_plain
         ]
         keyword_text_by_study_id[study.studien_id] = keyword_text
+        identifier_in_primary_source_by_study_id[study.studien_id] = (
+            f"{study.studien_id}-extended-data-use"
+        )
     yield from transform_synopse_data_to_mex_resources(
         synopse_studies_gens[1],
         synopse_projects,
@@ -536,6 +533,7 @@ def transform_synopse_data_extended_data_use_to_mex_resources(
         None,
         keyword_text_by_study_id,
         synopse_resource,
+        identifier_in_primary_source_by_study_id,
     )
 
 

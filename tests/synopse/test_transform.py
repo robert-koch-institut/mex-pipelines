@@ -418,6 +418,12 @@ def test_transform_synopse_data_to_mex_resources(
     access_platform_by_identifier_in_primary_source = {
         p.identifierInPrimarySource: p for p in extracted_access_platforms
     }
+    identifier_in_primary_source_by_studien_id = {
+        synopse_studies[
+            0
+        ].studien_id: f"{synopse_studies[0].studien_id}-{synopse_studies[0].ds_typ_id}-"
+        f"{synopse_studies[0].titel_datenset}"
+    }
     expected_resource = {
         "accessPlatform": [
             str(
@@ -448,8 +454,7 @@ def test_transform_synopse_data_to_mex_resources(
         "hasPersonalData": "https://mex.rki.de/item/personal-data-1",
         "identifier": Joker(),
         "identifierInPrimarySource": (
-            f"{synopse_studies[0].studien_id}-{synopse_studies[0].ds_typ_id}-"
-            f"{synopse_studies[0].titel_datenset}"
+            identifier_in_primary_source_by_studien_id[synopse_studies[0].studien_id]
         ),
         "keyword": [
             {
@@ -495,6 +500,7 @@ def test_transform_synopse_data_to_mex_resources(
             documentation_by_study_id,
             keyword_text_by_study_id,
             synopse_resource_extended_data_use,
+            identifier_in_primary_source_by_studien_id,
         )
     )
     assert len(resources) == 1
@@ -633,7 +639,7 @@ def test_transform_synopse_data_extended_data_use_to_mex_resources(
         ],
         "hasPersonalData": "https://mex.rki.de/item/personal-data-1",
         "identifier": Joker(),
-        "identifierInPrimarySource": ("12345-17-Titel"),
+        "identifierInPrimarySource": ("12345-extended-data-use"),
         "keyword": [{"language": TextLanguage.DE, "value": "Krankheiten allgemein"}],
         "language": ["https://mex.rki.de/item/language-1"],
         "publisher": [str(extracted_organization[0].stableTargetId)],
