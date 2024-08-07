@@ -22,7 +22,7 @@ def run_job_in_process(group_name: str = "default") -> "ExecutionResult":
     """Run the dagster job with the given group name locally in-process."""
     import mex  # avoid circular imports
 
-    job = mex.defs.get_job_def(group_name)
+    job = mex.extractors.defs.get_job_def(group_name)
     return job.execute_in_process()
 
 
