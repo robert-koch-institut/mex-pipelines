@@ -9,6 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changes
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [0.18.0] - 2024-08-07
+
+### Added
+
 - transform voxco resources and variables
 
 ### Changes
@@ -23,8 +37,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   access from `ExtractorSettings.parameter` to `settings.extractor.parameter`.
 - update mex-common to 0.32.0
 
-### Deprecated
-
 ### Removed
 
 - remove mypy ignores for arg-type and call-arg
@@ -34,8 +46,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - fix confluence_vvt: use interne Vorgangsnummer as identifierInPrimarySource
 - remaining issues in voxco extractor
-
-### Security
 
 ## [0.17.1] - 2024-06-14
 
