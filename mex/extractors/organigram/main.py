@@ -8,7 +8,7 @@ from mex.common.primary_source.transform import (
     get_primary_sources_by_name,
     transform_seed_primary_sources_to_extracted_primary_sources,
 )
-from mex.pipeline import asset, run_job_in_process
+from mex.extractors.pipeline import asset, run_job_in_process
 from mex.settings import Settings
 from mex.sinks import load
 

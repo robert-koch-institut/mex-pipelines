@@ -28,7 +28,7 @@ from mex.extractors.artificial.provider import (
     TemporalEntityProvider,
     TextProvider,
 )
-from mex.pipeline import asset, run_job_in_process
+from mex.extractors.pipeline import asset, run_job_in_process
 from mex.settings import Settings
 from mex.sinks import load
 

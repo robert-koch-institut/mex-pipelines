@@ -21,8 +21,8 @@ from mex.extractors.confluence_vvt.models.source import ConfluenceVvtSource
 from mex.extractors.confluence_vvt.transform import (
     transform_confluence_vvt_sources_to_extracted_activities,
 )
+from mex.extractors.pipeline import asset, run_job_in_process
 from mex.filters import filter_by_global_rules
-from mex.pipeline import asset, run_job_in_process
 from mex.settings import Settings
 from mex.sinks import load
 

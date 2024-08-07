@@ -38,8 +38,8 @@ from mex.extractors.ifsg.transform import (
     transform_resource_parent_to_mex_resource,
     transform_resource_state_to_mex_resource,
 )
-from mex.mapping.extract import extract_mapping_data
-from mex.pipeline import asset, run_job_in_process
+from mex.extractors.mapping.extract import extract_mapping_data
+from mex.extractors.pipeline import asset, run_job_in_process
 from mex.settings import Settings
 from mex.sinks import load
 

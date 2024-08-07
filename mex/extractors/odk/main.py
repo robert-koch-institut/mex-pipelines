@@ -13,6 +13,7 @@ from mex.common.types import (
     MergedOrganizationalUnitIdentifier,
     MergedOrganizationIdentifier,
 )
+from mex.extractors.mapping.extract import extract_mapping_data
 from mex.extractors.odk.extract import (
     extract_odk_raw_data,
     get_external_partner_and_publisher_by_label,
@@ -24,13 +25,12 @@ from mex.extractors.odk.transform import (
     transform_odk_resources_to_mex_resources,
     transform_odk_variable_groups_to_extracted_variable_groups,
 )
-from mex.mapping.extract import extract_mapping_data
-from mex.pipeline import asset, run_job_in_process
-from mex.settings import Settings
-from mex.sinks import load
-from mex.wikidata.extract import (
+from mex.extractors.pipeline import asset, run_job_in_process
+from mex.extractors.wikidata.extract import (
     get_merged_organization_id_by_query_with_transform_and_load,
 )
+from mex.settings import Settings
+from mex.sinks import load
 
 
 @asset(group_name="odk", deps=["extracted_primary_source_mex"])

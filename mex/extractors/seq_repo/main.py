@@ -18,6 +18,8 @@ from mex.common.types import (
     MergedOrganizationalUnitIdentifier,
     MergedPersonIdentifier,
 )
+from mex.extractors.mapping.extract import extract_mapping_data
+from mex.extractors.pipeline import asset, run_job_in_process
 from mex.extractors.seq_repo.extract import (
     extract_source_project_coordinator,
     extract_sources,
@@ -29,8 +31,6 @@ from mex.extractors.seq_repo.transform import (
     transform_seq_repo_activities_to_extracted_activities,
     transform_seq_repo_resource_to_extracted_resource_and_distribution,
 )
-from mex.mapping.extract import extract_mapping_data
-from mex.pipeline import asset, run_job_in_process
 from mex.settings import Settings
 from mex.sinks import load
 

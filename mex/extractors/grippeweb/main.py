@@ -37,14 +37,14 @@ from mex.extractors.grippeweb.transform import (
     transform_grippeweb_variable_group_to_extracted_variable_groups,
     transform_grippeweb_variable_to_extracted_variables,
 )
+from mex.extractors.mapping.extract import extract_mapping_data
+from mex.extractors.pipeline import asset, run_job_in_process
 from mex.extractors.sumo.transform import get_contact_merged_ids_by_emails
-from mex.mapping.extract import extract_mapping_data
-from mex.pipeline import asset, run_job_in_process
-from mex.settings import Settings
-from mex.sinks import load
-from mex.wikidata.extract import (
+from mex.extractors.wikidata.extract import (
     get_merged_organization_id_by_query_with_transform_and_load,
 )
+from mex.settings import Settings
+from mex.sinks import load
 
 
 @asset(group_name="grippeweb", deps=["extracted_primary_source_mex"])

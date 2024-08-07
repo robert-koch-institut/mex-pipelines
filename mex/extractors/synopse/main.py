@@ -20,6 +20,7 @@ from mex.common.types import (
     MergedPersonIdentifier,
     MergedResourceIdentifier,
 )
+from mex.extractors.pipeline import asset, run_job_in_process
 from mex.extractors.synopse.extract import (
     extract_projects,
     extract_study_data,
@@ -41,7 +42,6 @@ from mex.extractors.synopse.transform import (
     transform_synopse_variables_to_mex_variable_groups,
     transform_synopse_variables_to_mex_variables,
 )
-from mex.pipeline import asset, run_job_in_process
 from mex.settings import Settings
 from mex.sinks import load
 

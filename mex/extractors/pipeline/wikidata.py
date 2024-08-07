@@ -5,7 +5,7 @@ from mex.common.wikidata.models.organization import WikidataOrganization
 from mex.common.wikidata.transform import (
     transform_wikidata_organizations_to_extracted_organizations,
 )
-from mex.pipeline import asset
+from mex.extractors.pipeline import asset
 from mex.sinks import load
 
 

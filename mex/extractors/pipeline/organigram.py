@@ -7,7 +7,7 @@ from mex.common.organigram.transform import (
     transform_organigram_units_to_organizational_units,
 )
 from mex.common.types import MergedOrganizationalUnitIdentifier
-from mex.pipeline import asset
+from mex.extractors.pipeline import asset
 from mex.sinks import load
 
 

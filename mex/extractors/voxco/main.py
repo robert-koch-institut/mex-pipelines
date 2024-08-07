@@ -20,6 +20,8 @@ from mex.common.types import (
     MergedOrganizationalUnitIdentifier,
     MergedOrganizationIdentifier,
 )
+from mex.extractors.mapping.extract import extract_mapping_data
+from mex.extractors.pipeline import asset, run_job_in_process
 from mex.extractors.voxco.extract import (
     extract_ldap_persons_voxco,
     extract_voxco_organizations,
@@ -30,13 +32,11 @@ from mex.extractors.voxco.transform import (
     transform_voxco_resource_mappings_to_extracted_resources,
     transform_voxco_variable_mappings_to_extracted_variables,
 )
-from mex.mapping.extract import extract_mapping_data
-from mex.pipeline import asset, run_job_in_process
-from mex.settings import Settings
-from mex.sinks import load
-from mex.wikidata.extract import (
+from mex.extractors.wikidata.extract import (
     get_merged_organization_id_by_query_with_transform_and_load,
 )
+from mex.settings import Settings
+from mex.sinks import load
 
 
 @asset(group_name="voxco", deps=["extracted_primary_source_mex"])

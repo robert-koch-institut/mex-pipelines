@@ -4,7 +4,7 @@ from mex.common.primary_source.transform import (
     get_primary_sources_by_name,
     transform_seed_primary_sources_to_extracted_primary_sources,
 )
-from mex.pipeline import asset
+from mex.extractors.pipeline import asset
 from mex.sinks import load
 
 

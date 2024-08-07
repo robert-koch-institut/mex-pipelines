@@ -9,13 +9,13 @@ from mex.common.models import (
 from mex.common.primary_source.transform import (
     get_primary_sources_by_name,
 )
+from mex.extractors.pipeline import asset, run_job_in_process
 from mex.extractors.rdmo.extract import (
     extract_rdmo_source_contacts,
     extract_rdmo_sources,
 )
 from mex.extractors.rdmo.models.source import RDMOSource
 from mex.extractors.rdmo.transform import transform_rdmo_sources_to_extracted_activities
-from mex.pipeline import asset, run_job_in_process
 from mex.settings import Settings
 from mex.sinks import load
 

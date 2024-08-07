@@ -1,10 +1,10 @@
 from mex.common.models import ExtractedPrimarySource
 from mex.common.types import MergedOrganizationIdentifier
 from mex.common.wikidata.models.organization import WikidataOrganization
-from mex.sinks import load
-from mex.wikidata.transform import (
+from mex.extractors.wikidata.transform import (
     transform_wikidata_organizations_to_extracted_organizations_with_query,
 )
+from mex.sinks import load
 
 
 def get_merged_organization_id_by_query_with_transform_and_load(

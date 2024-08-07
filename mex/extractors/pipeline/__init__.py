@@ -5,15 +5,16 @@ RKI Metadata Exchange. Dagster allows us to structure our code, visualize depend
 between different data sources and schedule the execution of pipelines.
 
 In order to decrease the vendor-lock, we try to restrict the use of dagster APIs to the
-`mex.pipeline` module and avoid directly importing dagster modules from the extractors.
+`mex.extractors.pipeline` module and avoid directly importing dagster modules from the
+extractors.
 
 software-defined assets
 -----------------------
 
 Each pipeline should have a `main` module, e.g. `mex.extractors.artificial.main`, that
 contains all steps needed for a successful execution. Each "step" should be marked as a
-software-defined asset using the decorator exposed by `mex.pipeline.asset` and should be
-assigned to a group with a name unique to the pipeline.
+software-defined asset using the decorator exposed by `mex.extractors.pipeline.asset`
+and should be assigned to a group with a name unique to the pipeline.
 
     # mex/foo_system/main.py
 
@@ -23,8 +24,8 @@ assigned to a group with a name unique to the pipeline.
 
 An individual step should be one semantic unit, like get something from there,
 transform this to that or link these things to those things.
-Steps that can be re-used by multiple pipelines should go into `mex.pipeline` and
-should be assigned to the `"default"` group.
+Steps that can be re-used by multiple pipelines should go into `mex.extractors.pipeline`
+and should be assigned to the `"default"` group.
 
     # mex/pipeline/reusable_thing.py
 
@@ -73,6 +74,6 @@ if TYPE_CHECKING:  # pragma: no cover
 else:
     from dagster import asset
 
-from mex.pipeline.base import load_job_definitions, run_job_in_process
+from mex.extractors.pipeline.base import load_job_definitions, run_job_in_process
 
 __all__ = ("asset", "run_job_in_process", "load_job_definitions")

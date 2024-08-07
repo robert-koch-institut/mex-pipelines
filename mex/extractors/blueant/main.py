@@ -13,8 +13,8 @@ from mex.extractors.blueant.models.source import BlueAntSource
 from mex.extractors.blueant.transform import (
     transform_blueant_sources_to_extracted_activities,
 )
+from mex.extractors.pipeline import asset, run_job_in_process
 from mex.filters import filter_by_global_rules
-from mex.pipeline import asset, run_job_in_process
 from mex.settings import Settings
 from mex.sinks import load
 
