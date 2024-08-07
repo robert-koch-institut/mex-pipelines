@@ -651,25 +651,22 @@ def transform_synopse_project_to_activity(
         for email in synopse_project.get_contacts()
         if email in contact_merged_ids_by_emails
     ]
-    if (
-        synopse_project.externe_partner
-        in synopse_organization_ids_by_query_string.keys()
-    ):
-        external_associate = [
-            synopse_organization_ids_by_query_string[synopse_project.externe_partner]
-        ]
-    elif synopse_project.externe_partner:
-        extracted_organization = ExtractedOrganization(
-            officialName=synopse_project.externe_partner,
-            identifierInPrimarySource=synopse_project.externe_partner,
-            hadPrimarySource=extracted_primary_source.stableTargetId,
-        )
-        load([extracted_organization])
-        external_associate = [
-            MergedOrganizationIdentifier(extracted_organization.stableTargetId)
-        ]
-    else:
-        external_associate = []
+    external_associate = []
+    if synopse_project.externe_partner:
+        for org in synopse_project.externe_partner.split(", "):
+            if org in synopse_organization_ids_by_query_string.keys():
+                external_associate.append(synopse_organization_ids_by_query_string[org])
+            else:
+                extracted_organization = ExtractedOrganization(
+                    officialName=org,
+                    identifierInPrimarySource=org,
+                    hadPrimarySource=extracted_primary_source.stableTargetId,
+                )
+                load([extracted_organization])
+                external_associate.append(
+                    MergedOrganizationIdentifier(extracted_organization.stableTargetId)
+                )
+
     if (
         synopse_project.foerderinstitution_oder_auftraggeber
         in synopse_organization_ids_by_query_string.keys()
@@ -692,6 +689,12 @@ def transform_synopse_project_to_activity(
     else:
         funder_or_commissioner = []
     involved_person = contributor_merged_ids_by_name[synopse_project.beitragende]
+    theme = (
+        synopse_activity["theme"][0]["mappingRules"][0]["setValues"]
+        if synopse_project.studien_id
+        in synopse_activity["theme"][0]["mappingRules"][0]["forValues"]
+        else synopse_activity["theme"][0]["mappingRules"][1]["setValues"]
+    )
     return ExtractedActivity(
         abstract=synopse_project.beschreibung_der_studie,
         activityType=synopse_activity["activityType"][0]["mappingRules"][0][
@@ -717,7 +720,7 @@ def transform_synopse_project_to_activity(
             if synopse_project.projektbeginn
             else None
         ),
-        theme=synopse_activity["theme"][0]["mappingRules"][0]["setValues"],
+        theme=theme,
         title=synopse_project.project_studientitel
         or synopse_project.akronym_des_studientitels,
     )

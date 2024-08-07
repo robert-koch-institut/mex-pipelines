@@ -120,7 +120,11 @@ def extract_synopse_organizations(
     synopse_organizations = {
         project.externe_partner for project in synopse_projects
     }.union(
-        {project.foerderinstitution_oder_auftraggeber for project in synopse_projects}
+        {
+            project.foerderinstitution_oder_auftraggeber.split("(")[0]
+            for project in synopse_projects
+            if project.foerderinstitution_oder_auftraggeber
+        }
     )
     return {
         org_name: org

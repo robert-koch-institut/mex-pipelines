@@ -292,6 +292,28 @@ def synopse_studies() -> list[SynopseStudy]:
             studien_id="123458",
             titel_datenset="Study 2 ohne Referenzen",
         ),
+        SynopseStudy(
+            beschreibung="eine study ohne Variablen, Projekt, oder exctractedActivity.",
+            dokumentation="interne Datennutzung",
+            ds_typ_id=16,
+            erstellungs_datum="2017",
+            plattform_adresse="interne Datennutzung",
+            rechte="Niemand darf irgendwas.",
+            schlagworte_themen="Alkohol, Alter und Geschlecht, Drogen",
+            studien_id="123457",
+            titel_datenset="Study ohne Referenzen",
+        ),
+        SynopseStudy(
+            beschreibung="eine study ohne Variablen, Projekt, oder exctractedActivity.",
+            dokumentation="https://asd.def",
+            ds_typ_id=16,
+            erstellungs_datum="2017",
+            plattform_adresse="noch nicht erstellt",
+            rechte="Niemand darf irgendwas.",
+            schlagworte_themen="Alkohol, Alter und Geschlecht, Drogen",
+            studien_id="123458",
+            titel_datenset="Study 2 ohne Referenzen",
+        ),
     ]
 
 
@@ -624,7 +646,13 @@ def synopse_activity() -> dict[str, Any]:
         "theme": [
             {
                 "fieldInPrimarySource": "n/a",
-                "mappingRules": [{"setValues": ["https://mex.rki.de/item/theme-36"]}],
+                "mappingRules": [
+                    {
+                        "forValues": ["7202001", "7202002", "7202003", "7202004"],
+                        "setValues": ["https://mex.rki.de/item/theme-11"],
+                    },
+                    {"setValues": ["https://mex.rki.de/item/theme-36"]},
+                ],
                 "comment": "Studien und Surveillance",
             }
         ],

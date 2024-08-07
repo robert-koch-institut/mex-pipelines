@@ -34,6 +34,7 @@ from mex.synopse.extract import (
     extract_synopse_project_contributors,
     extract_variables,
 )
+from mex.synopse.filter import filter_and_log_access_platforms
 from mex.synopse.models.project import SynopseProject
 from mex.synopse.models.study import SynopseStudy
 from mex.synopse.models.study_overview import SynopseStudyOverview
@@ -277,9 +278,12 @@ def extracted_synopse_access_platforms(
         settings.synopse.mapping_path / "access-platform.yaml",
         ExtractedAccessPlatform,
     )
+    synopse_studies_filtered = filter_and_log_access_platforms(
+        synopse_studies, extracted_primary_source_report_server
+    )
     transformed_access_platforms = list(
         transform_synopse_studies_into_access_platforms(
-            synopse_studies,
+            synopse_studies_filtered,
             unit_stable_target_ids_by_synonym,
             extracted_primary_source_report_server,
             synopse_access_platform,

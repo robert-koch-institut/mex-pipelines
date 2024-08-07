@@ -58,16 +58,21 @@ externalAssociate:
   - fieldInPrimarySource: Partner_extern
     locationInPrimarySource: projekt_und_studienverwaltung.csv
     examplesInPrimarySource:
-    - 'Modul Kiesel: Bundesinstituts für Risikobewertung\n- Modul Momo: Karlsruher Institut für Technologie\n- Moudul Bella:  Uniklinik Hamburg Eppendorf",\n"USUMA GmbH"'
+    - Bundesinstituts für Risikobewertung, Karlsruher Institut für Technologie, Uniklinik Hamburg Eppendorf
+    - USUMA GmbH
     mappingRules:
-    - rule: Match values using wikidata extractor. To match the organizations, ignore the part befor the `:`. Expect multiple entries on newlines. If wikidata match fails (no match), create new organization with value as officialName.
+    - rule: Match values using wikidata extractor. If wikidata match fails (no match), create new organization.
+            Use ', ' as marker to separate organizations.
 funderOrCommissioner:
   - fieldInPrimarySource: Auftraggeber
     locationInPrimarySource: projekt_und_studienverwaltung.csv
     examplesInPrimarySource:
     - Bundesministerium für Gesundheit (BMG)
     mappingRules:
-      - rule: Match values using wikidata extractor. If wikidata match fails (no match), create new organization with value as officialName.
+    - rule: Match values using wikidata extractor. If wikidata match fails (no match), create new organization with value as officialName.
+    - forValues:
+      - Bundesministerium für Gesundheit (BMG)
+      rule: Ignore '(BMG)' in wikidata search string to find a match.
 hadPrimarySource:
   - fieldInPrimarySource: n/a
     mappingRules:
@@ -101,7 +106,7 @@ responsibleUnit:
     examplesInPrimarySource:
     - fg23
     mappingRules:
-      - rule: Use value to match with identifer in /raw-data/organigram/organizational-units.json. If unit unit cannot be resovled, set to C1.
+      - rule: Use value to match with identifer in /raw-data/organigram/organizational-units.json. If unit unit cannot be resovled, set to fg21.
 shortName:
   - fieldInPrimarySource: Studie
     locationInPrimarySource: projekt_und_studienverwaltung.csv
@@ -124,13 +129,22 @@ succeeds:
     examplesInPrimarySource:
     - KiGGS-Basiserhebung
     mappingRules:
-    - rule: match with the field `Studie` OR skip this until C1 updates the data.
+    - rule: match with the field `Studie` OR skip this until FG 21 updates the data.
         (We want to have `StudienID` inside the field).
 theme:
-  - fieldInPrimarySource: n/a
+  - fieldInPrimarySource: StudienID
+    locationInPrimarySource: projekt_und_studienverwaltung.csv
     mappingRules:
-    - setValues:
-      - https://mex.rki.de/item/theme-36 # Non-Communicable Diseases
+    - forValues:
+      - "7202001"
+      - "7202002"
+      - "7202003"
+      - "7202004"
+      setValues:
+      - https://mex.rki.de/item/theme-11 # Infectious Diseases and Epidemiology
+    - rule: For all other StudienID set value as mentioned below in "setValues".
+      setValues:
+      - https://mex.rki.de/item/theme-36 # Non-Communicable Diseases and Health Surveillance
 title:
   - fieldInPrimarySource: ProjektStudientitel
     locationInPrimarySource: projekt_und_studienverwaltung.csv

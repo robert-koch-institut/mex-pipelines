@@ -142,7 +142,7 @@ def test_transform_synopse_studies_into_access_platforms(
             synopse_access_platform,
         )
     )
-    assert len(access_platforms) == 2
+    assert len(access_platforms) == 4
     assert (
         access_platforms[0].model_dump(exclude_defaults=True)
         == expected_access_platform_one
