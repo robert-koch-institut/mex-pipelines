@@ -17,8 +17,8 @@ from mex.extractors.rdmo.settings import RDMOSettings
 from mex.extractors.seq_repo.settings import SeqRepoSettings
 from mex.extractors.sumo.settings import SumoSettings
 from mex.extractors.synopse.settings import SynopseSettings
+from mex.extractors.types import ExtractorIdentityProvider
 from mex.extractors.voxco.settings import VoxcoSettings
-from mex.types import ExtractorIdentityProvider
 
 
 class Settings(BaseSettings):

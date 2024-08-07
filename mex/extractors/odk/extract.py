@@ -6,7 +6,7 @@ from pandas import DataFrame, ExcelFile
 from mex.common.wikidata.extract import search_organization_by_label
 from mex.common.wikidata.models.organization import WikidataOrganization
 from mex.extractors.odk.model import ODKData
-from mex.settings import Settings
+from mex.extractors.settings import Settings
 
 
 def extract_odk_raw_data() -> list[ODKData]:

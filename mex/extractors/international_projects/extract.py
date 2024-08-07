@@ -18,7 +18,7 @@ from mex.common.wikidata.models.organization import WikidataOrganization
 from mex.extractors.international_projects.models.source import (
     InternationalProjectsSource,
 )
-from mex.settings import Settings
+from mex.extractors.settings import Settings
 
 
 @watch

@@ -4,8 +4,8 @@ from mex.common.logging import watch
 from mex.common.types import Identifier
 from mex.common.utils import contains_any
 from mex.extractors.blueant.models.source import BlueAntSource
-from mex.logging import log_filter
-from mex.settings import Settings
+from mex.extractors.logging import log_filter
+from mex.extractors.settings import Settings
 
 
 @watch

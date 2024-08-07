@@ -1,5 +1,5 @@
 from mex.common.connector import HTTPConnector
-from mex.settings import Settings
+from mex.extractors.settings import Settings
 
 
 class ConfluenceVvtConnector(HTTPConnector):

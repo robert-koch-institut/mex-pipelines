@@ -5,7 +5,7 @@ from requests_ntlm import HttpNtlmAuth
 
 from mex.common.connector import HTTPConnector
 from mex.common.exceptions import MExError
-from mex.settings import Settings
+from mex.extractors.settings import Settings
 
 
 class ReportServerConnector(HTTPConnector):

@@ -2,7 +2,7 @@ from mex.common.cli import entrypoint
 from mex.extractors.pipeline import asset, run_job_in_process
 from mex.extractors.publisher.extract import get_merged_items
 from mex.extractors.publisher.load import write_merged_items
-from mex.settings import Settings
+from mex.extractors.settings import Settings
 
 
 @asset(group_name="publisher")

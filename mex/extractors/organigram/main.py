@@ -9,8 +9,8 @@ from mex.common.primary_source.transform import (
     transform_seed_primary_sources_to_extracted_primary_sources,
 )
 from mex.extractors.pipeline import asset, run_job_in_process
-from mex.settings import Settings
-from mex.sinks import load
+from mex.extractors.settings import Settings
+from mex.extractors.sinks import load
 
 
 @asset(group_name="organigram")

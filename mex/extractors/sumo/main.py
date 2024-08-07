@@ -25,6 +25,8 @@ from mex.common.types import (
 )
 from mex.extractors.mapping.extract import extract_mapping_data
 from mex.extractors.pipeline import asset, run_job_in_process
+from mex.extractors.settings import Settings
+from mex.extractors.sinks import load
 from mex.extractors.sumo.extract import (
     extract_cc1_data_model_nokeda,
     extract_cc1_data_valuesets,
@@ -53,8 +55,6 @@ from mex.extractors.sumo.transform import (
     transform_sumo_access_platform_to_mex_access_platform,
     transform_sumo_activity_to_extracted_activity,
 )
-from mex.settings import Settings
-from mex.sinks import load
 
 
 @asset(group_name="sumo", deps=["extracted_primary_source_mex"])

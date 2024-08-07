@@ -3,8 +3,8 @@ from collections.abc import Generator, Iterable
 from mex.common.types import Identifier, MergedOrganizationalUnitIdentifier
 from mex.common.utils import any_contains_any, contains_any
 from mex.extractors.ff_projects.models.source import FFProjectsSource
-from mex.logging import log_filter
-from mex.settings import Settings
+from mex.extractors.logging import log_filter
+from mex.extractors.settings import Settings
 
 
 def filter_and_log_ff_projects_sources(

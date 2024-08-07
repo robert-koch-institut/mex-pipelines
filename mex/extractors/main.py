@@ -1,6 +1,6 @@
 from mex.common.cli import entrypoint
 from mex.extractors.pipeline.base import run_job_in_process
-from mex.settings import Settings
+from mex.extractors.settings import Settings
 
 
 @entrypoint(Settings)

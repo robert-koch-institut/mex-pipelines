@@ -17,7 +17,7 @@ from mex.common.types import (
 from mex.common.wikidata.extract import search_organization_by_label
 from mex.common.wikidata.models.organization import WikidataOrganization
 from mex.extractors.ff_projects.models.source import FFProjectsSource
-from mex.settings import Settings
+from mex.extractors.settings import Settings
 
 
 @watch

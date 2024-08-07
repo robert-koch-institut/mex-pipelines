@@ -12,7 +12,7 @@ from dagster import (
     load_assets_from_package_module,
 )
 
-from mex.settings import Settings
+from mex.extractors.settings import Settings
 
 if TYPE_CHECKING:  # pragma: no cover
     from dagster._core.execution.execution_result import ExecutionResult

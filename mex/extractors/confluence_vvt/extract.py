@@ -9,7 +9,7 @@ from mex.common.logging import watch
 from mex.extractors.confluence_vvt.connector import ConfluenceVvtConnector
 from mex.extractors.confluence_vvt.models.source import ConfluenceVvtSource
 from mex.extractors.confluence_vvt.parse_html import parse_data_html_page
-from mex.settings import Settings
+from mex.extractors.settings import Settings
 
 
 @watch

@@ -10,7 +10,7 @@ from mex.common.models import (
     ExtractedData,
 )
 from mex.common.types import MergedPrimarySourceIdentifier
-from mex.settings import Settings
+from mex.extractors.settings import Settings
 
 IdentityMap = dict[str, list[Identity]]
 

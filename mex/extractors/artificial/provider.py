@@ -24,7 +24,7 @@ from mex.common.types import (
     Text,
 )
 from mex.extractors.artificial.identity import IdentityMap
-from mex.settings import Settings
+from mex.extractors.settings import Settings
 
 
 class BuilderProvider(PythonFakerProvider):

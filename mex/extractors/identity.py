@@ -5,7 +5,7 @@ from mex.common.connector.http import HTTPConnector
 from mex.common.identity.base import BaseProvider
 from mex.common.identity.models import Identity
 from mex.common.types import Identifier, MergedPrimarySourceIdentifier
-from mex.settings import Settings
+from mex.extractors.settings import Settings
 
 
 class BackendIdentityProvider(BaseProvider, HTTPConnector):

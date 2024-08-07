@@ -1,9 +1,9 @@
 from collections.abc import Generator, Iterable
 
 from mex.common.models import ExtractedPrimarySource
+from mex.extractors.logging import log_filter
 from mex.extractors.synopse.models.study_overview import SynopseStudyOverview
 from mex.extractors.synopse.models.variable import SynopseVariable
-from mex.logging import log_filter
 
 
 def filter_and_log_variables(

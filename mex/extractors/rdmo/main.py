@@ -16,8 +16,8 @@ from mex.extractors.rdmo.extract import (
 )
 from mex.extractors.rdmo.models.source import RDMOSource
 from mex.extractors.rdmo.transform import transform_rdmo_sources_to_extracted_activities
-from mex.settings import Settings
-from mex.sinks import load
+from mex.extractors.settings import Settings
+from mex.extractors.sinks import load
 
 
 @asset(group_name="rdmo", deps=["extracted_primary_source_mex"])

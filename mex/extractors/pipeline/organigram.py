@@ -8,7 +8,7 @@ from mex.common.organigram.transform import (
 )
 from mex.common.types import MergedOrganizationalUnitIdentifier
 from mex.extractors.pipeline import asset
-from mex.sinks import load
+from mex.extractors.sinks import load
 
 
 @asset(group_name="default")

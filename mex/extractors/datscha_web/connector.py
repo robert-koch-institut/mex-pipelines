@@ -7,7 +7,7 @@ from mex.extractors.datscha_web.parse_html import (
     parse_item_urls_from_overview_html,
     parse_single_item_html,
 )
-from mex.settings import Settings
+from mex.extractors.settings import Settings
 
 
 class DatschaWebConnector(HTTPConnector):

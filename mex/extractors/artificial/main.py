@@ -29,8 +29,8 @@ from mex.extractors.artificial.provider import (
     TextProvider,
 )
 from mex.extractors.pipeline import asset, run_job_in_process
-from mex.settings import Settings
-from mex.sinks import load
+from mex.extractors.settings import Settings
+from mex.extractors.sinks import load
 
 
 @asset(group_name="artificial")

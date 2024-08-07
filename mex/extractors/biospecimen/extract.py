@@ -10,7 +10,7 @@ from mex.common.ldap.connector import LDAPConnector
 from mex.common.ldap.models.person import LDAPPerson
 from mex.common.logging import watch
 from mex.extractors.biospecimen.models.source import BiospecimenResource
-from mex.settings import Settings
+from mex.extractors.settings import Settings
 
 
 @watch

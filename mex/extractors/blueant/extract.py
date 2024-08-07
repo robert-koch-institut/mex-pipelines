@@ -6,7 +6,7 @@ from mex.common.ldap.models.person import LDAPPerson
 from mex.common.logging import watch
 from mex.extractors.blueant.connector import BlueAntConnector
 from mex.extractors.blueant.models.source import BlueAntSource
-from mex.settings import Settings
+from mex.extractors.settings import Settings
 
 
 @watch

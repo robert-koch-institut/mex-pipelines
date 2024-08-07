@@ -4,7 +4,7 @@ from typing import Any
 
 from mex.common.connector import BaseConnector
 from mex.common.logging import logger
-from mex.settings import Settings
+from mex.extractors.settings import Settings
 
 QUERY_BY_TABLE_NAME = {
     "vActualQuestion": "SELECT * FROM GrippeWeb.MEx.vActualQuestion",

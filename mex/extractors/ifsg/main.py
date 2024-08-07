@@ -40,8 +40,8 @@ from mex.extractors.ifsg.transform import (
 )
 from mex.extractors.mapping.extract import extract_mapping_data
 from mex.extractors.pipeline import asset, run_job_in_process
-from mex.settings import Settings
-from mex.sinks import load
+from mex.extractors.settings import Settings
+from mex.extractors.sinks import load
 
 
 @asset(group_name="ifsg", deps=["extracted_primary_source_mex"])

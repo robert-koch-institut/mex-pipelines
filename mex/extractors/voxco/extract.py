@@ -4,7 +4,7 @@ from mex.common.ldap.connector import LDAPConnector
 from mex.common.ldap.models.person import LDAPPerson
 from mex.common.wikidata.extract import search_organization_by_label
 from mex.common.wikidata.models.organization import WikidataOrganization
-from mex.drop import DropApiConnector
+from mex.extractors.drop import DropApiConnector
 from mex.extractors.voxco.model import VoxcoVariable
 
 

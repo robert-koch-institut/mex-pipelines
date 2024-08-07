@@ -31,8 +31,8 @@ from mex.extractors.seq_repo.transform import (
     transform_seq_repo_activities_to_extracted_activities,
     transform_seq_repo_resource_to_extracted_resource_and_distribution,
 )
-from mex.settings import Settings
-from mex.sinks import load
+from mex.extractors.settings import Settings
+from mex.extractors.sinks import load
 
 
 @asset(group_name="seq_repo", deps=["extracted_primary_source_mex"])

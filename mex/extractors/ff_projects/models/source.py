@@ -1,7 +1,7 @@
 from collections.abc import Sequence
 
 from mex.common.types import TemporalEntity
-from mex.models import BaseRawData
+from mex.extractors.models import BaseRawData
 
 
 class FFProjectsSource(BaseRawData):

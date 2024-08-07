@@ -1,8 +1,8 @@
 from collections.abc import Generator, Iterable
 
 from mex.common.models import ExtractedPrimarySource
+from mex.extractors.logging import log_filter
 from mex.extractors.sumo.models.cc2_aux_model import Cc2AuxModel
-from mex.logging import log_filter
 
 
 def filter_and_log_cc2_aux_model(

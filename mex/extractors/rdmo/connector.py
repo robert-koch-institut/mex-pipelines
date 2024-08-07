@@ -6,7 +6,7 @@ from mex.common.connector import HTTPConnector
 from mex.common.exceptions import MExError
 from mex.extractors.rdmo.models.question import RDMOOption, RDMOQuestion, RDMOValue
 from mex.extractors.rdmo.models.source import RDMOSource
-from mex.settings import Settings
+from mex.extractors.settings import Settings
 
 
 class RDMOConnector(HTTPConnector):

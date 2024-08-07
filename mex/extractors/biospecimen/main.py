@@ -19,8 +19,8 @@ from mex.extractors.biospecimen.transform import (
     transform_biospecimen_resource_to_mex_resource,
 )
 from mex.extractors.pipeline import asset, run_job_in_process
-from mex.settings import Settings
-from mex.sinks import load
+from mex.extractors.settings import Settings
+from mex.extractors.sinks import load
 
 
 @asset(group_name="biospecimen", deps=["extracted_primary_source_mex"])

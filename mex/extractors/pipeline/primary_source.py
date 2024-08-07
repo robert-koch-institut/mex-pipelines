@@ -5,7 +5,7 @@ from mex.common.primary_source.transform import (
     transform_seed_primary_sources_to_extracted_primary_sources,
 )
 from mex.extractors.pipeline import asset
-from mex.sinks import load
+from mex.extractors.sinks import load
 
 
 @asset(group_name="default")

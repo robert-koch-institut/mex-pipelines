@@ -2,7 +2,7 @@ from typing import Any, cast
 from urllib.parse import urljoin
 
 from mex.common.connector import HTTPConnector
-from mex.settings import Settings
+from mex.extractors.settings import Settings
 
 
 class DropApiConnector(HTTPConnector):

@@ -7,7 +7,7 @@ from mex.common.connector import HTTPConnector
 from mex.common.exceptions import MExError
 from mex.extractors.blueant.models.person import BlueAntPerson, BlueAntPersonResponse
 from mex.extractors.blueant.models.project import BlueAntProject, BlueAntProjectResponse
-from mex.settings import Settings
+from mex.extractors.settings import Settings
 
 
 class BlueAntConnector(HTTPConnector):
