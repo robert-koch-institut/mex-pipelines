@@ -43,7 +43,7 @@ optional-dependencies.dev = [
 ]
 
 [project.scripts]
-all-extractors = "mex.main:run"
+all-extractors = "mex.extractors.main:run"
 artificial = "mex.extractors.artificial.main:run"
 biospecimen = "mex.extractors.biospecimen.main:run"
 blueant = "mex.extractors.blueant.main:run"
@@ -58,7 +58,7 @@ organigram = "mex.extractors.organigram.main:run"
 rdmo = "mex.extractors.rdmo.main:run"
 seq-repo = "mex.extractors.seq_repo.main:run"
 sumo = "mex.extractors.sumo.main:run"
-sync-persons = "mex.ldap.main:run"
+sync-persons = "mex.extractors.ldap.main:run"
 synopse = "mex.extractors.synopse.main:run"
 voxco = "mex.extractors.voxco.main:run"
 publisher = "mex.extractors.publisher.main:run"
