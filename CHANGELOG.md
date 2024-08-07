@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Environment variables change from `EXTRACTOR_PARAMETER` to `MEX_EXTRACTOR__PARAMETER`,
   access from `ExtractorSettings.parameter` to `settings.extractor.parameter`.
 - update mex-common to 0.32.0
+- BREAKING: refactor package structure from `mex.foo` to `mex.extractors.foo`
 
 ### Deprecated
 
