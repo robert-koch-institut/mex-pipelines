@@ -1,8 +1,8 @@
 import pytest
 
-from mex.biospecimen.models.source import BiospecimenResource
 from mex.common.models import ExtractedPerson
 from mex.common.types import Identifier
+from mex.extractors.biospecimen.models.source import BiospecimenResource
 
 
 @pytest.fixture

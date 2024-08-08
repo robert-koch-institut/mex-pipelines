@@ -5,15 +5,15 @@ import pandas as pd
 import pytest
 from pandas import Series
 
-from mex.biospecimen.extract import (
+from mex.common.ldap.models.person import LDAPPerson
+from mex.extractors.biospecimen.extract import (
     extract_biospecimen_contacts_by_email,
     extract_biospecimen_resources,
     get_clean_file_name,
     get_clean_string,
     get_year_from_zeitlicher_bezug,
 )
-from mex.biospecimen.models.source import BiospecimenResource
-from mex.common.ldap.models.person import LDAPPerson
+from mex.extractors.biospecimen.models.source import BiospecimenResource
 from mex.settings import Settings
 
 

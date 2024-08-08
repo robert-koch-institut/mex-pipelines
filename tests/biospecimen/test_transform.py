@@ -2,8 +2,6 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from mex.biospecimen.models.source import BiospecimenResource
-from mex.biospecimen.transform import transform_biospecimen_resource_to_mex_resource
 from mex.common.models import (
     ExtractedActivity,
     ExtractedOrganization,
@@ -12,6 +10,10 @@ from mex.common.models import (
 )
 from mex.common.testing import Joker
 from mex.common.types import Identifier, Link, TextLanguage
+from mex.extractors.biospecimen.models.source import BiospecimenResource
+from mex.extractors.biospecimen.transform import (
+    transform_biospecimen_resource_to_mex_resource,
+)
 
 
 @pytest.fixture

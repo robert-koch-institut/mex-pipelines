@@ -11,7 +11,7 @@ from mex.common.types import (
     MergedPrimarySourceIdentifier,
     Text,
 )
-from mex.voxco.model import VoxcoVariable
+from mex.extractors.voxco.model import VoxcoVariable
 
 ModelT = TypeVar("ModelT", bound=BaseModel)
 

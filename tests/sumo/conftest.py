@@ -19,12 +19,12 @@ from mex.common.types import (
     Text,
     TextLanguage,
 )
-from mex.sumo.models.cc1_data_model_nokeda import Cc1DataModelNoKeda
-from mex.sumo.models.cc1_data_valuesets import Cc1DataValuesets
-from mex.sumo.models.cc2_aux_mapping import Cc2AuxMapping
-from mex.sumo.models.cc2_aux_model import Cc2AuxModel
-from mex.sumo.models.cc2_aux_valuesets import Cc2AuxValuesets
-from mex.sumo.models.cc2_feat_projection import Cc2FeatProjection
+from mex.extractors.sumo.models.cc1_data_model_nokeda import Cc1DataModelNoKeda
+from mex.extractors.sumo.models.cc1_data_valuesets import Cc1DataValuesets
+from mex.extractors.sumo.models.cc2_aux_mapping import Cc2AuxMapping
+from mex.extractors.sumo.models.cc2_aux_model import Cc2AuxModel
+from mex.extractors.sumo.models.cc2_aux_valuesets import Cc2AuxValuesets
+from mex.extractors.sumo.models.cc2_feat_projection import Cc2FeatProjection
 
 
 @pytest.fixture
