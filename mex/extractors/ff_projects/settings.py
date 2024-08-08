@@ -8,7 +8,7 @@ class FFProjectsSettings(BaseModel):
     """Settings submodel for the FF Projects extractor."""
 
     file_path: AssetsPath = Field(
-        AssetsPath("raw-data/ff-projects/ff-projects.xlsx"),
+        AssetsPath("../../../assets/raw-data/ff-projects/ff-projects.xlsx"),
         description=(
             "Path to the FF Projects excel file, "
             "absolute path or relative to `assets_dir`."

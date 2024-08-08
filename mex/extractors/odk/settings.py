@@ -8,14 +8,14 @@ class ODKSettings(BaseModel):
     """Settings submodel definition for odk data extraction."""
 
     raw_data_path: AssetsPath = Field(
-        AssetsPath("raw-data/odk"),
+        AssetsPath("../../../assets/raw-data/odk"),
         description=(
             "Path to the directory with the odk excel files, "
             "absolute path or relative to `assets_dir`."
         ),
     )
     mapping_path: AssetsPath = Field(
-        AssetsPath("mappings/__final__/odk"),
+        AssetsPath("../../../assets/mappings/__final__/odk"),
         description=(
             "Path to the directory with the odk mapping files containing the default "
             "values, absolute path or relative to `assets_dir`."
