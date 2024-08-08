@@ -163,10 +163,13 @@ def transform_synopse_variables_belonging_to_same_variable_group_to_mex_variable
     for synopse_id, levels_iter in groupby(variables, lambda x: x.synopse_id):
         levels = list(levels_iter)
         variable = levels[0]
-        used_in = resource_ids_by_synopse_id[variable.synopse_id]
+        if variable.synopse_id in resource_ids_by_synopse_id.keys():
+            used_in = resource_ids_by_synopse_id[variable.synopse_id]
+        else:
+            continue
 
         yield ExtractedVariable(
-            belongsTo=belongs_to.stableTargetId,
+            belongsTo=[belongs_to.stableTargetId] if belongs_to else [],
             codingSystem=variable.val_instrument,
             dataType=variable.datentyp,
             description=(
@@ -206,7 +209,7 @@ def transform_synopse_variables_to_mex_variables(
         group.identifierInPrimarySource: group for group in variable_groups
     }
     for thema, variables in synopse_variables_by_thema.items():
-        belongs_to = variable_group_by_identifier_in_primary_source[thema]
+        belongs_to = variable_group_by_identifier_in_primary_source.get(thema)
         yield from transform_synopse_variables_belonging_to_same_variable_group_to_mex_variables(  # noqa: E501
             variables,
             belongs_to,
@@ -245,13 +248,13 @@ def transform_synopse_variables_to_mex_variable_groups(
         )
 
         label = Text(value=re.sub(r"\s\(\d+\)", "", thema), language=TextLanguage("de"))
-
-        yield ExtractedVariableGroup(
-            containedBy=contained_by,
-            hadPrimarySource=extracted_primary_source.stableTargetId,
-            identifierInPrimarySource=thema,
-            label=label,
-        )
+        if len(contained_by) > 0:
+            yield ExtractedVariableGroup(
+                containedBy=contained_by,
+                hadPrimarySource=extracted_primary_source.stableTargetId,
+                identifierInPrimarySource=thema,
+                label=label,
+            )
 
 
 @watch
@@ -309,6 +312,7 @@ def transform_synopse_data_to_mex_resources(
                 study.plattform_adresse
             ].stableTargetId
             if study.plattform_adresse
+            in access_platform_by_identifier_in_primary_source
             else []
         )
         created = None
