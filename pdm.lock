@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:83c0f4fa34086cbc07be2f0644f68a38e3ad1cf98a4f40a48c962973dbe8d1d1"
+content_hash = "sha256:d0c9bb0634d2e08b79c92ea2ef857b3e858ca67b1992bbdbf687a10b33c558da"
 
 [[metadata.targets]]
 requires_python = ">=3.11,<3.13"
@@ -580,7 +580,7 @@ files = [
 
 [[package]]
 name = "faker"
-version = "26.0.0"
+version = "26.1.0"
 requires_python = ">=3.8"
 summary = "Faker is a Python package that generates fake data for you."
 groups = ["default"]
@@ -588,8 +588,8 @@ dependencies = [
     "python-dateutil>=2.4",
 ]
 files = [
-    {file = "Faker-26.0.0-py3-none-any.whl", hash = "sha256:886ee28219be96949cd21ecc96c4c742ee1680e77f687b095202c8def1a08f06"},
-    {file = "Faker-26.0.0.tar.gz", hash = "sha256:0f60978314973de02c00474c2ae899785a42b2cf4f41b7987e93c132a2b8a4a9"},
+    {file = "Faker-26.1.0-py3-none-any.whl", hash = "sha256:e8c5ef795223e945d9166aea3c0ecaf85ac54b4ade2af068d8e3c6524c2c0aa7"},
+    {file = "Faker-26.1.0.tar.gz", hash = "sha256:33921b6fc3b83dd75fd42ec7f47ec87b50c00d3c5380fa7d8a507dab848b8229"},
 ]
 
 [[package]]
@@ -696,7 +696,7 @@ version = "3.0.3"
 requires_python = ">=3.7"
 summary = "Lightweight in-process concurrent programming"
 groups = ["default"]
-marker = "(platform_machine == \"win32\" or platform_machine == \"WIN32\" or platform_machine == \"AMD64\" or platform_machine == \"amd64\" or platform_machine == \"x86_64\" or platform_machine == \"ppc64le\" or platform_machine == \"aarch64\") and python_version < \"3.13\""
+marker = "platform_machine == \"win32\" or platform_machine == \"WIN32\" or platform_machine == \"AMD64\" or platform_machine == \"amd64\" or platform_machine == \"x86_64\" or platform_machine == \"ppc64le\" or platform_machine == \"aarch64\""
 files = [
     {file = "greenlet-3.0.3-cp311-cp311-macosx_11_0_universal2.whl", hash = "sha256:b1b5667cced97081bf57b8fa1d6bfca67814b0afd38208d52538316e9422fc61"},
     {file = "greenlet-3.0.3-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:52f59dd9c96ad2fc0d5724107444f76eb20aaccb675bf825df6435acb7703559"},
@@ -1282,7 +1282,6 @@ version = "3.0.0"
 requires_python = ">=3.8"
 summary = "Python datetimes made easy"
 groups = ["default"]
-marker = "python_version >= \"3.9\""
 dependencies = [
     "backports-zoneinfo>=0.2.1; python_version < \"3.9\"",
     "importlib-resources>=5.9.0; python_version < \"3.9\"",
@@ -1610,7 +1609,7 @@ name = "pyreadline3"
 version = "3.4.1"
 summary = "A python implementation of GNU readline."
 groups = ["default"]
-marker = "sys_platform == \"win32\" and python_version >= \"3.8\""
+marker = "sys_platform == \"win32\""
 files = [
     {file = "pyreadline3-3.4.1-py3-none-any.whl", hash = "sha256:b0efb6516fd4fb07b45949053826a62fa4cb353db5be2bbb4a7aa1fdd1e345fb"},
     {file = "pyreadline3-3.4.1.tar.gz", hash = "sha256:6f3d1f7b8a31ba32b73917cefc1f28cc660562f39aea8646d30bd6eff21f7bae"},
@@ -2122,7 +2121,7 @@ version = "2.15.0"
 requires_python = ">=3.8"
 summary = "Travel through time in your tests."
 groups = ["default"]
-marker = "implementation_name != \"pypy\" and python_version >= \"3.9\""
+marker = "implementation_name != \"pypy\""
 dependencies = [
     "python-dateutil",
 ]
