@@ -4,23 +4,7 @@ abstract:
   - fieldInPrimarySource: BeschreibungStudie
     locationInPrimarySource: projekt_und_studienverwaltung.csv
     examplesInPrimarySource:
-    - 'Mit KiGGS Welle 2 hat das Robert Koch-Institut von 2014 bis August 2017 erneut
-      aktuelle und umfassende Daten zur Gesundheit der in Deutschland lebenden Kinder,
-      Jugendlichen und jungen Erwachsenen erhoben.
-      Das Studienprogramm umfasste neben Befragungen für einen Teil der eingeladenen
-      Teilnehmerinnen und Teilnehmer auch körperliche Untersuchungen, Tests sowie Laboruntersuchungen
-      von Blut- und Urinproben.
-      Laufzeit: September 2014 bis August 2017
-      Teilnehmende: 15.023 Teilnehmende (Querschnitt KiGGS Welle 2), 10.853 (KiGGS-Kohorte
-      in KiGGS Welle 2)
-      Alter: 0 bis 29 Jahre
-      Untersuchungsorte: 167 Städte und Gemeinden in Deutschland
-      Inhaltliche Schwerpunkte von KiGGS Welle 2 waren Gesundheitsstatus, Gesundheitsverhalten,
-      Lebensbedingungen, Schutz- und Risikofaktoren und Inanspruchnahme von Leistungen
-      des Gesundheitssystems.
-      Laufzeit: 1997 bis 1999
-      Befragte: 7.124 Personen
-      Alter: 18 bis 79 Jahre '
+    - 'Mit'
     mappingRules:
       - rule: Assign 'de' as default for language property of the text object.
 activityType:
@@ -32,8 +16,8 @@ contact:
   - fieldInPrimarySource: Kontakt
     locationInPrimarySource: projekt_und_studienverwaltung.csv
     examplesInPrimarySource:
-    - edz@rki.de
-    - fdz@rki.de
+    - abc@rki.de
+    - cde@rki.de
     mappingRules:
       - rule: Use value and match it using ldap extractor.
 documentation:
@@ -97,14 +81,14 @@ involvedUnit:
   - fieldInPrimarySource: Partner_intern
     locationInPrimarySource: projekt_und_studienverwaltung.csv
     examplesInPrimarySource:
-    - FG23
+    - C1
     mappingRules:
       - rule: Use value to match with identifer in /raw-data/organigram/organizational-units.json.
 responsibleUnit:
   - fieldInPrimarySource: VerantwortlicheOE
     locationInPrimarySource: projekt_und_studienverwaltung.csv
     examplesInPrimarySource:
-    - fg23
+    - C1
     mappingRules:
       - rule: Use value to match with identifer in /raw-data/organigram/organizational-units.json. If unit unit cannot be resovled, set to fg21.
 shortName:
