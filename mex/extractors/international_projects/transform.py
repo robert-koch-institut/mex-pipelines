@@ -2,13 +2,18 @@ from collections.abc import Generator, Hashable, Iterable
 from typing import Any
 
 from mex.common.logging import watch
-from mex.common.models import ExtractedActivity, ExtractedPrimarySource
+from mex.common.models import (
+    ExtractedActivity,
+    ExtractedOrganization,
+    ExtractedPrimarySource,
+)
 from mex.common.types import (
     ActivityType,
     Link,
     MergedOrganizationalUnitIdentifier,
     MergedOrganizationIdentifier,
     MergedPersonIdentifier,
+    Text,
 )
 from mex.extractors.international_projects.models.source import (
     InternationalProjectsSource,
@@ -75,11 +80,26 @@ def transform_international_projects_source_to_extracted_activity(
 
     all_partner_organizations: list[MergedOrganizationIdentifier] = []
     if source.partner_organization:
-        all_partner_organizations.extend(
-            wfc
-            for fc in source.partner_organization
-            if (wfc := partner_organizations_stable_target_id_by_query.get(fc))
-        )
+        for partner_org in source.partner_organization:
+            if wfc := partner_organizations_stable_target_id_by_query.get(partner_org):
+                all_partner_organizations.append(wfc)
+            else:
+                extracted_organization = ExtractedOrganization(
+                    officialName=[Text(value=partner_org)],
+                    identifierInPrimarySource=partner_org,
+                    hadPrimarySource=extracted_primary_source.stableTargetId,
+                )
+                load([extracted_organization])
+                all_partner_organizations.append(
+                    MergedOrganizationIdentifier(extracted_organization.stableTargetId)
+                )
+
+        # all_partner_organizations.extend(
+        #     wfc
+        #     for fc in source.partner_organization
+        #     if (wfc := partner_organizations_stable_target_id_by_query.get(fc))
+        # )
+    breakpoint()
 
     activity_types = international_projects_activity["activityType"][0]["mappingRules"]
     activity_types_dict: dict[str, ActivityType] = {}
