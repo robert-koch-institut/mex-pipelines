@@ -1,6 +1,6 @@
 from mex.common.models import ExtractedPrimarySource
-from mex.synopse.filter import filter_and_log_access_platforms
-from mex.synopse.models.study import SynopseStudy
+from mex.extractors.synopse.filter import filter_and_log_access_platforms
+from mex.extractors.synopse.models.study import SynopseStudy
 
 
 def test_filter_and_log_variables(

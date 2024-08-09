@@ -133,6 +133,11 @@ def transform_overviews_to_resource_lookup(
         ):
             resource_ids = resource_ids_by_synopse_id.setdefault(study.synopse_id, [])
             resource_ids.append(MergedResourceIdentifier(resource_id))
+        elif resource_id := resource_id_by_identifier_in_platform.get(
+            f"{study.studien_id}-extended-data-use"
+        ):
+            resource_ids = resource_ids_by_synopse_id.setdefault(study.synopse_id, [])
+            resource_ids.append(MergedResourceIdentifier(resource_id))
         else:
             continue
     return resource_ids_by_synopse_id
