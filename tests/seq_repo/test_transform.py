@@ -15,8 +15,8 @@ from mex.common.types import (
     MergedPersonIdentifier,
     TextLanguage,
 )
-from mex.seq_repo.model import SeqRepoSource
-from mex.seq_repo.transform import (
+from mex.extractors.seq_repo.model import SeqRepoSource
+from mex.extractors.seq_repo.transform import (
     transform_seq_repo_access_platform_to_extracted_access_platform,
     transform_seq_repo_activities_to_extracted_activities,
     transform_seq_repo_resource_to_extracted_resource_and_distribution,

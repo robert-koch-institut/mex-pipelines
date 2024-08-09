@@ -10,8 +10,8 @@ from mex.common.types import (
     TextLanguage,
     YearMonthDay,
 )
-from mex.ff_projects.models.source import FFProjectsSource
-from mex.ff_projects.transform import (
+from mex.extractors.ff_projects.models.source import FFProjectsSource
+from mex.extractors.ff_projects.transform import (
     get_rki_az_types,
     transform_ff_projects_source_to_extracted_activity,
 )

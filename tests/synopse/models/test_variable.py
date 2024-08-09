@@ -3,7 +3,7 @@ from typing import Any
 import numpy as np
 import pytest
 
-from mex.synopse.models.variable import SynopseVariable
+from mex.extractors.synopse.models.variable import SynopseVariable
 
 
 @pytest.mark.parametrize(
