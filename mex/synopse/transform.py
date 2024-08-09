@@ -272,6 +272,7 @@ def transform_synopse_data_to_mex_resources(
     keyword_text_by_study_id: dict[str, list[Text]],
     synopse_resource: dict[str, Any],
     identifier_in_primary_source_by_study_id: dict[str, str],
+    title_by_study_id: dict[str, Text],
 ) -> Generator[ExtractedResource, None, None]:
     """Transform Synopse Studies to MEx resources.
 
@@ -289,6 +290,7 @@ def transform_synopse_data_to_mex_resources(
         keyword_text_by_study_id: List of keywords by study ID
         synopse_resource: resource default values
         identifier_in_primary_source_by_study_id: identifierInPrimarySource by study ID
+        title_by_study_id: title by study ID
 
     Returns:
         Generator for extracted resources
@@ -384,7 +386,7 @@ def transform_synopse_data_to_mex_resources(
                 else None
             ),
             theme=theme,
-            title=Text(value=study.titel_datenset, language=TextLanguage("de")),
+            title=title_by_study_id[study.studien_id],
             unitInCharge=unit_in_charge,
             wasGeneratedBy=(
                 extracted_activity.stableTargetId if extracted_activity else None
@@ -427,6 +429,7 @@ def transform_synopse_data_regular_to_mex_resources(
     documentation_by_study_id: dict[str, Link | None] = {}
     identifier_in_primary_source_by_study_id: dict[str, str] = {}
     keyword_text_by_study_id: dict[str, list[Text]] = {}
+    title_by_study_id: dict[str, Text] = {}
     for study in synopse_studies_gens[0]:
         created_by_study_id[study.studien_id] = study.erstellungs_datum
         description_by_study_id[study.studien_id] = study.beschreibung
@@ -458,6 +461,9 @@ def transform_synopse_data_regular_to_mex_resources(
         identifier_in_primary_source_by_study_id[study.studien_id] = (
             f"{study.studien_id}-{study.ds_typ_id}-{study.titel_datenset}"
         )
+        title_by_study_id[study.studien_id] = Text(
+            value=study.titel_datenset, language=TextLanguage("de")
+        )
 
     yield from transform_synopse_data_to_mex_resources(
         synopse_studies_gens[1],
@@ -473,6 +479,7 @@ def transform_synopse_data_regular_to_mex_resources(
         keyword_text_by_study_id,
         synopse_resource,
         identifier_in_primary_source_by_study_id,
+        title_by_study_id,
     )
 
 
@@ -508,6 +515,7 @@ def transform_synopse_data_extended_data_use_to_mex_resources(
     identifier_in_primary_source_by_study_id: dict[str, str] = {}
     synopse_studies_gens = tee(synopse_studies, 2)
     keyword_text_by_study_id: dict[str, list[Text]] = {}
+    title_by_study_id: dict[str, Text] = {}
     for study in synopse_studies_gens[0]:
         synopse_variables = synopse_variables_by_study_id.get(int(study.studien_id))
         keywords_plain: list[str] = []
@@ -524,6 +532,10 @@ def transform_synopse_data_extended_data_use_to_mex_resources(
         identifier_in_primary_source_by_study_id[study.studien_id] = (
             f"{study.studien_id}-extended-data-use"
         )
+        title_by_study_id[study.studien_id] = Text(
+            value=f"{study.studie}: Erweiterte Datennutzung",
+            language=TextLanguage("de"),
+        )
     yield from transform_synopse_data_to_mex_resources(
         synopse_studies_gens[1],
         synopse_projects,
@@ -538,6 +550,7 @@ def transform_synopse_data_extended_data_use_to_mex_resources(
         keyword_text_by_study_id,
         synopse_resource,
         identifier_in_primary_source_by_study_id,
+        title_by_study_id,
     )
 
 

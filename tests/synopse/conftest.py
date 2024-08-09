@@ -258,6 +258,7 @@ def synopse_studies() -> list[SynopseStudy]:
             schlagworte_themen="Alkohol, Alter und Geschlecht, Drogen",
             studien_id="12345",
             titel_datenset="Titel",
+            Studie="Studie123",
         ),
         SynopseStudy(
             beschreibung="ein zweites heikles Unterfangen.",

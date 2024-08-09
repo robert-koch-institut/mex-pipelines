@@ -501,6 +501,11 @@ def test_transform_synopse_data_to_mex_resources(
             keyword_text_by_study_id,
             synopse_resource_extended_data_use,
             identifier_in_primary_source_by_studien_id,
+            {
+                synopse_studies[0].studien_id: Text(
+                    language=TextLanguage.DE, value=synopse_studies[0].titel_datenset
+                )
+            },
         )
     )
     assert len(resources) == 1
@@ -664,7 +669,7 @@ def test_transform_synopse_data_extended_data_use_to_mex_resources(
         "stableTargetId": Joker(),
         "temporal": "2000 - 2013",
         "theme": ["https://mex.rki.de/item/theme-11"],
-        "title": [{"language": TextLanguage.DE, "value": "Titel"}],
+        "title": [{"language": "de", "value": "Studie123: Erweiterte Datennutzung"}],
         "unitInCharge": [str(Identifier.generate(seed=234))],
         "wasGeneratedBy": str(extracted_activity.stableTargetId),
     }
