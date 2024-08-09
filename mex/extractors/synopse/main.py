@@ -213,8 +213,8 @@ def extracted_synopse_resource_stable_target_ids_by_synopse_id(
     Also transforms Synopse data to extracted resources
     """
     settings = Settings.get()
-    synopse_resource_extended_data_use = extract_mapping_data(
-        settings.synopse.mapping_path / "resource_extended-data-use.yaml",
+    synopse_resource = extract_mapping_data(
+        settings.synopse.mapping_path / "resource.yaml",
         ExtractedResource,
     )
     transformed_study_data_regular_resources = (
@@ -227,7 +227,7 @@ def extracted_synopse_resource_stable_target_ids_by_synopse_id(
             extracted_primary_source_report_server,
             unit_stable_target_ids_by_synonym,
             extracted_organization_rki,
-            synopse_resource_extended_data_use,
+            synopse_resource,
         )
     )
     transformed_study_data_regular_resource_gens = tee(
@@ -235,8 +235,8 @@ def extracted_synopse_resource_stable_target_ids_by_synopse_id(
     )
     load(transformed_study_data_regular_resource_gens[0])
     settings = Settings.get()
-    synopse_resource = extract_mapping_data(
-        settings.synopse.mapping_path / "resource.yaml",
+    synopse_resource_extended_data_use = extract_mapping_data(
+        settings.synopse.mapping_path / "resource_extended-data-use.yaml",
         ExtractedResource,
     )
     transformed_study_data_resources_extended_data_use = (
@@ -249,7 +249,7 @@ def extracted_synopse_resource_stable_target_ids_by_synopse_id(
             extracted_primary_source_report_server,
             unit_stable_target_ids_by_synonym,
             extracted_organization_rki,
-            synopse_resource,
+            synopse_resource_extended_data_use,
         )
     )
     transformed_study_data_resource_extended_data_use_gens = tee(
