@@ -18,6 +18,7 @@ from mex.common.types import (
 from mex.extractors.international_projects.models.source import (
     InternationalProjectsSource,
 )
+from mex.extractors.sinks import load
 
 
 def transform_international_projects_source_to_extracted_activity(
@@ -93,13 +94,6 @@ def transform_international_projects_source_to_extracted_activity(
                 all_partner_organizations.append(
                     MergedOrganizationIdentifier(extracted_organization.stableTargetId)
                 )
-
-        # all_partner_organizations.extend(
-        #     wfc
-        #     for fc in source.partner_organization
-        #     if (wfc := partner_organizations_stable_target_id_by_query.get(fc))
-        # )
-    breakpoint()
 
     activity_types = international_projects_activity["activityType"][0]["mappingRules"]
     activity_types_dict: dict[str, ActivityType] = {}
