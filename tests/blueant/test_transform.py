@@ -1,11 +1,13 @@
 from collections.abc import Hashable
 from typing import cast
 
-from mex.blueant.models.source import BlueAntSource
-from mex.blueant.transform import transform_blueant_sources_to_extracted_activities
 from mex.common.models import ExtractedAccessPlatform
 from mex.common.testing import Joker
 from mex.common.types import Identifier, TemporalEntity
+from mex.extractors.blueant.models.source import BlueAntSource
+from mex.extractors.blueant.transform import (
+    transform_blueant_sources_to_extracted_activities,
+)
 
 
 def test_transform_blueant_sources_to_extracted_activities(

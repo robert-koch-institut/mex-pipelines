@@ -13,8 +13,8 @@ from mex.common.types import (
     MergedOrganizationalUnitIdentifier,
     MergedOrganizationIdentifier,
 )
-from mex.voxco.model import VoxcoVariable
-from mex.voxco.transform import (
+from mex.extractors.voxco.model import VoxcoVariable
+from mex.extractors.voxco.transform import (
     transform_voxco_resource_mappings_to_extracted_resources,
     transform_voxco_variable_mappings_to_extracted_variables,
 )

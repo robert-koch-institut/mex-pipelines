@@ -23,11 +23,11 @@ from mex.common.types import (
     TextLanguage,
     Year,
 )
-from mex.synopse.models.project import SynopseProject
-from mex.synopse.models.study import SynopseStudy
-from mex.synopse.models.study_overview import SynopseStudyOverview
-from mex.synopse.models.variable import SynopseVariable
-from mex.synopse.transform import (
+from mex.extractors.synopse.models.project import SynopseProject
+from mex.extractors.synopse.models.study import SynopseStudy
+from mex.extractors.synopse.models.study_overview import SynopseStudyOverview
+from mex.extractors.synopse.models.variable import SynopseVariable
+from mex.extractors.synopse.transform import (
     split_off_extended_data_use_variables,
     transform_overviews_to_resource_lookup,
     transform_synopse_data_extended_data_use_to_mex_resources,

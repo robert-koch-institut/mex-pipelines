@@ -9,9 +9,9 @@ urls = { Repository = "https://github.com/robert-koch-institut/mex-extractors" }
 requires-python = "<3.13,>=3.11"
 dependencies = [
     "beautifulsoup4==4.12.3",
-    "dagster-postgres==0.23.13",
-    "dagster-webserver==1.7.13",
-    "dagster==1.7.13",
+    "dagster-postgres==0.23.15",
+    "dagster-webserver==1.7.15",
+    "dagster==1.7.15",
     "faker==26.0.0",
     "mex-common @ git+https://github.com/robert-koch-institut/mex-common.git@feature/model-update-v3",
     "numpy==2.0.1",
@@ -33,8 +33,8 @@ optional-dependencies.dev = [
     "pytest-cov==5.0.0",
     "pytest-random-order==1.1.1",
     "pytest-xdist==3.6.1",
-    "pytest==8.3.1",
-    "ruff==0.5.4",
+    "pytest==8.3.2",
+    "ruff==0.5.5",
     "sphinx==7.4.7",
     "types-beautifulsoup4==4.12.0.20240511",
     "types-pytz==2024.1.0.20240417",
@@ -43,32 +43,32 @@ optional-dependencies.dev = [
 ]
 
 [project.scripts]
-all-extractors = "mex.main:run"
-artificial = "mex.artificial.main:run"
-biospecimen = "mex.biospecimen.main:run"
-blueant = "mex.blueant.main:run"
-confluence-vvt = "mex.confluence_vvt.main:run"
-datscha-web = "mex.datscha_web.main:run"
-ff-projects = "mex.ff_projects.main:run"
-grippeweb = "mex.grippeweb.main:run"
-ifsg = "mex.ifsg.main:run"
-international-projects = "mex.international_projects.main:run"
-odk = "mex.odk.main:run"
-organigram = "mex.organigram.main:run"
-rdmo = "mex.rdmo.main:run"
-seq-repo = "mex.seq_repo.main:run"
-sumo = "mex.sumo.main:run"
-sync-persons = "mex.ldap.main:run"
-synopse = "mex.synopse.main:run"
-voxco = "mex.voxco.main:run"
-publisher = "mex.publisher.main:run"
+all-extractors = "mex.extractors.main:run"
+artificial = "mex.extractors.artificial.main:run"
+biospecimen = "mex.extractors.biospecimen.main:run"
+blueant = "mex.extractors.blueant.main:run"
+confluence-vvt = "mex.extractors.confluence_vvt.main:run"
+datscha-web = "mex.extractors.datscha_web.main:run"
+ff-projects = "mex.extractors.ff_projects.main:run"
+grippeweb = "mex.extractors.grippeweb.main:run"
+ifsg = "mex.extractors.ifsg.main:run"
+international-projects = "mex.extractors.international_projects.main:run"
+odk = "mex.extractors.odk.main:run"
+organigram = "mex.extractors.organigram.main:run"
+rdmo = "mex.extractors.rdmo.main:run"
+seq-repo = "mex.extractors.seq_repo.main:run"
+sumo = "mex.extractors.sumo.main:run"
+sync-persons = "mex.extractors.ldap.main:run"
+synopse = "mex.extractors.synopse.main:run"
+voxco = "mex.extractors.voxco.main:run"
+publisher = "mex.extractors.publisher.main:run"
 
 [tool.cruft]
 template = "https://github.com/robert-koch-institut/mex-template"
 skip = ["CHANGELOG.md", "mex", "tests"]
 
 [tool.dagster]
-module_name = "mex"
+module_name = "mex.extractors"
 
 [tool.ipdb]
 context = 5

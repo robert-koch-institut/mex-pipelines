@@ -18,7 +18,7 @@ from mex.common.types import (
     MergedOrganizationIdentifier,
     YearMonth,
 )
-from mex.grippeweb.transform import (
+from mex.extractors.grippeweb.transform import (
     transform_grippeweb_access_platform_to_extracted_access_platform,
     transform_grippeweb_resource_mappings_to_dict,
     transform_grippeweb_resource_mappings_to_extracted_resources,

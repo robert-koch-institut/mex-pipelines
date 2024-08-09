@@ -18,7 +18,7 @@ from mex.common.types import (
     Text,
     Theme,
 )
-from mex.odk.model import ODKData
+from mex.extractors.odk.model import ODKData
 
 
 @pytest.fixture

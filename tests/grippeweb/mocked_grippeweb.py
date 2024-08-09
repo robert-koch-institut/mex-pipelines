@@ -19,7 +19,7 @@ from mex.common.types import (
     MergedPrimarySourceIdentifier,
     Text,
 )
-from mex.grippeweb.connector import GrippewebConnector
+from mex.extractors.grippeweb.connector import GrippewebConnector
 
 ModelT = TypeVar("ModelT", bound=BaseModel)
 
