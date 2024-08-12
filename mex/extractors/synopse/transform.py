@@ -53,7 +53,9 @@ def split_off_extended_data_use_variables(
     synopse_variable_regular, synopse_variable_extended_data_use = tee(
         (
             (
-                not ds_typ_id_in_datensatzuebersicht_by_synopse_id[variable.synopse_id]
+                not ds_typ_id_in_datensatzuebersicht_by_synopse_id.get(
+                    variable.synopse_id
+                )
                 and variable.int_var
                 and variable.keep_varname
             ),
