@@ -1,9 +1,9 @@
 from collections.abc import Generator, Sequence
 
 from mex.common.types import Identifier, TemporalEntity
+from mex.extractors.settings import Settings
 from mex.filters import filter_by_global_rules
 from mex.models import BaseRawData
-from mex.settings import Settings
 
 
 class MockedBaseRawData(BaseRawData):

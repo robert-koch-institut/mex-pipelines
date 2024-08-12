@@ -9,6 +9,7 @@ from mex.common.types import (
     TemporalEntityPrecision,
     YearMonthDay,
 )
+from mex.extractors.ff_projects.extract import ORGANIZATIONS_BY_ABBREVIATIONS
 from mex.extractors.ff_projects.models.source import FFProjectsSource
 
 
@@ -37,22 +38,47 @@ def transform_ff_projects_source_to_extracted_activity(
         Extracted activity for the given projects source
     """
     if rki_oe := ff_projects_source.rki_oe:
-        responsible_unit = unit_stable_target_id_by_synonym[rki_oe]
+        responsible_unit = [
+            unit_stable_target_id_by_synonym[oe]
+            for oe in rki_oe.replace("/", ",").split(",")
+        ]
     else:
         raise MExError("missing unit should have been filtered out")
 
-    project_lead = person_stable_target_ids_by_query_string.get(
-        ff_projects_source.projektleiter
-    )
-    funder_or_commissioner = organization_stable_target_id_by_synonyms.get(
-        ff_projects_source.zuwendungs_oder_auftraggeber
-    )
-    activity_type = (
-        ff_projects_activity["activityType"][0]["mappingRules"][0]["setValues"]
-        if ff_projects_source.rki_az
+    project_lead = [
+        sti
+        for person in ff_projects_source.projektleiter.replace("/", ",").split(",")
+        if person
+        for sti in person_stable_target_ids_by_query_string[person]
+    ]
+    orgs = ff_projects_source.zuwendungs_oder_auftraggeber.replace("/", ",").split(",")
+    funder_or_commissioner: list[MergedOrganizationIdentifier] = []
+    for org in orgs:
+        if org in ["Sonderforschung", "AA"]:
+            continue
+        if org in ORGANIZATIONS_BY_ABBREVIATIONS.keys():
+            funder_or_commissioner.append(
+                organization_stable_target_id_by_synonyms[
+                    ORGANIZATIONS_BY_ABBREVIATIONS[org]
+                ]
+            )
+        elif sti := organization_stable_target_id_by_synonyms.get(org):
+            funder_or_commissioner.append(sti)
+    activity_type = []
+    if (
+        ff_projects_source.rki_az
         in ff_projects_activity["activityType"][0]["mappingRules"][0]["forValues"]
-        else []
-    )
+    ):
+        activity_type = ff_projects_activity["activityType"][0]["mappingRules"][0][
+            "setValues"
+        ]
+    elif (
+        ff_projects_source.rki_az
+        in ff_projects_activity["activityType"][0]["mappingRules"][1]["forValues"]
+    ):
+        activity_type = ff_projects_activity["activityType"][0]["mappingRules"][1][
+            "setValues"
+        ]
     start = (
         [
             YearMonthDay(
