@@ -60,12 +60,16 @@ def test_split_off_extended_data_use_variables(
                 "valInstrument": None,
                 "textbox21": "no auspraegung",
                 "textbox24": "no_auspraegung",
+                "IntVar": True,
+                "KeepVarname": True,
             }
         )
     )
     expected_regular = {
         "auspraegungen": "-97",
         "datentyp": "Zahl",
+        "int_var": False,
+        "keep_varname": False,
         "studie_id": 12345,
         "studie": "STUDY1",
         "synopse_id": "1",
@@ -77,6 +81,8 @@ def test_split_off_extended_data_use_variables(
         "varname": "KHEfehlb",
     }
     expected_extended_data_use = {
+        "int_var": True,
+        "keep_varname": True,
         "studie_id": 12345,
         "studie": "STUDY1",
         "synopse_id": "12345678901111",

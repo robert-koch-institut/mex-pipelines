@@ -83,6 +83,8 @@ def synopse_variables_raw() -> list[dict[str, str | int | float | None]]:
             "textbox21": "Angeborene Fehlbildung",
             "textbox24": "KHEfehlb",
             "textbox11": "Zahl",
+            "IntVar": False,
+            "KeepVarname": False,
         },
         {  # var 1, auspraegung 2
             "textbox49": -98,
@@ -97,6 +99,8 @@ def synopse_variables_raw() -> list[dict[str, str | int | float | None]]:
             "textbox21": "Angeborene Fehlbildung",
             "textbox24": "KHEfehlb",
             "textbox11": "Text",
+            "IntVar": False,
+            "KeepVarname": False,
         },
         {  # var 2, missing var label, valInstrument
             "textbox49": 1,
@@ -111,6 +115,8 @@ def synopse_variables_raw() -> list[dict[str, str | int | float | None]]:
             "textbox21": None,
             "textbox24": "KHEfiebB",
             "textbox11": "Zahl",
+            "IntVar": False,
+            "KeepVarname": False,
         },
         {  # var 3, no auspraegung
             "textbox49": None,
@@ -125,6 +131,8 @@ def synopse_variables_raw() -> list[dict[str, str | int | float | None]]:
             "textbox21": "no auspraegung",
             "textbox24": "no_auspraegung",
             "textbox11": "Text",
+            "IntVar": False,
+            "KeepVarname": False,
         },
         {  # var 4, different value in textbox5
             "textbox49": None,
@@ -139,6 +147,8 @@ def synopse_variables_raw() -> list[dict[str, str | int | float | None]]:
             "textbox21": "no auspraegung",
             "textbox24": "no_auspraegung",
             "textbox11": "Zahl",
+            "IntVar": False,
+            "KeepVarname": False,
         },
         {  # var 5, different studie_id, same thema
             "textbox49": None,
@@ -153,6 +163,8 @@ def synopse_variables_raw() -> list[dict[str, str | int | float | None]]:
             "textbox21": "no auspraegung",
             "textbox24": "no_auspraegung",
             "textbox11": "Text",
+            "IntVar": False,
+            "KeepVarname": False,
         },
     ]
 
@@ -213,6 +225,8 @@ def synopse_variables_extended_data_use_raw() -> (
             "valInstrument": None,
             "textbox21": "no auspraegung",
             "textbox24": "no_auspraegung",
+            "IntVar": True,
+            "KeepVarname": True,
         }
     ]
 
@@ -542,6 +556,12 @@ def synopse_overviews() -> list[SynopseStudyOverview]:
             ds_typ_id=12,
             titel_datenset="set2",
             synopse_id="3",
+        ),
+        SynopseStudyOverview(
+            studien_id="12345",
+            ds_typ_id=None,
+            titel_datenset="set2",
+            synopse_id="12345678901111",
         ),
         SynopseStudyOverview(
             studien_id="12345",

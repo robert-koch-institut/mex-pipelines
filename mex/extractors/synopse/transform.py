@@ -47,17 +47,26 @@ def split_off_extended_data_use_variables(
     Returns:
         Tuple of two Generators for synopse variables
     """
-    variables_in_datensatzuebersicht = {s.synopse_id for s in synopse_overviews}
+    ds_typ_id_in_datensatzuebersicht_by_synopse_id = {
+        s.synopse_id: s.ds_typ_id for s in synopse_overviews
+    }
     synopse_variable_regular, synopse_variable_extended_data_use = tee(
-        ((variable.synopse_id in variables_in_datensatzuebersicht), variable)
+        (
+            (
+                not ds_typ_id_in_datensatzuebersicht_by_synopse_id[variable.synopse_id]
+                and variable.int_var
+                and variable.keep_varname
+            ),
+            variable,
+        )
         for variable in synopse_variables
     )
     return (
-        variable for condition, variable in synopse_variable_regular if condition
+        variable for condition, variable in synopse_variable_regular if not condition
     ), (
         variable
         for condition, variable in synopse_variable_extended_data_use
-        if not condition
+        if condition
     )
 
 
