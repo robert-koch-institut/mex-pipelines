@@ -12,13 +12,13 @@ from mex.common.ldap.extract import get_merged_ids_by_query_string
 from mex.common.models import ExtractedPrimarySource
 from mex.common.testing import Joker
 from mex.common.types import Identifier, TextLanguage
-from mex.confluence_vvt.connector import ConfluenceVvtConnector
-from mex.confluence_vvt.extract import (
+from mex.extractors.confluence_vvt.connector import ConfluenceVvtConnector
+from mex.extractors.confluence_vvt.extract import (
     extract_confluence_vvt_authors,
     fetch_all_data_page_ids,
     fetch_all_pages_data,
 )
-from mex.confluence_vvt.transform import (
+from mex.extractors.confluence_vvt.transform import (
     transform_confluence_vvt_sources_to_extracted_activities,
 )
 

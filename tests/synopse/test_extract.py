@@ -1,13 +1,13 @@
 import pytest
 
-from mex.synopse.extract import (
+from mex.extractors.synopse.extract import (
     extract_projects,
     extract_study_data,
     extract_study_overviews,
     extract_synopse_project_contributors,
     extract_variables,
 )
-from mex.synopse.models.project import SynopseProject
+from mex.extractors.synopse.models.project import SynopseProject
 
 
 def test_extract_variables() -> None:

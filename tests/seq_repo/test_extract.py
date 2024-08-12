@@ -6,7 +6,7 @@ from pytest import MonkeyPatch
 
 from mex.common.exceptions import MExError
 from mex.drop import DropApiConnector
-from mex.seq_repo.extract import extract_sources
+from mex.extractors.seq_repo.extract import extract_sources
 
 
 @pytest.mark.usefixtures(

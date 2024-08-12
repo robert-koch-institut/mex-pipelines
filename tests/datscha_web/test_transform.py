@@ -5,8 +5,8 @@ import pytest
 from mex.common.models import ExtractedPrimarySource
 from mex.common.testing import Joker
 from mex.common.types import Identifier
-from mex.datscha_web.models.item import DatschaWebItem
-from mex.datscha_web.transform import (
+from mex.extractors.datscha_web.models.item import DatschaWebItem
+from mex.extractors.datscha_web.transform import (
     transform_datscha_web_items_to_mex_activities,
 )
 
