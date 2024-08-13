@@ -9,7 +9,6 @@ from mex.common.types import (
     TemporalEntityPrecision,
     YearMonthDay,
 )
-from mex.extractors.ff_projects.extract import ORGANIZATIONS_BY_ABBREVIATIONS
 from mex.extractors.ff_projects.models.source import FFProjectsSource
 
 
@@ -48,7 +47,7 @@ def transform_ff_projects_source_to_extracted_activity(
     project_lead = [
         sti
         for person in ff_projects_source.projektleiter.replace("/", ",").split(",")
-        if person
+        if person in person_stable_target_ids_by_query_string.keys()
         for sti in person_stable_target_ids_by_query_string[person]
     ]
     orgs = ff_projects_source.zuwendungs_oder_auftraggeber.replace("/", ",").split(",")
@@ -56,11 +55,9 @@ def transform_ff_projects_source_to_extracted_activity(
     for org in orgs:
         if org in ["Sonderforschung", "AA"]:
             continue
-        if org in ORGANIZATIONS_BY_ABBREVIATIONS.keys():
+        if org in organization_stable_target_id_by_synonyms.keys():
             funder_or_commissioner.append(
-                organization_stable_target_id_by_synonyms[
-                    ORGANIZATIONS_BY_ABBREVIATIONS[org]
-                ]
+                organization_stable_target_id_by_synonyms[org]
             )
         elif sti := organization_stable_target_id_by_synonyms.get(org):
             funder_or_commissioner.append(sti)
