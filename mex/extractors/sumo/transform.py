@@ -529,12 +529,12 @@ def transform_sumo_access_platform_to_mex_access_platform(
     return ExtractedAccessPlatform(
         identifierInPrimarySource=sumo_access_platform["identifierInPrimarySource"][0][
             "mappingRules"
-        ][0]["setValues"],
+        ][0]["setValues"][0],
         hadPrimarySource=extracted_primary_source.stableTargetId,
         title=sumo_access_platform["title"][0]["mappingRules"][0]["setValues"],
         technicalAccessibility=sumo_access_platform["technicalAccessibility"][0][
             "mappingRules"
-        ][0]["setValues"],
+        ][0]["setValues"][0],
         unitInCharge=unit_in_charge,
         contact=contact,
     )
