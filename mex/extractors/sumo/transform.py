@@ -110,16 +110,23 @@ def transform_resource_feat_model_to_mex_resource(
         accrualPeriodicity=extracted_sumo_resource_feat["accrualPeriodicity"][0][
             "mappingRules"
         ][0]["setValues"][0],
-        contact=contact_merged_ids_by_emails[
-            extracted_sumo_resource_feat["contact"][0]["mappingRules"][0]["forValues"][
-                0
+        contact=[
+            contact_merged_ids_by_emails[
+                extracted_sumo_resource_feat["contact"][0]["mappingRules"][0][
+                    "forValues"
+                ][0]
             ]
         ],
-        contributingUnit=unit_merged_ids_by_synonym[
-            extracted_sumo_resource_feat["contributingUnit"][0]["mappingRules"][0][
-                "forValues"
-            ][0]
+        contributingUnit=[
+            unit_merged_ids_by_synonym[
+                extracted_sumo_resource_feat["contributingUnit"][0]["mappingRules"][0][
+                    "forValues"
+                ][0]
+            ]
         ],
+        hasPersonalData=extracted_sumo_resource_feat["hasPersonalData"][0][
+            "mappingRules"
+        ][0]["setValues"][0],
         hadPrimarySource=extracted_primary_source.stableTargetId,
         identifierInPrimarySource=extracted_sumo_resource_feat["title"][0][
             "mappingRules"
@@ -129,17 +136,28 @@ def transform_resource_feat_model_to_mex_resource(
         meshId=extracted_sumo_resource_feat["meshId"][0]["mappingRules"][0][
             "setValues"
         ][0],
+        resourceCreationMethod=extracted_sumo_resource_feat["resourceCreationMethod"][
+            0
+        ]["mappingRules"][0]["setValues"][0],
         resourceTypeGeneral=extracted_sumo_resource_feat["resourceTypeGeneral"][0][
             "mappingRules"
         ][0]["setValues"],
+        resourceTypeSpecific=extracted_sumo_resource_feat["resourceTypeSpecific"][0][
+            "mappingRules"
+        ][0]["setValues"],
+        spatial=extracted_sumo_resource_feat["spatial"][0]["mappingRules"][0][
+            "setValues"
+        ][0],
         theme=extracted_sumo_resource_feat["theme"][0]["mappingRules"][0]["setValues"],
         title=extracted_sumo_resource_feat["title"][0]["mappingRules"][0]["setValues"][
             0
         ],
-        unitInCharge=unit_merged_ids_by_synonym[
-            extracted_sumo_resource_feat["unitInCharge"][0]["mappingRules"][0][
-                "forValues"
-            ][0]
+        unitInCharge=[
+            unit_merged_ids_by_synonym[
+                extracted_sumo_resource_feat["unitInCharge"][0]["mappingRules"][0][
+                    "forValues"
+                ][0]
+            ]
         ],
         wasGeneratedBy=transformed_activity.stableTargetId,
     )
