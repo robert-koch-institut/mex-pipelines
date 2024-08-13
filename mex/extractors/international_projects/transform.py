@@ -201,7 +201,7 @@ def get_theme_for_activity_or_topic(
     Returns:
         Sorted list of Theme
     """
-    default_theme_value: Theme = theme[0]["mappingRules"][0]["setValues"][0]
+    default_theme_from_mapping: Theme = theme[0]["mappingRules"][0]["setValues"][0]
     themes_dict_from_mapping: dict[str, Theme] = {}
     for theme_item in theme:
         for rule in theme_item["mappingRules"]:
@@ -209,17 +209,17 @@ def get_theme_for_activity_or_topic(
                 dict.fromkeys(rule["forValues"], rule["setValues"][0])
             )
 
-    def get_current_theme_or_default(key: str | None) -> Theme:
+    def get_theme_or_default(key: str | None) -> Theme:
         if key:
             if theme := themes_dict_from_mapping.get(key):
                 return theme
 
-        return default_theme_value
+        return default_theme_from_mapping
 
     theme_set = set()
-    theme_set.add(get_current_theme_or_default(activity1))
-    theme_set.add(get_current_theme_or_default(activity2))
-    theme_set.add(get_current_theme_or_default(topic1))
-    theme_set.add(get_current_theme_or_default(topic2))
+    theme_set.add(get_theme_or_default(activity1))
+    theme_set.add(get_theme_or_default(activity2))
+    theme_set.add(get_theme_or_default(topic1))
+    theme_set.add(get_theme_or_default(topic2))
 
     return sorted(list(theme_set), key=lambda x: x.name)
