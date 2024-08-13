@@ -14,6 +14,7 @@ from mex.common.types import (
     MergedOrganizationIdentifier,
     MergedPersonIdentifier,
     Text,
+    Theme,
 )
 from mex.extractors.international_projects.models.source import (
     InternationalProjectsSource,
@@ -104,7 +105,7 @@ def transform_international_projects_source_to_extracted_activity(
             activity_types_dict.setdefault("Other", set_value)
             continue
         activity_types_dict.setdefault(for_value[0], set_value)
-
+    theme = international_projects_activity["theme"]
     return ExtractedActivity(
         title=source.full_project_name,
         activityType=(
@@ -124,7 +125,9 @@ def transform_international_projects_source_to_extracted_activity(
         hadPrimarySource=extracted_primary_source.stableTargetId,
         fundingProgram=source.funding_program if source.funding_program else [],
         shortName=source.project_abbreviation,
-        theme=[],
+        theme=get_theme_for_activity_or_topic(
+            theme, source.activity1, source.activity2, source.topic1, source.topic2
+        ),
         website=(
             []
             if source.website in ("", "does not exist yet")
@@ -177,3 +180,46 @@ def transform_international_projects_sources_to_extracted_activities(
             partner_organizations_stable_target_id_by_query,
         ):
             yield activity
+
+
+def get_theme_for_activity_or_topic(
+    theme: list[dict[str, Any]],
+    activity1: str | None,
+    activity2: str | None,
+    topic1: str | None,
+    topic2: str | None,
+) -> list[Theme]:
+    """Get theme identifier for activities and topics.
+
+    Args:
+        theme: theme extracted from mapping
+        activity1: activity 1
+        activity2: activity 1
+        topic1: topic 1
+        topic2: topic 2
+
+    Returns:
+        Sorted list of Theme
+    """
+    default_theme_value: Theme = theme[0]["mappingRules"][0]["setValues"][0]
+    themes_dict_from_mapping: dict[str, Theme] = {}
+    for theme_item in theme:
+        for rule in theme_item["mappingRules"]:
+            themes_dict_from_mapping.update(
+                dict.fromkeys(rule["forValues"], rule["setValues"][0])
+            )
+
+    def get_current_theme_or_default(key: str | None) -> Theme:
+        if key:
+            if theme := themes_dict_from_mapping.get(key):
+                return theme
+
+        return default_theme_value
+
+    theme_set = set()
+    theme_set.add(get_current_theme_or_default(activity1))
+    theme_set.add(get_current_theme_or_default(activity2))
+    theme_set.add(get_current_theme_or_default(topic1))
+    theme_set.add(get_current_theme_or_default(topic2))
+
+    return sorted(list(theme_set), key=lambda x: x.name)

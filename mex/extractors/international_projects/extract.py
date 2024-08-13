@@ -216,7 +216,6 @@ def get_clean_organizations_names(organizations_str: str) -> list[str]:
     for org in unclean_organizations:
         if org:
             org = re.sub("^[0-9]+", "", org)
-            org = org.strip()
-            clean_organizations.append(org)
+            clean_organizations.append(org.strip())
 
     return clean_organizations
