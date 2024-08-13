@@ -19,10 +19,12 @@ from mex.common.types import (
     Link,
     MergedContactPointIdentifier,
     MergedOrganizationalUnitIdentifier,
+    MergedOrganizationIdentifier,
     MergedPersonIdentifier,
     Text,
     TextLanguage,
 )
+from mex.extractors.sinks import load
 from mex.extractors.sumo.models.cc1_data_model_nokeda import Cc1DataModelNoKeda
 from mex.extractors.sumo.models.cc1_data_valuesets import Cc1DataValuesets
 from mex.extractors.sumo.models.cc2_aux_mapping import Cc2AuxMapping
@@ -529,12 +531,12 @@ def transform_sumo_access_platform_to_mex_access_platform(
     return ExtractedAccessPlatform(
         identifierInPrimarySource=sumo_access_platform["identifierInPrimarySource"][0][
             "mappingRules"
-        ][0]["setValues"][0],
+        ][0]["setValues"],
         hadPrimarySource=extracted_primary_source.stableTargetId,
         title=sumo_access_platform["title"][0]["mappingRules"][0]["setValues"],
         technicalAccessibility=sumo_access_platform["technicalAccessibility"][0][
             "mappingRules"
-        ][0]["setValues"][0],
+        ][0]["setValues"],
         unitInCharge=unit_in_charge,
         contact=contact,
     )
@@ -568,17 +570,26 @@ def transform_sumo_activity_to_extracted_activity(
         unit_merged_ids_by_synonym[unit]
         for unit in sumo_activity["involvedUnit"][0]["mappingRules"][0]["forValues"]
     ]
-    publication = sumo_activity["publication"][0]["mappingRules"][0]["setValues"]
     responsible_unit = [
         unit_merged_ids_by_synonym[unit]
         for unit in sumo_activity["responsibleUnit"][0]["mappingRules"][0]["forValues"]
     ]
     short_name = sumo_activity["shortName"][0]["mappingRules"][0]["setValues"]
     title = sumo_activity["title"][0]["mappingRules"][0]["setValues"]
-    theme = [
-        theme["setValues"][0] for theme in sumo_activity["theme"][0]["mappingRules"]
-    ]
+    theme = sumo_activity["theme"][0]["mappingRules"][0]["setValues"]
     website = sumo_activity["website"][0]["mappingRules"][0]["setValues"]
+    external_associate = sumo_activity["externalAssociate"][0]["mappingRules"][0][
+        "forValues"
+    ][0]
+    extracted_organization = ExtractedOrganization(
+        officialName=[Text(value=external_associate)],
+        identifierInPrimarySource=external_associate,
+        hadPrimarySource=extracted_primary_source.stableTargetId,
+    )
+    load([extracted_organization])
+    organization_merged_id = MergedOrganizationIdentifier(
+        extracted_organization.stableTargetId
+    )
     return ExtractedActivity(
         abstract=abstract,
         activityType=sumo_activity["activityType"][0]["mappingRules"][0]["setValues"],
@@ -589,7 +600,7 @@ def transform_sumo_activity_to_extracted_activity(
             "mappingRules"
         ][0]["setValues"],
         involvedUnit=involved_unit,
-        publication=publication,
+        publication=[],  # TODO: add bibliographic resource item
         responsibleUnit=responsible_unit,
         shortName=short_name,
         start=sumo_activity["start"][0]["mappingRules"][0]["setValues"],
@@ -597,4 +608,5 @@ def transform_sumo_activity_to_extracted_activity(
         theme=theme,
         title=title,
         website=website,
+        externalAssociate=[organization_merged_id],
     )
