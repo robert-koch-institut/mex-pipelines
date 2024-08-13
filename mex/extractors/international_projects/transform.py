@@ -83,8 +83,8 @@ def transform_international_projects_source_to_extracted_activity(
     all_partner_organizations: list[MergedOrganizationIdentifier] = []
     if source.partner_organization:
         for partner_org in source.partner_organization:
-            if wfc := partner_organizations_stable_target_id_by_query.get(partner_org):
-                all_partner_organizations.append(wfc)
+            if wpo := partner_organizations_stable_target_id_by_query.get(partner_org):
+                all_partner_organizations.append(wpo)
             else:
                 extracted_organization = ExtractedOrganization(
                     officialName=[Text(value=partner_org)],
