@@ -123,7 +123,6 @@ def extracted_international_projects_activities(
         settings.international_projects.mapping_path / "activity.yaml",
         ExtractedActivity,
     )
-
     mex_sources = list(
         transform_international_projects_sources_to_extracted_activities(
             international_projects_sources,
