@@ -1,3 +1,5 @@
+from typing import Any
+
 from pytz import timezone
 
 from mex.common.models import ExtractedPrimarySource
@@ -18,6 +20,7 @@ from mex.extractors.international_projects.transform import (
 def test_transform_international_projects_source_to_mex_source(
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
     unit_stable_target_ids_by_synonym: dict[str, Identifier],
+    international_projects_mapping_activity: dict[str, Any],
 ) -> None:
     organization_id = Identifier.generate(seed=44)
     funding_source_stable_target_ids_by_synonym = {"Test-Institute": organization_id}
@@ -32,6 +35,7 @@ def test_transform_international_projects_source_to_mex_source(
     extracted_activities = list(
         transform_international_projects_sources_to_extracted_activities(
             international_projects_sources,
+            international_projects_mapping_activity,
             extracted_primary_sources["international-projects"],
             person_stable_target_ids_by_query_string,
             unit_stable_target_ids_by_synonym,
@@ -47,10 +51,7 @@ def test_transform_international_projects_source_to_mex_source(
         ].stableTargetId,
         "identifierInPrimarySource": "0000-1000",
         "stableTargetId": Joker(),
-        "activityType": [
-            "https://mex.rki.de/item/activity-type-2",
-            "https://mex.rki.de/item/activity-type-1",
-        ],
+        "activityType": ["https://mex.rki.de/item/activity-type-1"],
         "alternativeTitle": [{"value": "testAAbr"}],
         "contact": [
             person_id,
@@ -64,7 +65,7 @@ def test_transform_international_projects_source_to_mex_source(
         "responsibleUnit": [unit_id],
         "shortName": [{"value": "testAAbr"}],
         "start": [YearMonthDay(2021, 7, 27, tzinfo=timezone("UTC"))],
-        "theme": ["https://mex.rki.de/item/theme-27"],
+        "theme": ["https://mex.rki.de/item/theme-37"],
         "title": [
             {"value": "This is a test project full title", "language": TextLanguage.EN}
         ],
