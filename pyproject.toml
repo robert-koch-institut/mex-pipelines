@@ -25,7 +25,7 @@ dependencies = [
     "xlrd==2.0.1",
 ]
 optional-dependencies.dev = [
-    "black==24.4.2",
+    "black==24.8.0",
     "click==8.1.7",
     "ipdb==0.13.13",
     "mypy==1.11.1",
