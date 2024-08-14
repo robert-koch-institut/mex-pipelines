@@ -99,9 +99,7 @@ def transform_international_projects_source_to_extracted_activity(
         "mappingRules"
     ]
     if source.funding_type == activity_type_from_mapping[0]["forValues"][0]:
-        activity_type = international_projects_activity["activityType"][0][
-            "mappingRules"
-        ][0]["setValues"][0]
+        activity_type = activity_type_from_mapping[0]["setValues"][0]
     elif source.funding_type == activity_type_from_mapping[1]["forValues"][0]:
         activity_type = activity_type_from_mapping[1]["setValues"][0]
     else:
