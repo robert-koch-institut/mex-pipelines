@@ -1,3 +1,5 @@
+from typing import Any
+
 from pytz import timezone
 
 from mex.common.models import ExtractedPrimarySource
