@@ -1,20 +1,29 @@
 from collections.abc import Generator, Hashable, Iterable
+from typing import Any
 
 from mex.common.logging import watch
-from mex.common.models import ExtractedActivity, ExtractedPrimarySource
+from mex.common.models import (
+    ExtractedActivity,
+    ExtractedOrganization,
+    ExtractedPrimarySource,
+)
 from mex.common.types import (
     Link,
     MergedOrganizationalUnitIdentifier,
     MergedOrganizationIdentifier,
     MergedPersonIdentifier,
+    Text,
+    Theme,
 )
 from mex.extractors.international_projects.models.source import (
     InternationalProjectsSource,
 )
+from mex.extractors.sinks import load
 
 
 def transform_international_projects_source_to_extracted_activity(
     source: InternationalProjectsSource,
+    international_projects_activity: dict[str, Any],
     extracted_primary_source: ExtractedPrimarySource,
     person_stable_target_ids_by_query_string: dict[
         Hashable, list[MergedPersonIdentifier]
@@ -29,6 +38,8 @@ def transform_international_projects_source_to_extracted_activity(
 
     Args:
         source: international projects sources
+        international_projects_activity: extracted activity for default
+                                         values from mapping
         extracted_primary_source: Extracted primary_source for FF Projects
         person_stable_target_ids_by_query_string: Mapping from author query
                                                   to person stable target ID
@@ -70,15 +81,34 @@ def transform_international_projects_source_to_extracted_activity(
 
     all_partner_organizations: list[MergedOrganizationIdentifier] = []
     if source.partner_organization:
-        all_partner_organizations.extend(
-            wfc
-            for fc in source.partner_organization
-            if (wfc := partner_organizations_stable_target_id_by_query.get(fc))
-        )
+        for partner_org in source.partner_organization:
+            if wpo := partner_organizations_stable_target_id_by_query.get(partner_org):
+                all_partner_organizations.append(wpo)
+            else:
+                extracted_organization = ExtractedOrganization(
+                    officialName=[Text(value=partner_org)],
+                    identifierInPrimarySource=partner_org,
+                    hadPrimarySource=extracted_primary_source.stableTargetId,
+                )
+                load([extracted_organization])
+                all_partner_organizations.append(
+                    MergedOrganizationIdentifier(extracted_organization.stableTargetId)
+                )
 
+    activity_type_from_mapping = international_projects_activity["activityType"][0][
+        "mappingRules"
+    ]
+    if source.funding_type == activity_type_from_mapping[0]["forValues"][0]:
+        activity_type = activity_type_from_mapping[0]["setValues"][0]
+    elif source.funding_type == activity_type_from_mapping[1]["forValues"][0]:
+        activity_type = activity_type_from_mapping[1]["setValues"][0]
+    else:
+        activity_type = activity_type_from_mapping[2]["setValues"][0]
+
+    theme = international_projects_activity["theme"]
     return ExtractedActivity(
         title=source.full_project_name,
-        activityType={},
+        activityType=activity_type,
         alternativeTitle=source.project_abbreviation,
         contact=[*project_leads, project_lead_rki_unit],
         involvedPerson=project_leads,
@@ -93,7 +123,9 @@ def transform_international_projects_source_to_extracted_activity(
         hadPrimarySource=extracted_primary_source.stableTargetId,
         fundingProgram=source.funding_program if source.funding_program else [],
         shortName=source.project_abbreviation,
-        theme=[],
+        theme=get_theme_for_activity_or_topic(
+            theme, source.activity1, source.activity2, source.topic1, source.topic2
+        ),
         website=(
             []
             if source.website in ("", "does not exist yet")
@@ -105,6 +137,7 @@ def transform_international_projects_source_to_extracted_activity(
 @watch
 def transform_international_projects_sources_to_extracted_activities(
     international_projects_sources: Iterable[InternationalProjectsSource],
+    international_projects_activity: dict[str, Any],
     extracted_primary_source: ExtractedPrimarySource,
     person_stable_target_ids_by_query_string: dict[
         Hashable, list[MergedPersonIdentifier]
@@ -119,6 +152,8 @@ def transform_international_projects_sources_to_extracted_activities(
 
     Args:
         international_projects_sources: international projects sources
+        international_projects_activity: extracted activity for default
+                                         values from mapping
         extracted_primary_source: Extracted primary_source for FF Projects
         person_stable_target_ids_by_query_string: Mapping from author query
                                                   to person stable target ID
@@ -135,6 +170,7 @@ def transform_international_projects_sources_to_extracted_activities(
     for source in international_projects_sources:
         if activity := transform_international_projects_source_to_extracted_activity(
             source,
+            international_projects_activity,
             extracted_primary_source,
             person_stable_target_ids_by_query_string,
             unit_stable_target_id_by_synonym,
@@ -142,3 +178,46 @@ def transform_international_projects_sources_to_extracted_activities(
             partner_organizations_stable_target_id_by_query,
         ):
             yield activity
+
+
+def get_theme_for_activity_or_topic(
+    theme: list[dict[str, Any]],
+    activity1: str | None,
+    activity2: str | None,
+    topic1: str | None,
+    topic2: str | None,
+) -> list[Theme]:
+    """Get theme identifier for activities and topics.
+
+    Args:
+        theme: theme extracted from mapping
+        activity1: activity 1
+        activity2: activity 1
+        topic1: topic 1
+        topic2: topic 2
+
+    Returns:
+        Sorted list of Theme
+    """
+    default_theme_from_mapping: Theme = theme[0]["mappingRules"][0]["setValues"][0]
+    themes_dict_from_mapping: dict[str, Theme] = {}
+    for theme_item in theme:
+        for rule in theme_item["mappingRules"]:
+            themes_dict_from_mapping.update(
+                dict.fromkeys(rule["forValues"], rule["setValues"][0])
+            )
+
+    def get_theme_or_default(key: str | None) -> Theme:
+        if key:
+            if theme := themes_dict_from_mapping.get(key):
+                return theme
+
+        return default_theme_from_mapping
+
+    theme_set = set()
+    theme_set.add(get_theme_or_default(activity1))
+    theme_set.add(get_theme_or_default(activity2))
+    theme_set.add(get_theme_or_default(topic1))
+    theme_set.add(get_theme_or_default(topic2))
+
+    return sorted(list(theme_set), key=lambda x: x.name)
