@@ -264,7 +264,7 @@ def transform_synopse_variables_to_mex_variable_groups(
         )
 
         label = Text(value=re.sub(r"\s\(\d+\)", "", thema), language=TextLanguage("de"))
-        if len(contained_by) > 0:
+        if contained_by:
             yield ExtractedVariableGroup(
                 containedBy=contained_by,
                 hadPrimarySource=extracted_primary_source.stableTargetId,
