@@ -4,7 +4,6 @@ from mex.common.ldap.models.person import LDAPPersonWithQuery
 from mex.common.models import (
     ExtractedAccessPlatform,
     ExtractedActivity,
-    ExtractedDistribution,
     ExtractedOrganization,
     ExtractedPrimarySource,
     ExtractedResource,
@@ -73,12 +72,11 @@ def transform_seq_repo_activities_to_extracted_activities(
     return unique_activities
 
 
-def transform_seq_repo_resource_to_extracted_resource_and_distribution(
+def transform_seq_repo_resource_to_extracted_resource(
     seq_repo_sources: dict[str, SeqRepoSource],
     seq_repo_activities: dict[str, ExtractedActivity],
     mex_access_platform: ExtractedAccessPlatform,
     seq_repo_resource: dict[str, Any],
-    seq_repo_distribution: dict[str, Any],
     seq_repo_source_resolved_project_coordinators: list[LDAPPersonWithQuery],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     project_coordinators_merged_ids_by_query_string: dict[
@@ -86,18 +84,14 @@ def transform_seq_repo_resource_to_extracted_resource_and_distribution(
     ],
     extracted_organization_rki: ExtractedOrganization,
     extracted_primary_source: ExtractedPrimarySource,
-) -> tuple[list[ExtractedResource], list[ExtractedDistribution]]:
-    """Transform seq-repo resources and distributions.
-
-    transform seq-repo resources to ExtractedResource and
-    transform seq-repo distributions to ExtractedDistribution.
+) -> list[ExtractedResource]:
+    """Transform seq-repo resources to ExtractedResource.
 
     Args:
         seq_repo_sources: Seq Repo extracted sources
         seq_repo_activities: Seq Repo extracted activity for default values from mapping
         mex_access_platform: Extracted access platform
         seq_repo_resource: Seq Repo extracted resource
-        seq_repo_distribution: Seq Repo extracted distribution
         seq_repo_source_resolved_project_coordinators: Seq Repo sources resolved project
                                             coordinators ldap query results
         unit_stable_target_ids_by_synonym: Unit stable target ids by synonym
@@ -107,7 +101,7 @@ def transform_seq_repo_resource_to_extracted_resource_and_distribution(
         extracted_primary_source: Extracted primary source
 
     Returns:
-        lists of ExtractedResource and ExtractedDistribution
+        list of ExtractedResource
     """
     # Resource values from mapping
     access_restriction = seq_repo_resource["accessRestriction"][0]["mappingRules"][0][
@@ -121,6 +115,9 @@ def transform_seq_repo_resource_to_extracted_resource_and_distribution(
     ]["mappingRules"][0]["setValues"]
     method = seq_repo_resource["method"][0]["mappingRules"][0]["setValues"]
 
+    resource_creation_method = seq_repo_resource["resourceCreationMethod"][0][
+        "mappingRules"
+    ][0]["setValues"]
     resource_type_general = seq_repo_resource["resourceTypeGeneral"][0]["mappingRules"][
         0
     ]["setValues"]
@@ -133,15 +130,7 @@ def transform_seq_repo_resource_to_extracted_resource_and_distribution(
     ][0]["setValues"]
     theme = seq_repo_resource["theme"][0]["mappingRules"][0]["setValues"]
 
-    # Distribution values from mapping
-    access_restriction = seq_repo_distribution["accessRestriction"][0]["mappingRules"][
-        0
-    ]["setValues"]
-    media_type = seq_repo_distribution["mediaType"][0]["mappingRules"][0]["setValues"]
-    title = seq_repo_distribution["title"][0]["mappingRules"][0]["setValues"]
-
     extracted_resources = []
-    extracted_distributions = []
     for identifier_in_primary_source, source in seq_repo_sources.items():
         activity = seq_repo_activities.get(source.project_id)
 
@@ -160,19 +149,8 @@ def transform_seq_repo_resource_to_extracted_resource_and_distribution(
         contributing_unit = unit_stable_target_ids_by_synonym.get(
             source.customer_org_unit_id
         )
-
-        extracted_distribution = ExtractedDistribution(
-            accessService=mex_access_platform.stableTargetId,
-            accessRestriction=access_restriction,
-            hadPrimarySource=extracted_primary_source.stableTargetId,
-            identifierInPrimarySource=identifier_in_primary_source,
-            issued=source.sequencing_date,
-            mediaType=media_type,
-            publisher=extracted_organization_rki.stableTargetId,
-            title=title,
-        )
-        extracted_distributions.append(extracted_distribution)
-
+        keyword = seq_repo_resource["keyword"][0]["mappingRules"][0]["setValues"]
+        keyword.append(source.species)
         extracted_resource = ExtractedResource(
             accessPlatform=mex_access_platform.stableTargetId,
             accessRestriction=access_restriction,
@@ -181,13 +159,13 @@ def transform_seq_repo_resource_to_extracted_resource_and_distribution(
             contact=project_coordinators_ids,
             contributingUnit=contributing_unit or [],
             created=source.sequencing_date,
-            distribution=extracted_distribution.stableTargetId,
             hadPrimarySource=extracted_primary_source.stableTargetId,
             identifierInPrimarySource=identifier_in_primary_source,
             instrumentToolOrApparatus=source.sequencing_platform,
-            keyword=source.species,
+            keyword=keyword,
             method=method,
             publisher=extracted_organization_rki.stableTargetId,
+            resourceCreationMethod=resource_creation_method,
             resourceTypeGeneral=resource_type_general,
             resourceTypeSpecific=resource_type_specific,
             rights=rights,
@@ -199,7 +177,7 @@ def transform_seq_repo_resource_to_extracted_resource_and_distribution(
         )
         extracted_resources.append(extracted_resource)
 
-    return extracted_resources, extracted_distributions
+    return extracted_resources
 
 
 def transform_seq_repo_access_platform_to_extracted_access_platform(
