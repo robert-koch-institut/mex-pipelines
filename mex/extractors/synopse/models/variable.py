@@ -20,3 +20,5 @@ class SynopseVariable(BaseModel):
     val_instrument: str | None = Field(None, alias="valInstrument")
     varlabel: str | None = Field(None, alias="textbox21")
     varname: str = Field(..., alias="textbox24")
+    int_var: bool = Field(..., alias="IntVar")
+    keep_varname: bool = Field(..., alias="KeepVarname")
