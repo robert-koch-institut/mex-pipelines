@@ -1,74 +1,89 @@
 # yaml-language-server: $schema=../../__schema__/ExtractedActivity_MappingSchema.json
 
 abstract:
+  - fieldInPrimarySource: n/a
     mappingRules:
     - setValues:
       - language: de
-        value: 'Dummy abstract.'
+        value: Dummy abstract.
 activityType:
+  - fieldInPrimarySource: n/a
     mappingRules:
     - setValues:
       - https://mex.rki.de/item/activity-type-3
 contact:
+  - fieldInPrimarySource: n/a
     mappingRules:
     - forValues:
       - email@email.de
-      rule: Use value to match with ldap extractor.
 documentation:
+  - fieldInPrimarySource: n/a
     mappingRules:
     - setValues:
       - language: de
         title: SUMO im internen RKI Confluence
         url: https://url.url
 externalAssociate:
+  - fieldInPrimarySource: n/a
     mappingRules:
     - forValues:
       - C1
+hadPrimarySource:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - rule: Assign 'stable target id' of primary source.
+
 identifierInPrimarySource:
+  - fieldInPrimarySource: n/a
     mappingRules:
     - setValues:
       - https://url.url
 involvedUnit:
+  - fieldInPrimarySource: n/a
     mappingRules:
     - forValues:
       - C1
 publication:
+  - fieldInPrimarySource: n/a
     mappingRules:
-    - setValues:
-      - language: de
-        title: "Dummy title."
-        url: http://url.url
-    - setValues:
-      - language: de
-        title: "Dummy title."
-        url: https://url.url
+    - forValues:
+      - "Dummy publication"
+    - forValues:
+      - "Dummy publication"
 responsibleUnit:
+  - fieldInPrimarySource: n/a
     mappingRules:
     - forValues:
       - C1
 shortName:
+  - fieldInPrimarySource: n/a
     mappingRules:
     - setValues:
       - value: SUMO
 start:
+  - fieldInPrimarySource: n/a
     mappingRules:
     - setValues:
       - 2018-07-01
 succeeds:
+  - fieldInPrimarySource: n/a
     mappingRules:
     - forValues:
         - "Dummy project"
 theme:
+  - fieldInPrimarySource: n/a
     mappingRules:
     - setValues:
       - https://mex.rki.de/item/theme-11
       - https://mex.rki.de/item/theme-36
 title:
+  - fieldInPrimarySource: n/a
     mappingRules:
     - setValues:
       - language: de
         value: SUMO Notaufnahmesurveillance
 website:
+  - fieldInPrimarySource: n/a
     mappingRules:
     - setValues:
       - language: de
