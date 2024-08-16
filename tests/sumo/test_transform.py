@@ -11,13 +11,14 @@ from mex.common.models import (
 )
 from mex.common.testing import Joker
 from mex.common.types import (
+    Email,
     Identifier,
     LinkLanguage,
     MergedContactPointIdentifier,
     MergedOrganizationalUnitIdentifier,
     MergedPrimarySourceIdentifier,
-    TemporalEntity,
     TextLanguage,
+    YearMonthDay,
 )
 from mex.extractors.sumo.models.cc1_data_model_nokeda import Cc1DataModelNoKeda
 from mex.extractors.sumo.models.cc1_data_valuesets import Cc1DataValuesets
@@ -448,7 +449,7 @@ def test_transform_sumo_activity_to_extracted_activity(
     sumo_activity: dict[str, Any],
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
     unit_merged_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
-    contact_merged_ids_by_emails: dict[str, MergedContactPointIdentifier],
+    contact_merged_ids_by_emails: dict[Email, MergedContactPointIdentifier],
 ) -> None:
     extracted_activity = transform_sumo_activity_to_extracted_activity(
         sumo_activity,
@@ -456,14 +457,15 @@ def test_transform_sumo_activity_to_extracted_activity(
         contact_merged_ids_by_emails,
         extracted_primary_sources["nokeda"],
     )
+
     expected = {
         "identifier": Joker(),
         "hadPrimarySource": extracted_primary_sources["nokeda"].stableTargetId,
         "identifierInPrimarySource": "https://url.url",
         "stableTargetId": Joker(),
-        "abstract": [{"value": "Dummy abstract.", "language": TextLanguage.DE}],
+        "abstract": [{"value": "Dummy abstract", "language": TextLanguage.DE}],
         "activityType": ["https://mex.rki.de/item/activity-type-3"],
-        "contact": [contact_merged_ids_by_emails["email@email.de"]],
+        "contact": [contact_merged_ids_by_emails[Email("email@email.de")]],
         "documentation": [
             {
                 "language": LinkLanguage.DE,
@@ -471,23 +473,14 @@ def test_transform_sumo_activity_to_extracted_activity(
                 "url": "https://url.url",
             }
         ],
+        "externalAssociate": Joker(),
         "involvedUnit": [unit_merged_ids_by_synonym["MF4"]],
-        "publication": [
-            {
-                "language": LinkLanguage.DE,
-                "title": "Dummy title.",
-                "url": "http://url.url",
-            }
-        ],
         "responsibleUnit": [unit_merged_ids_by_synonym["FG32"]],
         "shortName": [{"value": "SUMO", "language": TextLanguage.DE}],
-        "start": [TemporalEntity("2018-07")],
+        "start": [YearMonthDay("2018-07-01")],
         "theme": [
-            "https://mex.rki.de/item/theme-35",
             "https://mex.rki.de/item/theme-11",
-            "https://mex.rki.de/item/theme-3",
             "https://mex.rki.de/item/theme-36",
-            "https://mex.rki.de/item/theme-38",
         ],
         "title": [
             {"value": "SUMO Notaufnahmesurveillance", "language": TextLanguage.DE}

@@ -442,7 +442,9 @@ def sumo_activity() -> dict[str, Any]:
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
-                    {"setValues": [{"language": "de", "value": "Dummy abstract."}]}
+                    {
+                        "setValues": [{"language": "de", "value": "Dummy abstract"}],
+                    }
                 ],
             }
         ],
@@ -450,9 +452,10 @@ def sumo_activity() -> dict[str, Any]:
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
-                    {"setValues": ["https://mex.rki.de/item/activity-type-3"]}
+                    {
+                        "setValues": ["https://mex.rki.de/item/activity-type-3"],
+                    }
                 ],
-                "comment": "RKI-internes Projekt",
             }
         ],
         "contact": [
@@ -461,7 +464,6 @@ def sumo_activity() -> dict[str, Any]:
                 "mappingRules": [
                     {
                         "forValues": ["email@email.de"],
-                        "rule": "Use value to match with ldap extractor.",
                     }
                 ],
             }
@@ -477,7 +479,7 @@ def sumo_activity() -> dict[str, Any]:
                                 "title": "SUMO im internen RKI Confluence",
                                 "url": "https://url.url",
                             }
-                        ]
+                        ],
                     }
                 ],
             }
@@ -488,7 +490,6 @@ def sumo_activity() -> dict[str, Any]:
                 "mappingRules": [
                     {
                         "forValues": ["Dummy Associate"],
-                        "rule": "Use value to match with wikidata extractor.",
                     }
                 ],
             }
@@ -496,7 +497,11 @@ def sumo_activity() -> dict[str, Any]:
         "identifierInPrimarySource": [
             {
                 "fieldInPrimarySource": "n/a",
-                "mappingRules": [{"setValues": ["https://url.url"]}],
+                "mappingRules": [
+                    {
+                        "setValues": ["https://url.url"],
+                    }
+                ],
             }
         ],
         "involvedUnit": [
@@ -505,7 +510,6 @@ def sumo_activity() -> dict[str, Any]:
                 "mappingRules": [
                     {
                         "forValues": ["mf4"],
-                        "rule": "Use value to match with identifier in /raw-data/organigram/organizational-units.json.",
                     }
                 ],
             }
@@ -515,22 +519,10 @@ def sumo_activity() -> dict[str, Any]:
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
                     {
-                        "setValues": [
-                            {
-                                "language": "de",
-                                "title": "Dummy title.",
-                                "url": "http://url.url",
-                            }
-                        ]
+                        "forValues": ["Dummy publication"],
                     },
                     {
-                        "setValues": [
-                            {
-                                "language": "de",
-                                "title": "Dummy title.",
-                                "url": "https://url.url",
-                            }
-                        ]
+                        "forValues": ["Dummy publication"],
                     },
                 ],
             }
@@ -541,7 +533,6 @@ def sumo_activity() -> dict[str, Any]:
                 "mappingRules": [
                     {
                         "forValues": ["fg32"],
-                        "rule": "Use value to match with identifier in /raw-data/organigram/organizational-units.json.",
                     }
                 ],
             }
@@ -549,13 +540,21 @@ def sumo_activity() -> dict[str, Any]:
         "shortName": [
             {
                 "fieldInPrimarySource": "n/a",
-                "mappingRules": [{"setValues": [{"value": "SUMO"}]}],
+                "mappingRules": [
+                    {
+                        "setValues": [{"language": "de", "value": "SUMO"}],
+                    }
+                ],
             }
         ],
         "start": [
             {
                 "fieldInPrimarySource": "n/a",
-                "mappingRules": [{"setValues": ["2018-07"]}],
+                "mappingRules": [
+                    {
+                        "setValues": ["2018-07-01"],
+                    }
+                ],
             }
         ],
         "succeeds": [
@@ -564,7 +563,6 @@ def sumo_activity() -> dict[str, Any]:
                 "mappingRules": [
                     {
                         "forValues": ["Dummy project"],
-                        "rule": "Ignore the value, the item is not in MEx.",
                     }
                 ],
             }
@@ -573,13 +571,13 @@ def sumo_activity() -> dict[str, Any]:
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
-                    {"setValues": ["https://mex.rki.de/item/theme-35"]},
-                    {"setValues": ["https://mex.rki.de/item/theme-11"]},
-                    {"setValues": ["https://mex.rki.de/item/theme-3"]},
-                    {"setValues": ["https://mex.rki.de/item/theme-36"]},
-                    {"setValues": ["https://mex.rki.de/item/theme-38"]},
+                    {
+                        "setValues": [
+                            "https://mex.rki.de/item/theme-11",
+                            "https://mex.rki.de/item/theme-36",
+                        ],
+                    }
                 ],
-                "comment": "dummy comment",
             }
         ],
         "title": [
@@ -588,8 +586,11 @@ def sumo_activity() -> dict[str, Any]:
                 "mappingRules": [
                     {
                         "setValues": [
-                            {"language": "de", "value": "SUMO Notaufnahmesurveillance"}
-                        ]
+                            {
+                                "language": "de",
+                                "value": "SUMO Notaufnahmesurveillance",
+                            }
+                        ],
                     }
                 ],
             }
@@ -605,7 +606,7 @@ def sumo_activity() -> dict[str, Any]:
                                 "title": "Surveillance Monitor",
                                 "url": "https://url.url",
                             }
-                        ]
+                        ],
                     }
                 ],
             }
