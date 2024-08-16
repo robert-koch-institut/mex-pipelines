@@ -148,7 +148,7 @@ def test_transform_resource_feat_model_to_mex_resource(
     transformed_activity: ExtractedActivity,
 ) -> None:
     contact_merged_ids_by_emails = {
-        "email@email.de": MergedContactPointIdentifier.generate(43)
+        Email("email@email.de"): MergedContactPointIdentifier.generate(43)
     }
     mex_source = transform_resource_feat_model_to_mex_resource(
         sumo_resources_feat,
@@ -163,6 +163,7 @@ def test_transform_resource_feat_model_to_mex_resource(
         "hadPrimarySource": MergedPrimarySourceIdentifier(
             extracted_primary_sources["nokeda"].stableTargetId
         ),
+        "hasPersonalData": "https://mex.rki.de/item/personal-data-1",
         "identifierInPrimarySource": "Syndrome",
         "stableTargetId": Joker(),
         "accessRestriction": "https://mex.rki.de/item/access-restriction-2",
@@ -175,8 +176,23 @@ def test_transform_resource_feat_model_to_mex_resource(
             {"language": TextLanguage.DE, "value": "keyword 2"},
         ],
         "meshId": ["http://id.nlm.nih.gov/mesh/D004636"],
-        "resourceTypeGeneral": ["https://mex.rki.de/item/resource-type-general-1"],
-        "theme": ["https://mex.rki.de/item/theme-35"],
+        "resourceCreationMethod": [
+            "https://mex.rki.de/item/resource-creation-method-1",
+        ],
+        "resourceTypeGeneral": ["https://mex.rki.de/item/resource-type-general-14"],
+        "resourceTypeSpecific": [
+            {
+                "language": TextLanguage.DE,
+                "value": "Dummy resource type",
+            },
+        ],
+        "spatial": [
+            {
+                "language": TextLanguage.DE,
+                "value": "Dummy spatial",
+            },
+        ],
+        "theme": ["https://mex.rki.de/item/theme-11"],
         "title": [{"language": TextLanguage.DE, "value": "Syndrome"}],
         "unitInCharge": [unit_merged_ids_by_synonym["FG 99"]],
         "wasGeneratedBy": transformed_activity.stableTargetId,

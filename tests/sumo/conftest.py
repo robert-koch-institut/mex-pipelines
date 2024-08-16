@@ -123,6 +123,16 @@ def sumo_resources_feat() -> dict[str, Any]:
                 ],
             }
         ],
+        "hasPersonalData": [
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {
+                        "setValues": ["https://mex.rki.de/item/personal-data-1"],
+                    }
+                ],
+            }
+        ],
         "keyword": [
             {
                 "fieldInPrimarySource": "n/a",
@@ -139,19 +149,47 @@ def sumo_resources_feat() -> dict[str, Any]:
                 "comment": "Emergency Service, Hospital",
             }
         ],
+        "resourceCreationMethod": [
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {
+                        "setValues": [
+                            "https://mex.rki.de/item/resource-creation-method-1"
+                        ],
+                    }
+                ],
+            }
+        ],
         "resourceTypeGeneral": [
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
-                    {"setValues": ["https://mex.rki.de/item/resource-type-general-1"]}
+                    {"setValues": ["https://mex.rki.de/item/resource-type-general-14"]}
                 ],
-                "comment": "Public Health Fachdaten",
+            }
+        ],
+        "resourceTypeSpecific": [
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {"setValues": [{"language": "de", "value": "Dummy resource type"}]},
+                    {"setValues": [{"language": "en", "value": "Dummy resource type"}]},
+                ],
+            }
+        ],
+        "spatial": [
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {"setValues": [{"language": "de", "value": "Dummy spatial"}]},
+                ],
             }
         ],
         "theme": [
             {
                 "fieldInPrimarySource": "n/a",
-                "mappingRules": [{"setValues": ["https://mex.rki.de/item/theme-35"]}],
+                "mappingRules": [{"setValues": ["https://mex.rki.de/item/theme-11"]}],
             }
         ],
         "title": [
@@ -301,9 +339,8 @@ def sumo_resources_nokeda() -> dict[str, Any]:
             {
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
-                    {"setValues": ["https://mex.rki.de/item/resource-type-general-1"]}
+                    {"setValues": ["https://mex.rki.de/item/resource-type-general-14"]}
                 ],
-                "comment": "Public Health Fachdaten",
             }
         ],
         "resourceTypeSpecific": [
@@ -637,7 +674,7 @@ def transformed_activity() -> ExtractedActivity:
         shortName=[Text(value="SUMO", language=TextLanguage.DE)],
         start=[],
         succeeds=[],
-        theme=["https://mex.rki.de/item/theme-35"],
+        theme=["https://mex.rki.de/item/theme-36"],
         title=[Text(value="SUMO Notaufnahmesurveillance", language=TextLanguage.DE)],
         website=[],
     )
@@ -660,7 +697,8 @@ def mex_resources_nokeda() -> ExtractedResource:
         meshId=["http://id.nlm.nih.gov/mesh/D004636"],
         publication=["Situationsreport"],
         publisher=[MergedOrganizationIdentifier("bFQoRhcVH5DHU6")],
-        resourceTypeGeneral=["https://mex.rki.de/item/resource-type-general-1"],
+        resourceCreationMethod=["https://mex.rki.de/item/resource-creation-method-1"],
+        resourceTypeGeneral=["https://mex.rki.de/item/resource-type-general-14"],
         resourceTypeSpecific=["Daten"],
         rights=[
             "Die Daten sind zweckgebunden und können nicht ohne Weiteres innerhalb des RKI zur Nutzung zur Verfügung gestellt werden."
@@ -685,8 +723,8 @@ def mex_resources_feat() -> ExtractedResource:
         contributingUnit=[UUID(int=5, version=4)],
         keyword=["keyword 1", "keyword 2"],
         meshId=["http://id.nlm.nih.gov/mesh/D004636"],
-        resourceTypeGeneral=["https://mex.rki.de/item/resource-type-general-1"],
-        theme=["https://mex.rki.de/item/theme-1"],
+        resourceTypeGeneral=["https://mex.rki.de/item/resource-type-general-14"],
+        theme=["https://mex.rki.de/item/theme-11"],
         title=["Syndrome"],
         unitInCharge=[MergedOrganizationalUnitIdentifier.generate(seed=42)],
     )
