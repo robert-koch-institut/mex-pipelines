@@ -21,6 +21,8 @@ from mex.extractors.synopse.models.variable import SynopseVariable
             "valInstrument": None,
             "textbox21": "Angeborene Fehlbildung",
             "textbox24": "KHEfehlb",
+            "IntVar": False,
+            "KeepVarname": False,
         },
         {
             "textbox49": np.nan,
@@ -34,6 +36,8 @@ from mex.extractors.synopse.models.variable import SynopseVariable
             "valInstrument": None,
             "textbox21": "Angeborene Fehlbildung",
             "textbox24": "KHEfehlb",
+            "IntVar": False,
+            "KeepVarname": False,
         },
     ],
     ids=["all_params", "missing_auspraegung"],

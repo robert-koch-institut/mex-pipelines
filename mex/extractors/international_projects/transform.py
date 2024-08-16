@@ -8,7 +8,6 @@ from mex.common.models import (
     ExtractedPrimarySource,
 )
 from mex.common.types import (
-    ActivityType,
     Link,
     MergedOrganizationalUnitIdentifier,
     MergedOrganizationIdentifier,
@@ -96,21 +95,20 @@ def transform_international_projects_source_to_extracted_activity(
                     MergedOrganizationIdentifier(extracted_organization.stableTargetId)
                 )
 
-    activity_types = international_projects_activity["activityType"][0]["mappingRules"]
-    activity_types_dict: dict[str, ActivityType] = {}
-    for activity_type in activity_types:
-        for_value = activity_type.get("forValues")
-        set_value = activity_type.get("setValues")[0]
-        if not for_value:
-            activity_types_dict.setdefault("Other", set_value)
-            continue
-        activity_types_dict.setdefault(for_value[0], set_value)
+    activity_type_from_mapping = international_projects_activity["activityType"][0][
+        "mappingRules"
+    ]
+    if source.funding_type == activity_type_from_mapping[0]["forValues"][0]:
+        activity_type = activity_type_from_mapping[0]["setValues"][0]
+    elif source.funding_type == activity_type_from_mapping[1]["forValues"][0]:
+        activity_type = activity_type_from_mapping[1]["setValues"][0]
+    else:
+        activity_type = activity_type_from_mapping[2]["setValues"][0]
+
     theme = international_projects_activity["theme"]
     return ExtractedActivity(
         title=source.full_project_name,
-        activityType=(
-            [activity_types_dict[source.funding_type]] if source.funding_type else []
-        ),
+        activityType=activity_type,
         alternativeTitle=source.project_abbreviation,
         contact=[*project_leads, project_lead_rki_unit],
         involvedPerson=project_leads,
