@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - transform voxco resources and variables
 - model update: international-projects
+- model update: sumo
 
 ### Changes
 
