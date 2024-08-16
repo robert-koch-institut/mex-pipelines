@@ -8,7 +8,7 @@ class FFProjectsSettings(BaseModel):
     """Settings submodel for the FF Projects extractor."""
 
     file_path: AssetsPath = Field(
-        AssetsPath("../../../assets/raw-data/ff-projects/ff-projects.xlsx"),
+        AssetsPath("raw-data/ff-projects/ff-projects.xlsx"),
         description=(
             "Path to the FF Projects excel file, "
             "absolute path or relative to `assets_dir`."
@@ -32,4 +32,11 @@ class FFProjectsSettings(BaseModel):
     skip_clients: list[str] = Field(
         ["Sonstige"],
         description="Skip sources with these clients",
+    )
+    mapping_path: AssetsPath = Field(
+        AssetsPath("mappings/__final__/ff-projects"),
+        description=(
+            "Path to the directory with the ff-projects mapping files"
+            "values, absolute path or relative to `assets_dir`."
+        ),
     )
