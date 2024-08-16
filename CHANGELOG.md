@@ -61,7 +61,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changes
 
 - update mex-common to 0.27.1
-- move `mex.extractors.pipeline` documentation to `__init__` to have it in sphinx
+- move `mex.pipeline` documentation to `__init__` to have it in sphinx
 - consolidate mocked drop connector into one general mock
 
 ### Removed
