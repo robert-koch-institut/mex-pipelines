@@ -250,6 +250,16 @@ def sumo_resources_nokeda() -> dict[str, Any]:
                 ],
             }
         ],
+        "hasPersonalData": [
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {
+                        "setValues": ["https://mex.rki.de/item/personal-data-1"],
+                    }
+                ],
+            }
+        ],
         "description": [
             {
                 "fieldInPrimarySource": "n/a",
@@ -335,6 +345,18 @@ def sumo_resources_nokeda() -> dict[str, Any]:
                 ],
             }
         ],
+        "resourceCreationMethod": [
+            {
+                "fieldInPrimarySource": "n/a",
+                "mappingRules": [
+                    {
+                        "setValues": [
+                            "https://mex.rki.de/item/resource-creation-method-3"
+                        ],
+                    }
+                ],
+            }
+        ],
         "resourceTypeGeneral": [
             {
                 "fieldInPrimarySource": "n/a",
@@ -386,9 +408,8 @@ def sumo_resources_nokeda() -> dict[str, Any]:
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
                     {"setValues": ["https://mex.rki.de/item/theme-11"]},
-                    {"setValues": ["https://mex.rki.de/item/theme-35"]},
+                    {"setValues": ["https://mex.rki.de/item/theme-36"]},
                 ],
-                "comment": "Infektionskrankheiten.",
             }
         ],
         "title": [

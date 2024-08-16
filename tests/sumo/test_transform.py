@@ -72,7 +72,7 @@ def test_transform_resource_nokeda_to_mex_resource(
     transformed_activity: ExtractedActivity,
 ) -> None:
     contact_merged_ids_by_emails = {
-        "email@email.de": MergedContactPointIdentifier.generate(43)
+        Email("email@email.de"): MergedContactPointIdentifier.generate(43)
     }
     mex_source = transform_resource_nokeda_to_mex_resource(
         sumo_resources_nokeda,
@@ -87,6 +87,7 @@ def test_transform_resource_nokeda_to_mex_resource(
         "hadPrimarySource": MergedPrimarySourceIdentifier(
             extracted_primary_sources["nokeda"].stableTargetId
         ),
+        "hasPersonalData": "https://mex.rki.de/item/personal-data-1",
         "identifierInPrimarySource": "test_project",
         "stableTargetId": Joker(),
         "accessRestriction": "https://mex.rki.de/item/access-restriction-2",
@@ -106,20 +107,17 @@ def test_transform_resource_nokeda_to_mex_resource(
                 "url": "https://link.com",
             }
         ],
+        "externalPartner": Joker(),
         "keyword": [
             {"language": TextLanguage.DE, "value": "keyword1"},
             {"language": TextLanguage.DE, "value": "keyword2"},
         ],
         "meshId": ["http://id.nlm.nih.gov/mesh/D004636"],
-        "publication": [
-            {
-                "language": LinkLanguage.DE,
-                "title": "Situationsreport",
-                "url": "https://link.com",
-            }
-        ],
         "publisher": [extracted_organization_rki.stableTargetId],
-        "resourceTypeGeneral": ["https://mex.rki.de/item/resource-type-general-1"],
+        "resourceCreationMethod": [
+            "https://mex.rki.de/item/resource-creation-method-3",
+        ],
+        "resourceTypeGeneral": ["https://mex.rki.de/item/resource-type-general-14"],
         "resourceTypeSpecific": [{"language": TextLanguage.DE, "value": "Daten"}],
         "rights": [
             {
@@ -131,7 +129,6 @@ def test_transform_resource_nokeda_to_mex_resource(
         "stateOfDataProcessing": ["https://mex.rki.de/item/data-processing-state-2"],
         "theme": [
             "https://mex.rki.de/item/theme-11",
-            "https://mex.rki.de/item/theme-35",
         ],
         "title": [{"language": TextLanguage.DE, "value": "test_project"}],
         "unitInCharge": [unit_merged_ids_by_synonym["FG99"]],
