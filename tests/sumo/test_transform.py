@@ -71,6 +71,7 @@ def test_transform_resource_nokeda_to_mex_resource(
     sumo_resources_nokeda: dict[str, Any],
     extracted_organization_rki: ExtractedOrganization,
     transformed_activity: ExtractedActivity,
+    transformed_sumo_access_platform: ExtractedAccessPlatform,
 ) -> None:
     contact_merged_ids_by_emails = {
         Email("email@email.de"): MergedContactPointIdentifier.generate(43)
@@ -82,6 +83,7 @@ def test_transform_resource_nokeda_to_mex_resource(
         contact_merged_ids_by_emails,
         extracted_organization_rki,
         transformed_activity,
+        transformed_sumo_access_platform,
     )
     expected = {
         "identifier": Joker(),
@@ -91,6 +93,7 @@ def test_transform_resource_nokeda_to_mex_resource(
         "hasPersonalData": "https://mex.rki.de/item/personal-data-1",
         "identifierInPrimarySource": "test_project",
         "stableTargetId": Joker(),
+        "accessPlatform": [transformed_sumo_access_platform.stableTargetId],
         "accessRestriction": "https://mex.rki.de/item/access-restriction-2",
         "accrualPeriodicity": "https://mex.rki.de/item/frequency-15",
         "contact": [Identifier.generate(43)],

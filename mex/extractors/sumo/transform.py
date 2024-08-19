@@ -173,6 +173,7 @@ def transform_resource_nokeda_to_mex_resource(
     contact_merged_ids_by_emails: dict[Email, MergedContactPointIdentifier],
     extracted_organization_rki: ExtractedOrganization,
     transformed_activity: ExtractedActivity,
+    sumo_access_platform: ExtractedAccessPlatform,
 ) -> ExtractedResource:
     """Transform ResourceNokeda to ExtractedResource.
 
@@ -184,6 +185,8 @@ def transform_resource_nokeda_to_mex_resource(
                                       points
         extracted_organization_rki: ExtractedOrganization
         transformed_activity: ExtractedActivity for sumo
+        sumo_access_platform: transformed sumo ExtractedAccessPlatform
+
 
     Returns:
         ExtractedResource
@@ -193,6 +196,7 @@ def transform_resource_nokeda_to_mex_resource(
         for k in extracted_sumo_resource_nokeda["keyword"][0]["mappingRules"]
     ]
     return ExtractedResource(
+        accessPlatform=[sumo_access_platform.stableTargetId],
         accessRestriction=extracted_sumo_resource_nokeda["accessRestriction"][0][
             "mappingRules"
         ][0]["setValues"][0],
