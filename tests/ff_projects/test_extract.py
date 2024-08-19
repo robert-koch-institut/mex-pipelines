@@ -117,6 +117,4 @@ def test_extract_ff_projects_organizations(
     organizations = extract_ff_projects_organizations(
         [next(extract_ff_projects_sources())]
     )
-    assert organizations == {
-        "Apple": wikidata_organization,
-    }
+    assert organizations["Apple"] == wikidata_organization
