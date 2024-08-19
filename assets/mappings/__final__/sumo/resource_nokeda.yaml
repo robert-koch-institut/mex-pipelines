@@ -56,9 +56,9 @@ keyword:
     mappingRules:
     - setValues:
       - language: de
-        value: Test 1
+        value: Keyword1
       - language: de
-        value: Test 2
+        value: Keyword2
 meshId:
   - fieldInPrimarySource: n/a
     mappingRules:
