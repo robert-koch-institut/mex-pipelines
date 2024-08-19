@@ -4,6 +4,7 @@ import pytest
 from traitlets import Any
 
 from mex.common.models import (
+    ExtractedAccessPlatform,
     ExtractedActivity,
     ExtractedContactPoint,
     ExtractedPerson,
@@ -16,6 +17,7 @@ from mex.common.types import (
     MergedOrganizationalUnitIdentifier,
     MergedOrganizationIdentifier,
     MergedPrimarySourceIdentifier,
+    TechnicalAccessibility,
     Text,
     TextLanguage,
 )
@@ -490,6 +492,20 @@ def sumo_access_platform() -> dict[str, Any]:
             }
         ],
     }
+
+
+@pytest.fixture
+def transformed_sumo_access_platform() -> ExtractedAccessPlatform:
+    return ExtractedAccessPlatform(
+        identifierInPrimarySource="sumo",
+        hadPrimarySource=UUID(int=5, version=4),
+        title=[Text(value="SUMO Access Platform", language=TextLanguage.EN)],
+        technicalAccessibility=TechnicalAccessibility(
+            "https://mex.rki.de/item/technical-accessibility-1"
+        ),
+        unitInCharge=[MergedOrganizationalUnitIdentifier.generate(seed=42)],
+        contact=[MergedOrganizationalUnitIdentifier("bFQoRhcVH5DHVf")],
+    )
 
 
 @pytest.fixture

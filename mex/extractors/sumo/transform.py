@@ -84,6 +84,7 @@ def transform_resource_feat_model_to_mex_resource(
     contact_merged_ids_by_emails: dict[Email, MergedContactPointIdentifier],
     mex_resource_nokeda: ExtractedResource,
     transformed_activity: ExtractedActivity,
+    sumo_access_platform: ExtractedAccessPlatform,
 ) -> ExtractedResource:
     """Transform extracted_sumo_resource_feat to ExtractedResource.
 
@@ -95,6 +96,7 @@ def transform_resource_feat_model_to_mex_resource(
             points
         mex_resource_nokeda: ExtractedResource for nokeda
         transformed_activity: ExtractedActivity for sumo
+        sumo_access_platform: transformed sumo ExtractedAccessPlatform
 
     Returns:
         ExtractedResource
@@ -104,6 +106,7 @@ def transform_resource_feat_model_to_mex_resource(
         for k in extracted_sumo_resource_feat["keyword"][0]["mappingRules"]
     ]
     return ExtractedResource(
+        accessPlatform=[sumo_access_platform.stableTargetId],
         accessRestriction=extracted_sumo_resource_feat["accessRestriction"][0][
             "mappingRules"
         ][0]["setValues"][0],
@@ -617,21 +620,24 @@ def transform_sumo_activity_to_extracted_activity(
     external_associate = sumo_activity["externalAssociate"][0]["mappingRules"][0][
         "forValues"
     ][0]
+    start = sumo_activity["start"][0]["mappingRules"][0]["setValues"]
+    activity_type = sumo_activity["activityType"][0]["mappingRules"][0]["setValues"]
+    identifier_in_primary_source = sumo_activity["identifierInPrimarySource"][0][
+        "mappingRules"
+    ][0]["setValues"]
 
     return ExtractedActivity(
         abstract=abstract,
-        activityType=sumo_activity["activityType"][0]["mappingRules"][0]["setValues"],
+        activityType=activity_type,
         contact=contact,
         documentation=documentation,
         hadPrimarySource=extracted_primary_source.stableTargetId,
-        identifierInPrimarySource=sumo_activity["identifierInPrimarySource"][0][
-            "mappingRules"
-        ][0]["setValues"],
+        identifierInPrimarySource=identifier_in_primary_source,
         involvedUnit=involved_unit,
         publication=[],  # TODO: add bibliographic resource item
         responsibleUnit=responsible_unit,
         shortName=short_name,
-        start=sumo_activity["start"][0]["mappingRules"][0]["setValues"],
+        start=start,
         succeeds=[],
         theme=theme,
         title=title,

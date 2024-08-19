@@ -1,6 +1,7 @@
 from typing import Any
 
 from mex.common.models import (
+    ExtractedAccessPlatform,
     ExtractedActivity,
     ExtractedContactPoint,
     ExtractedOrganization,
@@ -143,6 +144,7 @@ def test_transform_resource_feat_model_to_mex_resource(
     sumo_resources_feat: dict[str, Any],
     mex_resources_nokeda: ExtractedResource,
     transformed_activity: ExtractedActivity,
+    transformed_sumo_access_platform: ExtractedAccessPlatform,
 ) -> None:
     contact_merged_ids_by_emails = {
         Email("email@email.de"): MergedContactPointIdentifier.generate(43)
@@ -154,8 +156,10 @@ def test_transform_resource_feat_model_to_mex_resource(
         contact_merged_ids_by_emails,
         mex_resources_nokeda,
         transformed_activity,
+        transformed_sumo_access_platform,
     )
     expected = {
+        "accessPlatform": [transformed_sumo_access_platform.stableTargetId],
         "identifier": Joker(),
         "hadPrimarySource": MergedPrimarySourceIdentifier(
             extracted_primary_sources["nokeda"].stableTargetId
