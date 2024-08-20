@@ -5,7 +5,6 @@ from mex.common.ldap.transform import transform_ldap_persons_with_query_to_mex_p
 from mex.common.models import (
     ExtractedAccessPlatform,
     ExtractedActivity,
-    ExtractedDistribution,
     ExtractedOrganization,
     ExtractedOrganizationalUnit,
     ExtractedPrimarySource,
@@ -29,7 +28,7 @@ from mex.extractors.seq_repo.model import SeqRepoSource
 from mex.extractors.seq_repo.transform import (
     transform_seq_repo_access_platform_to_extracted_access_platform,
     transform_seq_repo_activities_to_extracted_activities,
-    transform_seq_repo_resource_to_extracted_resource_and_distribution,
+    transform_seq_repo_resource_to_extracted_resource,
 )
 from mex.extractors.settings import Settings
 from mex.extractors.sinks import load
@@ -145,7 +144,7 @@ def seq_repo_extracted_access_platform(
 
 
 @asset(group_name="seq_repo")
-def seq_repo_resource_and_distribution(
+def seq_repo_resource(
     seq_repo_latest_source: dict[str, SeqRepoSource],
     extracted_activity: dict[str, ExtractedActivity],
     seq_repo_extracted_access_platform: ExtractedAccessPlatform,
@@ -157,34 +156,26 @@ def seq_repo_resource_and_distribution(
     extracted_organization_rki: ExtractedOrganization,
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
 ) -> list[ExtractedResource]:
-    """Extract resource and distribution from Seq-Repo."""
+    """Extract resource from Seq-Repo."""
     settings = Settings.get()
     resource = extract_mapping_data(
         settings.seq_repo.mapping_path / "resource.yaml",
         ExtractedResource,
     )
-    distribution = extract_mapping_data(
-        settings.seq_repo.mapping_path / "distribution.yaml",
-        ExtractedDistribution,
-    )
 
-    mex_resources, mex_distributions = (
-        transform_seq_repo_resource_to_extracted_resource_and_distribution(
-            seq_repo_latest_source,
-            extracted_activity,
-            seq_repo_extracted_access_platform,
-            resource,
-            distribution,
-            seq_repo_source_resolved_project_coordinators,
-            unit_stable_target_ids_by_synonym,
-            project_coordinators_merged_ids_by_query_string,
-            extracted_organization_rki,
-            extracted_primary_source_seq_repo,
-        )
+    mex_resources = transform_seq_repo_resource_to_extracted_resource(
+        seq_repo_latest_source,
+        extracted_activity,
+        seq_repo_extracted_access_platform,
+        resource,
+        seq_repo_source_resolved_project_coordinators,
+        unit_stable_target_ids_by_synonym,
+        project_coordinators_merged_ids_by_query_string,
+        extracted_organization_rki,
+        extracted_primary_source_seq_repo,
     )
 
     load(mex_resources)
-    load(mex_distributions)
 
     return mex_resources
 
