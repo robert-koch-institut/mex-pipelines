@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:c6f3282827ee2f58fd8b4b2b6322d82408448da07143453477767b828cd8b9d9"
+content_hash = "sha256:f67c07c2ec52c48757060bb411e24c3b935e1a76317ab76e402c1a33f6232d3f"
 
 [[metadata.targets]]
 requires_python = ">=3.11,<3.13"
@@ -581,7 +581,7 @@ files = [
 
 [[package]]
 name = "faker"
-version = "26.3.0"
+version = "27.0.0"
 requires_python = ">=3.8"
 summary = "Faker is a Python package that generates fake data for you."
 groups = ["default"]
@@ -589,8 +589,8 @@ dependencies = [
     "python-dateutil>=2.4",
 ]
 files = [
-    {file = "Faker-26.3.0-py3-none-any.whl", hash = "sha256:97fe1e7e953dd640ca2cd4dfac4db7c4d2432dd1b7a244a3313517707f3b54e9"},
-    {file = "Faker-26.3.0.tar.gz", hash = "sha256:7c10ebdf74aaa0cc4fe6ec6db5a71e8598ec33503524bd4b5f4494785a5670dd"},
+    {file = "Faker-27.0.0-py3-none-any.whl", hash = "sha256:55ed0c4ed7bf16800c64823805f6fbbe6d4823db4b7c0903f6f890b8e4d6c34b"},
+    {file = "faker-27.0.0.tar.gz", hash = "sha256:32c78b68d2ba97aaad78422e4035785de2b4bb46b81e428190fc11978da9036c"},
 ]
 
 [[package]]
