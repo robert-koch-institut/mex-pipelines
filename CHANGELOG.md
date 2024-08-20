@@ -10,7 +10,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - transform voxco resources and variables
-- model update: international-projects
 
 ### Changes
 
@@ -24,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   access from `ExtractorSettings.parameter` to `settings.extractor.parameter`.
 - update mex-common to 0.32.0
 - BREAKING: refactor package structure from `mex.foo` to `mex.extractors.foo`
-- model update: synopse
+- model update: international-projects, seqrepo, synopse
 
 ### Deprecated
 
