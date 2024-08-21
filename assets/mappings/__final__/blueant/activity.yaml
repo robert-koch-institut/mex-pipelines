@@ -3,7 +3,7 @@
 activityType:
   - fieldInPrimarySource: typeId
     examplesInPrimarySource:
-    - "typeId: 18426, text: Standardprojekt"
+    - "typeId: 12345, text: Standardprojekt"
     mappingRules:
     - rule: typeId resolved to text using api endpoint masterdata/projects/types/{typeId}.
     - forValues:
@@ -27,7 +27,7 @@ activityType:
 contact:
   - fieldInPrimarySource: projectLeaderId (personnelNumber)
     examplesInPrimarySource:
-    - "projectLeaderId: 20367, personnelNumber: 48217"
+    - "projectLeaderId: 12345, personnelNumber: 12345"
     mappingRules:
     - rule: projectLeaderId resolved to personnelNumber using api endpoint human/persons, resolved to LDAP GUID using LDAP connector. If not resolvable use departmentId.resolved
     comment: LDAP-resolved fields only contain actor UUIDs. ActorID type is set to UUID-only.
@@ -40,7 +40,7 @@ end:
 funderOrCommissioner:
   - fieldInPrimarySource: clientId
     examplesInPrimarySource:
-    - "clientId: 19611103, customer.text:"
+    - "clientId: 12345, customer.text:"
     mappingRules:
     - rule: list of clients.clientId, resolved to list of customer.text using api endpoint /masterdata/customers/{clientId}.
             Match values using wikidata extractor. If wikidata match fails (no match), create new organization with value as officialName.
@@ -54,7 +54,7 @@ hadPrimarySource:
 identifierInPrimarySource:
   - fieldInPrimarySource: number
     examplesInPrimarySource:
-    - "00637"
+    - "12345"
     mappingRules:
       - rule: Extract original value.
     comment: "If project is a Drittmittelprojekt, then the Projektnummer is a number
@@ -62,7 +62,7 @@ identifierInPrimarySource:
 involvedPerson:
   - fieldInPrimarySource: projectLeaderId
     examplesInPrimarySource:
-    - "projectLeaderId: 20367, personnelNumber: 48217"
+    - "projectLeaderId: 12345, personnelNumber: 12345"
     mappingRules:
     - rule: "If projectLeaderId is resolvable: projectLeaderId resolved to LDAP GUID.
         if not: leave unset. LDAP-resolved fields only contain actor UUIDs. ActorID
@@ -70,7 +70,7 @@ involvedPerson:
 responsibleUnit:
   - fieldInPrimarySource: departmentId
     examplesInPrimarySource:
-    - "departmentId: 39866, text: ZV4.3 Zentrale Dienste und
+    - "departmentId: 12345, text: ZV4.3 Zentrale Dienste und
       Fachanwendungen (h)"
     mappingRules:
     - rule: departmentId, resolved to text using api endpoint masterdata/departments/{departmentId}. Filter according to rules for all extractors /mappings/__all__/activity.
