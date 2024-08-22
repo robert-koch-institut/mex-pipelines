@@ -8,14 +8,14 @@ class SumoSettings(BaseModel):
     """Settings submodel for the SUMO extractor."""
 
     raw_data_path: AssetsPath = Field(
-        AssetsPath("../../../assets/raw-data/sumo"),
+        AssetsPath("raw-data/sumo"),
         description=(
             "Path to the directory with the sumo excel files, "
             "absolute path or relative to `assets_dir`."
         ),
     )
     mapping_path: AssetsPath = Field(
-        AssetsPath("../../../assets/mappings/__final__/sumo"),
+        AssetsPath("mappings/__final__/sumo"),
         description=(
             "Path to the directory with the sumo mapping files containing the default "
             "values, absolute path or relative to `assets_dir`."

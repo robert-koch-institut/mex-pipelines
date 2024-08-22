@@ -75,7 +75,7 @@ def transformed_sumo_access_platform(
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     extracted_primary_source_ldap: ExtractedPrimarySource,
     extracted_primary_source_sumo: ExtractedPrimarySource,
-) -> None:
+) -> ExtractedAccessPlatform:
     """Transform and load SUMO access platform and related LDAP actors."""
     settings = Settings.get()
     sumo_access_platform = extract_mapping_data(
@@ -104,6 +104,8 @@ def transformed_sumo_access_platform(
         extracted_primary_source_sumo,
     )
     load([transformed_access_platform])
+
+    return transformed_access_platform
 
 
 @asset(group_name="sumo")
@@ -198,6 +200,7 @@ def transformed_resource_nokeda_sumo(
     contact_merged_ids_by_emails_sumo: dict[Email, MergedContactPointIdentifier],
     extracted_organization_rki: ExtractedOrganization,
     transformed_activity_sumo: ExtractedActivity,
+    transformed_sumo_access_platform: ExtractedAccessPlatform,
 ) -> ExtractedResource:
     """Transform and load extracted Nokeda Resource from SUMO."""
     mex_resource_nokeda = transform_resource_nokeda_to_mex_resource(
@@ -207,6 +210,7 @@ def transformed_resource_nokeda_sumo(
         contact_merged_ids_by_emails_sumo,
         extracted_organization_rki,
         transformed_activity_sumo,
+        transformed_sumo_access_platform,
     )
     load([mex_resource_nokeda])
     return mex_resource_nokeda
@@ -220,6 +224,7 @@ def transformed_resource_feat_sumo(
     contact_merged_ids_by_emails_sumo: dict[Email, MergedContactPointIdentifier],
     transformed_resource_nokeda_sumo: ExtractedResource,
     transformed_activity_sumo: ExtractedActivity,
+    transformed_sumo_access_platform: ExtractedAccessPlatform,
 ) -> ExtractedResource:
     """Transform and load extracted SUMO Resource feat."""
     mex_resource_feat = transform_resource_feat_model_to_mex_resource(
@@ -229,6 +234,7 @@ def transformed_resource_feat_sumo(
         contact_merged_ids_by_emails_sumo,
         transformed_resource_nokeda_sumo,
         transformed_activity_sumo,
+        transformed_sumo_access_platform,
     )
     load([mex_resource_feat])
     return mex_resource_feat
