@@ -1,10 +1,19 @@
 from mex.common.cli import entrypoint
 from mex.common.ldap.extract import get_merged_ids_by_employee_ids
 from mex.common.ldap.transform import transform_ldap_persons_to_mex_persons
-from mex.common.models import ExtractedOrganizationalUnit, ExtractedPrimarySource
+from mex.common.models import (
+    ExtractedActivity,
+    ExtractedOrganizationalUnit,
+    ExtractedPrimarySource,
+)
 from mex.common.primary_source.transform import get_primary_sources_by_name
-from mex.common.types import MergedOrganizationalUnitIdentifier, MergedPersonIdentifier
+from mex.common.types import (
+    MergedOrganizationalUnitIdentifier,
+    MergedOrganizationIdentifier,
+    MergedPersonIdentifier,
+)
 from mex.extractors.blueant.extract import (
+    extract_blueant_organizations,
     extract_blueant_project_leaders,
     extract_blueant_sources,
 )
@@ -14,9 +23,13 @@ from mex.extractors.blueant.transform import (
     transform_blueant_sources_to_extracted_activities,
 )
 from mex.extractors.filters import filter_by_global_rules
+from mex.extractors.mapping.extract import extract_mapping_data
 from mex.extractors.pipeline import asset, run_job_in_process
 from mex.extractors.settings import Settings
 from mex.extractors.sinks import load
+from mex.extractors.wikidata.extract import (
+    get_merged_organization_id_by_query_with_transform_and_load,
+)
 
 
 @asset(group_name="blueant", deps=["extracted_primary_source_mex"])
@@ -66,18 +79,39 @@ def blueant_project_leaders_by_employee_id(
 
 
 @asset(group_name="blueant")
+def blueant_organization_ids_by_query_string(
+    extracted_primary_source_wikidata: ExtractedPrimarySource,
+    blueant_sources: list[BlueAntSource],
+) -> dict[str, MergedOrganizationIdentifier]:
+    """Extract organizations for blueant from wikidata and group them by query."""
+    wikidata_organizations_by_query = extract_blueant_organizations(blueant_sources)
+
+    return get_merged_organization_id_by_query_with_transform_and_load(
+        wikidata_organizations_by_query, extracted_primary_source_wikidata
+    )
+
+
+@asset(group_name="blueant")
 def extracted_blueant_activities(
     blueant_sources: list[BlueAntSource],
     extracted_primary_source_blueant: ExtractedPrimarySource,
     blueant_project_leaders_by_employee_id: dict[str, list[MergedPersonIdentifier]],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
+    blueant_organization_ids_by_query_string: dict[str, MergedOrganizationIdentifier],
 ) -> None:
     """Transform blueant sources to extracted activities and load them to the sinks."""
+    settings = Settings.get()
+    activity = extract_mapping_data(
+        settings.blueant.mapping_path / "activity.yaml", ExtractedActivity
+    )
+
     extracted_activities = transform_blueant_sources_to_extracted_activities(
         blueant_sources,
         extracted_primary_source_blueant,
         blueant_project_leaders_by_employee_id,
         unit_stable_target_ids_by_synonym,
+        activity,
+        blueant_organization_ids_by_query_string,
     )
     load(extracted_activities)
 
