@@ -1,5 +1,5 @@
 from collections.abc import Hashable
-from typing import cast
+from typing import Any, cast
 
 from mex.common.models import ExtractedAccessPlatform
 from mex.common.testing import Joker
