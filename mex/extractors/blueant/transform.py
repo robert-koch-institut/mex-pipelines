@@ -1,31 +1,15 @@
 from collections.abc import Generator, Hashable, Iterable
+from typing import Any
 
 from mex.common.logging import watch
-from mex.common.models import ExtractedActivity, ExtractedPrimarySource
-from mex.common.types import ActivityType, Identifier, Theme
-from mex.common.utils import contains_any
+from mex.common.models import (
+    ExtractedActivity,
+    ExtractedOrganization,
+    ExtractedPrimarySource,
+)
+from mex.common.types import Identifier, MergedOrganizationIdentifier
 from mex.extractors.blueant.models.source import BlueAntSource
-
-INTERNATIONAL_PROJECT_DEPARTMENTS = [
-    "ZIG",
-    "Europäische Union",
-    "EU",
-    "Auswärtiges Amt",
-    "WHO Europe",
-    "World Wildlife Fund",
-]
-
-RKI_INTERNAL_PROJECT_TYPES = [
-    "Standardprojekt",
-    "Standardprojekt agil",
-    "Dienstleistung und Support",
-    "Linienprojekt",
-    "internes Projekt",
-    "Organisationsprojekt",
-    "Maßnahme",
-]
-
-STUDY_PROJECT_TYPES = ["Study"]
+from mex.extractors.sinks import load
 
 
 @watch
@@ -34,6 +18,8 @@ def transform_blueant_sources_to_extracted_activities(
     primary_source: ExtractedPrimarySource,
     person_stable_target_ids_by_employee_id: dict[Hashable, list[Identifier]],
     unit_stable_target_ids_by_synonym: dict[str, Identifier],
+    activity: dict[str, Any],
+    blueant_organization_ids_by_query_string: dict[str, MergedOrganizationIdentifier],
 ) -> Generator[ExtractedActivity, None, None]:
     """Transform Blue Ant sources to ExtractedActivities.
 
@@ -44,24 +30,48 @@ def transform_blueant_sources_to_extracted_activities(
                                                  to person stable target IDs
         unit_stable_target_ids_by_synonym: Map from unit acronyms and labels
                                            to unit stable target IDs
+        activity: activity mapping default values
+        blueant_organization_ids_by_query_string: extracted blueant organizations dict
 
     Returns:
         Generator for ExtractedActivity instances
     """
+    activity_type_values_by_type_id = {
+        for_value: mapping_rule["setValues"]
+        for mapping_rule in activity["activityType"][0]["mappingRules"]
+        if mapping_rule["forValues"]
+        for for_value in mapping_rule["forValues"]
+    }
     for source in blueant_sources:
         # find source type
-        if contains_any(source.type_, RKI_INTERNAL_PROJECT_TYPES):
-            activity_type = [ActivityType["RKI_INTERNAL_PROJECT"]]
-        elif contains_any(source.department, INTERNATIONAL_PROJECT_DEPARTMENTS):
-            activity_type = [ActivityType["INTERNATIONAL_PROJECT"]]
-        elif contains_any(source.type_, STUDY_PROJECT_TYPES):
-            activity_type = [ActivityType["STUDY"]]
-        else:
-            activity_type = [ActivityType["OTHER"]]
+        activity_type = (
+            [activity_type_values_by_type_id[source.type_]]
+            if source.type_ in activity_type_values_by_type_id.keys()
+            else []
+        )
+        funder_or_commissioner: list[MergedOrganizationIdentifier] = []
+        for name in source.client_names:
+            if name in blueant_organization_ids_by_query_string.keys():
+                funder_or_commissioner.append(
+                    blueant_organization_ids_by_query_string[name]
+                )
+            elif name != "Robert Koch-Institut":
+                extracted_organization = ExtractedOrganization(
+                    officialName=name,
+                    identifierInPrimarySource=name,
+                    hadPrimarySource=primary_source.stableTargetId,
+                )
+                load([extracted_organization])
+                funder_or_commissioner.append(
+                    MergedOrganizationIdentifier(extracted_organization.stableTargetId)
+                )
 
         # find responsible unit
         department = source.department.replace("(h)", "").strip()
-        responsible_unit = unit_stable_target_ids_by_synonym.get(department)
+        if department in unit_stable_target_ids_by_synonym.keys():
+            responsible_unit = unit_stable_target_ids_by_synonym.get(department)
+        else:
+            continue
 
         # get contact employee or fallback to unit
         contact = person_stable_target_ids_by_employee_id[
@@ -69,8 +79,6 @@ def transform_blueant_sources_to_extracted_activities(
         ]
         if not contact and responsible_unit:
             contact.append(responsible_unit)
-
-        theme = [Theme["PUBLIC_HEALTH"]]
 
         yield ExtractedActivity(
             start=source.start,
@@ -82,9 +90,7 @@ def transform_blueant_sources_to_extracted_activities(
             ],
             hadPrimarySource=primary_source.stableTargetId,
             responsibleUnit=responsible_unit,
-            # TODO: resolve funderOrCommissioner as organization from client_names
-            funderOrCommissioner=None,
-            theme=theme,
+            funderOrCommissioner=funder_or_commissioner,
             title=source.name,
             identifierInPrimarySource=source.number,
         )
