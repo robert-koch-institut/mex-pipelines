@@ -73,6 +73,5 @@ def transform_datscha_web_items_to_mex_activities(
             involvedPerson=involved_person,
             involvedUnit=involved_unit,
             responsibleUnit=responsible_unit,
-            theme="https://mex.rki.de/item/theme-1",
             title=datscha_web_item.bezeichnung_der_verarbeitungstaetigkeit,
         )

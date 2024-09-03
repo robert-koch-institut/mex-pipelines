@@ -80,7 +80,6 @@ def test_transform_datscha_web_items_to_mex_activities(
             Identifier("ID000000000044"),
         ],
         "stableTargetId": Joker(),
-        "theme": ["https://mex.rki.de/item/theme-1"],
         "title": [{"value": "Consequuntur atque reiciendis voluptates minus."}],
     }
 
@@ -126,6 +125,5 @@ def test_transform_datscha_web_items_to_mex_activities_without_involved_persons(
             Identifier("ID000000000044"),
         ],
         "stableTargetId": Joker(),
-        "theme": ["https://mex.rki.de/item/theme-1"],
         "title": [{"value": "Consequuntur atque reiciendis voluptates minus."}],
     }
