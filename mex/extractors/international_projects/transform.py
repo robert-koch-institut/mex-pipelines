@@ -191,27 +191,29 @@ def get_theme_for_activity_or_topic(
 
     Args:
         theme: theme extracted from mapping
-        activity1: activity 1
-        activity2: activity 1
-        topic1: topic 1
-        topic2: topic 2
+        activity1: activity 1 from the international-projects raw data file
+        activity2: activity 2 from the international-projects raw data file
+        topic1: topic 1 from the international-projects raw data file
+        topic2: topic 2 from the international-projects raw data file
 
     Returns:
         Sorted list of Theme
     """
-    default_theme_from_mapping: Theme = theme[0]["mappingRules"][0]["setValues"][0]
     themes_dict_from_mapping: dict[str, Theme] = {}
+    default_theme_from_mapping: Theme = theme[0]["mappingRules"][0]["setValues"][0]
+
     for theme_item in theme:
         for rule in theme_item["mappingRules"]:
-            themes_dict_from_mapping.update(
-                dict.fromkeys(rule["forValues"], rule["setValues"][0])
-            )
+            rule_for_values = rule["forValues"]
+            if rule_for_values:
+                themes_dict_from_mapping.update(
+                    dict.fromkeys(rule_for_values, rule["setValues"][0])
+                )
 
     def get_theme_or_default(key: str | None) -> Theme:
         if key:
             if theme := themes_dict_from_mapping.get(key):
                 return theme
-
         return default_theme_from_mapping
 
     theme_set = set()
