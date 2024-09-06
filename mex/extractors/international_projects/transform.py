@@ -247,11 +247,11 @@ def get_partner_organizations_merged_ids(
                                                          their stable target ID
         extracted_primary_source: Extracted primary_source for international projects
     """
-    all_partner_organizations: list[MergedOrganizationIdentifier] = []
+    final_partner_organizations: list[MergedOrganizationIdentifier] = []
     if partner_organization:
         for partner_org in partner_organization:
             if wpo := partner_organizations_stable_target_id_by_query.get(partner_org):
-                all_partner_organizations.append(wpo)
+                final_partner_organizations.append(wpo)
             else:
                 extracted_organization = ExtractedOrganization(
                     officialName=[Text(value=partner_org)],
@@ -259,7 +259,7 @@ def get_partner_organizations_merged_ids(
                     hadPrimarySource=extracted_primary_source.stableTargetId,
                 )
                 load([extracted_organization])
-                all_partner_organizations.append(
+                final_partner_organizations.append(
                     MergedOrganizationIdentifier(extracted_organization.stableTargetId)
                 )
-    return all_partner_organizations
+    return final_partner_organizations
