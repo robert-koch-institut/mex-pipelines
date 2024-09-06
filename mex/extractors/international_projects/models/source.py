@@ -12,14 +12,14 @@ class InternationalProjectsSource(BaseRawData):
     model_config = ConfigDict(str_min_length=0)
 
     funding_type: str
-    project_lead_person: str
+    project_lead_person: list[str]
     end_date: TemporalEntity | None = None
     partner_organization: list[str] = []
     funding_source: list[str] = []
     funding_program: str
     rki_internal_project_number: str
     additional_rki_units: str
-    project_lead_rki_unit: str
+    project_lead_rki_unit: list[str]
     project_abbreviation: str
     start_date: TemporalEntity | None = None
     activity1: str
@@ -43,7 +43,7 @@ class InternationalProjectsSource(BaseRawData):
 
     def get_units(self) -> Sequence[str | None]:
         """Return units from extractor."""
-        return [self.project_lead_rki_unit]
+        return self.project_lead_rki_unit
 
     def get_identifier_in_primary_source(self) -> str | None:
         """Return identifier in primary source from extractor."""

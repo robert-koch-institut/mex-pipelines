@@ -95,14 +95,16 @@ def extract_international_projects_source(
 
     return InternationalProjectsSource(
         funding_type=funding_type,
-        project_lead_person=project_lead_person,
+        project_lead_person=(
+            re.split(";|\n", project_lead_person) if project_lead_person else []
+        ),
         end_date=end_date,
         partner_organization=get_clean_organizations_names(partner_organization),
-        funding_source=funding_source.split("\n"),
+        funding_source=re.split(",|\n", funding_source),
         funding_program=funding_program,
         rki_internal_project_number=rki_internal_project_number,
         additional_rki_units=additional_rki_units,
-        project_lead_rki_unit=project_lead_rki_unit,
+        project_lead_rki_unit=re.split(",|/", project_lead_rki_unit),
         project_abbreviation=project_abbreviation,
         start_date=start_date,
         activity1=activity1,
@@ -132,13 +134,17 @@ def extract_international_projects_project_leaders(
         names = source.project_lead_person
         if not names:
             continue
-        if names in seen:
-            continue
-        seen.add(names)
-        for name in analyse_person_string(names):
-            persons = list(ldap.get_persons(name.surname, name.given_name))
-            if len(persons) == 1 and persons[0].objectGUID:
-                yield LDAPPersonWithQuery(person=persons[0], query=names)
+
+        for name in names:
+            if name in seen:
+                continue
+            seen.add(name)
+            for analysed_name in analyse_person_string(name):
+                persons = list(
+                    ldap.get_persons(analysed_name.surname, analysed_name.given_name)
+                )
+                if len(persons) == 1 and persons[0].objectGUID:
+                    yield LDAPPersonWithQuery(person=persons[0], query=name)
 
 
 def extract_international_projects_funding_sources(
