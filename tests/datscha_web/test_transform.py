@@ -4,7 +4,7 @@ import pytest
 
 from mex.common.models import ExtractedPrimarySource
 from mex.common.testing import Joker
-from mex.common.types import Identifier
+from mex.common.types import Identifier, MergedOrganizationIdentifier
 from mex.extractors.datscha_web.models.item import DatschaWebItem
 from mex.extractors.datscha_web.transform import (
     transform_datscha_web_items_to_mex_activities,
@@ -32,7 +32,9 @@ def unit_stable_target_ids_by_synonym() -> dict[str, Identifier]:
 
 
 @pytest.fixture
-def organizations_stable_target_ids_by_query_string() -> dict[str, Identifier]:
+def organizations_stable_target_ids_by_query_string() -> (
+    dict[str, MergedOrganizationIdentifier]
+):
     return {
         "Mentzel Oderwald OHG mbH": Identifier("ID000000000077"),
         "FG99": Identifier("ID000000000884"),
@@ -44,7 +46,9 @@ def test_transform_datscha_web_items_to_mex_activities(
     datscha_web_item: DatschaWebItem,
     person_stable_target_ids_by_query_string: dict[Hashable, list[Identifier]],
     unit_stable_target_ids_by_synonym: dict[str, Identifier],
-    organizations_stable_target_ids_by_query_string: dict[str, Identifier],
+    organizations_stable_target_ids_by_query_string: dict[
+        str, MergedOrganizationIdentifier
+    ],
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
 ) -> None:
     mex_sources = list(
@@ -88,7 +92,9 @@ def test_transform_datscha_web_items_to_mex_activities_without_involved_persons(
     datscha_web_item_without_contributors: DatschaWebItem,
     person_stable_target_ids_by_query_string: dict[Hashable, list[Identifier]],
     unit_stable_target_ids_by_synonym: dict[str, Identifier],
-    organizations_stable_target_ids_by_query_string: dict[str, Identifier],
+    organizations_stable_target_ids_by_query_string: dict[
+        str, MergedOrganizationIdentifier
+    ],
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
 ) -> None:
     mex_sources = list(

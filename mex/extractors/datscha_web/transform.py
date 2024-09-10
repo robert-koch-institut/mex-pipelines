@@ -3,10 +3,12 @@ from collections.abc import Generator, Hashable, Iterable
 from mex.common.logging import watch
 from mex.common.models import (
     ExtractedActivity,
+    ExtractedOrganization,
     ExtractedPrimarySource,
 )
-from mex.common.types import Identifier
+from mex.common.types import Identifier, MergedOrganizationIdentifier
 from mex.extractors.datscha_web.models.item import DatschaWebItem
+from mex.extractors.sinks import load
 
 
 @watch
@@ -15,7 +17,9 @@ def transform_datscha_web_items_to_mex_activities(
     primary_source: ExtractedPrimarySource,
     person_stable_target_ids_by_query_string: dict[Hashable, list[Identifier]],
     unit_stable_target_ids_by_synonym: dict[str, Identifier],
-    organizations_stable_target_ids_by_query_string: dict[str, Identifier],
+    organizations_stable_target_ids_by_query_string: dict[
+        str, MergedOrganizationIdentifier
+    ],
 ) -> Generator[ExtractedActivity, None, None]:
     """Transform datscha-web items to extracted activities.
 
@@ -55,13 +59,25 @@ def transform_datscha_web_items_to_mex_activities(
         else:
             contact = responsible_unit
 
-        external_associate = []
+        external_associate: list[MergedOrganizationIdentifier] = []
         for partner in datscha_web_item.get_partners():
             if partner:
                 if associate := organizations_stable_target_ids_by_query_string.get(
                     partner
                 ):
                     external_associate.append(associate)
+                else:
+                    extracted_organization = ExtractedOrganization(
+                        officialName=partner,
+                        identifierInPrimarySource=partner,
+                        hadPrimarySource=primary_source.stableTargetId,
+                    )
+                    load([extracted_organization])
+                    external_associate.append(
+                        MergedOrganizationIdentifier(
+                            extracted_organization.stableTargetId
+                        )
+                    )
 
         yield ExtractedActivity(
             abstract=datscha_web_item.kurzbeschreibung,
