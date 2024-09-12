@@ -143,7 +143,7 @@ def test_transform_biospecimen_resource_to_mex_resource(
         "language": [
             "https://mex.rki.de/item/language-1",
         ],
-        "loincId": ["12345-6"],
+        "loincId": ["https://loinc.org/12345-6"],
         "meshId": ["http://id.nlm.nih.gov/mesh/D123"],
         "method": [{"language": TextLanguage.EN, "value": "Testmethode"}],
         "methodDescription": [
