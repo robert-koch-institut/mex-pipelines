@@ -19,6 +19,12 @@ contact:
     - forValues:
       - email@email.de
       rule: Use value to match with ldap extractor.
+keyword:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+      - setValues:
+        - value: FASTA
+        - value: FASTQ
 method:
   - fieldInPrimarySource: n/a
     mappingRules:
