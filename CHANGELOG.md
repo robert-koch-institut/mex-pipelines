@@ -100,6 +100,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - fix confluence_vvt: use interne Vorgangsnummer as identifierInPrimarySource
 - remaining issues in voxco extractor
+- bug in seq-repo that caused exponential run-time as well as incorrect resource
+  keywords
 
 ## [0.17.1] - 2024-06-14
 
