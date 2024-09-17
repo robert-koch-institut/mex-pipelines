@@ -2,6 +2,7 @@ from typing import Any
 
 from mex.common.models import (
     ExtractedActivity,
+    ExtractedOrganization,
     ExtractedPrimarySource,
     ExtractedResource,
     ExtractedVariable,
@@ -12,6 +13,7 @@ from mex.common.types import (
     MergedOrganizationIdentifier,
 )
 from mex.extractors.odk.model import ODKData
+from mex.extractors.sinks import load
 
 
 def transform_odk_resources_to_mex_resources(
@@ -20,7 +22,7 @@ def transform_odk_resources_to_mex_resources(
     external_partner_and_publisher_by_label: dict[str, MergedOrganizationIdentifier],
     extracted_international_projects_activities: list[ExtractedActivity],
     extracted_primary_source_mex: ExtractedPrimarySource,
-) -> list[ExtractedResource]:
+) -> tuple[dict[str, ExtractedResource], list[str]]:
     """Transform odk resources to mex resources.
 
     Args:
@@ -33,14 +35,15 @@ def transform_odk_resources_to_mex_resources(
         extracted_primary_source_mex: mex primary source
 
     Returns:
-        list of mex resources
+        tuple of list of mex resources and list of resources which are part of another
     """
     international_projects_stable_target_id_by_identifier_in_primary_source = {
         activity.identifierInPrimarySource: activity.stableTargetId
         for activity in extracted_international_projects_activities
     }
 
-    resources = []
+    resources: dict[str, ExtractedResource] = {}
+    is_part_of_list: list[str] = []
     for resource in odk_resource_mappings:
         alternative_title = None
         if rules := resource["alternativeTitle"]:
@@ -56,6 +59,16 @@ def transform_odk_resources_to_mex_resources(
         description = None
         if resource.get("description"):
             description = resource["description"][0]["mappingRules"][0]["setValues"]
+        has_legal_basis = (
+            resource["hasLegalBasis"][0]["mappingRules"][0]["setValues"]
+            if resource["hasLegalBasis"]
+            else []
+        )
+        identifier_in_primary_source = resource["identifierInPrimarySource"][0][
+            "mappingRules"
+        ][0]["setValues"][0]
+        if resource["isPartOf"]:
+            is_part_of_list.append(identifier_in_primary_source)
         method_description = None
         if resource.get("methodDescription"):
             method_description = resource["methodDescription"][0]["mappingRules"][0][
@@ -71,54 +84,87 @@ def transform_odk_resources_to_mex_resources(
                 resource["wasGeneratedBy"][0]["mappingRules"][0]["forValues"][0]
             ]
         )
-        external_partner = [
-            partner
-            for name in resource["externalPartner"][0]["mappingRules"][0]["forValues"]
-            if (partner := external_partner_and_publisher_by_label.get(name))
-        ]
+        external_partner: list[MergedOrganizationIdentifier] = []
+        for partner in resource["externalPartner"][0]["mappingRules"][0]["forValues"]:
+            if partner in external_partner_and_publisher_by_label.keys():
+                external_partner.append(
+                    external_partner_and_publisher_by_label[partner]
+                )
+            else:
+                organization = ExtractedOrganization(
+                    identifierInPrimarySource=partner,
+                    officialName=partner,
+                    hadPrimarySource=extracted_primary_source_mex.stableTargetId,
+                )
+                load([organization])
+                external_partner.append(organization.stableTargetId)
         publisher = [
             partner
             for name in resource["publisher"][0]["mappingRules"][0]["forValues"]
             if (partner := external_partner_and_publisher_by_label.get(name))
         ]
-        resources.append(
-            ExtractedResource(
-                identifierInPrimarySource=resource["identifierInPrimarySource"][0][
-                    "mappingRules"
-                ][0]["setValues"],
-                accessRestriction=resource["accessRestriction"][0]["mappingRules"][0][
-                    "setValues"
-                ],
-                alternativeTitle=alternative_title,
-                contact=unit_stable_target_ids_by_synonym[
-                    resource["contact"][0]["mappingRules"][0]["forValues"][0]
-                ],
-                contributingUnit=contributing_unit,
-                description=description,
-                externalPartner=external_partner,
-                hadPrimarySource=extracted_primary_source_mex.stableTargetId,
-                keyword=resource["keyword"][0]["mappingRules"][0]["setValues"],
-                language=resource["language"][0]["mappingRules"][0]["setValues"],
-                meshId=resource["meshId"][0]["mappingRules"][0]["setValues"],
-                method=resource["method"][0]["mappingRules"][0]["setValues"],
-                methodDescription=method_description,
-                publisher=publisher,
-                resourceTypeGeneral=resource["resourceTypeGeneral"][0]["mappingRules"][
-                    0
-                ]["setValues"],
-                rights=resource["rights"][0]["mappingRules"][0]["setValues"],
-                sizeOfDataBasis=size_of_data_basis,
-                spatial=resource["spatial"][0]["mappingRules"][0]["setValues"],
-                temporal=resource["temporal"][0]["mappingRules"][0]["setValues"],
-                theme=resource["theme"][0]["mappingRules"][0]["setValues"],
-                title=resource["title"][0]["mappingRules"][0]["setValues"],
-                unitInCharge=unit_stable_target_ids_by_synonym[
-                    resource["unitInCharge"][0]["mappingRules"][0]["forValues"][0]
-                ],
-                wasGeneratedBy=was_generated_by,
-            )
+        resources[identifier_in_primary_source] = ExtractedResource(
+            identifierInPrimarySource=identifier_in_primary_source,
+            accessRestriction=resource["accessRestriction"][0]["mappingRules"][0][
+                "setValues"
+            ],
+            alternativeTitle=alternative_title,
+            contact=unit_stable_target_ids_by_synonym[
+                resource["contact"][0]["mappingRules"][0]["forValues"][0]
+            ],
+            contributingUnit=contributing_unit,
+            description=description,
+            externalPartner=external_partner,
+            hadPrimarySource=extracted_primary_source_mex.stableTargetId,
+            hasLegalBasis=has_legal_basis,
+            keyword=resource["keyword"][0]["mappingRules"][0]["setValues"],
+            language=resource["language"][0]["mappingRules"][0]["setValues"],
+            meshId=resource["meshId"][0]["mappingRules"][0]["setValues"],
+            method=resource["method"][0]["mappingRules"][0]["setValues"],
+            methodDescription=method_description,
+            publisher=publisher,
+            resourceCreationMethod=resource["resourceCreationMethod"][0][
+                "mappingRules"
+            ][0]["setValues"],
+            resourceTypeGeneral=resource["resourceTypeGeneral"][0]["mappingRules"][0][
+                "setValues"
+            ],
+            resourceTypeSpecific=resource["resourceTypeSpecific"][0]["mappingRules"][0][
+                "setValues"
+            ],
+            rights=resource["rights"][0]["mappingRules"][0]["setValues"],
+            sizeOfDataBasis=size_of_data_basis,
+            spatial=resource["spatial"][0]["mappingRules"][0]["setValues"],
+            temporal=resource["temporal"][0]["mappingRules"][0]["setValues"],
+            theme=resource["theme"][0]["mappingRules"][0]["setValues"],
+            title=resource["title"][0]["mappingRules"][0]["setValues"],
+            unitInCharge=unit_stable_target_ids_by_synonym[
+                resource["unitInCharge"][0]["mappingRules"][0]["forValues"][0]
+            ],
+            wasGeneratedBy=was_generated_by,
         )
-    return resources
+    return (resources, is_part_of_list)
+
+
+def assign_resource_relations(
+    resources: dict[str, ExtractedResource], is_part_of_list: list[str]
+) -> list[ExtractedResource]:
+    """Assign resources related to each other.
+
+    Args:
+        resources : list of mex resources
+        is_part_of_list : list of resources which are part of another
+
+    Returns:
+        list of mex resources
+    """
+    main_questionnaire_id = resources[
+        "BCHW_ZIG2_FG37_main_questionnaire_01052021"
+    ].stableTargetId
+    for identifier_in_primary_source, resource in resources.items():
+        if identifier_in_primary_source in is_part_of_list:
+            resource.isPartOf = [main_questionnaire_id]
+    return list(resources.values())
 
 
 def get_variable_groups_from_raw_data(

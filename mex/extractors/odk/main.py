@@ -20,6 +20,7 @@ from mex.extractors.odk.extract import (
 )
 from mex.extractors.odk.model import ODKData
 from mex.extractors.odk.transform import (
+    assign_resource_relations,
     get_variable_groups_from_raw_data,
     transform_odk_data_to_extracted_variables,
     transform_odk_resources_to_mex_resources,
@@ -85,15 +86,18 @@ def extracted_resources_odk(
     extracted_primary_source_mex: ExtractedPrimarySource,
 ) -> list[ExtractedResource]:
     """Transform odk resources to mex resource, load to sinks and return."""
-    extracted_resources_odk = transform_odk_resources_to_mex_resources(
+    extracted_resources_odk, is_part_of = transform_odk_resources_to_mex_resources(
         odk_resource_mappings,
         unit_stable_target_ids_by_synonym,
         external_partner_and_publisher_by_label,
         extracted_international_projects_activities,
         extracted_primary_source_mex,
     )
-    load(extracted_resources_odk)
-    return extracted_resources_odk
+    extracted_resources_odk_linked = assign_resource_relations(
+        extracted_resources_odk, is_part_of
+    )
+    load(extracted_resources_odk_linked)
+    return extracted_resources_odk_linked
 
 
 @asset(group_name="odk")
