@@ -291,6 +291,7 @@ def transform_odk_data_to_extracted_variables(
             f"begin_group-{begin_group_name}"
         ]
         for row in group:
+            data_type = row["type"]
             description = [
                 cell
                 for column_name, cell in row.items()
@@ -313,6 +314,7 @@ def transform_odk_data_to_extracted_variables(
 
             extracted_variables.append(
                 ExtractedVariable(
+                    dataType=data_type,
                     hadPrimarySource=extracted_primary_source_odk.stableTargetId,
                     identifierInPrimarySource=row["name"],
                     belongsTo=belongs_to,

@@ -329,26 +329,34 @@ def test_transform_odk_data_to_extracted_variables(
     )
     expected = {
         "identifier": Joker(),
-        "hadPrimarySource": extracted_primary_sources["odk"].stableTargetId,
+        "hadPrimarySource": str(extracted_primary_sources["odk"].stableTargetId),
         "identifierInPrimarySource": "gatekeeper",
         "stableTargetId": Joker(),
-        "belongsTo": [extracted_variable_groups_odk[0].stableTargetId],
+        "belongsTo": [str(extracted_variable_groups_odk[0].stableTargetId)],
+        "dataType": "begin_group",
         "label": [
-            {"value": "Introduction of study to gatekeeper", "language": "en"},
-            {"value": "Introduction of study to gatekeeper", "language": "en"},
+            {
+                "value": "Introduction of study to gatekeeper",
+                "language": TextLanguage.EN,
+            },
+            {
+                "value": "Introduction of study to gatekeeper",
+                "language": TextLanguage.EN,
+            },
         ],
-        "usedIn": [extracted_resources_odk[0].stableTargetId],
+        "usedIn": [str(extracted_resources_odk[0].stableTargetId)],
     }
     assert extracted_variables[0].model_dump(exclude_defaults=True) == expected
     expected = {
-        "hadPrimarySource": extracted_primary_sources["odk"].stableTargetId,
+        "hadPrimarySource": str(extracted_primary_sources["odk"].stableTargetId),
         "identifierInPrimarySource": "consent_gatekeeper",
-        "belongsTo": [extracted_variable_groups_odk[0].stableTargetId],
+        "belongsTo": [str(extracted_variable_groups_odk[0].stableTargetId)],
+        "dataType": "select_one consent",
         "label": [
             {"value": "**Verbal consent**"},
             {"value": "**Omaitaverero wokotjinyo**"},
         ],
-        "usedIn": [extracted_resources_odk[0].stableTargetId],
+        "usedIn": [str(extracted_resources_odk[0].stableTargetId)],
         "valueSet": [
             "consent",
             "I AGREE with the above statements and wish to take part in the survey",
