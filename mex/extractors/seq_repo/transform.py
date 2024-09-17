@@ -11,6 +11,7 @@ from mex.common.models import (
 from mex.common.types import (
     MergedOrganizationalUnitIdentifier,
     MergedPersonIdentifier,
+    Text,
 )
 from mex.extractors.seq_repo.model import SeqRepoSource
 
@@ -113,7 +114,10 @@ def transform_seq_repo_resource_to_extracted_resource(
     anonymization_pseudonymization = seq_repo_resource["anonymizationPseudonymization"][
         0
     ]["mappingRules"][0]["setValues"]
-    method = seq_repo_resource["method"][0]["mappingRules"][0]["setValues"]
+    method = [
+        Text(**k)
+        for k in seq_repo_resource["method"][0]["mappingRules"][0]["setValues"]
+    ]
 
     resource_creation_method = seq_repo_resource["resourceCreationMethod"][0][
         "mappingRules"
@@ -121,14 +125,24 @@ def transform_seq_repo_resource_to_extracted_resource(
     resource_type_general = seq_repo_resource["resourceTypeGeneral"][0]["mappingRules"][
         0
     ]["setValues"]
-    resource_type_specific = seq_repo_resource["resourceTypeSpecific"][0][
-        "mappingRules"
-    ][0]["setValues"]
-    rights = seq_repo_resource["rights"][0]["mappingRules"][0]["setValues"]
+    resource_type_specific = [
+        Text(**k)
+        for k in seq_repo_resource["resourceTypeSpecific"][0]["mappingRules"][0][
+            "setValues"
+        ]
+    ]
+    rights = [
+        Text(**k)
+        for k in seq_repo_resource["rights"][0]["mappingRules"][0]["setValues"]
+    ]
     state_of_data_processing = seq_repo_resource["stateOfDataProcessing"][0][
         "mappingRules"
     ][0]["setValues"]
     theme = seq_repo_resource["theme"][0]["mappingRules"][0]["setValues"]
+    shared_keyword = [
+        Text(**k)
+        for k in seq_repo_resource["keyword"][0]["mappingRules"][0]["setValues"]
+    ]
 
     extracted_resources = []
     for identifier_in_primary_source, source in seq_repo_sources.items():
@@ -149,8 +163,7 @@ def transform_seq_repo_resource_to_extracted_resource(
         contributing_unit = unit_stable_target_ids_by_synonym.get(
             source.customer_org_unit_id
         )
-        keyword = seq_repo_resource["keyword"][0]["mappingRules"][0]["setValues"]
-        keyword.append(source.species)
+        keyword = [*shared_keyword, Text(value=source.species)]
         extracted_resource = ExtractedResource(
             accessPlatform=mex_access_platform.stableTargetId,
             accessRestriction=access_restriction,
