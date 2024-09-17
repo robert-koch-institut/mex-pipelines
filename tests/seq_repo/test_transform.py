@@ -73,9 +73,6 @@ def test_transform_seq_repo_activities_to_extracted_activities(
     )
 
 
-@pytest.mark.usefixtures(
-    "mocked_ldap",
-)
 def test_transform_seq_repo_resource_to_extracted_resource(
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
     seq_repo_latest_sources: dict[str, SeqRepoSource],
