@@ -17,13 +17,15 @@ from mex.extractors.biospecimen.extract import (
 )
 from mex.extractors.biospecimen.models.source import BiospecimenResource
 from mex.extractors.biospecimen.transform import (
-    get_merged_organization_id_by_query_with_transform_and_load,
     transform_biospecimen_resource_to_mex_resource,
 )
 from mex.extractors.mapping.extract import extract_mapping_data
 from mex.extractors.pipeline import asset, run_job_in_process
 from mex.extractors.settings import Settings
 from mex.extractors.sinks import load
+from mex.extractors.wikidata.extract import (
+    get_merged_organization_id_by_query_with_transform_and_load,
+)
 
 
 @asset(group_name="biospecimen", deps=["extracted_primary_source_mex"])
