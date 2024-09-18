@@ -36,7 +36,7 @@ def organizations_stable_target_ids_by_query_string() -> (
     dict[str, MergedOrganizationIdentifier]
 ):
     return {
-        "Mentzel Oderwald OHG mbH": Identifier("ID000000000077"),
+        "Fancy Fake Firm & CoKG": Identifier("ID000000000077"),
         "FG99": Identifier("ID000000000884"),
         "Abteilung 2": Identifier("ID000000000039"),
     }
