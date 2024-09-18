@@ -23,7 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   access from `ExtractorSettings.parameter` to `settings.extractor.parameter`.
 - update mex-common to 0.32.0
 - BREAKING: refactor package structure from `mex.foo` to `mex.extractors.foo`
-- model update: international-projects, seqrepo, synopse, blueant, sumo, datscha-web
+- model update: international-projects, seqrepo, synopse, blueant, sumo, odk,
+  datscha-web
 
 ### Deprecated
 
@@ -36,6 +37,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - fix confluence_vvt: use interne Vorgangsnummer as identifierInPrimarySource
 - remaining issues in voxco extractor
+- bug in seq-repo that caused exponential run-time as well as incorrect resource
+  keywords
 
 ### Security
 
