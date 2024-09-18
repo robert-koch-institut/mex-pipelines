@@ -98,7 +98,6 @@ def transform_grippeweb_resource_mappings_to_dict(
         for activity in extracted_confluence_vvt_activities
     }
     for resource in grippeweb_resource_mappings:
-
         access_restriction = resource["accessRestriction"][0]["mappingRules"][0][
             "setValues"
         ]
@@ -123,6 +122,10 @@ def transform_grippeweb_resource_mappings_to_dict(
         created = resource["created"][0]["mappingRules"][0]["setValues"]
         description = resource["description"][0]["mappingRules"][0]["setValues"]
         documentation = resource["documentation"][0]["mappingRules"][0]["setValues"]
+        has_legal_basis = resource["hasLegalBasis"][0]["mappingRules"][0]["setValues"]
+        has_personal_data = resource["hasPersonalData"][0]["mappingRules"][0][
+            "setValues"
+        ]
         icd10code = resource["icd10code"][0]["mappingRules"][0]["setValues"]
         identifier_in_primary_source_mapping_rules = resource[
             "identifierInPrimarySource"
@@ -140,11 +143,17 @@ def transform_grippeweb_resource_mappings_to_dict(
         method_description = resource["methodDescription"][0]["mappingRules"][0][
             "setValues"
         ]
-        publication = resource["publication"][0]["mappingRules"][0]["setValues"]
+        min_typical_age = resource["minTypicalAge"][0]["mappingRules"][0]["setValues"]
+        population_coverage = resource["populationCoverage"][0]["mappingRules"][0][
+            "setValues"
+        ]
         publisher = grippeweb_organization_ids_by_query_string.get(
             resource["publisher"][0]["mappingRules"][0]["forValues"][0]
         )
 
+        resource_creation_method = resource["resourceCreationMethod"][0][
+            "mappingRules"
+        ][0]["setValues"]
         resource_type_general = resource["resourceTypeGeneral"][0]["mappingRules"][0][
             "setValues"
         ]
@@ -169,6 +178,11 @@ def transform_grippeweb_resource_mappings_to_dict(
             resource["wasGeneratedBy"][0]["mappingRules"][0]["forValues"][0]
         ]
         resource_dict[identifier_in_primary_source] = ExtractedResource(
+            hasLegalBasis=has_legal_basis,
+            hasPersonalData=has_personal_data,
+            minTypicalAge=min_typical_age,
+            populationCoverage=population_coverage,
+            resourceCreationMethod=resource_creation_method,
             accessPlatform=grippeweb_extracted_access_platform.stableTargetId,
             accessRestriction=access_restriction,
             accrualPeriodicity=accrual_periodicity,
@@ -187,7 +201,6 @@ def transform_grippeweb_resource_mappings_to_dict(
             meshId=mesh_id,
             method=method,
             methodDescription=method_description,
-            publication=publication,
             publisher=publisher,
             resourceTypeGeneral=resource_type_general,
             resourceTypeSpecific=resource_type_specific,

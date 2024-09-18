@@ -56,6 +56,17 @@ documentation:
           - language: de
             title: RKI Website
             url: https://www.rki.de
+hasLegalBasis:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+    - setValues:
+      - language: de
+        value: "Bei dem Verfahren GrippeWeb."
+hasPersonalData:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+      - setValues:
+        - https://mex.rki.de/item/personal-data-1
 hadPrimarySource:
   - fieldInPrimarySource: n/a
     mappingRules:
@@ -110,25 +121,46 @@ methodDescription:
           - language: de
             value:
               "Stichprobe"
-publication:
+minTypicalAge:
   - fieldInPrimarySource: n/a
     mappingRules:
       - setValues:
-          - language: en
-            title:
-              "Feasibility study"
-            url: https://doi.org/10.25646/11292
+        - 0
+populationCoverage:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+      - setValues:
+        - language: de
+          value: "Alle Personen aus dem Bundesgebiet ab einem Mindestalter von 16 Jahren sind zur Teilnahme berechtigt,
+                für Personen bis zu einem Alter von 15 Jahren kann eine Teilnahme durch eine
+                erziehungsberechtigte Person erfolgen."
+publication:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+      - forValues:
+          - "Feasibility study for the use of self-collected nasalswabs to identify
+              pathogens among participants of apopulation-based surveillance system for
+              acute respiratoryinfections (GrippeWeb-Plus) - Germany, 2016. https://doi.org/10.25646/11292"
+          - "GrippeWeb-Wochenbericht KW 28. http://edoc.rki.de/176904/11232"
+          - "GrippeWeb-Wochenbericht KW 27. http://edoc.rki.de/176904/11227"
+          - "GrippeWeb-Wochenbericht KW 26. http://edoc.rki.de/176904/11204"
+        rule: Skip extraction. Add the bibliographic resources with the editor.
 publisher:
   - fieldInPrimarySource: n/a
     mappingRules:
     - forValues:
       - Robert Koch-Institut
       rule: Match value with organization item using wikidata extractor.
+resourceCreationMethod:
+  - fieldInPrimarySource: n/a
+    mappingRules:
+      - setValues:
+        - https://mex.rki.de/item/resource-creation-method-3 # Surveillance
 resourceTypeGeneral:
   - fieldInPrimarySource: n/a
     mappingRules:
       - setValues:
-          - https://mex.rki.de/item/resource-type-general-10 #Surveillance data
+          - https://mex.rki.de/item/resource-type-general-13 #Surveillance data
       - setValues:
           - https://mex.rki.de/item/resource-type-general-2 #Biospecimen
 resourceTypeSpecific:
@@ -174,7 +206,7 @@ theme:
   - fieldInPrimarySource: n/a
     mappingRules:
       - setValues:
-          - https://mex.rki.de/item/theme-35 #Studies and Surveillance
+          - https://mex.rki.de/item/theme-11 #Studies and Surveillance
 title:
   - fieldInPrimarySource: n/a
     mappingRules:

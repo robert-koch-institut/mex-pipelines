@@ -16,7 +16,8 @@ from mex.common.types import (
     MergedContactPointIdentifier,
     MergedOrganizationalUnitIdentifier,
     MergedOrganizationIdentifier,
-    YearMonth,
+    TextLanguage,
+    Year,
 )
 from mex.extractors.grippeweb.transform import (
     transform_grippeweb_access_platform_to_extracted_access_platform,
@@ -100,55 +101,72 @@ def test_transform_grippeweb_resource_mappings_to_dict(
         [extracted_confluence_vvt_source],
     )
     expected = {
-        "hadPrimarySource": extracted_primary_sources["grippeweb"].stableTargetId,
+        "hadPrimarySource": str(extracted_primary_sources["grippeweb"].stableTargetId),
         "identifierInPrimarySource": "grippeweb",
-        "accessPlatform": [grippeweb_extracted_access_platform.stableTargetId],
+        "accessPlatform": [str(grippeweb_extracted_access_platform.stableTargetId)],
         "accessRestriction": "https://mex.rki.de/item/access-restriction-2",
         "accrualPeriodicity": "https://mex.rki.de/item/frequency-15",
         "anonymizationPseudonymization": [
             "https://mex.rki.de/item/anonymization-pseudonymization-2"
         ],
-        "contact": [extracted_mex_functional_units_grippeweb["contactc@rki.de"]],
-        "contributingUnit": [unit_stable_target_ids_by_synonym["C1"]],
+        "contact": [str(extracted_mex_functional_units_grippeweb["contactc@rki.de"])],
+        "contributingUnit": [str(unit_stable_target_ids_by_synonym["C1"])],
         "contributor": [extracted_mex_persons_grippeweb[0].stableTargetId],
-        "created": YearMonth("2011"),
-        "description": [{"value": "GrippeWeb", "language": "de"}],
+        "created": Year("2011"),
+        "description": [{"value": "GrippeWeb", "language": TextLanguage.DE}],
         "documentation": [
-            {"language": "de", "title": "RKI Website", "url": "https://www.rki.de"}
+            {
+                "language": TextLanguage.DE,
+                "title": "RKI Website",
+                "url": "https://www.rki.de",
+            }
         ],
+        "hasLegalBasis": [
+            {
+                "language": TextLanguage.DE,
+                "value": "Bei dem Verfahren.",
+            },
+        ],
+        "hasPersonalData": "https://mex.rki.de/item/personal-data-1",
         "icd10code": ["J00-J99"],
         "keyword": [{"value": "Citizen Science", "language": "en"}],
         "language": ["https://mex.rki.de/item/language-1"],
         "meshId": ["http://id.nlm.nih.gov/mesh/D012140"],
-        "method": [{"value": "Online-Befragung", "language": "de"}],
+        "method": [{"value": "Online-Befragung", "language": TextLanguage.DE}],
         "methodDescription": [
-            {"value": "Online-Surveillanceintrument", "language": "de"}
+            {"value": "Online-Surveillanceintrument", "language": TextLanguage.DE}
         ],
-        "publication": [
+        "minTypicalAge": 0,
+        "populationCoverage": [
             {
-                "language": "de",
-                "title": "COVID-19-Raten",
-                "url": "https://doi.org/10.25646/11292",
+                "language": TextLanguage.DE,
+                "value": "Alle Personen.",
             }
         ],
         "publisher": [
             grippeweb_organization_ids_by_query_string["Robert Koch-Institut"]
         ],
-        "resourceTypeGeneral": ["https://mex.rki.de/item/resource-type-general-10"],
-        "resourceTypeSpecific": [
-            {"value": "bevölkerungsbasierte Surveillancedaten", "language": "de"}
+        "resourceCreationMethod": [
+            "https://mex.rki.de/item/resource-creation-method-3"
         ],
-        "rights": [{"value": "Verfahren", "language": "de"}],
+        "resourceTypeGeneral": ["https://mex.rki.de/item/resource-type-general-13"],
+        "resourceTypeSpecific": [
+            {
+                "value": "bevölkerungsbasierte Surveillancedaten",
+                "language": TextLanguage.DE,
+            }
+        ],
+        "rights": [{"value": "Verfahren", "language": TextLanguage.DE}],
         "sizeOfDataBasis": "Meldungen",
-        "spatial": [{"language": "de", "value": "Deutschland"}],
+        "spatial": [{"language": TextLanguage.DE, "value": "Deutschland"}],
         "stateOfDataProcessing": ["https://mex.rki.de/item/data-processing-state-1"],
         "temporal": "seit 2011",
-        "theme": ["https://mex.rki.de/item/theme-35"],
-        "title": [{"value": "GrippeWeb", "language": "de"}],
-        "unitInCharge": [unit_stable_target_ids_by_synonym["C1"]],
+        "theme": ["https://mex.rki.de/item/theme-11"],
+        "title": [{"value": "GrippeWeb", "language": TextLanguage.DE}],
+        "unitInCharge": [str(unit_stable_target_ids_by_synonym["C1"])],
         "identifier": Joker(),
         "stableTargetId": Joker(),
-        "wasGeneratedBy": extracted_confluence_vvt_source.stableTargetId,
+        "wasGeneratedBy": str(extracted_confluence_vvt_source.stableTargetId),
     }
     assert (
         resource_dict["grippeweb"].model_dump(exclude_none=True, exclude_defaults=True)
