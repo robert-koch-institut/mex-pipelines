@@ -46,6 +46,7 @@ def extract_international_projects_sources() -> (
             keep_default_na=False,
             parse_dates=True,
             header=1,
+            sheet_name=1,
         )
     for row in df.iterrows():
         if source := extract_international_projects_source(row[1]):

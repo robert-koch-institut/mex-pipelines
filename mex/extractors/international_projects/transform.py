@@ -114,7 +114,7 @@ def transform_international_projects_source_to_extracted_activity(
         identifierInPrimarySource=source.rki_internal_project_number
         or source.project_abbreviation,
         funderOrCommissioner=all_funder_or_commissioner,
-        externalAssociate=get_partner_organizations_merged_ids(
+        externalAssociate=get_or_create_partner_organization(
             source.partner_organization,
             partner_organizations_stable_target_id_by_query,
             extracted_primary_source,
@@ -232,25 +232,25 @@ def get_theme_for_activity_or_topic(
     return sorted(list(theme_set), key=lambda x: x.name)
 
 
-def get_partner_organizations_merged_ids(
+def get_or_create_partner_organization(
     partner_organization: list[str],
-    partner_organizations_stable_target_id_by_query: dict[
-        str, MergedOrganizationIdentifier
-    ],
+    extracted_organizations: dict[str, MergedOrganizationIdentifier],
     extracted_primary_source: ExtractedPrimarySource,
 ) -> list[MergedOrganizationIdentifier]:
     """Get partner organizations merged ids.
 
     Args:
         partner_organization: partner organizations from the source
-        partner_organizations_stable_target_id_by_query: Mapping from partner orgs to
-                                                         their stable target ID
+        extracted_organizations: merged organization identifier extracted from wikidata
         extracted_primary_source: Extracted primary_source for international projects
+
+    Returns:
+        list of matched or created merged organization identifier
     """
     final_partner_organizations: list[MergedOrganizationIdentifier] = []
     if partner_organization:
         for partner_org in partner_organization:
-            if wpo := partner_organizations_stable_target_id_by_query.get(partner_org):
+            if wpo := extracted_organizations.get(partner_org):
                 final_partner_organizations.append(wpo)
             else:
                 extracted_organization = ExtractedOrganization(
