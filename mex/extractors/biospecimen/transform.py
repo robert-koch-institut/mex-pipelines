@@ -1,22 +1,20 @@
 from collections.abc import Generator, Iterable
-from typing import cast
+from typing import Any, cast
 
 from mex.common.logging import watch
 from mex.common.models import (
-    ExtractedAccessPlatform,
     ExtractedActivity,
     ExtractedOrganization,
     ExtractedPerson,
+    ExtractedPrimarySource,
     ExtractedResource,
 )
 from mex.common.types import (
-    AccessRestriction,
     AnonymizationPseudonymization,
     Identifier,
     Link,
-    ResourceTypeGeneral,
+    MergedOrganizationIdentifier,
     TemporalEntity,
-    Theme,
 )
 from mex.extractors.biospecimen.models.source import BiospecimenResource
 
@@ -24,21 +22,25 @@ from mex.extractors.biospecimen.models.source import BiospecimenResource
 @watch
 def transform_biospecimen_resource_to_mex_resource(
     biospecimen_resources: Iterable[BiospecimenResource],
-    extracted_platform_biospecimen: ExtractedAccessPlatform,
+    extracted_primary_source_biospecimen: ExtractedPrimarySource,
     unit_stable_target_ids_by_synonym: dict[str, Identifier],
     mex_persons: Iterable[ExtractedPerson],
     extracted_organization_rki: ExtractedOrganization,
     extracted_synopse_activities: Iterable[ExtractedActivity],
+    resource_mapping: dict[str, Any],
+    extracted_organizations: dict[str, MergedOrganizationIdentifier],
 ) -> Generator[ExtractedResource, None, None]:
     """Transform Biospecimen resources to extracted resources.
 
     Args:
         biospecimen_resources: Biospecimen resources
-        extracted_platform_biospecimen: Extracted platform for Biospecimen
+        extracted_primary_source_biospecimen: Extracted platform for Biospecimen
         unit_stable_target_ids_by_synonym: Unit stable target ids by synonym
         mex_persons: Generator for ExtractedPerson
         extracted_synopse_activities: extracted synopse activitiesq
-        extracted_organization_rki: extractded organization
+        extracted_organization_rki: extracted organization
+        resource_mapping: resource default values
+        extracted_organizations: exttracted organizations by label
 
     Returns:
         Generator for ExtractedResource instances
@@ -57,6 +59,7 @@ def transform_biospecimen_resource_to_mex_resource(
             )
         else:
             anonymization_pseudonymization = None
+        conforms_to = resource_mapping["conformsTo"][0]["mappingRules"][0]["setValues"]
         contributing_unit = (
             unit_stable_target_ids_by_synonym.get(unit_name)
             if (unit_name := resource.mitwirkende_fachabteilung)
@@ -68,10 +71,22 @@ def transform_biospecimen_resource_to_mex_resource(
             else None
         )
         external_partner = (
-            unit_stable_target_ids_by_synonym.get(unit_name)
-            if (unit_name := resource.externe_partner)
-            else None
+            get_or_create_externe_partner(
+                resource.externe_partner,
+                extracted_organizations,
+                extracted_primary_source_biospecimen,
+            )
+            if resource.externe_partner
+            else []
         )
+        has_personal_data = resource_mapping["hasPersonalData"][0]["mappingRules"][0][
+            "setValues"
+        ]
+        has_legal_basis = resource_mapping["hasLegalBasis"][0]["mappingRules"][0][
+            "setValues"
+        ]
+        language = resource_mapping["language"][0]["mappingRules"][0]["setValues"]
+
         contact = None
         for kontakt in resource.kontakt:
             if k := person_stable_target_id_by_email.get(kontakt):
@@ -89,42 +104,64 @@ def transform_biospecimen_resource_to_mex_resource(
             )
         else:
             documentation = None
+        loinc_id = (
+            [f"https://loinc.org/{lid}" for lid in resource.id_loinc[0].split(", ")]
+            if resource.id_loinc
+            else []
+        )
         mesh_id = [
             f"http://id.nlm.nih.gov/mesh/{id_}" for id_ in resource.id_mesh_begriff
         ]
-        if resource.verwandte_publikation_doi:
-            publication = resource.verwandte_publikation_doi
+        if (
+            resource.ressourcentyp_allgemein
+            in resource_mapping["resourceTypeGeneral"][0]["mappingRules"][0][
+                "forValues"
+            ]
+        ):
+            resource_type_general = resource_mapping["resourceTypeGeneral"][0][
+                "mappingRules"
+            ][0]["setValues"]
         else:
-            publication = None
-        resource_type_general = ResourceTypeGeneral["BIOSPECIMEN"]
+            resource_type_general = []
+        resource_creation_method = resource_mapping["resourceCreationMethod"][0][
+            "mappingRules"
+        ][0]["setValues"]
         unit_in_charge = unit_stable_target_ids_by_synonym.get(
             resource.verantwortliche_fachabteilung
         )
-        theme = [
-            Theme["LABORATORY"],
-            Theme["INFECTIOUS_DISEASES"],
-            Theme["PHYSICAL_HEALTH"],
-        ]
+        if (
+            resource_mapping["theme"][0]["mappingRules"][1]["forValues"]
+            in resource.thema
+        ):
+            theme = resource_mapping["theme"][0]["mappingRules"][1]["setValues"]
+        else:
+            theme = resource_mapping["theme"][0]["mappingRules"][0]["setValues"]
         yield ExtractedResource(
-            accessRestriction=AccessRestriction["RESTRICTED"],
+            accessRestriction=resource_mapping["accessRestriction"][0]["mappingRules"][
+                0
+            ]["setValues"],
             alternativeTitle=resource.alternativer_titel,
             anonymizationPseudonymization=anonymization_pseudonymization,
+            conformsTo=conforms_to,
             contact=contact,
             contributingUnit=contributing_unit,
             contributor=contributor,
             description=resource.beschreibung,
             documentation=documentation,
             externalPartner=external_partner,
-            hadPrimarySource=extracted_platform_biospecimen.stableTargetId,
+            hadPrimarySource=extracted_primary_source_biospecimen.stableTargetId,
+            hasLegalBasis=has_legal_basis,
+            hasPersonalData=has_personal_data,
             identifierInPrimarySource=resource.sheet_name,
             instrumentToolOrApparatus=resource.tools_instrumente_oder_apparate,
             keyword=resource.schlagworte,
-            loincId=resource.id_loinc,
+            language=language,
+            loincId=loinc_id,
             meshId=mesh_id,
             method=resource.methoden,
             methodDescription=resource.methodenbeschreibung,
-            publication=publication,
             publisher=extracted_organization_rki.stableTargetId,
+            resourceCreationMethod=resource_creation_method,
             resourceTypeGeneral=resource_type_general,
             resourceTypeSpecific=resource.ressourcentyp_speziell,
             rights=resource.rechte,
@@ -136,3 +173,27 @@ def transform_biospecimen_resource_to_mex_resource(
             unitInCharge=unit_in_charge,
             wasGeneratedBy=was_generated_by or None,
         )
+
+
+def get_or_create_externe_partner(
+    externe_partner: str,
+    extracted_organizations: dict[str, MergedOrganizationIdentifier],
+    extracted_primary_source_biospecimen: ExtractedPrimarySource,
+) -> MergedOrganizationIdentifier:
+    """Get extracted organization for label or create new organization.
+
+    Args:
+        externe_partner: externe partner label
+        extracted_organizations: merged organization identifier extracted from wikidata
+        extracted_primary_source_biospecimen: extracted primary source
+
+    Returns:
+        matched or created merged organization identifier
+    """
+    if externe_partner in extracted_organizations.keys():
+        return extracted_organizations[externe_partner]
+    return ExtractedOrganization(
+        officialName=externe_partner,
+        identifierInPrimarySource=externe_partner,
+        hadPrimarySource=extracted_primary_source_biospecimen.stableTargetId,
+    ).stableTargetId
