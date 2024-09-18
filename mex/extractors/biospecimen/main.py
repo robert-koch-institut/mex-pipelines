@@ -12,15 +12,20 @@ from mex.common.primary_source.transform import get_primary_sources_by_name
 from mex.common.types import MergedOrganizationalUnitIdentifier
 from mex.extractors.biospecimen.extract import (
     extract_biospecimen_contacts_by_email,
+    extract_biospecimen_organizations,
     extract_biospecimen_resources,
 )
 from mex.extractors.biospecimen.models.source import BiospecimenResource
 from mex.extractors.biospecimen.transform import (
     transform_biospecimen_resource_to_mex_resource,
 )
+from mex.extractors.mapping.extract import extract_mapping_data
 from mex.extractors.pipeline import asset, run_job_in_process
 from mex.extractors.settings import Settings
 from mex.extractors.sinks import load
+from mex.extractors.wikidata.extract import (
+    get_merged_organization_id_by_query_with_transform_and_load,
+)
 
 
 @asset(group_name="biospecimen", deps=["extracted_primary_source_mex"])
@@ -66,8 +71,19 @@ def extracted_biospecimen_resources(
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     extracted_organization_rki: ExtractedOrganization,
     extracted_synopse_activities: list[ExtractedActivity],
+    extracted_primary_source_wikidata: ExtractedPrimarySource,
 ) -> list[ExtractedResource]:
     """Transform biospecimen resources to extracted resources and load them to the sinks."""  # noqa: E501
+    settings = Settings.get()
+    resource_mapping = extract_mapping_data(
+        settings.biospecimen.mapping_path / "resource.yaml", ExtractedResource
+    )
+    biospecimen_organizations = extract_biospecimen_organizations(biospecimen_resources)
+    extracted_organizations = (
+        get_merged_organization_id_by_query_with_transform_and_load(
+            biospecimen_organizations, extracted_primary_source_wikidata
+        )
+    )
     mex_sources = list(
         transform_biospecimen_resource_to_mex_resource(
             biospecimen_resources,
@@ -76,6 +92,8 @@ def extracted_biospecimen_resources(
             extracted_mex_persons,
             extracted_organization_rki,
             extracted_synopse_activities,
+            resource_mapping,
+            extracted_organizations,
         )
     )
     load(mex_sources)
