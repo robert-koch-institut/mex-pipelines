@@ -219,9 +219,3 @@ unitInCharge:
       - forValues:
           - "C1"
         rule: Match value using organigram extractor.
-wasGeneratedBy:
-  - fieldInPrimarySource: n/a
-    mappingRules:
-      - forValues:
-        - 2022-006
-        rule: Match value with corresponding identifierInPrimarySource.

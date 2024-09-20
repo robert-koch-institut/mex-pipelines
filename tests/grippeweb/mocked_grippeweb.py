@@ -729,7 +729,7 @@ def grippeweb_resource_mappings() -> list[dict[str, Any]]:
                     "examplesInPrimarySource": None,
                     "mappingRules": [
                         {
-                            "forValues": ["2022-006"],
+                            "forValues": ["C1"],
                             "setValues": None,
                             "rule": "Match value with corresponding identifierInPrimarySource.",
                         }
@@ -1275,21 +1275,6 @@ def grippeweb_resource_mappings() -> list[dict[str, Any]]:
                             "forValues": ["C1"],
                             "setValues": None,
                             "rule": "Match value using organigram extractor.",
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "wasGeneratedBy": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": ["2022-006"],
-                            "setValues": None,
-                            "rule": "Match value with corresponding identifierInPrimarySource",
                         }
                     ],
                     "comment": None,
