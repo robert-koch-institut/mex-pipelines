@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - update mex-common to 0.32.0
 - BREAKING: refactor package structure from `mex.foo` to `mex.extractors.foo`
 - model update: international-projects, seqrepo, synopse, blueant, sumo, biospecimen,
-  odk, datscha-web, confluence-vvt
+  odk, datscha-web, confluence-vvt, grippeweb
 - confluence vvt now ignores ill templated pages
 
 ### Deprecated
