@@ -164,6 +164,8 @@ def transform_grippeweb_resource_mappings_to_dict(
         unit_in_charge = unit_stable_target_ids_by_synonym[
             resource["unitInCharge"][0]["mappingRules"][0]["forValues"][0]
         ]
+        # wasGeneratedField was removed for one resource mapping, but kept for the other
+        # only look this field up if it exists in mapping
         was_generated_by = None
         if wgb := resource.get("wasGeneratedBy"):
             was_generated_by = unit_stable_target_ids_by_synonym[

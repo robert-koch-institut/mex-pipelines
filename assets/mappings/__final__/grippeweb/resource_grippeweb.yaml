@@ -123,19 +123,12 @@ populationCoverage:
     mappingRules:
       - setValues:
         - language: de
-          value: "Alle Personen aus dem Bundesgebiet ab einem Mindestalter von 16 Jahren sind zur Teilnahme berechtigt,
-                für Personen bis zu einem Alter von 15 Jahren kann eine Teilnahme durch eine
-                erziehungsberechtigte Person erfolgen."
+          value: "Alle Personen."
 publication:
   - fieldInPrimarySource: n/a
     mappingRules:
       - forValues:
-          - "Feasibility study for the use of self-collected nasalswabs to identify
-              pathogens among participants of apopulation-based surveillance system for
-              acute respiratoryinfections (GrippeWeb-Plus) - Germany, 2016. https://doi.org/10.25646/11292"
-          - "GrippeWeb-Wochenbericht KW 28. http://edoc.rki.de/176904/11232"
-          - "GrippeWeb-Wochenbericht KW 27. http://edoc.rki.de/176904/11227"
-          - "GrippeWeb-Wochenbericht KW 26. http://edoc.rki.de/176904/11204"
+          - "study"
         rule: Skip extraction. Add the bibliographic resources with the editor.
 publisher:
   - fieldInPrimarySource: n/a
