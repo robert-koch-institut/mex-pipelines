@@ -31,13 +31,15 @@ def test_transform_confluence_vvt_source_items_to_mex_activity(
     unit_merged_ids_by_synonym: dict[str, Identifier],
 ) -> None:
     expected = {
-        "hadPrimarySource": extracted_primary_sources["confluence-vvt"].stableTargetId,
-        "identifierInPrimarySource": "86355570",
+        "hadPrimarySource": str(
+            extracted_primary_sources["confluence-vvt"].stableTargetId
+        ),
+        "identifierInPrimarySource": "DS-2023-153",
         "activityType": ["https://mex.rki.de/item/activity-type-6"],
         "title": [
             {
                 "value": "Accessing and Building Capacities: "
-                "Madagascar Public Health System (ABCM) \u2013 Work Package 1",
+                "Madagascar Public Health System (ABCM) \u2013 Work Packages 1-3",
                 "language": TextLanguage.EN,
             }
         ],
