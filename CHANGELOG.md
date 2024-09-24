@@ -90,7 +90,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - update mex-common to 0.32.0
 - BREAKING: refactor package structure from `mex.foo` to `mex.extractors.foo`
 - model update: international-projects, seqrepo, synopse, blueant, sumo, biospecimen,
-  odk, datscha-web
+  odk, datscha-web, grippeweb
 
 ### Removed
 
