@@ -8,7 +8,6 @@ from mex.common.ldap.transform import (
 )
 from mex.common.models import (
     ExtractedAccessPlatform,
-    ExtractedActivity,
     ExtractedOrganizationalUnit,
     ExtractedPerson,
     ExtractedPrimarySource,
@@ -186,7 +185,6 @@ def grippeweb_extracted_resource_dict(
     extracted_mex_persons_grippeweb: list[ExtractedPerson],
     grippeweb_organization_ids_by_query_string: dict[str, MergedOrganizationIdentifier],
     extracted_mex_functional_units_grippeweb: dict[Email, MergedContactPointIdentifier],
-    extracted_confluence_vvt_activities: list[ExtractedActivity],
 ) -> dict[str, ExtractedResource]:
     """Transform Grippeweb default values to extracted resources and load to sinks."""
     extracted_resources = transform_grippeweb_resource_mappings_to_extracted_resources(
@@ -197,7 +195,6 @@ def grippeweb_extracted_resource_dict(
         extracted_mex_persons_grippeweb,
         grippeweb_organization_ids_by_query_string,
         extracted_mex_functional_units_grippeweb,
-        extracted_confluence_vvt_activities,
     )
     load(list(extracted_resources.values()))
     return extracted_resources

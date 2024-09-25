@@ -2,7 +2,6 @@ from typing import Any
 
 from mex.common.models import (
     ExtractedAccessPlatform,
-    ExtractedActivity,
     ExtractedPerson,
     ExtractedPrimarySource,
     ExtractedResource,
@@ -25,7 +24,6 @@ def transform_grippeweb_resource_mappings_to_extracted_resources(
     extracted_mex_persons_grippeweb: list[ExtractedPerson],
     grippeweb_organization_ids_by_query_string: dict[str, MergedOrganizationIdentifier],
     extracted_mex_functional_units_grippeweb: dict[Email, MergedContactPointIdentifier],
-    extracted_confluence_vvt_activities: list[ExtractedActivity],
 ) -> dict[str, ExtractedResource]:
     """Transform grippe web values to extracted resources and link them.
 
@@ -53,7 +51,6 @@ def transform_grippeweb_resource_mappings_to_extracted_resources(
         extracted_mex_persons_grippeweb,
         grippeweb_organization_ids_by_query_string,
         extracted_mex_functional_units_grippeweb,
-        extracted_confluence_vvt_activities,
     )
     resource_dict["grippeweb-plus"].isPartOf = [
         resource_dict["grippeweb"].stableTargetId
@@ -69,7 +66,6 @@ def transform_grippeweb_resource_mappings_to_dict(
     extracted_mex_persons_grippeweb: list[ExtractedPerson],
     grippeweb_organization_ids_by_query_string: dict[str, MergedOrganizationIdentifier],
     extracted_mex_functional_units_grippeweb: dict[Email, MergedContactPointIdentifier],
-    extracted_confluence_vvt_activities: list[ExtractedActivity],
 ) -> dict[str, ExtractedResource]:
     """Transform grippe web values to extracted resources.
 
@@ -83,8 +79,6 @@ def transform_grippeweb_resource_mappings_to_dict(
             extracted grippeweb organizations dict
         extracted_mex_functional_units_grippeweb:
             extracted grippeweb mex functional accounts
-        extracted_confluence_vvt_activities:
-            extracted confluence vvt activities
 
     Returns:
         dict extracted grippeweb resource by identifier in primary source
@@ -93,12 +87,7 @@ def transform_grippeweb_resource_mappings_to_dict(
     mex_persons_by_name = {
         person.fullName[0]: person for person in extracted_mex_persons_grippeweb
     }
-    confluence_vvt_by_identifier_in_primary_source = {
-        activity.identifierInPrimarySource: activity.stableTargetId
-        for activity in extracted_confluence_vvt_activities
-    }
     for resource in grippeweb_resource_mappings:
-
         access_restriction = resource["accessRestriction"][0]["mappingRules"][0][
             "setValues"
         ]
@@ -123,6 +112,10 @@ def transform_grippeweb_resource_mappings_to_dict(
         created = resource["created"][0]["mappingRules"][0]["setValues"]
         description = resource["description"][0]["mappingRules"][0]["setValues"]
         documentation = resource["documentation"][0]["mappingRules"][0]["setValues"]
+        has_legal_basis = resource["hasLegalBasis"][0]["mappingRules"][0]["setValues"]
+        has_personal_data = resource["hasPersonalData"][0]["mappingRules"][0][
+            "setValues"
+        ]
         icd10code = resource["icd10code"][0]["mappingRules"][0]["setValues"]
         identifier_in_primary_source_mapping_rules = resource[
             "identifierInPrimarySource"
@@ -140,11 +133,17 @@ def transform_grippeweb_resource_mappings_to_dict(
         method_description = resource["methodDescription"][0]["mappingRules"][0][
             "setValues"
         ]
-        publication = resource["publication"][0]["mappingRules"][0]["setValues"]
+        min_typical_age = resource["minTypicalAge"][0]["mappingRules"][0]["setValues"]
+        population_coverage = resource["populationCoverage"][0]["mappingRules"][0][
+            "setValues"
+        ]
         publisher = grippeweb_organization_ids_by_query_string.get(
             resource["publisher"][0]["mappingRules"][0]["forValues"][0]
         )
 
+        resource_creation_method = resource["resourceCreationMethod"][0][
+            "mappingRules"
+        ][0]["setValues"]
         resource_type_general = resource["resourceTypeGeneral"][0]["mappingRules"][0][
             "setValues"
         ]
@@ -165,10 +164,19 @@ def transform_grippeweb_resource_mappings_to_dict(
         unit_in_charge = unit_stable_target_ids_by_synonym[
             resource["unitInCharge"][0]["mappingRules"][0]["forValues"][0]
         ]
-        was_generated_by = confluence_vvt_by_identifier_in_primary_source[
-            resource["wasGeneratedBy"][0]["mappingRules"][0]["forValues"][0]
-        ]
+        # wasGeneratedField was removed for one resource mapping, but kept for the other
+        # only look this field up if it exists in mapping
+        was_generated_by = None
+        if wgb := resource.get("wasGeneratedBy"):
+            was_generated_by = unit_stable_target_ids_by_synonym[
+                wgb[0]["mappingRules"][0]["forValues"][0]
+            ]
         resource_dict[identifier_in_primary_source] = ExtractedResource(
+            hasLegalBasis=has_legal_basis,
+            hasPersonalData=has_personal_data,
+            minTypicalAge=min_typical_age,
+            populationCoverage=population_coverage,
+            resourceCreationMethod=resource_creation_method,
             accessPlatform=grippeweb_extracted_access_platform.stableTargetId,
             accessRestriction=access_restriction,
             accrualPeriodicity=accrual_periodicity,
@@ -187,7 +195,6 @@ def transform_grippeweb_resource_mappings_to_dict(
             meshId=mesh_id,
             method=method,
             methodDescription=method_description,
-            publication=publication,
             publisher=publisher,
             resourceTypeGeneral=resource_type_general,
             resourceTypeSpecific=resource_type_specific,
