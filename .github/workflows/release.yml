@@ -58,8 +58,7 @@ jobs:
       - name: Install requirements
         run: |
           make install
-          pdm run python -c "print(__import__('mex').__path__)"
-          cp ./mex/__init__.py ./.venv/lib/site-packages/mex/
+          cp ./mex/__init__.py /home/runner/work/mex-extractors/mex-extractors/.venv/lib/python3.11/site-packages/mex
 
       - name: run artificial extractor
         run: |
