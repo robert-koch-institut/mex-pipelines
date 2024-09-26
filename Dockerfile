@@ -5,8 +5,8 @@ FROM python:3.11 AS base
 LABEL org.opencontainers.image.authors="mex@rki.de"
 LABEL org.opencontainers.image.description="ETL pipelines for the RKI Metadata Exchange."
 LABEL org.opencontainers.image.licenses="MIT"
-LABEL org.opencontainers.image.url="https://github.com/robert-koch-institut/mex-extractors"
-LABEL org.opencontainers.image.vendor="robert-koch-institut"
+LABEL org.opencontainers.image.url="https://github.com/cutoffthetop/mex-extractors"
+LABEL org.opencontainers.image.vendor="cutoffthetop"
 
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONOPTIMIZE=1
