@@ -92,4 +92,4 @@ jobs:
           MEX_BACKEND_API_URL: "http://localhost:8080"
         run: |
           pdm run publisher
-          ls
+          cat publisher.ndjson
