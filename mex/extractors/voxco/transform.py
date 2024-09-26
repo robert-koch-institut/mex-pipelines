@@ -54,7 +54,6 @@ def transform_voxco_resource_mappings_to_extracted_resources(
         access_restriction = resource["accessRestriction"][0]["mappingRules"][0][
             "setValues"
         ]
-        # why does this part need to be so complex?
         if anonymization_pseudonymization_top_level := resource.get(
             "anonymizationPseudonymization"
         ):
