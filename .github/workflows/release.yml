@@ -56,7 +56,9 @@ jobs:
           python-version: 3.11
 
       - name: Install requirements
-        run: make install
+        run: |
+          make install
+          cp ./mex/__init__.py ./.venv/Lib/site-packages/mex/
 
       - name: run artificial extractor
         run: |
