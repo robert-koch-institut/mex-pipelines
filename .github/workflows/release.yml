@@ -34,6 +34,22 @@ jobs:
   release:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    services:
+      neo4j:
+        image: neo4j:5.23-community
+        env:
+          NEO4J_AUTH: neo4j/password
+        ports:
+          - 7687:7687
+      backend:
+        image: ghcr.io/robert-koch-institut/mex-backend:0.19.1
+        env:
+          MEX_BACKEND_API_USER_DATABASE: ${{ secrets.MEX_BACKEND_API_USER_DATABASE }}
+          MEX_BACKEND_API_KEY_DATABASE: ${{ secrets.MEX_BACKEND_API_KEY_DATABASE }}
+          MEX_GRAPH_URL: neo4j://neo4j:7687
+        ports:
+          - 8080:8080
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -61,6 +77,12 @@ jobs:
           cp ./mex/__init__.py /home/runner/work/mex-extractors/mex-extractors/.venv/lib/python3.11/site-packages/mex
 
       - name: run artificial extractor
+        env:
+          MEX_SINK: "[\"backend\"]"
+          MEX_BACKEND_API_USER_DATABASE: ${{ secrets.MEX_BACKEND_API_USER_DATABASE }}
+          MEX_BACKEND_API_KEY: ${{ secrets.MEX_BACKEND_API_KEY }}
+          MEX_BACKEND_API_URL: "http://localhost:8080"
+          MEX_ARTIFICIAL__COUNT: "2000"
         run: |
           pdm run artificial
           cat ExtractedActivity.ndjson
