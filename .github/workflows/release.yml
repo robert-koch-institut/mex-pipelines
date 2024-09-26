@@ -85,4 +85,11 @@ jobs:
           MEX_ARTIFICIAL__COUNT: "20"
         run: |
           pdm run artificial
-          cat ExtractedActivity.ndjson
+
+      - name: run publishing pipeline
+        env:
+          MEX_BACKEND_API_KEY: ${{ secrets.MEX_BACKEND_API_KEY }}
+          MEX_BACKEND_API_URL: "http://localhost:8080"
+        run: |
+          pdm run publisher
+          ls
