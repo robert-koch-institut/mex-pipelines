@@ -40,6 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - remaining issues in voxco extractor
 - bug in seq-repo that caused exponential run-time as well as incorrect resource
   keywords
+- fixed artificial data generation for Integers and BibliographicResources
 
 ### Security
 
