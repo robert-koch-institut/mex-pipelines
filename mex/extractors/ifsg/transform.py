@@ -53,16 +53,21 @@ def transform_resource_parent_to_mex_resource(
         ],
         description=resource_parent["description"][0]["mappingRules"][0]["setValues"],
         hadPrimarySource=extracted_primary_source.stableTargetId,
+        hasLegalBasis=resource_parent["hasLegalBasis"][0]["mappingRules"][0][
+            "setValues"
+        ],
+        hasPersonalData=resource_parent["hasPersonalData"][0]["mappingRules"][0][
+            "setValues"
+        ],
         identifierInPrimarySource=resource_parent["identifierInPrimarySource"][0][
             "mappingRules"
         ][0]["setValues"],
         keyword=resource_parent["keyword"][0]["mappingRules"][0]["setValues"],
         language=resource_parent["language"][0]["mappingRules"][0]["setValues"],
-        publication=resource_parent["publication"][0]["mappingRules"][0]["setValues"],
+        resourceCreationMethod=resource_parent["resourceCreationMethod"][0][
+            "mappingRules"
+        ][0]["setValues"],
         resourceTypeGeneral=resource_parent["resourceTypeGeneral"][0]["mappingRules"][
-            0
-        ]["setValues"],
-        resourceTypeSpecific=resource_parent["resourceTypeSpecific"][0]["mappingRules"][
             0
         ]["setValues"],
         rights=resource_parent["rights"][0]["mappingRules"][0]["setValues"],
@@ -139,15 +144,20 @@ def transform_resource_state_to_mex_resource(
                     resource_state["contact"][0]["mappingRules"][0]["forValues"][0]
                 ],
                 hadPrimarySource=extracted_primary_source.stableTargetId,
+                hasLegalBasis=resource_state["hasLegalBasis"][0]["mappingRules"][0][
+                    "setValues"
+                ],
+                hasPersonalData=resource_state["hasPersonalData"][0]["mappingRules"][0][
+                    "setValues"
+                ],
                 identifierInPrimarySource=id_bundesland,
                 isPartOf=extracted_ifsg_resource_parent.stableTargetId,
                 keyword=resource_state["keyword"][0]["mappingRules"][0]["setValues"],
                 language=resource_state["language"][0]["mappingRules"][0]["setValues"],
-                publication=publication,
-                resourceTypeGeneral=resource_state["resourceTypeGeneral"][0][
+                resourceCreationMethod=resource_state["resourceCreationMethod"][0][
                     "mappingRules"
                 ][0]["setValues"],
-                resourceTypeSpecific=resource_state["resourceTypeSpecific"][0][
+                resourceTypeGeneral=resource_state["resourceTypeGeneral"][0][
                     "mappingRules"
                 ][0]["setValues"],
                 rights=resource_state["rights"][0]["mappingRules"][0]["setValues"],
@@ -308,6 +318,9 @@ def transform_resource_disease_to_mex_resource_row(
         ]
         if value
     ]
+    keyword.extend(
+        [rule["setValues"] for rule in resource_disease["keyword"][0]["mappingRules"]]
+    )
 
     spatial = []
     if meta_disease_row.ifsg_bundesland == 0:
@@ -329,6 +342,12 @@ def transform_resource_disease_to_mex_resource_row(
             resource_disease["contact"][0]["mappingRules"][0]["forValues"][0]
         ],
         hadPrimarySource=extracted_primary_source.stableTargetId,
+        hasLegalBasis=resource_disease["hasLegalBasis"][0]["mappingRules"][0][
+            "setValues"
+        ],
+        hasPersonalData=resource_disease["hasPersonalData"][0]["mappingRules"][0][
+            "setValues"
+        ],
         icd10code=[i for i in icd10code if i],
         identifierInPrimarySource=str(id_type),
         instrumentToolOrApparatus=instrument_tool_or_apparatus,
@@ -337,12 +356,12 @@ def transform_resource_disease_to_mex_resource_row(
         language=resource_disease["language"][0]["mappingRules"][0]["setValues"],
         publication=resource_disease["publication"][0]["mappingRules"][0]["setValues"],
         publisher=extracted_organization_rki.stableTargetId,
+        resourceCreationMethod=resource_disease["resourceCreationMethod"][0][
+            "mappingRules"
+        ][0]["setValues"],
         resourceTypeGeneral=resource_disease["resourceTypeGeneral"][0]["mappingRules"][
             0
         ]["setValues"],
-        resourceTypeSpecific=resource_disease["resourceTypeSpecific"][0][
-            "mappingRules"
-        ][0]["setValues"],
         rights=resource_disease["rights"][0]["mappingRules"][0]["setValues"],
         spatial=spatial,
         theme=resource_disease["theme"][0]["mappingRules"][0]["setValues"],
