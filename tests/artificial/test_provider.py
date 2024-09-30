@@ -55,10 +55,10 @@ def test_builder_provider_min_max_for_field(faker: Faker) -> None:
         for name, field in DummyModel.model_fields.items()
     }
     assert min_max == {
-        "has_max": (5, 6),
+        "has_max": (5, 8),
         "has_min": (2, 5),
-        "is_inner_union": (0, 2),
-        "is_nested_pattern": (0, 3),
+        "is_inner_union": (0, 3),
+        "is_nested_pattern": (0, 2),
         "is_optional": (0, 1),
         "is_required": (1, 1),
         "is_union": (1, 1),
@@ -94,20 +94,28 @@ def test_builder_provider_inner_type_and_pattern(faker: Faker) -> None:
 @pytest.mark.parametrize(
     ("annotation", "expected"),
     [
-        (Link, [Link(language=None, title=None, url="http://trapp.org/")]),
-        (Email, ["schonlandluise@example.com"]),
-        (Text, [Text(value="Zurück man Schuh nicht der.", language=TextLanguage.DE)]),
-        (TemporalEntity, [TemporalEntity("2021")]),
-        (APIType, [APIType["OTHER"]]),
+        (Link, [Link(language=None, title=None, url="https://www.dippel.com/")]),
+        (Email, ["sibylla89@example.org"]),
+        (
+            Text,
+            [
+                Text(
+                    value="Zum Teller Weihnachten Geld seit weg Schiff. Monat haben gern Papa erklären Minute kann. Frei Tag mich als Schüler holen trinken. Ab legen Vogel fiel gestern vom einmal Mädchen.",
+                    language=TextLanguage.DE,
+                )
+            ],
+        ),
+        (TemporalEntity, [TemporalEntity("2016-05-23T01:57:35Z")]),
+        (APIType, [APIType["RPC"]]),
         (
             Annotated[Pattern, Field(pattern=r"^https://ror\.org/[a-z0-9]{9}$")],
-            ["https://ror.org/194892411"],
+            ["https://ror.org/948924115"],
         ),
         (
             Annotated[
                 str, Field(pattern=(r"^http://id\.nlm\.nih\.gov/mesh/[A-Z0-9]{2,64}$"))
             ],
-            ["http://id.nlm.nih.gov/mesh/D000007"],
+            ["http://id.nlm.nih.gov/mesh/D000017"],
         ),
         (
             list[
@@ -118,9 +126,12 @@ def test_builder_provider_inner_type_and_pattern(faker: Faker) -> None:
                     ),
                 ]
             ],
-            ["https://gepris.dfg.de/gepris/institution/8924115"],
+            [
+                "https://gepris.dfg.de/gepris/institution/8924115",
+                "https://gepris.dfg.de/gepris/institution/7815659",
+            ],
         ),
-        (str, ["oder"]),
+        (str, ["Tante fliegen über"]),
     ],
 )
 def test_builder_provider_field_value(
@@ -153,7 +164,11 @@ def test_builder_provider_field_value_error(faker: Faker) -> None:
 def test_builder_provider_extracted_data(faker: Faker) -> None:
     models = faker.extracted_data(ExtractedContactPoint)
     assert models[0].model_dump(exclude_defaults=True) == {
-        "email": ["lothardippel@example.net", "stolzemax@example.com"],
+        "email": [
+            "lothardippel@example.net",
+            "stolzemax@example.com",
+            "klappsylvester@example.com",
+        ],
         "hadPrimarySource": Joker(),
         "identifier": Joker(),
         "identifierInPrimarySource": "ContactPoint-4181830114",
@@ -184,31 +199,34 @@ def test_identity_provider_reference(faker: Faker) -> None:
 
 
 def test_link_provider(faker: Faker) -> None:
-    assert faker.link() == Link(
-        language="de", title="Schonland", url="https://www.briemer.com/"
-    )
+    assert faker.link() == Link(language=None, title=None, url="http://trapp.org/")
 
 
 def test_temporal_entity_provider(faker: Faker) -> None:
     assert faker.temporal_entity([TemporalEntityPrecision.DAY]) == TemporalEntity(
-        "2000-02-08"
+        "2021-01-25"
     )
 
 
 def test_text_provider_string(faker: Faker) -> None:
-    assert faker.text_string() == "Sommer"
+    assert faker.text_string() == "oder"
 
 
 def test_text_provider_text(faker: Faker) -> None:
     assert faker.text_object() == Text(
-        value="Stunde zurück man Schuh nicht der Brief bekommen.",
+        value="Zurück man Schuh nicht der.",
         language=TextLanguage.DE,
     )
 
 
 def test_pattern_provider(faker: Faker) -> None:
     pattern = faker.pattern(r"^https://ror\.org/[a-z0-9]{9}$")
-    assert pattern == "https://ror.org/219489241"
+    assert pattern == "https://ror.org/194892411"
+
+    pattern = faker.pattern(
+        "^(((http)|(https))://(dx.)?doi.org/)(10.\\d{4,9}/[-._;()/:A-Z0-9]+)$"
+    )
+    assert pattern == "https://dx.doi.org/10.0975/3513933"
 
     pattern = faker.pattern(r"^http://id\.nlm\.nih\.gov/mesh/[A-Z0-9]{2,64}$")
-    assert pattern == "http://id.nlm.nih.gov/mesh/D000026"
+    assert pattern == "http://id.nlm.nih.gov/mesh/D000010"
