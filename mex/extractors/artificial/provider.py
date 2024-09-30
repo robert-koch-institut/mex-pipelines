@@ -212,7 +212,7 @@ class PatternProvider(BaseFakerProvider):
         r"^https://gepris\.dfg\.de/gepris/institution/[0-9]{1,64}$": "https://gepris.dfg.de/gepris/institution/#######",
         r"^https://orcid\.org/[-X0-9]{9,21}$": "https://orcid.org/0000-####-####-###X",
         r"^https://ror\.org/[a-z0-9]{9}$": "https://ror.org/#########",
-        r"^https://loinc.org/([a-zA-z]*)|(([0-9]{5}-[0-9]*))$": "https://loinc.org/#####-#",
+        r"^https://loinc.org/([a-zA-z]*)|(([0-9]*(-[0-9])*))$": "https://loinc.org/#####-#",
         "^(((http)|(https))://(dx.)?doi.org/)(10.\\d{4,9}/[-._;()/:A-Z0-9]+)$": "https://dx.doi.org/10.####/#######",
     }
     MESH_TO_TEMPLATE = {
