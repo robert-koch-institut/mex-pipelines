@@ -78,34 +78,33 @@ def fetch_all_pages_data(
 
         html_body = json_data["body"]["view"]["value"]
         title = json_data["title"]
-
-        (
-            abstract,
-            lead_author_names,
-            lead_author_oes,
-            deputy_author_names,
-            deputy_author_oes,
-            collaborating_author_names,
-            collaborating_author_oes,
-            interne_vorgangsnummer,
-        ) = parse_data_html_page(html_body)
-
-        yield ConfluenceVvtSource(
-            abstract=abstract,
-            identifier=page_id,
-            title=title,
-            contact=lead_author_names,
-            identifier_in_primary_source=interne_vorgangsnummer,
-            involved_person=lead_author_names
-            + deputy_author_names
-            + collaborating_author_names,
-            responsible_unit=lead_author_oes,
-            theme="https://mex.rki.de/item/theme-1",
-            involved_unit=lead_author_oes
-            + deputy_author_oes
-            + collaborating_author_oes,
-            had_primary_source="confluence-vvt",
-        )
+        if parsed_tuple := parse_data_html_page(html_body):
+            (
+                abstract,
+                lead_author_names,
+                lead_author_oes,
+                deputy_author_names,
+                deputy_author_oes,
+                collaborating_author_names,
+                collaborating_author_oes,
+                interne_vorgangsnummer,
+            ) = parsed_tuple
+            yield ConfluenceVvtSource(
+                abstract=abstract,
+                identifier=page_id,
+                title=title,
+                contact=lead_author_names,
+                identifier_in_primary_source=interne_vorgangsnummer,
+                involved_person=lead_author_names
+                + deputy_author_names
+                + collaborating_author_names,
+                responsible_unit=lead_author_oes,
+                theme="https://mex.rki.de/item/theme-1",
+                involved_unit=lead_author_oes
+                + deputy_author_oes
+                + collaborating_author_oes,
+                had_primary_source="confluence-vvt",
+            )
 
 
 @watch
