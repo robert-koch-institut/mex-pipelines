@@ -40,7 +40,6 @@ class GrippewebConnector(BaseConnector):
     def parse_columns_by_column_name(self, table_name: str) -> dict[str, list[Any]]:
         """Execute whitelisted queries and zip results to column name."""
         with self._connection.cursor() as cursor:
-
             cursor.execute(QUERY_BY_TABLE_NAME[table_name])
             table = cursor.fetchall()
             table_columns = list(zip(*table, strict=False))
