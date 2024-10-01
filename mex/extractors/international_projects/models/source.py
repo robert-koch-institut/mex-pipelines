@@ -1,3 +1,4 @@
+import re
 from collections.abc import Sequence
 
 from pydantic import ConfigDict
@@ -12,14 +13,14 @@ class InternationalProjectsSource(BaseRawData):
     model_config = ConfigDict(str_min_length=0)
 
     funding_type: str
-    project_lead_person: list[str]
+    project_lead_person: str
     end_date: TemporalEntity | None = None
     partner_organization: list[str] = []
-    funding_source: list[str] = []
+    funding_source: str
     funding_program: str
     rki_internal_project_number: str
     additional_rki_units: str
-    project_lead_rki_unit: list[str]
+    project_lead_rki_unit: str
     project_abbreviation: str
     start_date: TemporalEntity | None = None
     activity1: str
@@ -28,6 +29,18 @@ class InternationalProjectsSource(BaseRawData):
     topic2: str
     full_project_name: str
     website: str
+
+    def get_project_lead_persons(self) -> list[str]:
+        """Return a list of project lead persons."""
+        return re.split(";|\n", self.project_lead_person)
+
+    def get_project_lead_rki_units(self) -> list[str]:
+        """Return a list of project lead rki units."""
+        return re.split(",|/", self.project_lead_rki_unit)
+
+    def get_funding_sources(self) -> list[str]:
+        """Return a list of project funding sources."""
+        return re.split(",|\n", self.funding_source)
 
     def get_partners(self) -> Sequence[str | None]:
         """Return partners from extractor."""

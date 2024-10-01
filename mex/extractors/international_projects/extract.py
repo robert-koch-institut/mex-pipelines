@@ -45,8 +45,8 @@ def extract_international_projects_sources() -> (
             settings.international_projects.file_path,
             keep_default_na=False,
             parse_dates=True,
-            header=1,
-            sheet_name=1,
+            header=0,
+            sheet_name="Projects",
         )
     for row in df.iterrows():
         if source := extract_international_projects_source(row[1]):
@@ -65,8 +65,8 @@ def extract_international_projects_source(
     Returns:
         international projects source, or None
     """
-    funding_type = row.get("Funding type")
-    project_lead_person = row.get("Project lead (person)")
+    funding_type = str(row.get("Funding type"))
+    project_lead_person = str(row.get("Project lead (person)"))
     project_lead_rki_unit = row.get("Project lead (RKI unit)")
     start_date = get_temporal_entity_from_cell(row.get("Start date DD.MM.YYYY"))
     end_date = get_temporal_entity_from_cell(row.get("End date DD.MM.YYYY"))
@@ -74,9 +74,9 @@ def extract_international_projects_source(
         row.get("Partner organizations (full name and acronym)", "")
     )
     funding_source = str(row.get("Funding source", ""))
-    funding_program = row.get("Funding programme")
-    rki_internal_project_number = row.get(
-        "RKI internal project number (e.g. 1368-2022)"
+    funding_program = str(row.get("Funding programme"))
+    rki_internal_project_number = str(
+        row.get("RKI internal project number (e.g. 1368-2022)")
     )
     project_abbreviation = row.get("Project Abbreviation")
     additional_rki_units = row.get("Additional RKI units involved")
@@ -87,7 +87,7 @@ def extract_international_projects_source(
     activity2 = str(row.get("Activity 2 (optional)", ""))
     topic1 = str(row.get("Topic 1", ""))
     topic2 = str(row.get("Topic 2 (optional)", ""))
-    homepage = row.get("Homepage")
+    homepage = str(row.get("Homepage"))
 
     if not full_project_name or not project_abbreviation:
         return None
@@ -96,16 +96,14 @@ def extract_international_projects_source(
 
     return InternationalProjectsSource(
         funding_type=funding_type,
-        project_lead_person=(
-            re.split(";|\n", project_lead_person) if project_lead_person else []
-        ),
+        project_lead_person=project_lead_person,
         end_date=end_date,
         partner_organization=get_clean_organizations_names(partner_organization),
-        funding_source=re.split(",|\n", funding_source),
+        funding_source=funding_source,
         funding_program=funding_program,
         rki_internal_project_number=rki_internal_project_number,
         additional_rki_units=additional_rki_units,
-        project_lead_rki_unit=re.split(",|/", project_lead_rki_unit),
+        project_lead_rki_unit=project_lead_rki_unit,
         project_abbreviation=project_abbreviation,
         start_date=start_date,
         activity1=activity1,
@@ -132,7 +130,7 @@ def extract_international_projects_project_leaders(
     ldap = LDAPConnector.get()
     seen = set()
     for source in international_projects_sources:
-        names = source.project_lead_person
+        names = source.get_project_lead_persons()
         if not names:
             continue
 
@@ -161,7 +159,7 @@ def extract_international_projects_funding_sources(
     """
     found_orgs = {}
     for source in international_projects_sources:
-        if funder_or_commissioner := source.funding_source:
+        if funder_or_commissioner := source.get_funding_sources():
             for org in funder_or_commissioner:
                 if wikidata_org := search_organization_by_label(org):
                     found_orgs[org] = wikidata_org

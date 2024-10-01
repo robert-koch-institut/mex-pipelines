@@ -59,14 +59,14 @@ def transform_international_projects_source_to_extracted_activity(
 
     project_lead = [
         found_person[0]
-        for person in source.project_lead_person
+        for person in source.get_project_lead_persons()
         if (
             found_person := person_stable_target_ids_by_query_string.get(person.strip())
         )
     ]
 
     project_lead_rki_unit = []
-    for unit in source.project_lead_rki_unit:
+    for unit in source.get_project_lead_rki_units():
         if unit == "ZIG-GS":
             unit = "zig"
         if found_unit := unit_stable_target_id_by_synonym.get(unit):
@@ -85,7 +85,7 @@ def transform_international_projects_source_to_extracted_activity(
     if source.funding_source:
         all_funder_or_commissioner.extend(
             wfc
-            for fc in source.funding_source
+            for fc in source.get_funding_sources()
             if (wfc := funding_sources_stable_target_id_by_query.get(fc))
         )
 
@@ -111,13 +111,17 @@ def transform_international_projects_source_to_extracted_activity(
         start=source.start_date,
         end=source.end_date,
         responsibleUnit=project_lead_rki_unit,
-        identifierInPrimarySource=source.rki_internal_project_number
+        identifierInPrimarySource=source.rki_internal_project_number.replace("\n", "/")
         or source.project_abbreviation,
         funderOrCommissioner=all_funder_or_commissioner,
-        externalAssociate=get_or_create_partner_organization(
-            source.partner_organization,
-            partner_organizations_stable_target_id_by_query,
-            extracted_primary_source,
+        externalAssociate=(
+            get_or_create_partner_organization(
+                source.partner_organization,
+                partner_organizations_stable_target_id_by_query,
+                extracted_primary_source,
+            )
+            if source.partner_organization
+            else []
         ),
         hadPrimarySource=extracted_primary_source.stableTargetId,
         fundingProgram=source.funding_program if source.funding_program else [],
@@ -248,18 +252,17 @@ def get_or_create_partner_organization(
         list of matched or created merged organization identifier
     """
     final_partner_organizations: list[MergedOrganizationIdentifier] = []
-    if partner_organization:
-        for partner_org in partner_organization:
-            if wpo := extracted_organizations.get(partner_org):
-                final_partner_organizations.append(wpo)
-            else:
-                extracted_organization = ExtractedOrganization(
-                    officialName=[Text(value=partner_org)],
-                    identifierInPrimarySource=partner_org,
-                    hadPrimarySource=extracted_primary_source.stableTargetId,
-                )
-                load([extracted_organization])
-                final_partner_organizations.append(
-                    MergedOrganizationIdentifier(extracted_organization.stableTargetId)
-                )
+    for partner_org in partner_organization:
+        if wpo := extracted_organizations.get(partner_org):
+            final_partner_organizations.append(wpo)
+        else:
+            extracted_organization = ExtractedOrganization(
+                officialName=[Text(value=partner_org)],
+                identifierInPrimarySource=partner_org,
+                hadPrimarySource=extracted_primary_source.stableTargetId,
+            )
+            load([extracted_organization])
+            final_partner_organizations.append(
+                MergedOrganizationIdentifier(extracted_organization.stableTargetId)
+            )
     return final_partner_organizations
