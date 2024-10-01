@@ -123,15 +123,9 @@ jobs:
 
       - name: 'Build Inventory Image'
         run: |
-<<<<<<< ours
-          docker build .
-          --tag ghcr.io/robert-koch-institut/mex-extractors:latest
-          --tag ghcr.io/robert-koch-institut/mex-extractors:${{ github.sha }}
-=======
           docker build . \
           --tag ghcr.io/robert-koch-institut/mex-extractors:latest \
           --tag ghcr.io/robert-koch-institut/mex-extractors:${{ github.sha }} \
->>>>>>> theirs
           --tag ghcr.io/robert-koch-institut/mex-extractors:${{ needs.release.outputs.tag }}
           docker push ghcr.io/robert-koch-institut/mex-extractors:latest
 
