@@ -5,7 +5,7 @@ from mex.ff_projects.filter import filter_and_log_ff_projects_sources
 
 
 def test_filter_and_log_ff_projects_sources(
-    extracted_primary_sources: dict[str, ExtractedPrimarySource]
+    extracted_primary_sources: dict[str, ExtractedPrimarySource],
 ) -> None:
     unit_stable_target_ids_by_synonym = {
         "FG33": MergedOrganizationalUnitIdentifier.generate(33),

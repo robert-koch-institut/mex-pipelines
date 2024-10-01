@@ -40,7 +40,7 @@ def test_extract_columns_by_table_and_column_name() -> None:
 
 @pytest.mark.usefixtures("mocked_ldap", "mocked_grippeweb")
 def test_extract_ldap_actors_for_functional_accounts(
-    grippeweb_resource_mappings: list[dict[str, Any]]
+    grippeweb_resource_mappings: list[dict[str, Any]],
 ) -> None:
     ldap_actors = extract_ldap_actors_for_functional_accounts(
         grippeweb_resource_mappings
@@ -76,7 +76,7 @@ def test_extract_ldap_persons(
 
 @pytest.mark.usefixtures("mocked_wikidata", "mocked_grippeweb")
 def test_extract_grippeweb_organizations(
-    grippeweb_resource_mappings: list[dict[str, Any]]
+    grippeweb_resource_mappings: list[dict[str, Any]],
 ) -> None:
     organizations = extract_grippeweb_organizations(grippeweb_resource_mappings)
     expected = {

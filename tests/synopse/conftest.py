@@ -145,7 +145,7 @@ def synopse_variables_raw() -> list[dict[str, str | int | float | None]]:
 
 @pytest.fixture()
 def synopse_variables(
-    synopse_variables_raw: list[dict[str, str | int]]
+    synopse_variables_raw: list[dict[str, str | int]],
 ) -> list[SynopseVariable]:
     """Return a list Synopse Variables."""
     return [SynopseVariable.model_validate(v) for v in synopse_variables_raw]
@@ -205,7 +205,7 @@ def synopse_variables_extended_data_use_raw() -> (
 
 @pytest.fixture()
 def synopse_variables_extended_data_use(
-    synopse_variables_extended_data_use_raw: list[dict[str, str | int]]
+    synopse_variables_extended_data_use_raw: list[dict[str, str | int]],
 ) -> list[SynopseVariable]:
     """Return a list Synopse Variables."""
     return [
