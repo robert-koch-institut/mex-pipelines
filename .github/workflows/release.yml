@@ -127,7 +127,7 @@ jobs:
           --tag ghcr.io/robert-koch-institut/mex-extractors:latest \
           --tag ghcr.io/robert-koch-institut/mex-extractors:${{ github.sha }} \
           --tag ghcr.io/robert-koch-institut/mex-extractors:${{ needs.release.outputs.tag }}
-          docker push ghcr.io/robert-koch-institut/mex-extractors:latest
+          docker push --all-tags ghcr.io/robert-koch-institut/mex-extractors
 
   distribute:
     runs-on: ubuntu-latest
