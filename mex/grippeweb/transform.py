@@ -98,7 +98,6 @@ def transform_grippeweb_resource_mappings_to_dict(
         for activity in extracted_confluence_vvt_activities
     }
     for resource in grippeweb_resource_mappings:
-
         access_restriction = resource["accessRestriction"][0]["mappingRules"][0][
             "setValues"
         ]

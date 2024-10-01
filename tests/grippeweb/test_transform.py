@@ -33,7 +33,6 @@ def test_transform_grippeweb_access_platform_to_extracted_access_platform(
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
     extracted_mex_persons_grippeweb: list[ExtractedPerson],
 ) -> None:
-
     extracted_access_platform = (
         transform_grippeweb_access_platform_to_extracted_access_platform(
             grippeweb_access_platform,
@@ -60,7 +59,7 @@ def test_transform_grippeweb_access_platform_to_extracted_access_platform(
 
 @pytest.fixture
 def extracted_confluence_vvt_source(
-    extracted_primary_sources: dict[str, ExtractedPrimarySource]
+    extracted_primary_sources: dict[str, ExtractedPrimarySource],
 ) -> ExtractedActivity:
     return ExtractedActivity(
         hadPrimarySource=extracted_primary_sources["confluence-vvt"].stableTargetId,

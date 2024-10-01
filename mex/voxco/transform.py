@@ -50,7 +50,6 @@ def transform_voxco_resource_mappings_to_extracted_resources(
         for activity in extracted_international_projects_activities
     }
     for resource in voxco_resource_mappings:
-
         access_restriction = resource["accessRestriction"][0]["mappingRules"][0][
             "setValues"
         ]
