@@ -9,6 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changes
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [0.18.0] - 2024-08-07
+
+### Added
+
 - transform voxco resources and variables
 
 ### Changes
@@ -27,8 +41,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   odk, datscha-web, confluence-vvt, grippeweb, voxco
 - confluence vvt now ignores ill templated pages
 
-### Deprecated
-
 ### Removed
 
 - remove mypy ignores for arg-type and call-arg
@@ -40,8 +52,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - remaining issues in voxco extractor
 - bug in seq-repo that caused exponential run-time as well as incorrect resource
   keywords
-
-### Security
 
 ## [0.17.1] - 2024-06-14
 
