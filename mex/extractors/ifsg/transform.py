@@ -85,6 +85,7 @@ def transform_resource_state_to_mex_resource(
     extracted_ifsg_resource_parent: ExtractedResource,
     extracted_primary_source: ExtractedPrimarySource,
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
+    meta_disease: list[MetaDisease],
 ) -> list[ExtractedResource]:
     """Transform resource state to mex resource.
 
@@ -94,6 +95,7 @@ def transform_resource_state_to_mex_resource(
         extracted_primary_source: ExtractedPrimarySource
         unit_stable_target_ids_by_synonym: mapping unit synonyms to
                                            MergedOrganizationalUnitIdentifier
+        meta_disease: MetaDisease
 
     Returns:
         transform resource state to ExtractedResource list
@@ -102,6 +104,20 @@ def transform_resource_state_to_mex_resource(
         value["forValues"][0]: value["setValues"][0]
         for value in resource_state["alternativeTitle"][0]["mappingRules"]
     }
+    documentation_by_bundesland_id = {
+        value["forValues"][0]: value["setValues"][0]
+        for value in resource_state["documentation"][0]["mappingRules"]
+    }
+    keyword = [
+        keyword
+        for keyword in [
+            *resource_state["keyword"][0]["mappingRules"][0]["setValues"],
+            *[row.disease_name for row in meta_disease if row.disease_name],
+            *[row.disease_name_en for row in meta_disease if row.disease_name_en],
+            *[row.specimen_name for row in meta_disease if row.specimen_name],
+        ]
+    ]
+
     spatial_by_bundesland_id = None
     if resource_state["spatial"]:
         spatial_by_bundesland_id = {
@@ -112,25 +128,22 @@ def transform_resource_state_to_mex_resource(
         value["forValues"][0]: value["setValues"][0]
         for value in resource_state["title"][0]["mappingRules"]
     }
-
-    publication_by_id_bundesland = {
-        value["forValues"][0]: value["setValues"][0]
-        for value in resource_state["publication"][1]["mappingRules"]
-    }
     mex_resource_state: list[ExtractedResource] = []
     for (
         id_bundesland,
         bundesland_meldedaten,
     ) in bundesland_meldedaten_by_bundesland_id.items():
-        publication = resource_state["publication"][0]["mappingRules"][0]["setValues"]
-        if id_bundesland in publication_by_id_bundesland.keys():
-            publication.append(publication_by_id_bundesland[id_bundesland])
         spatial = []
         if (
             spatial_by_bundesland_id
             and id_bundesland in spatial_by_bundesland_id.keys()
         ):
             spatial = spatial_by_bundesland_id[id_bundesland]
+        documentation = (
+            documentation_by_bundesland_id[id_bundesland]
+            if id_bundesland in documentation_by_bundesland_id.keys()
+            else []
+        )
         mex_resource_state.append(
             ExtractedResource(
                 accessRestriction=resource_state["accessRestriction"][0][
@@ -143,6 +156,7 @@ def transform_resource_state_to_mex_resource(
                 contact=unit_stable_target_ids_by_synonym[
                     resource_state["contact"][0]["mappingRules"][0]["forValues"][0]
                 ],
+                documentation=documentation,
                 hadPrimarySource=extracted_primary_source.stableTargetId,
                 hasLegalBasis=resource_state["hasLegalBasis"][0]["mappingRules"][0][
                     "setValues"
@@ -152,7 +166,7 @@ def transform_resource_state_to_mex_resource(
                 ],
                 identifierInPrimarySource=id_bundesland,
                 isPartOf=extracted_ifsg_resource_parent.stableTargetId,
-                keyword=resource_state["keyword"][0]["mappingRules"][0]["setValues"],
+                keyword=keyword,
                 language=resource_state["language"][0]["mappingRules"][0]["setValues"],
                 resourceCreationMethod=resource_state["resourceCreationMethod"][0][
                     "mappingRules"
@@ -308,19 +322,22 @@ def transform_resource_disease_to_mex_resource_row(
         is_part_of.extend(
             stable_target_id_by_bundesland_id[bundesland_id]
             for bundesland_id in meta_disease_row.in_bundesland.split(",")
+            if bundesland_id in stable_target_id_by_bundesland_id.keys()
         )
+
     keyword = [
-        value
-        for value in [
+        keyword
+        for keyword in [
             meta_disease_row.disease_name,
             meta_disease_row.disease_name_en,
             meta_disease_row.specimen_name,
+            *[
+                rule["setValues"][0]
+                for rule in resource_disease["keyword"][0]["mappingRules"]
+            ],
         ]
-        if value
+        if keyword
     ]
-    keyword.extend(
-        [rule["setValues"] for rule in resource_disease["keyword"][0]["mappingRules"]]
-    )
 
     spatial = []
     if meta_disease_row.ifsg_bundesland == 0:
@@ -354,7 +371,6 @@ def transform_resource_disease_to_mex_resource_row(
         isPartOf=is_part_of,
         keyword=keyword,
         language=resource_disease["language"][0]["mappingRules"][0]["setValues"],
-        publication=resource_disease["publication"][0]["mappingRules"][0]["setValues"],
         publisher=extracted_organization_rki.stableTargetId,
         resourceCreationMethod=resource_disease["resourceCreationMethod"][0][
             "mappingRules"
