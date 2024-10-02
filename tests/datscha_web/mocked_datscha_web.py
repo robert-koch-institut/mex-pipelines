@@ -107,7 +107,7 @@ def datscha_web_item(datscha_web_item_raw: dict[str, Any]) -> DatschaWebItem:
 
 @pytest.fixture
 def datscha_web_item_without_contributors(
-    datscha_web_item_raw: dict[str, Any]
+    datscha_web_item_raw: dict[str, Any],
 ) -> DatschaWebItem:
     """Return datscha web item without 'auskunftsperson' and 'zentrale_stelle_fdv'."""
     return DatschaWebItem.model_validate(

@@ -31,7 +31,6 @@ def test_transform_grippeweb_access_platform_to_extracted_access_platform(
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
     extracted_mex_persons_grippeweb: list[ExtractedPerson],
 ) -> None:
-
     extracted_access_platform = (
         transform_grippeweb_access_platform_to_extracted_access_platform(
             grippeweb_access_platform,

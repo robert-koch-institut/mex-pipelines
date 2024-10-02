@@ -50,7 +50,6 @@ def transform_voxco_resource_mappings_to_extracted_resources(
         for activity in extracted_international_projects_activities
     }
     for resource in voxco_resource_mappings:
-
         access_restriction = resource["accessRestriction"][0]["mappingRules"][0][
             "setValues"
         ]
@@ -92,7 +91,13 @@ def transform_voxco_resource_mappings_to_extracted_resources(
         method = resource["method"][0]["mappingRules"][0]["setValues"]
         publisher = extracted_organization_rki.stableTargetId
 
+        resource_creation_method = resource["resourceCreationMethod"][0][
+            "mappingRules"
+        ][0]["setValues"]
         resource_type_general = resource["resourceTypeGeneral"][0]["mappingRules"][0][
+            "setValues"
+        ]
+        resource_type_specific = resource["resourceTypeSpecific"][0]["mappingRules"][0][
             "setValues"
         ]
         quality_information = resource["qualityInformation"][0]["mappingRules"][0][
@@ -125,7 +130,9 @@ def transform_voxco_resource_mappings_to_extracted_resources(
             meshId=mesh_id,
             method=method,
             publisher=publisher,
+            resourceCreationMethod=resource_creation_method,
             resourceTypeGeneral=resource_type_general,
+            resourceTypeSpecific=resource_type_specific,
             qualityInformation=quality_information,
             rights=rights,
             spatial=spatial,
@@ -156,6 +163,7 @@ def transform_voxco_variable_mappings_to_extracted_variables(
         ExtractedVariable(
             hadPrimarySource=extracted_primary_source_voxco.stableTargetId,
             identifierInPrimarySource=str(variable.Id),
+            dataType=variable.DataType,
             description=variable.Type,
             label=variable.QuestionText if variable.QuestionText else variable.Text,
             usedIn=resource.stableTargetId,

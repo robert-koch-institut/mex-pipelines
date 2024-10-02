@@ -9,6 +9,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changes
+
+- BREAKING: refactor package structure from `mex.foo` to `mex.extractors.foo`
+- model update: international-projects, seqrepo, synopse, blueant, sumo, biospecimen,
+  odk, datscha-web, confluence-vvt, grippeweb, voxco
+- confluence vvt now ignores ill templated pages
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+- bug in seq-repo that caused exponential run-time as well as incorrect resource
+  keywords
+
+### Security
+
+## [0.18.0] - 2024-08-07
+
+### Added
+
 - transform voxco resources and variables
 
 ### Changes
@@ -22,12 +44,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Environment variables change from `EXTRACTOR_PARAMETER` to `MEX_EXTRACTOR__PARAMETER`,
   access from `ExtractorSettings.parameter` to `settings.extractor.parameter`.
 - update mex-common to 0.32.0
-- BREAKING: refactor package structure from `mex.foo` to `mex.extractors.foo`
-- model update: international-projects, seqrepo, synopse, blueant, sumo, biospecimen,
-  odk, datscha-web, confluence-vvt, grippeweb
-- confluence vvt now ignores ill templated pages
-
-### Deprecated
 
 ### Removed
 
@@ -138,7 +154,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - documentation workflow to Makefile, mex.bat and as github action
 - README.md for mesh data
 - ifsg raw data extraction
-- ifsg resource tranformation
+- ifsg resource transformation
 - add IFSG Variable and VariableGroup transformation
 - add wikidata dagster assets
 - integrate wikidata and organigram into the ifsg extractor
