@@ -46,7 +46,7 @@ hasPersonalData:
 hadPrimarySource:
   - fieldInPrimarySource: n/a
     mappingRules:
-    - rule: "Assign 'stable target id' of primary source with identifier 'ifsg' in /raw-data/primary-sources/primary-sources.json."
+    - rule: "Assign 'stable target id'"
 identifier:
   - fieldInPrimarySource: n/a
     mappingRules:
@@ -121,4 +121,4 @@ unitInCharge:
     mappingRules:
     - forValues:
       - "FG99"
-      rule: Use value to match identifer using /raw-data/organigram/organizational-units.json.
+      rule: Use value.

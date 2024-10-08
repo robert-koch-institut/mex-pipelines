@@ -39,31 +39,28 @@ documentation:
           - "07"
         setValues:
           - language: de
-            title: "Rheinland-Pfalz: Landesverordnung über die Erweiterung der Meldepflicht für übertragbare Krankheiten"
+            title: "Rheinland-Pfalz"
             url: "http://landesrecht.rlp.de/jportal/portal/page/bsrlpprod.psml?doc.id=jlr-IfSGMeldpflVRPpP1%3Ajuris-lr00&showdoccase=1&doc.hl=1&documentnumber=1"
       - forValues:
           - "09"
         setValues:
           - language: de
             title:
-              "Bayern: Verordnung zur Erweiterung der Meldepflicht auf andere übertragbare
-              Krankheiten oder Krankheitsserreger (Meldepflichttverordnung - MeldePflV)"
+              "Bayern"
             url: "https://www.gesetze-bayern.de/Content/Document/BayMeldePflV/true"
       - forValues:
           - "10"
         setValues:
           - language: de
             title:
-              "Saarland: Verordnung über die Erweiterung der Meldepflicht für übertragbare
-              Krankheiten (MPflVO)"
+              "Saarland"
             url: "https://www.saarland.de/msgff/DE/portale/gesundheitundpraevention/leistungenabisz/gesundheitsschutz/infektionsschutzgesetz/infektionsschutzgesetz.html"
       - forValues:
           - "11"
         setValues:
           - language: de
             title:
-              "Berlin: Verordnung über die Ausdehnung der Meldepflicht für Krankheiten
-              und Krankheitserreger nach dem Infektionsschutzgesetz (IfSG-MeldepflichtV)"
+              "Berlin"
             url: "https://gesetze.berlin.de/bsbe/document/jlr-IfSGMeldpflVBEpP1"
       - forValues:
           - "12"
@@ -116,7 +113,7 @@ hasPersonalData:
 hadPrimarySource:
 - fieldInPrimarySource: n/a
   mappingRules:
-  - rule: "Assign 'stable target id' of primary source with identifier 'ifsg' in /raw-data/primary-sources/primary-sources.json."
+  - rule: "Assign 'stable target id'"
 identifier:
 - fieldInPrimarySource: n/a
   mappingRules:
@@ -192,7 +189,7 @@ identifierInPrimarySource:
 isPartOf:
 - fieldInPrimarySource: n/a
   mappingRules:
-  - rule: Use the 'stable target id' of item described by mapping/../ifsg/resource_parent
+  - rule: Use the 'stable target id'
 keyword:
 - fieldInPrimarySource: n/a
   mappingRules:
@@ -318,7 +315,7 @@ spatial:
 stableTargetId:
 - fieldInPrimarySource: n/a
   mappingRules:
-  - rule: Assign 'stable target id' of merged item.
+  - rule: Assign 'stable target id'.
 theme:
 - fieldInPrimarySource: n/a
   mappingRules:
@@ -414,4 +411,4 @@ unitInCharge:
   mappingRules:
   - forValues:
       - "FG99"
-    rule: Use value to match with identifer in /raw-data/organigram/organizational-units.json.
+    rule: Use value.
