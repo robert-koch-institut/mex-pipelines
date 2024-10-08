@@ -400,6 +400,7 @@ def transform_ifsg_data_to_mex_variable_group(
     extracted_primary_source: ExtractedPrimarySource,
     meta_field: list[MetaField],
     id_types_of_diseases: list[int],
+    max_id_schema: int,
 ) -> list[ExtractedVariableGroup]:
     """Transform ifsg data to mex VariableGroup.
 
@@ -409,6 +410,7 @@ def transform_ifsg_data_to_mex_variable_group(
         extracted_primary_source: ExtractedPrimarySource
         meta_field: MetaField list
         id_types_of_diseases: disease related id_types
+        max_id_schema: latest id schema
 
     Returns:
         transform resource parent to ExtractedResource
@@ -433,7 +435,7 @@ def transform_ifsg_data_to_mex_variable_group(
             hadPrimarySource=extracted_primary_source.stableTargetId,
             identifierInPrimarySource=identifier_in_primary_source,
             containedBy=extracted_ifsg_resource_disease_stable_target_id_by_id_type[
-                identifier_in_primary_source.split("_")[0]
+                f'Meta.Disease_{identifier_in_primary_source.split("_")[0]}_{max_id_schema}'
             ],
             label=label_by_statement_area_group[
                 identifier_in_primary_source.split("_")[1]
@@ -476,7 +478,7 @@ def transform_ifsg_data_to_mex_variables(
         for group in extracted_ifsg_variable_group
     }
     resource_disease_stable_target_id_by_id_type = {
-        int(row.identifierInPrimarySource): row.stableTargetId
+        row.identifierInPrimarySource.split("_")[1]: row.stableTargetId
         for row in extracted_ifsg_resource_disease
     }
     extracted_variables = []
@@ -509,7 +511,7 @@ def transform_ifsg_data_to_mex_variables(
             item_row = item_by_id_item[id_item]
             value_set.append(item_row.item_name)
 
-        used_in = resource_disease_stable_target_id_by_id_type[row.id_type]
+        used_in = resource_disease_stable_target_id_by_id_type[str(row.id_type)]
         extracted_variables.append(
             ExtractedVariable(
                 belongsTo=belongs_to,

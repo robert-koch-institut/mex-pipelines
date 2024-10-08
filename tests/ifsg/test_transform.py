@@ -284,6 +284,7 @@ def test_transform_ifsg_data_to_mex_variable_group(
         extracted_primary_sources_ifsg,
         [meta_field[0]],
         [101],
+        1,
     )
     expected = {
         "identifier": Joker(),

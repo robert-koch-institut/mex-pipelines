@@ -3036,7 +3036,7 @@ def extracted_ifsg_resource_disease() -> list[ExtractedResource]:
     return [
         ExtractedResource(
             hadPrimarySource="fU5a2ZiWXu9ItMX7gYuuPv",
-            identifierInPrimarySource="101",
+            identifierInPrimarySource="Meta.Disease_101_1",
             accessPlatform=[],
             accessRestriction="https://mex.rki.de/item/access-restriction-2",
             accrualPeriodicity="https://mex.rki.de/item/frequency-17",

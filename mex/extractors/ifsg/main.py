@@ -267,6 +267,7 @@ def extracted_ifsg_variable_group(
     extracted_primary_sources_ifsg: ExtractedPrimarySource,
     filtered_empty_statement_area_group: list[MetaField],
     id_types_of_diseases: list[int],
+    max_id_schema: int,
 ) -> list[ExtractedVariableGroup]:
     """Extracted and loaded ifsg variable group."""
     extracted_variable_group = transform_ifsg_data_to_mex_variable_group(
@@ -275,6 +276,7 @@ def extracted_ifsg_variable_group(
         extracted_primary_sources_ifsg,
         filtered_empty_statement_area_group,
         id_types_of_diseases,
+        max_id_schema,
     )
     load(extracted_variable_group)
 
