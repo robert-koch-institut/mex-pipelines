@@ -13,11 +13,11 @@ from mex.common.primary_source.transform import (
     transform_seed_primary_sources_to_extracted_primary_sources,
 )
 from mex.common.types import (
-    Link,
-    LinkLanguage,
     MergedOrganizationalUnitIdentifier,
     MergedPrimarySourceIdentifier,
     MergedResourceIdentifier,
+    PersonalData,
+    ResourceCreationMethod,
     Text,
     TextLanguage,
 )
@@ -308,6 +308,45 @@ def resource_parent() -> dict[str, Any]:
                 ],
             }
         ],
+        "hasLegalBasis": [
+            {
+                "fieldInPrimarySource": "n/a",
+                "locationInPrimarySource": None,
+                "examplesInPrimarySource": None,
+                "mappingRules": [
+                    {
+                        "forValues": None,
+                        "setValues": [
+                            {
+                                "value": "Infektionsschutzgesetz (IfSG)",
+                                "language": "de",
+                            },
+                            {
+                                "value": "German Federal Law on the Prevention of Infectious Diseases (IfSG)",
+                                "language": "en",
+                            },
+                        ],
+                        "rule": None,
+                    }
+                ],
+                "comment": None,
+            }
+        ],
+        "hasPersonalData": [
+            {
+                "fieldInPrimarySource": "n/a",
+                "locationInPrimarySource": None,
+                "examplesInPrimarySource": None,
+                "mappingRules": [
+                    {
+                        "forValues": None,
+                        "setValues": [PersonalData["PERSONAL_DATA"]],
+                        "rule": None,
+                    }
+                ],
+                "comment": None,
+            }
+        ],
         "identifierInPrimarySource": [
             {
                 "fieldInPrimarySource": "n/a",
@@ -372,12 +411,27 @@ def resource_parent() -> dict[str, Any]:
                 ],
             }
         ],
+        "resourceCreationMethod": [
+            {
+                "fieldInPrimarySource": "n/a",
+                "locationInPrimarySource": None,
+                "examplesInPrimarySource": None,
+                "mappingRules": [
+                    {
+                        "forValues": None,
+                        "setValues": [ResourceCreationMethod["SURVEILLANCE"]],
+                        "rule": None,
+                    }
+                ],
+                "comment": None,
+            }
+        ],
         "resourceTypeGeneral": [
             {
                 "comment": "Public Health Fachdaten",
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
-                    {"setValues": ["https://mex.rki.de/item/resource-type-general-1"]}
+                    {"setValues": ["https://mex.rki.de/item/resource-type-general-13"]}
                 ],
             }
         ],
@@ -410,8 +464,7 @@ def resource_parent() -> dict[str, Any]:
                 "comment": "Meldewesen, Infektionskrankheiten",
                 "fieldInPrimarySource": "n/a",
                 "mappingRules": [
-                    {"setValues": ["https://mex.rki.de/item/theme-17"]},
-                    {"setValues": ["https://mex.rki.de/item/theme-2"]},
+                    {"setValues": ["https://mex.rki.de/item/theme-11"]},
                 ],
             }
         ],
@@ -499,7 +552,154 @@ def resource_states() -> list[dict[str, Any]]:
                     "mappingRules": [{"forValues": ["FG99"]}],
                 }
             ],
-            "description": [],
+            "documentation": [
+                {
+                    "fieldInPrimarySource": "InBundesland",
+                    "locationInPrimarySource": "Meta.Disease",
+                    "examplesInPrimarySource": None,
+                    "mappingRules": [
+                        {
+                            "forValues": ["07"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Rheinland-Pfalz",
+                                    "url": "http://landesrecht.rlp.de/jportal/portal/page/bsrlpprod.psml?doc.id=jlr-IfSGMeldpflVRPpP1%3Ajuris-lr00&showdoccase=1&doc.hl=1&documentnumber=1",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["09"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Bayern",
+                                    "url": "https://www.gesetze-bayern.de/Content/Document/BayMeldePflV/true",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["10"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Saarland",
+                                    "url": "https://www.saarland.de/msgff/DE/portale/gesundheitundpraevention/leistungenabisz/gesundheitsschutz/infektionsschutzgesetz/infektionsschutzgesetz.html",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["11"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Berlin",
+                                    "url": "https://gesetze.berlin.de/bsbe/document/jlr-IfSGMeldpflVBEpP1",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["12"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Brandenburg",
+                                    "url": "https://bravors.brandenburg.de/verordnungen/infkrankmv_2016",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["13"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Mecklenburg-Vorpommern",
+                                    "url": "https://www.landesrecht-mv.de/bsmv/document/jlr-InfSchAGMVrahmen",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["14"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Sachsen",
+                                    "url": "https://www.revosax.sachsen.de/vorschrift/1307-IfSGMeldeVO",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["15"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Sachsen-Anhalt",
+                                    "url": "https://www.landesrecht.sachsen-anhalt.de/bsst/document/jlr-IfSGMeldpflVST2005rahmen",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["16"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Thüringen",
+                                    "url": "https://landesrecht.thueringen.de/bsth/document/jlr-IfKrMeldAnpVTHrahmen",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                    ],
+                    "comment": None,
+                }
+            ],
+            "hasLegalBasis": [
+                {
+                    "fieldInPrimarySource": "n/a",
+                    "locationInPrimarySource": None,
+                    "examplesInPrimarySource": None,
+                    "mappingRules": [
+                        {
+                            "forValues": None,
+                            "setValues": [
+                                {
+                                    "value": "Infektionsschutzgesetz (IfSG)",
+                                    "language": "de",
+                                },
+                                {
+                                    "value": "German Federal Law on the Prevention of Infectious Diseases (IfSG)",
+                                    "language": "en",
+                                },
+                            ],
+                            "rule": None,
+                        }
+                    ],
+                    "comment": None,
+                }
+            ],
+            "hasPersonalData": [
+                {
+                    "fieldInPrimarySource": "n/a",
+                    "locationInPrimarySource": None,
+                    "examplesInPrimarySource": None,
+                    "mappingRules": [
+                        {
+                            "forValues": None,
+                            "setValues": [PersonalData["PERSONAL_DATA"]],
+                            "rule": None,
+                        }
+                    ],
+                    "comment": None,
+                }
+            ],
             "identifierInPrimarySource": [
                 {
                     "fieldInPrimarySource": "InBundesland",
@@ -685,6 +885,21 @@ def resource_states() -> list[dict[str, Any]]:
                     ],
                 },
             ],
+            "resourceCreationMethod": [
+                {
+                    "fieldInPrimarySource": "n/a",
+                    "locationInPrimarySource": None,
+                    "examplesInPrimarySource": None,
+                    "mappingRules": [
+                        {
+                            "forValues": None,
+                            "setValues": [ResourceCreationMethod["SURVEILLANCE"]],
+                            "rule": None,
+                        }
+                    ],
+                    "comment": None,
+                }
+            ],
             "resourceTypeGeneral": [
                 {
                     "comment": "Public Health Fachdaten",
@@ -692,7 +907,7 @@ def resource_states() -> list[dict[str, Any]]:
                     "mappingRules": [
                         {
                             "setValues": [
-                                "https://mex.rki.de/item/resource-type-general-1"
+                                "https://mex.rki.de/item/resource-type-general-13"
                             ]
                         }
                     ],
@@ -807,8 +1022,7 @@ def resource_states() -> list[dict[str, Any]]:
                     "comment": "Meldewesen, Infektionskrankheiten",
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
-                        {"setValues": ["https://mex.rki.de/item/theme-17"]},
-                        {"setValues": ["https://mex.rki.de/item/theme-2"]},
+                        {"setValues": ["https://mex.rki.de/item/theme-11"]},
                     ],
                 }
             ],
@@ -958,7 +1172,154 @@ def resource_states() -> list[dict[str, Any]]:
                     "mappingRules": [{"forValues": ["FG99"]}],
                 }
             ],
-            "description": [],
+            "documentation": [
+                {
+                    "fieldInPrimarySource": "InBundesland",
+                    "locationInPrimarySource": "Meta.Disease",
+                    "examplesInPrimarySource": None,
+                    "mappingRules": [
+                        {
+                            "forValues": ["07"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Rheinland-Pfalz",
+                                    "url": "http://landesrecht.rlp.de/jportal/portal/page/bsrlpprod.psml?doc.id=jlr-IfSGMeldpflVRPpP1%3Ajuris-lr00&showdoccase=1&doc.hl=1&documentnumber=1",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["09"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Bayern",
+                                    "url": "https://www.gesetze-bayern.de/Content/Document/BayMeldePflV/true",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["10"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Saarland",
+                                    "url": "https://www.saarland.de/msgff/DE/portale/gesundheitundpraevention/leistungenabisz/gesundheitsschutz/infektionsschutzgesetz/infektionsschutzgesetz.html",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["11"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Berlin",
+                                    "url": "https://gesetze.berlin.de/bsbe/document/jlr-IfSGMeldpflVBEpP1",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["12"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Brandenburg",
+                                    "url": "https://bravors.brandenburg.de/verordnungen/infkrankmv_2016",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["13"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Mecklenburg-Vorpommern",
+                                    "url": "https://www.landesrecht-mv.de/bsmv/document/jlr-InfSchAGMVrahmen",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["14"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Sachsen",
+                                    "url": "https://www.revosax.sachsen.de/vorschrift/1307-IfSGMeldeVO",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["15"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Sachsen-Anhalt",
+                                    "url": "https://www.landesrecht.sachsen-anhalt.de/bsst/document/jlr-IfSGMeldpflVST2005rahmen",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["16"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Thüringen",
+                                    "url": "https://landesrecht.thueringen.de/bsth/document/jlr-IfKrMeldAnpVTHrahmen",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                    ],
+                    "comment": None,
+                }
+            ],
+            "hasLegalBasis": [
+                {
+                    "fieldInPrimarySource": "n/a",
+                    "locationInPrimarySource": None,
+                    "examplesInPrimarySource": None,
+                    "mappingRules": [
+                        {
+                            "forValues": None,
+                            "setValues": [
+                                {
+                                    "value": "Infektionsschutzgesetz (IfSG)",
+                                    "language": "de",
+                                },
+                                {
+                                    "value": "German Federal Law on the Prevention of Infectious Diseases (IfSG)",
+                                    "language": "en",
+                                },
+                            ],
+                            "rule": None,
+                        }
+                    ],
+                    "comment": None,
+                }
+            ],
+            "hasPersonalData": [
+                {
+                    "fieldInPrimarySource": "n/a",
+                    "locationInPrimarySource": None,
+                    "examplesInPrimarySource": None,
+                    "mappingRules": [
+                        {
+                            "forValues": None,
+                            "setValues": [PersonalData["PERSONAL_DATA"]],
+                            "rule": None,
+                        }
+                    ],
+                    "comment": None,
+                }
+            ],
             "identifierInPrimarySource": [
                 {
                     "fieldInPrimarySource": "InBundesland",
@@ -1144,6 +1505,21 @@ def resource_states() -> list[dict[str, Any]]:
                     ],
                 },
             ],
+            "resourceCreationMethod": [
+                {
+                    "fieldInPrimarySource": "n/a",
+                    "locationInPrimarySource": None,
+                    "examplesInPrimarySource": None,
+                    "mappingRules": [
+                        {
+                            "forValues": None,
+                            "setValues": [ResourceCreationMethod["SURVEILLANCE"]],
+                            "rule": None,
+                        }
+                    ],
+                    "comment": None,
+                }
+            ],
             "resourceTypeGeneral": [
                 {
                     "comment": "Public Health Fachdaten",
@@ -1151,7 +1527,7 @@ def resource_states() -> list[dict[str, Any]]:
                     "mappingRules": [
                         {
                             "setValues": [
-                                "https://mex.rki.de/item/resource-type-general-1"
+                                "https://mex.rki.de/item/resource-type-general-13"
                             ]
                         }
                     ],
@@ -1266,8 +1642,7 @@ def resource_states() -> list[dict[str, Any]]:
                     "comment": "Meldewesen, Infektionskrankheiten",
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
-                        {"setValues": ["https://mex.rki.de/item/theme-17"]},
-                        {"setValues": ["https://mex.rki.de/item/theme-2"]},
+                        {"setValues": ["https://mex.rki.de/item/theme-11"]},
                     ],
                 }
             ],
@@ -1416,7 +1791,169 @@ def resource_diseases() -> list[dict[str, Any]]:
                     ],
                 }
             ],
-            "description": [],
+            "documentation": [
+                {
+                    "fieldInPrimarySource": "InBundesland",
+                    "locationInPrimarySource": "Meta.Disease",
+                    "examplesInPrimarySource": None,
+                    "mappingRules": [
+                        {
+                            "forValues": ["07"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Rheinland-Pfalz",
+                                    "url": "http://landesrecht.rlp.de/jportal/portal/page/bsrlpprod.psml?doc.id=jlr-IfSGMeldpflVRPpP1%3Ajuris-lr00&showdoccase=1&doc.hl=1&documentnumber=1",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["09"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Bayern",
+                                    "url": "https://www.gesetze-bayern.de/Content/Document/BayMeldePflV/true",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["10"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Saarland",
+                                    "url": "https://www.saarland.de/msgff/DE/portale/gesundheitundpraevention/leistungenabisz/gesundheitsschutz/infektionsschutzgesetz/infektionsschutzgesetz.html",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["11"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Berlin",
+                                    "url": "https://gesetze.berlin.de/bsbe/document/jlr-IfSGMeldpflVBEpP1",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["12"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Brandenburg",
+                                    "url": "https://bravors.brandenburg.de/verordnungen/infkrankmv_2016",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["13"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Mecklenburg-Vorpommern",
+                                    "url": "https://www.landesrecht-mv.de/bsmv/document/jlr-InfSchAGMVrahmen",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["14"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Sachsen",
+                                    "url": "https://www.revosax.sachsen.de/vorschrift/1307-IfSGMeldeVO",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["15"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Sachsen-Anhalt",
+                                    "url": "https://www.landesrecht.sachsen-anhalt.de/bsst/document/jlr-IfSGMeldpflVST2005rahmen",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["16"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Thüringen",
+                                    "url": "https://landesrecht.thueringen.de/bsth/document/jlr-IfKrMeldAnpVTHrahmen",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                    ],
+                    "comment": None,
+                }
+            ],
+            "hasLegalBasis": [
+                {
+                    "fieldInPrimarySource": "n/a",
+                    "locationInPrimarySource": None,
+                    "examplesInPrimarySource": None,
+                    "mappingRules": [
+                        {
+                            "forValues": None,
+                            "setValues": [
+                                {
+                                    "value": "Infektionsschutzgesetz (IfSG)",
+                                    "language": "de",
+                                },
+                                {
+                                    "value": "German Federal Law on the Prevention of Infectious Diseases (IfSG)",
+                                    "language": "en",
+                                },
+                            ],
+                            "rule": None,
+                        }
+                    ],
+                    "comment": None,
+                }
+            ],
+            "hasPersonalData": [
+                {
+                    "fieldInPrimarySource": "n/a",
+                    "locationInPrimarySource": None,
+                    "examplesInPrimarySource": None,
+                    "mappingRules": [
+                        {
+                            "forValues": None,
+                            "setValues": [PersonalData["PERSONAL_DATA"]],
+                            "rule": None,
+                        }
+                    ],
+                    "comment": None,
+                }
+            ],
+            "icd10code": [
+                {
+                    "fieldInPrimarySource": "ICD10Code",
+                    "locationInPrimarySource": "Meta.Disease",
+                    "examplesInPrimarySource": ["A22"],
+                    "mappingRules": [
+                        {
+                            "forValues": None,
+                            "setValues": None,
+                            "rule": "Extract original value.",
+                        }
+                    ],
+                    "comment": None,
+                }
+            ],
             "identifierInPrimarySource": [
                 {
                     "examplesInPrimarySource": ["102"],
@@ -1557,39 +2094,23 @@ def resource_diseases() -> list[dict[str, Any]]:
             ],
             "keyword": [
                 {
-                    "examplesInPrimarySource": ["Milzbrand", "Borreliose"],
-                    "fieldInPrimarySource": "DiseaseName",
-                    "locationInPrimarySource": "Meta.Disease",
                     "mappingRules": [
                         {
-                            "rule": "Assign 'de' as default for the "
-                            "language property of the text "
-                            "object."
-                        }
-                    ],
-                },
-                {
-                    "examplesInPrimarySource": ["Anthrax", "Lyme disease"],
-                    "fieldInPrimarySource": "DiseaseNameEN",
-                    "locationInPrimarySource": "Meta.Disease",
-                    "mappingRules": [
+                            "forValues": None,
+                            "setValues": [
+                                {"value": "Infektionsschutzgesetz", "language": "de"}
+                            ],
+                            "rule": None,
+                        },
                         {
-                            "rule": "Assign 'en' as default for the "
-                            "language property of the text "
-                            "object."
-                        }
+                            "forValues": None,
+                            "setValues": [
+                                {"value": "Infektionsschutz", "language": "de"}
+                            ],
+                            "rule": None,
+                        },
                     ],
-                },
-                {
-                    "examplesInPrimarySource": [
-                        "Bacillus anthracis",
-                        "Borelia burgdorferi",
-                    ],
-                    "fieldInPrimarySource": "SpecimenName",
-                    "locationInPrimarySource": "Meta.Disease",
-                    "mappingRules": [
-                        {"rule": "Use value as it is. Use language detection."}
-                    ],
+                    "comment": None,
                 },
             ],
             "language": [
@@ -1617,6 +2138,21 @@ def resource_diseases() -> list[dict[str, Any]]:
                     ],
                 }
             ],
+            "resourceCreationMethod": [
+                {
+                    "fieldInPrimarySource": "n/a",
+                    "locationInPrimarySource": None,
+                    "examplesInPrimarySource": None,
+                    "mappingRules": [
+                        {
+                            "forValues": None,
+                            "setValues": [ResourceCreationMethod["SURVEILLANCE"]],
+                            "rule": None,
+                        }
+                    ],
+                    "comment": None,
+                }
+            ],
             "resourceTypeGeneral": [
                 {
                     "comment": "Public Health Fachdaten",
@@ -1624,7 +2160,7 @@ def resource_diseases() -> list[dict[str, Any]]:
                     "mappingRules": [
                         {
                             "setValues": [
-                                "https://mex.rki.de/item/resource-type-general-1"
+                                "https://mex.rki.de/item/resource-type-general-13"
                             ]
                         }
                     ],
@@ -1714,8 +2250,7 @@ def resource_diseases() -> list[dict[str, Any]]:
                     "mappingRules": [
                         {
                             "setValues": [
-                                "https://mex.rki.de/item/theme-17",
-                                "https://mex.rki.de/item/theme-2",
+                                "https://mex.rki.de/item/theme-11",
                             ]
                         }
                     ],
@@ -1792,7 +2327,154 @@ def resource_diseases() -> list[dict[str, Any]]:
                     ],
                 }
             ],
-            "description": [],
+            "documentation": [
+                {
+                    "fieldInPrimarySource": "InBundesland",
+                    "locationInPrimarySource": "Meta.Disease",
+                    "examplesInPrimarySource": None,
+                    "mappingRules": [
+                        {
+                            "forValues": ["07"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Rheinland-Pfalz",
+                                    "url": "http://landesrecht.rlp.de/jportal/portal/page/bsrlpprod.psml?doc.id=jlr-IfSGMeldpflVRPpP1%3Ajuris-lr00&showdoccase=1&doc.hl=1&documentnumber=1",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["09"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Bayern",
+                                    "url": "https://www.gesetze-bayern.de/Content/Document/BayMeldePflV/true",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["10"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Saarland",
+                                    "url": "https://www.saarland.de/msgff/DE/portale/gesundheitundpraevention/leistungenabisz/gesundheitsschutz/infektionsschutzgesetz/infektionsschutzgesetz.html",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["11"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Berlin",
+                                    "url": "https://gesetze.berlin.de/bsbe/document/jlr-IfSGMeldpflVBEpP1",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["12"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Brandenburg",
+                                    "url": "https://bravors.brandenburg.de/verordnungen/infkrankmv_2016",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["13"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Mecklenburg-Vorpommern",
+                                    "url": "https://www.landesrecht-mv.de/bsmv/document/jlr-InfSchAGMVrahmen",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["14"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Sachsen",
+                                    "url": "https://www.revosax.sachsen.de/vorschrift/1307-IfSGMeldeVO",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["15"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Sachsen-Anhalt",
+                                    "url": "https://www.landesrecht.sachsen-anhalt.de/bsst/document/jlr-IfSGMeldpflVST2005rahmen",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["16"],
+                            "setValues": [
+                                {
+                                    "language": "de",
+                                    "title": "Thüringen",
+                                    "url": "https://landesrecht.thueringen.de/bsth/document/jlr-IfKrMeldAnpVTHrahmen",
+                                }
+                            ],
+                            "rule": None,
+                        },
+                    ],
+                    "comment": None,
+                }
+            ],
+            "hasLegalBasis": [
+                {
+                    "fieldInPrimarySource": "n/a",
+                    "locationInPrimarySource": None,
+                    "examplesInPrimarySource": None,
+                    "mappingRules": [
+                        {
+                            "forValues": None,
+                            "setValues": [
+                                {
+                                    "value": "Infektionsschutzgesetz (IfSG)",
+                                    "language": "de",
+                                },
+                                {
+                                    "value": "German Federal Law on the Prevention of Infectious Diseases (IfSG)",
+                                    "language": "en",
+                                },
+                            ],
+                            "rule": None,
+                        }
+                    ],
+                    "comment": None,
+                }
+            ],
+            "hasPersonalData": [
+                {
+                    "fieldInPrimarySource": "n/a",
+                    "locationInPrimarySource": None,
+                    "examplesInPrimarySource": None,
+                    "mappingRules": [
+                        {
+                            "forValues": None,
+                            "setValues": [PersonalData["PERSONAL_DATA"]],
+                            "rule": None,
+                        }
+                    ],
+                    "comment": None,
+                }
+            ],
             "identifierInPrimarySource": [
                 {
                     "examplesInPrimarySource": ["102"],
@@ -1933,39 +2615,23 @@ def resource_diseases() -> list[dict[str, Any]]:
             ],
             "keyword": [
                 {
-                    "examplesInPrimarySource": ["Milzbrand", "Borreliose"],
-                    "fieldInPrimarySource": "DiseaseName",
-                    "locationInPrimarySource": "Meta.Disease",
                     "mappingRules": [
                         {
-                            "rule": "Assign 'de' as default for the "
-                            "language property of the text "
-                            "object."
-                        }
-                    ],
-                },
-                {
-                    "examplesInPrimarySource": ["Anthrax", "Lyme disease"],
-                    "fieldInPrimarySource": "DiseaseNameEN",
-                    "locationInPrimarySource": "Meta.Disease",
-                    "mappingRules": [
+                            "forValues": None,
+                            "setValues": [
+                                {"value": "Infektionsschutzgesetz", "language": "de"}
+                            ],
+                            "rule": None,
+                        },
                         {
-                            "rule": "Assign 'en' as default for the "
-                            "language property of the text "
-                            "object."
-                        }
+                            "forValues": None,
+                            "setValues": [
+                                {"value": "Infektionsschutz", "language": "de"}
+                            ],
+                            "rule": None,
+                        },
                     ],
-                },
-                {
-                    "examplesInPrimarySource": [
-                        "Bacillus anthracis",
-                        "Borelia burgdorferi",
-                    ],
-                    "fieldInPrimarySource": "SpecimenName",
-                    "locationInPrimarySource": "Meta.Disease",
-                    "mappingRules": [
-                        {"rule": "Use value as it is. Use language detection."}
-                    ],
+                    "comment": None,
                 },
             ],
             "language": [
@@ -1993,6 +2659,21 @@ def resource_diseases() -> list[dict[str, Any]]:
                     ],
                 }
             ],
+            "resourceCreationMethod": [
+                {
+                    "fieldInPrimarySource": "n/a",
+                    "locationInPrimarySource": None,
+                    "examplesInPrimarySource": None,
+                    "mappingRules": [
+                        {
+                            "forValues": None,
+                            "setValues": [ResourceCreationMethod["SURVEILLANCE"]],
+                            "rule": None,
+                        }
+                    ],
+                    "comment": None,
+                }
+            ],
             "resourceTypeGeneral": [
                 {
                     "comment": "Public Health Fachdaten",
@@ -2000,7 +2681,7 @@ def resource_diseases() -> list[dict[str, Any]]:
                     "mappingRules": [
                         {
                             "setValues": [
-                                "https://mex.rki.de/item/resource-type-general-1"
+                                "https://mex.rki.de/item/resource-type-general-13"
                             ]
                         }
                     ],
@@ -2090,8 +2771,7 @@ def resource_diseases() -> list[dict[str, Any]]:
                     "mappingRules": [
                         {
                             "setValues": [
-                                "https://mex.rki.de/item/theme-17",
-                                "https://mex.rki.de/item/theme-2",
+                                "https://mex.rki.de/item/theme-11",
                             ]
                         }
                     ],
@@ -2173,29 +2853,14 @@ def extracted_ifsg_resource_parent() -> ExtractedResource:
         isPartOf=[],
         keyword=[Text(value="Infektionsschutzgesetz", language=TextLanguage.DE)],
         language=["https://mex.rki.de/item/language-1"],
-        license=None,
-        loincId=[],
-        meshId=[],
-        method=[],
-        methodDescription=[],
-        modified=None,
-        publication=[
-            Link(
-                language=LinkLanguage.DE,
-                title="Infektionsepidemiologisches Jahrbuch",
-                url="https://www.rki.de/DE/Content/Infekt/Jahrbuch/jahrbuch_node.html",
-            )
-        ],
-        publisher=[],
-        qualityInformation=[],
-        resourceTypeGeneral=["https://mex.rki.de/item/resource-type-general-1"],
+        resourceTypeGeneral=["https://mex.rki.de/item/resource-type-general-13"],
         resourceTypeSpecific=[Text(value="Meldedaten", language=TextLanguage.DE)],
         rights=[Text(value="Gesundheitsdaten.", language=TextLanguage.DE)],
         sizeOfDataBasis=None,
         spatial=[Text(value="Deutschland", language=TextLanguage.DE)],
         stateOfDataProcessing=[],
         temporal=None,
-        theme=["https://mex.rki.de/item/theme-17"],
+        theme=["https://mex.rki.de/item/theme-11"],
         title=[
             Text(
                 value="Meldedaten nach Infektionsschutzgesetz (IfSG)",
@@ -2234,39 +2899,14 @@ def extracted_ifsg_resource_state() -> list[ExtractedResource]:
             isPartOf=["eMzHOpNx0evkZAHMle6ZKd"],
             keyword=[Text(value="Infektionsschutzgesetz", language=TextLanguage.DE)],
             language=["https://mex.rki.de/item/language-1"],
-            license=None,
-            loincId=[],
-            meshId=[],
-            method=[],
-            methodDescription=[],
-            modified=None,
-            publication=[
-                Link(
-                    language=LinkLanguage.DE,
-                    title="Infektionsepidemiologisches Jahrbuch",
-                    url="https://www.rki.de/DE/Content/Infekt/Jahrbuch/jahrbuch_node.html",
-                ),
-                Link(
-                    language=LinkLanguage.DE,
-                    title="Epidemiologisches Bulletin",
-                    url="https://www.rki.de/DE/Content/Infekt/EpidBull/epid_bull_node.html",
-                ),
-                Link(
-                    language=LinkLanguage.DE,
-                    title="Falldefinitionen",
-                    url="https://www.rki.de/DE/Content/Infekt/IfSG/Falldefinition/falldefinition_node.html",
-                ),
-            ],
-            publisher=[],
-            qualityInformation=[],
-            resourceTypeGeneral=["https://mex.rki.de/item/resource-type-general-1"],
+            resourceTypeGeneral=["https://mex.rki.de/item/resource-type-general-13"],
             resourceTypeSpecific=[Text(value="Meldedaten", language=TextLanguage.DE)],
             rights=[Text(value="Gesundheitsdaten.", language=TextLanguage.DE)],
             sizeOfDataBasis=None,
             spatial=[Text(value="Schleswig-Holstein", language=TextLanguage.DE)],
             stateOfDataProcessing=[],
             temporal=None,
-            theme=["https://mex.rki.de/item/theme-17"],
+            theme=["https://mex.rki.de/item/theme-11"],
             title=[Text(value="Schleswig-Holstein", language=TextLanguage.DE)],
             unitInCharge=["bFQoRhcVH5DHU7"],
             wasGeneratedBy=None,
@@ -2295,39 +2935,14 @@ def extracted_ifsg_resource_state() -> list[ExtractedResource]:
             isPartOf=["eMzHOpNx0evkZAHMle6ZKd"],
             keyword=[Text(value="Infektionsschutzgesetz", language=TextLanguage.DE)],
             language=["https://mex.rki.de/item/language-1"],
-            license=None,
-            loincId=[],
-            meshId=[],
-            method=[],
-            methodDescription=[],
-            modified=None,
-            publication=[
-                Link(
-                    language=LinkLanguage.DE,
-                    title="Infektionsepidemiologisches Jahrbuch",
-                    url="https://www.rki.de/DE/Content/Infekt/Jahrbuch/jahrbuch_node.html",
-                ),
-                Link(
-                    language=LinkLanguage.DE,
-                    title="Epidemiologisches Bulletin",
-                    url="https://www.rki.de/DE/Content/Infekt/EpidBull/epid_bull_node.html",
-                ),
-                Link(
-                    language=LinkLanguage.DE,
-                    title="Falldefinitionen",
-                    url="https://www.rki.de/DE/Content/Infekt/IfSG/Falldefinition/falldefinition_node.html",
-                ),
-            ],
-            publisher=[],
-            qualityInformation=[],
-            resourceTypeGeneral=["https://mex.rki.de/item/resource-type-general-1"],
+            resourceTypeGeneral=["https://mex.rki.de/item/resource-type-general-13"],
             resourceTypeSpecific=[Text(value="Meldedaten", language=TextLanguage.DE)],
             rights=[Text(value="Gesundheitsdaten.", language=TextLanguage.DE)],
             sizeOfDataBasis=None,
             spatial=[Text(value="Hamburg", language=TextLanguage.DE)],
             stateOfDataProcessing=[],
             temporal=None,
-            theme=["https://mex.rki.de/item/theme-17"],
+            theme=["https://mex.rki.de/item/theme-11"],
             title=[Text(value="Hamburg", language=TextLanguage.DE)],
             unitInCharge=["bFQoRhcVH5DHU7"],
             wasGeneratedBy=None,
@@ -2356,39 +2971,14 @@ def extracted_ifsg_resource_state() -> list[ExtractedResource]:
             isPartOf=["eMzHOpNx0evkZAHMle6ZKd"],
             keyword=[Text(value="Infektionsschutzgesetz", language=TextLanguage.DE)],
             language=["https://mex.rki.de/item/language-1"],
-            license=None,
-            loincId=[],
-            meshId=[],
-            method=[],
-            methodDescription=[],
-            modified=None,
-            publication=[
-                Link(
-                    language=LinkLanguage.DE,
-                    title="Infektionsepidemiologisches Jahrbuch",
-                    url="https://www.rki.de/DE/Content/Infekt/Jahrbuch/jahrbuch_node.html",
-                ),
-                Link(
-                    language=LinkLanguage.DE,
-                    title="Epidemiologisches Bulletin",
-                    url="https://www.rki.de/DE/Content/Infekt/EpidBull/epid_bull_node.html",
-                ),
-                Link(
-                    language=LinkLanguage.DE,
-                    title="Falldefinitionen",
-                    url="https://www.rki.de/DE/Content/Infekt/IfSG/Falldefinition/falldefinition_node.html",
-                ),
-            ],
-            publisher=[],
-            qualityInformation=[],
-            resourceTypeGeneral=["https://mex.rki.de/item/resource-type-general-1"],
+            resourceTypeGeneral=["https://mex.rki.de/item/resource-type-general-13"],
             resourceTypeSpecific=[Text(value="Meldedaten", language=TextLanguage.DE)],
             rights=[Text(value="Gesundheitsdaten.", language=TextLanguage.DE)],
             sizeOfDataBasis=None,
             spatial=[Text(value="Schleswig-Holstein", language=TextLanguage.DE)],
             stateOfDataProcessing=[],
             temporal=None,
-            theme=["https://mex.rki.de/item/theme-17"],
+            theme=["https://mex.rki.de/item/theme-11"],
             title=[Text(value="Schleswig-Holstein", language=TextLanguage.DE)],
             unitInCharge=["bFQoRhcVH5DHU7"],
             wasGeneratedBy=None,
@@ -2417,39 +3007,14 @@ def extracted_ifsg_resource_state() -> list[ExtractedResource]:
             isPartOf=["eMzHOpNx0evkZAHMle6ZKd"],
             keyword=[Text(value="Infektionsschutzgesetz", language=TextLanguage.DE)],
             language=["https://mex.rki.de/item/language-1"],
-            license=None,
-            loincId=[],
-            meshId=[],
-            method=[],
-            methodDescription=[],
-            modified=None,
-            publication=[
-                Link(
-                    language=LinkLanguage.DE,
-                    title="Infektionsepidemiologisches Jahrbuch",
-                    url="https://www.rki.de/DE/Content/Infekt/Jahrbuch/jahrbuch_node.html",
-                ),
-                Link(
-                    language=LinkLanguage.DE,
-                    title="Epidemiologisches Bulletin",
-                    url="https://www.rki.de/DE/Content/Infekt/EpidBull/epid_bull_node.html",
-                ),
-                Link(
-                    language=LinkLanguage.DE,
-                    title="Falldefinitionen",
-                    url="https://www.rki.de/DE/Content/Infekt/IfSG/Falldefinition/falldefinition_node.html",
-                ),
-            ],
-            publisher=[],
-            qualityInformation=[],
-            resourceTypeGeneral=["https://mex.rki.de/item/resource-type-general-1"],
+            resourceTypeGeneral=["https://mex.rki.de/item/resource-type-general-13"],
             resourceTypeSpecific=[Text(value="Meldedaten", language=TextLanguage.DE)],
             rights=[Text(value="Gesundheitsdaten.", language=TextLanguage.DE)],
             sizeOfDataBasis=None,
             spatial=[Text(value="Hamburg", language=TextLanguage.DE)],
             stateOfDataProcessing=[],
             temporal=None,
-            theme=["https://mex.rki.de/item/theme-17"],
+            theme=["https://mex.rki.de/item/theme-11"],
             title=[Text(value="Hamburg", language=TextLanguage.DE)],
             unitInCharge=["bFQoRhcVH5DHU7"],
             wasGeneratedBy=None,
@@ -2493,22 +3058,7 @@ def extracted_ifsg_resource_disease() -> list[ExtractedResource]:
                 Text(value="virus", language=None),
             ],
             language=["https://mex.rki.de/item/language-1"],
-            license=None,
-            loincId=[],
-            meshId=[],
-            method=[],
-            methodDescription=[],
-            modified=None,
-            publication=[
-                Link(
-                    language=LinkLanguage.DE,
-                    title="Falldefinitionen",
-                    url="https://www.rki.de/DE/Content/Infekt/IfSG/Falldefinition/falldefinition_node.html",
-                )
-            ],
-            publisher=[],
-            qualityInformation=[],
-            resourceTypeGeneral=["https://mex.rki.de/item/resource-type-general-1"],
+            resourceTypeGeneral=["https://mex.rki.de/item/resource-type-general-13"],
             resourceTypeSpecific=[Text(value="Meldedaten", language=TextLanguage.DE)],
             rights=[Text(value="Gesundheitsdaten.", language=TextLanguage.DE)],
             sizeOfDataBasis=None,
@@ -2516,8 +3066,7 @@ def extracted_ifsg_resource_disease() -> list[ExtractedResource]:
             stateOfDataProcessing=[],
             temporal=None,
             theme=[
-                "https://mex.rki.de/item/theme-17",
-                "https://mex.rki.de/item/theme-2",
+                "https://mex.rki.de/item/theme-11",
             ],
             title=[Text(value="virus", language=None)],
             unitInCharge=["bFQoRhcVH5DHU7"],
