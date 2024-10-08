@@ -237,6 +237,7 @@ def transform_resource_disease_to_mex_resource(
     extracted_primary_source: ExtractedPrimarySource,
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     extracted_organization_rki: ExtractedOrganization,
+    max_id_schema: int,
 ) -> list[ExtractedResource]:
     """Transform resource disease to mex resource.
 
@@ -251,6 +252,7 @@ def transform_resource_disease_to_mex_resource(
         unit_stable_target_ids_by_synonym: mapping unit synonyms to
                                            MergedOrganizationalUnitIdentifier
         extracted_organization_rki: extracted organization for RKI
+        max_id_schema: latest id schema
 
     Returns:
         transform resource disease to ExtractedResource list
@@ -277,6 +279,7 @@ def transform_resource_disease_to_mex_resource(
             code_by_id_type,
             unit_stable_target_ids_by_synonym,
             extracted_organization_rki,
+            max_id_schema,
         )
         for id_type in id_type_of_diseases
     ]
@@ -293,6 +296,7 @@ def transform_resource_disease_to_mex_resource_row(
     code_by_id_type: dict[int, str],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     extracted_organization_rki: ExtractedOrganization,
+    max_id_schema: int,
 ) -> ExtractedResource:
     """Transform resource disease row to mex resource.
 
@@ -308,6 +312,7 @@ def transform_resource_disease_to_mex_resource_row(
         unit_stable_target_ids_by_synonym: mapping unit synonyms to
                                            MergedOrganizationalUnitIdentifier
         extracted_organization_rki: extracted organization for RKI
+        max_id_schema: latest id schema
 
     Returns:
         transform resource disease row to ExtractedResource
@@ -367,7 +372,7 @@ def transform_resource_disease_to_mex_resource_row(
             "setValues"
         ],
         icd10code=[i for i in icd10code if i],
-        identifierInPrimarySource=str(id_type),
+        identifierInPrimarySource=f"Meta.Disease_{id_type}_{max_id_schema}",
         instrumentToolOrApparatus=instrument_tool_or_apparatus,
         isPartOf=is_part_of,
         keyword=keyword,
@@ -447,6 +452,7 @@ def transform_ifsg_data_to_mex_variables(
     meta_catalogue2item2schema: list[MetaCatalogue2Item2Schema],
     meta_item: list[MetaItem],
     meta_datatype: list[MetaDataType],
+    max_id_schema: int,
 ) -> list[ExtractedVariable]:
     """Transform ifsg data to mex Variable.
 
@@ -459,6 +465,7 @@ def transform_ifsg_data_to_mex_variables(
         meta_catalogue2item2schema: MetaCatalogue2Item2Schema list
         meta_item: MetaItem list
         meta_datatype: MetaDataType list
+        max_id_schema: latest id schema
 
     Returns:
         transform filtered variable to extracted variables
@@ -509,7 +516,7 @@ def transform_ifsg_data_to_mex_variables(
                 description=row.gui_tool_tip,
                 dataType=data_type_by_id[row.id_data_type],
                 hadPrimarySource=extracted_primary_sources_ifsg.stableTargetId,
-                identifierInPrimarySource=str(row.id_field),
+                identifierInPrimarySource=f"Meta.Field_{row.id_field}_{max_id_schema}",
                 label=f"{row.gui_text} (berechneter Wert)",
                 usedIn=used_in,
                 valueSet=value_set,

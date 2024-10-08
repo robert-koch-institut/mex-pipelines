@@ -64,6 +64,7 @@ def mocked_ifsg_sql_tables() -> dict[type[BaseModel], list[dict[str, Any]]]:
         MetaDisease: [
             {
                 "IdType": 101,
+                "IdSchema": 1,
                 "DiseaseName": "virus",
                 "DiseaseNameEN": "Epidemic",
                 "SpecimenName": "virus",
@@ -78,6 +79,7 @@ def mocked_ifsg_sql_tables() -> dict[type[BaseModel], list[dict[str, Any]]]:
             },
             {
                 "IdType": 101,
+                "IdSchema": 1,
                 "DiseaseName": "virus",
                 "DiseaseNameEN": "Epidemic",
                 "SpecimenName": "virus",

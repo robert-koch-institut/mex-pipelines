@@ -117,6 +117,7 @@ def meta_disease() -> list[MetaDisease]:
     return [
         MetaDisease(
             IdType=101,
+            IdSchema=1,
             DiseaseName="virus",
             DiseaseNameEN="Epidemic",
             SpecimenName="virus",
@@ -131,6 +132,7 @@ def meta_disease() -> list[MetaDisease]:
         ),
         MetaDisease(
             IdType=102,
+            IdSchema=1,
             DiseaseName="virus",
             DiseaseNameEN="Epidemic",
             SpecimenName="virus",
@@ -145,6 +147,7 @@ def meta_disease() -> list[MetaDisease]:
         ),
         MetaDisease(
             IdType=103,
+            IdSchema=1,
             DiseaseName="virus",
             DiseaseNameEN="Epidemic",
             SpecimenName="virus",

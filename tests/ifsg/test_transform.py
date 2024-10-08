@@ -202,13 +202,14 @@ def test_transform_resource_disease_to_mex_resource(
             extracted_primary_sources_ifsg,
             unit_stable_target_ids,
             extracted_organization_rki,
+            1,
         )
         for resource_disease in resource_diseases
     ]
     expected = {
         "identifier": Joker(),
         "hadPrimarySource": str(extracted_primary_sources_ifsg.stableTargetId),
-        "identifierInPrimarySource": "101",
+        "identifierInPrimarySource": "Meta.Disease_101_1",
         "stableTargetId": Joker(),
         "accessRestriction": "https://mex.rki.de/item/access-restriction-2",
         "accrualPeriodicity": "https://mex.rki.de/item/frequency-17",
@@ -316,20 +317,21 @@ def test_transform_ifsg_data_to_mex_variable(
         meta_catalogue2item2schema,
         meta_item,
         meta_datatype,
+        1,
     )
 
     expected = {
         "identifier": Joker(),
-        "hadPrimarySource": extracted_primary_sources_ifsg.stableTargetId,
+        "hadPrimarySource": str(extracted_primary_sources_ifsg.stableTargetId),
         "dataType": "DummyType",
-        "identifierInPrimarySource": "1",
+        "identifierInPrimarySource": "Meta.Field_1_1",
         "stableTargetId": Joker(),
-        "belongsTo": [extracted_ifsg_variable_group[0].stableTargetId],
+        "belongsTo": [str(extracted_ifsg_variable_group[0].stableTargetId)],
         "description": [{"value": "lokaler"}],
         "label": [
             {"value": "Id der Version (berechneter Wert)", "language": TextLanguage.DE}
         ],
-        "usedIn": [extracted_ifsg_resource_disease[0].stableTargetId],
+        "usedIn": [str(extracted_ifsg_resource_disease[0].stableTargetId)],
         "valueSet": ["NullItem", "NullItem2"],
     }
     assert extracted_variable[0].model_dump(exclude_defaults=True) == expected
