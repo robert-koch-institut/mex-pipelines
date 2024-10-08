@@ -25,6 +25,7 @@ from mex.extractors.ifsg.models.meta_catalogue2item import MetaCatalogue2Item
 from mex.extractors.ifsg.models.meta_catalogue2item2schema import (
     MetaCatalogue2Item2Schema,
 )
+from mex.extractors.ifsg.models.meta_datatype import MetaDataType
 from mex.extractors.ifsg.models.meta_disease import MetaDisease
 from mex.extractors.ifsg.models.meta_field import MetaField
 from mex.extractors.ifsg.models.meta_item import MetaItem
@@ -61,6 +62,12 @@ def extracted_primary_sources_ifsg(
 def meta_catalogue2item() -> list[MetaCatalogue2Item]:
     """Extract `Catalogue2Item` table."""
     return extract_sql_table(MetaCatalogue2Item)
+
+
+@asset(group_name="ifsg")
+def meta_datatype() -> list[MetaDataType]:
+    """Extract `MetaDataType` table."""
+    return extract_sql_table(MetaDataType)
 
 
 @asset(group_name="ifsg")
@@ -281,6 +288,7 @@ def extracted_ifsg_variable(
     meta_catalogue2item: list[MetaCatalogue2Item],
     meta_catalogue2item2schema: list[MetaCatalogue2Item2Schema],
     meta_item: list[MetaItem],
+    meta_datatype: list[MetaDataType],
 ) -> None:
     """Extracted and loaded ifsg variable."""
     extracted_variables = transform_ifsg_data_to_mex_variables(
@@ -291,6 +299,7 @@ def extracted_ifsg_variable(
         meta_catalogue2item,
         meta_catalogue2item2schema,
         meta_item,
+        meta_datatype,
     )
     load(extracted_variables)
 

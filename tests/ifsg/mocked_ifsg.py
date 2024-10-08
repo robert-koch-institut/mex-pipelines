@@ -10,6 +10,7 @@ from mex.extractors.ifsg.models.meta_catalogue2item import MetaCatalogue2Item
 from mex.extractors.ifsg.models.meta_catalogue2item2schema import (
     MetaCatalogue2Item2Schema,
 )
+from mex.extractors.ifsg.models.meta_datatype import MetaDataType
 from mex.extractors.ifsg.models.meta_disease import MetaDisease
 from mex.extractors.ifsg.models.meta_field import MetaField
 from mex.extractors.ifsg.models.meta_item import MetaItem
@@ -59,6 +60,7 @@ def mocked_ifsg_sql_tables() -> dict[type[BaseModel], list[dict[str, Any]]]:
                 "IdCatalogue2Item": 1,
             },
         ],
+        MetaDataType: [{"IdDataType": 0, "DataTypeName": "DummyType"}],
         MetaDisease: [
             {
                 "IdType": 101,

@@ -16,6 +16,7 @@ from mex.extractors.ifsg.models.meta_catalogue2item import MetaCatalogue2Item
 from mex.extractors.ifsg.models.meta_catalogue2item2schema import (
     MetaCatalogue2Item2Schema,
 )
+from mex.extractors.ifsg.models.meta_datatype import MetaDataType
 from mex.extractors.ifsg.models.meta_disease import MetaDisease
 from mex.extractors.ifsg.models.meta_field import MetaField
 from mex.extractors.ifsg.models.meta_item import MetaItem
@@ -304,6 +305,7 @@ def test_transform_ifsg_data_to_mex_variable(
     meta_catalogue2item: list[MetaCatalogue2Item],
     meta_catalogue2item2schema: list[MetaCatalogue2Item2Schema],
     meta_item: list[MetaItem],
+    meta_datatype: list[MetaDataType],
 ) -> None:
     extracted_variable = transform_ifsg_data_to_mex_variables(
         meta_field,
@@ -313,11 +315,13 @@ def test_transform_ifsg_data_to_mex_variable(
         meta_catalogue2item,
         meta_catalogue2item2schema,
         meta_item,
+        meta_datatype,
     )
 
     expected = {
         "identifier": Joker(),
         "hadPrimarySource": extracted_primary_sources_ifsg.stableTargetId,
+        "dataType": "DummyType",
         "identifierInPrimarySource": "1",
         "stableTargetId": Joker(),
         "belongsTo": [extracted_ifsg_variable_group[0].stableTargetId],

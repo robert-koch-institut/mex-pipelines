@@ -16,6 +16,7 @@ from mex.extractors.ifsg.models.meta_catalogue2item import MetaCatalogue2Item
 from mex.extractors.ifsg.models.meta_catalogue2item2schema import (
     MetaCatalogue2Item2Schema,
 )
+from mex.extractors.ifsg.models.meta_datatype import MetaDataType
 from mex.extractors.ifsg.models.meta_disease import MetaDisease
 from mex.extractors.ifsg.models.meta_field import MetaField
 from mex.extractors.ifsg.models.meta_item import MetaItem
@@ -445,6 +446,7 @@ def transform_ifsg_data_to_mex_variables(
     meta_catalogue2item: list[MetaCatalogue2Item],
     meta_catalogue2item2schema: list[MetaCatalogue2Item2Schema],
     meta_item: list[MetaItem],
+    meta_datatype: list[MetaDataType],
 ) -> list[ExtractedVariable]:
     """Transform ifsg data to mex Variable.
 
@@ -456,10 +458,12 @@ def transform_ifsg_data_to_mex_variables(
         meta_catalogue2item: MetaCatalogue2Item list
         meta_catalogue2item2schema: MetaCatalogue2Item2Schema list
         meta_item: MetaItem list
+        meta_datatype: MetaDataType list
 
     Returns:
         transform filtered variable to extracted variables
     """
+    data_type_by_id = {row.id_data_type: row.data_type_name for row in meta_datatype}
     variable_group_by_identifier_in_primary_source = {
         group.identifierInPrimarySource: group.stableTargetId
         for group in extracted_ifsg_variable_group
@@ -503,6 +507,7 @@ def transform_ifsg_data_to_mex_variables(
             ExtractedVariable(
                 belongsTo=belongs_to,
                 description=row.gui_tool_tip,
+                dataType=data_type_by_id[row.id_data_type],
                 hadPrimarySource=extracted_primary_sources_ifsg.stableTargetId,
                 identifierInPrimarySource=str(row.id_field),
                 label=f"{row.gui_text} (berechneter Wert)",

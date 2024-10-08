@@ -25,6 +25,7 @@ from mex.extractors.ifsg.models.meta_catalogue2item import MetaCatalogue2Item
 from mex.extractors.ifsg.models.meta_catalogue2item2schema import (
     MetaCatalogue2Item2Schema,
 )
+from mex.extractors.ifsg.models.meta_datatype import MetaDataType
 from mex.extractors.ifsg.models.meta_disease import MetaDisease
 from mex.extractors.ifsg.models.meta_field import MetaField
 from mex.extractors.ifsg.models.meta_item import MetaItem
@@ -59,6 +60,11 @@ def meta_catalogue2item2schema() -> list[MetaCatalogue2Item2Schema]:
             IdCatalogue2Item=0,
         )
     ]
+
+
+@pytest.fixture
+def meta_datatype() -> list[MetaDataType]:
+    return [MetaDataType(id_data_type=0, data_type_name="DummyType")]
 
 
 @pytest.fixture
@@ -162,7 +168,7 @@ def meta_field() -> list[MetaField]:
             gui_tool_tip="lokaler",
             id_catalogue=0,
             id_type=101,
-            id_data_type=2,
+            id_data_type=0,
             id_field=1,
             id_field_type=3,
             to_transport=0,
@@ -174,7 +180,7 @@ def meta_field() -> list[MetaField]:
             gui_tool_tip="globaler",
             id_catalogue=-12,
             id_type=101,
-            id_data_type=1,
+            id_data_type=0,
             id_field=2,
             id_field_type=2,
             to_transport=0,
