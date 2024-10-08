@@ -26,7 +26,7 @@ from mex.common.types import (
 class DummyModel(BaseModel):
     no_min: list[str] = []
     has_min: list[bytes] = Field([], min_length=2)
-    has_max: list[bytes] = Field([], min_length=5)
+    has_max: list[bytes] = Field([], max_length=5)
     is_required: int
     is_optional: bool | None = None
     is_union: float | list[float]
@@ -56,7 +56,7 @@ def test_builder_provider_min_max_for_field(faker: Faker) -> None:
         for name, field in DummyModel.model_fields.items()
     }
     assert min_max == {
-        "has_max": (5, 7),
+        "has_max": (0, 5),
         "has_min": (2, 5),
         "is_inner_union": (0, 2),
         "is_nested_pattern": (0, 2),
