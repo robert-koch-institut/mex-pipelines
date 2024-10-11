@@ -30,7 +30,7 @@ def get_extracted_primary_source_id_by_name(
 
 
 # Helper for Wikidata
-def get_extracted_wikidata_organization_id_by_name(
+def get_wikidata_extracted_organization_id_by_name(
     name: str,
 ) -> MergedOrganizationIdentifier | None:
     """Use helper function to look up an organization and return its stableTargetId.
