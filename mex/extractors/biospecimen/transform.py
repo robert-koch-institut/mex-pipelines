@@ -52,6 +52,10 @@ def transform_biospecimen_resource_to_mex_resource(
         activity.identifierInPrimarySource: activity.stableTargetId
         for activity in extracted_synopse_activities
     }
+    access_restriction_by_zugriffsbeschraenkung = {
+        rule["forValues"][0]: rule["setValues"][0]
+        for rule in resource_mapping["accessRestriction"][0]["mappingRules"]
+    }
     for resource in biospecimen_resources:
         if resource.anonymisiert_pseudonymisiert:
             anonymization_pseudonymization = AnonymizationPseudonymization.find(
@@ -87,12 +91,12 @@ def transform_biospecimen_resource_to_mex_resource(
         ]
         language = resource_mapping["language"][0]["mappingRules"][0]["setValues"]
 
-        contact = None
+        contact: list[Identifier] = []
         for kontakt in resource.kontakt:
             if k := person_stable_target_id_by_email.get(kontakt):
-                contact = k
+                contact.append(k)
             elif k := unit_stable_target_ids_by_synonym.get(kontakt):
-                contact = k
+                contact.append(k)
         was_generated_by = sysnopse_stable_target_id_by_studien_id.get(
             resource.studienbezug[0], None
         )
@@ -137,9 +141,9 @@ def transform_biospecimen_resource_to_mex_resource(
         else:
             theme = resource_mapping["theme"][0]["mappingRules"][0]["setValues"]
         yield ExtractedResource(
-            accessRestriction=resource_mapping["accessRestriction"][0]["mappingRules"][
-                0
-            ]["setValues"],
+            accessRestriction=access_restriction_by_zugriffsbeschraenkung[
+                resource.zugriffsbeschraenkung
+            ],
             alternativeTitle=resource.alternativer_titel,
             anonymizationPseudonymization=anonymization_pseudonymization,
             conformsTo=conforms_to,
@@ -152,7 +156,7 @@ def transform_biospecimen_resource_to_mex_resource(
             hadPrimarySource=extracted_primary_source_biospecimen.stableTargetId,
             hasLegalBasis=has_legal_basis,
             hasPersonalData=has_personal_data,
-            identifierInPrimarySource=resource.sheet_name,
+            identifierInPrimarySource=f"{resource.file_name.split('.')[0]}_{resource.sheet_name}",
             instrumentToolOrApparatus=resource.tools_instrumente_oder_apparate,
             keyword=resource.schlagworte,
             language=language,

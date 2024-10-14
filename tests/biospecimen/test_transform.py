@@ -104,7 +104,7 @@ def test_transform_biospecimen_resource_to_mex_resource(
     mex_source = next(mex_sources)
 
     expected = {
-        "accessRestriction": "https://mex.rki.de/item/access-restriction-1",
+        "accessRestriction": "https://mex.rki.de/item/access-restriction-2",
         "alternativeTitle": [{"value": "alternativer Testitel"}],
         "anonymizationPseudonymization": [
             "https://mex.rki.de/item/anonymization-pseudonymization-2"
@@ -135,7 +135,7 @@ def test_transform_biospecimen_resource_to_mex_resource(
         ],
         "hasPersonalData": "https://mex.rki.de/item/personal-data-1",
         "identifier": Joker(),
-        "identifierInPrimarySource": "Probe1",
+        "identifierInPrimarySource": "test_bioproben_Probe1",
         "instrumentToolOrApparatus": [{"value": "Testtool"}],
         "keyword": [
             {"language": TextLanguage.DE, "value": "Testschlagwort 1, Testschlagwort 2"}

@@ -1,6 +1,6 @@
 import re
 from collections.abc import Generator, Iterable
-from glob import glob
+from pathlib import Path
 from typing import Any
 
 from pandas import DataFrame, ExcelFile, Series
@@ -71,16 +71,15 @@ def extract_biospecimen_resources() -> Generator[BiospecimenResource, None, None
         Generator for Biospecimen resources
     """
     settings = Settings.get()
-    file_path_list = glob(
-        str(settings.biospecimen.dir_path / "**" / "*.xlsx"), recursive=True
-    )
-    for file_path in file_path_list:
-        xls = ExcelFile(file_path)
+    for file in Path(settings.biospecimen.raw_data_path).glob("*.xlsx"):
+        xls = ExcelFile(file)
         sheets = xls.book.worksheets
         for sheet in sheets:
             if sheet.sheet_state == "visible":
                 sheet_df = xls.parse(sheet_name=sheet.title, header=1)
-                if resource := extract_biospecimen_resource(sheet_df, str(sheet.title)):
+                if resource := extract_biospecimen_resource(
+                    sheet_df, str(sheet.title), file.name
+                ):
                     yield resource
 
 
@@ -158,13 +157,14 @@ def get_year_from_zeitlicher_bezug(
 
 
 def extract_biospecimen_resource(
-    resource: DataFrame, sheet_name: str
+    resource: DataFrame, sheet_name: str, file_name: str
 ) -> BiospecimenResource | None:
     """Extract one Biospecimen resource from an xlsx file.
 
     Args:
         resource: DataFrame containing resource information
         sheet_name: Name of the Excel sheet the data came from
+        file_name: Name of the Excel file
 
     Settings:
         key_col: column in the file with keys
@@ -243,6 +243,7 @@ def extract_biospecimen_resource(
     sheet_name = get_clean_file_name(str(sheet_name))
 
     return BiospecimenResource(
+        file_name=file_name,
         sheet_name=sheet_name,
         zugriffsbeschraenkung=zugriffsbeschraenkung,
         alternativer_titel=alternativer_titel,
