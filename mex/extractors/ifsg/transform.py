@@ -11,6 +11,7 @@ from mex.common.types import (
     MergedOrganizationalUnitIdentifier,
     MergedResourceIdentifier,
     Text,
+    TextLanguage,
 )
 from mex.extractors.ifsg.models.meta_catalogue2item import MetaCatalogue2Item
 from mex.extractors.ifsg.models.meta_catalogue2item2schema import (
@@ -102,19 +103,27 @@ def transform_resource_state_to_mex_resource(
         transform resource state to ExtractedResource list
     """
     bundesland_meldedaten_by_bundesland_id = {
-        value["forValues"][0]: value["setValues"][0]
+        value["forValues"][0]: value["setValues"]
         for value in resource_state["alternativeTitle"][0]["mappingRules"]
     }
     documentation_by_bundesland_id = {
-        value["forValues"][0]: value["setValues"][0]
+        value["forValues"][0]: value["setValues"]
         for value in resource_state["documentation"][0]["mappingRules"]
     }
     keyword = [
         keyword
         for keyword in [
             *resource_state["keyword"][0]["mappingRules"][0]["setValues"],
-            *[row.disease_name for row in meta_disease if row.disease_name],
-            *[row.disease_name_en for row in meta_disease if row.disease_name_en],
+            *[
+                Text(value=row.disease_name, language=TextLanguage.DE)
+                for row in meta_disease
+                if row.disease_name
+            ],
+            *[
+                Text(value=row.disease_name_en, language=TextLanguage.EN)
+                for row in meta_disease
+                if row.disease_name_en
+            ],
             *[row.specimen_name for row in meta_disease if row.specimen_name],
         ]
     ]
@@ -122,11 +131,11 @@ def transform_resource_state_to_mex_resource(
     spatial_by_bundesland_id = None
     if resource_state["spatial"]:
         spatial_by_bundesland_id = {
-            value["forValues"][0]: value["setValues"][0]
+            value["forValues"][0]: value["setValues"]
             for value in resource_state["spatial"][0]["mappingRules"]
         }
     title_by_bundesland_id = {
-        value["forValues"][0]: value["setValues"][0]
+        value["forValues"][0]: value["setValues"]
         for value in resource_state["title"][0]["mappingRules"]
     }
     mex_resource_state: list[ExtractedResource] = []

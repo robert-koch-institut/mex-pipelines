@@ -126,24 +126,12 @@ def test_transform_resource_state_to_mex_resource(
         "isPartOf": [str(extracted_ifsg_resource_parent.stableTargetId)],
         "keyword": [
             {"value": "Infektionsschutzgesetz", "language": TextLanguage.DE},
-            {
-                "value": "virus",
-            },
-            {
-                "value": "virus",
-            },
-            {
-                "value": "virus",
-            },
-            {
-                "value": "Epidemic",
-            },
-            {
-                "value": "Epidemic",
-            },
-            {
-                "value": "Epidemic",
-            },
+            {"value": "virus", "language": TextLanguage.DE},
+            {"value": "virus", "language": TextLanguage.DE},
+            {"value": "virus", "language": TextLanguage.DE},
+            {"value": "Epidemic", "language": TextLanguage.EN},
+            {"value": "Epidemic", "language": TextLanguage.EN},
+            {"value": "Epidemic", "language": TextLanguage.EN},
             {
                 "value": "virus",
             },
