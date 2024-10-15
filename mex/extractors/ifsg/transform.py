@@ -96,7 +96,7 @@ def transform_resource_state_to_mex_resource(
         extracted_primary_source: ExtractedPrimarySource
         unit_stable_target_ids_by_synonym: mapping unit synonyms to
                                            MergedOrganizationalUnitIdentifier
-        meta_disease: MetaDisease
+        meta_disease: list of MetaDisease table rows
 
     Returns:
         transform resource state to ExtractedResource list
@@ -193,7 +193,7 @@ def get_instrument_tool_or_apparatus(
     """Calculate instrument_tool_or_apparatus for MetaDisease reference definitions.
 
     Args:
-        meta_disease: MetaDisease
+        meta_disease: list of MetaDisease table rows
         resource_disease: resource_disease default values
 
     Returns:
@@ -245,7 +245,7 @@ def transform_resource_disease_to_mex_resource(
         resource_disease: resource_disease default values
         extracted_ifsg_resource_parent: ExtractedResource
         extracted_ifsg_resource_state: ExtractedResource
-        meta_disease: MetaDisease
+        meta_disease: list of MetaDisease table rows
         meta_type: MetaType
         id_type_of_diseases: list of disease related id_types
         extracted_primary_source: ExtractedPrimarySource
