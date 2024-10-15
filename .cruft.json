@@ -1,6 +1,6 @@
 {
   "checkout": null,
-  "commit": "cf7f28ed2a2abbeb6b7eb2319e5c894d7020d675",
+  "commit": "9167981a2eb9889a68c72a5b3cbdb11d5702c4b8",
   "context": {
     "cookiecutter": {
       "project_name": "extractors",

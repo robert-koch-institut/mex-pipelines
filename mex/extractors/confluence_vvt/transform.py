@@ -25,6 +25,8 @@ def transform_confluence_vvt_sources_to_extracted_activities(
         Generator for ExtractedActivity
     """
     for source in confluence_vvt_sources:
+        if not source.identifier_in_primary_source:
+            continue
         contact_merged_ids = [
             merged_id
             for author in source.contact
@@ -63,7 +65,7 @@ def transform_confluence_vvt_sources_to_extracted_activities(
             or involved_person_merged_ids
             or responsible_unit_merged_ids,
             documentation=source.documentation,
-            identifierInPrimarySource=source.identifier_in_primary_source,
+            identifierInPrimarySource=";".join(source.identifier_in_primary_source),
             involvedPerson=involved_person_merged_ids,
             involvedUnit=involved_unit_merged_ids,
             responsibleUnit=responsible_unit_merged_ids or involved_unit_merged_ids,

@@ -21,16 +21,19 @@ ZWECKE_DES_VORHABENS = "Zwecke des Vorhabens"
 
 def parse_data_html_page(
     html: str,
-) -> tuple[
-    str | list[str] | None,
-    list[str],
-    list[str],
-    list[str],
-    list[str],
-    list[str],
-    list[str],
-    list[str] | Any,
-]:
+) -> (
+    tuple[
+        str | list[str] | None,
+        list[str],
+        list[str],
+        list[str],
+        list[str],
+        list[str],
+        list[str],
+        list[str] | Any,
+    ]
+    | None
+):
     """Parse required data from html string.
 
     Args:
@@ -41,7 +44,8 @@ def parse_data_html_page(
     """
     soup = BeautifulSoup(html, "html.parser")
     table = soup.find_all("table", {"class": "confluenceTable"})
-
+    if len(table) < 2:
+        return None
     trs_table1 = table[0].find_all("tr")
     trs_table2 = table[1].find_all("tr")
 
