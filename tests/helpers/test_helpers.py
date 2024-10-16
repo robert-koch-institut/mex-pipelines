@@ -15,8 +15,9 @@ from mex.helpers.helpers import (
 def test_get_extracted_primary_source_id_by_name(
     monkeypatch: MonkeyPatch,
 ) -> None:
+    """Primary source helper finds "Wikidata" and returns None for nonsense query."""
     query_wiki = "wikidata"
-    query_nonsense = "this shlould give None"
+    query_nonsense = "this should give None"
 
     mocked_load = Mock()
     monkeypatch.setattr(helpers, "load", mocked_load)
@@ -28,18 +29,26 @@ def test_get_extracted_primary_source_id_by_name(
     assert get_extracted_primary_source_id_by_name(query_nonsense) is None
 
 
-@pytest.mark.usefixtures("mocked_wikidata")
+@pytest.mark.integration
 def test_get_wikidata_extracted_organization_id_by_name(
     monkeypatch: MonkeyPatch,
 ) -> None:
-    query_wiki = "wikidata"
-    query_nonsense = "this shlould give None"
+    """Wikidata helper finds "Robert Koch-Institut"."""
+    query_rki = "Robert Koch-Institut"
 
     mocked_load = Mock()
     monkeypatch.setattr(helpers, "load", mocked_load)
 
-    returned = get_wikidata_extracted_organization_id_by_name(query_wiki)
+    returned = get_wikidata_extracted_organization_id_by_name(query_rki)
     mocked_load.assert_called_once()
 
     assert returned == MergedOrganizationIdentifier("ga6xh6pgMwgq7DC7r6Wjqg")
-    assert get_wikidata_extracted_organization_id_by_name(query_nonsense) is None
+
+
+@pytest.mark.integration
+def test_get_wikidata_extracted_organization_id_by_name_for_nonsensequery() -> None:
+    """Wikidata helper returns None for nonensense query."""
+    query_nonsense = "this should not give a match"
+    returned = get_wikidata_extracted_organization_id_by_name(query_nonsense)
+
+    assert returned is None
