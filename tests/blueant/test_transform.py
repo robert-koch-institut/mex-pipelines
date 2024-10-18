@@ -7,7 +7,6 @@ from mex.common.types import (
     Identifier,
     MergedOrganizationIdentifier,
     TextLanguage,
-    YearMonthDay,
 )
 from mex.extractors.blueant.models.source import BlueAntSource
 from mex.extractors.blueant.transform import (
@@ -46,27 +45,25 @@ def test_transform_blueant_sources_to_extracted_activities(
     assert len(mex_sources) == 2
     assert mex_sources[0].model_dump(exclude_none=True, exclude_defaults=True) == {
         "contact": [str(Identifier.generate(seed=99))],
-        "end": [YearMonthDay("2019-12-31")],
         "responsibleUnit": [str(Identifier.generate(seed=555))],
         "funderOrCommissioner": [str(MergedOrganizationIdentifier.generate(seed=42))],
         "identifier": Joker(),
         "identifierInPrimarySource": "00123",
         "involvedPerson": ["bFQoRhcVH5DHV1"],
-        "title": [{"value": "3_Prototype Space Rocket", "language": TextLanguage.EN}],
-        "start": [YearMonthDay("2019-01-07")],
+        "title": [{"value": "Prototype Space Rocket", "language": TextLanguage.EN}],
+        "start": ["2019-01-07"],
         "hadPrimarySource": str(extracted_primary_sources["blueant"].stableTargetId),
         "stableTargetId": Joker(),
     }
     assert mex_sources[1].model_dump(exclude_none=True, exclude_defaults=True) == {
         "contact": ["bFQoRhcVH5DH3n"],
-        "end": [YearMonthDay("2010-10-11")],
         "funderOrCommissioner": [str(MergedOrganizationIdentifier.generate(seed=42))],
         "responsibleUnit": ["bFQoRhcVH5DH3n"],
         "identifier": Joker(),
         "identifierInPrimarySource": "00255",
         "involvedPerson": ["bFQoRhcVH5DH3n"],
-        "title": [{"value": "2_Prototype Moon Lander", "language": TextLanguage.EN}],
-        "start": [YearMonthDay("2018-08-09")],
+        "title": [{"value": "Prototype Moon Lander", "language": TextLanguage.EN}],
+        "start": ["2018-08-09"],
         "hadPrimarySource": str(extracted_primary_sources["blueant"].stableTargetId),
         "stableTargetId": Joker(),
     }

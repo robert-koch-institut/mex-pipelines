@@ -94,5 +94,6 @@ def blueant_activity() -> dict[str, Any]:
                 ],
                 "comment": None,
             }
-        ]
+        ],
+        "title": [{"mappingRules": [None, {"forValues": ["text"]}]}],
     }
