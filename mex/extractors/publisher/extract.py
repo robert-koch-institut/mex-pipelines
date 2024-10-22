@@ -13,16 +13,13 @@ def get_merged_items() -> Generator[dict[str, Any], None, None]:
     )
     total_item_number = response["total"]
 
-    item_number_limit = 100  # max limit
-    item_counter = 0
+    item_number_limit = 100  # 100 is the maximum possible number per get-request
 
-    while item_counter <= total_item_number:
+    for item_counter in range(0, total_item_number + 1, item_number_limit):
         response = connector.request(
             method="GET",
             endpoint="merged-item",
             params={"limit": str(item_number_limit), "skip": str(item_counter)},
         )
-
-        item_counter += item_number_limit
 
         yield from response["items"]
