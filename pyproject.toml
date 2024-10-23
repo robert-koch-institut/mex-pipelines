@@ -10,8 +10,8 @@ requires-python = "<3.13,>=3.11"
 dependencies = [
     "beautifulsoup4>=4.12.3,<5",
     "dagster-postgres>=0.23.15,<1",
-    "dagster-webserver>=1.7.15,<2",
-    "dagster>=1.7.15,<2",
+    "dagster-webserver>=1.7.15,<1.8",
+    "dagster>=1.7.15,<1.8",
     "faker>=30,<31",
     "mex-common @ git+https://github.com/robert-koch-institut/mex-common.git@feature/model-update-v3",
     "numpy>=2.0.1,<3",
@@ -175,5 +175,5 @@ known-first-party = ["mex", "tests"]
 convention = "google"
 
 [build-system]
-requires = ["pdm-backend==2.4.2"]
+requires = ["pdm-backend==2.4.1"]
 build-backend = "pdm.backend"
