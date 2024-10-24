@@ -58,7 +58,7 @@ jobs:
         run: make setup
 
       - name: Setup commit signing
-        uses: erichesse/mex-setup-commit-signing@v4
+        run: pdm setup-commit-signing
         env:
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
           SIGNING_PUB: ${{ secrets.SIGNING_PUB }}
@@ -72,6 +72,8 @@ jobs:
         run: |
           pdm release ${{ inputs.version }}
           echo "tag=$(git describe --abbrev=0 --tags)" >> "$GITHUB_OUTPUT"
+
+
 
   containerize:
     runs-on: ubuntu-latest
