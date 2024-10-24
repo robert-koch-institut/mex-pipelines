@@ -47,7 +47,7 @@ jobs:
         run: make setup
 
       - name: Setup commit signing
-        uses: erichesse/mex-setup-commit-signing/action.yml@v4
+        run: pdm setup-commit-signing
         env:
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
           SIGNING_PUB: ${{ secrets.SIGNING_PUB }}
