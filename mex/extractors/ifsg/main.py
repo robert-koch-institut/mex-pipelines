@@ -40,6 +40,7 @@ from mex.extractors.ifsg.transform import (
     transform_resource_state_to_mex_resource,
 )
 from mex.extractors.mapping.extract import extract_mapping_data
+from mex.extractors.mapping.transform import transform_mapping_data_to_model
 from mex.extractors.pipeline import asset, run_job_in_process
 from mex.extractors.settings import Settings
 from mex.extractors.sinks import load
@@ -157,37 +158,28 @@ def meta_type() -> list[MetaType]:
 def resource_disease() -> dict[str, Any]:
     """Extract `resource_disease` default values."""
     settings = Settings.get()
-    return extract_mapping_data(
-        settings.ifsg.mapping_path / "resource_disease.yaml", ExtractedResource
-    )
+    return extract_mapping_data(settings.ifsg.mapping_path / "resource_disease.yaml")
 
 
 @asset(group_name="ifsg")
 def resource_parent() -> dict[str, Any]:
     """Extract `resource_parent` default values."""
     settings = Settings.get()
-    return extract_mapping_data(
-        settings.ifsg.mapping_path / "resource_parent.yaml", ExtractedResource
-    )
+    return extract_mapping_data(settings.ifsg.mapping_path / "resource_parent.yaml")
 
 
 @asset(group_name="ifsg")
 def resource_state() -> dict[str, Any]:
     """Extract `resource_state` default values."""
     settings = Settings.get()
-    return extract_mapping_data(
-        settings.ifsg.mapping_path / "resource_state.yaml", ExtractedResource
-    )
+    return extract_mapping_data(settings.ifsg.mapping_path / "resource_state.yaml")
 
 
 @asset(group_name="ifsg")
 def ifsg_variable_group() -> dict[str, Any]:
     """Extract `ifsg_variable_group` default values."""
     settings = Settings.get()
-    return extract_mapping_data(
-        settings.ifsg.mapping_path / "variable-group.yaml",
-        ExtractedVariableGroup,
-    )
+    return extract_mapping_data(settings.ifsg.mapping_path / "variable-group.yaml")
 
 
 @asset(group_name="ifsg")
@@ -198,7 +190,7 @@ def extracted_ifsg_resource_parent(
 ) -> ExtractedResource:
     """Extracted and loaded ifsg resource parent."""
     mex_resource_parent = transform_resource_parent_to_mex_resource(
-        resource_parent,
+        transform_mapping_data_to_model(resource_parent, ExtractedResource),
         extracted_primary_sources_ifsg,
         unit_stable_target_ids_by_synonym,
     )
@@ -218,7 +210,7 @@ def extracted_ifsg_resource_state(
 ) -> list[ExtractedResource]:
     """Extracted and loaded ifsg resource disease."""
     mex_resource_state = transform_resource_state_to_mex_resource(
-        resource_state,
+        transform_mapping_data_to_model(resource_state, ExtractedResource),
         extracted_ifsg_resource_parent,
         extracted_primary_sources_ifsg,
         unit_stable_target_ids_by_synonym,
@@ -244,7 +236,7 @@ def extracted_ifsg_resource_disease(
 ) -> list[ExtractedResource]:
     """Extracted and loaded ifsg resource disease."""
     mex_resource_disease = transform_resource_disease_to_mex_resource(
-        resource_disease,
+        transform_mapping_data_to_model(resource_disease, ExtractedResource),
         extracted_ifsg_resource_parent,
         extracted_ifsg_resource_state,
         meta_disease,
@@ -271,7 +263,7 @@ def extracted_ifsg_variable_group(
 ) -> list[ExtractedVariableGroup]:
     """Extracted and loaded ifsg variable group."""
     extracted_variable_group = transform_ifsg_data_to_mex_variable_group(
-        ifsg_variable_group,
+        transform_mapping_data_to_model(ifsg_variable_group, ExtractedVariableGroup),
         extracted_ifsg_resource_disease,
         extracted_primary_sources_ifsg,
         filtered_empty_statement_area_group,

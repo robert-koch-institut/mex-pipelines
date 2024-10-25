@@ -1,5 +1,3 @@
-from typing import Any
-
 from mex.common.models import (
     ExtractedActivity,
     ExtractedOrganization,
@@ -12,11 +10,12 @@ from mex.common.types import (
     MergedOrganizationalUnitIdentifier,
     MergedOrganizationIdentifier,
 )
+from mex.extractors.mapping.types import AnyMappingModel
 from mex.extractors.voxco.model import VoxcoVariable
 
 
 def transform_voxco_resource_mappings_to_extracted_resources(
-    voxco_resource_mappings: list[dict[str, Any]],
+    voxco_resource_mappings: list[AnyMappingModel],
     organization_stable_target_id_by_query_voxco: dict[
         str, MergedOrganizationIdentifier
     ],
@@ -50,69 +49,65 @@ def transform_voxco_resource_mappings_to_extracted_resources(
         for activity in extracted_international_projects_activities
     }
     for resource in voxco_resource_mappings:
-        access_restriction = resource["accessRestriction"][0]["mappingRules"][0][
-            "setValues"
-        ]
+        access_restriction = resource.accessRestriction[0].mappingRules[0].setValues
         if anonymization_pseudonymization_top_level := resource.get(
             "anonymizationPseudonymization"
         ):
-            anonymization_pseudonymization = anonymization_pseudonymization_top_level[
-                0
-            ]["mappingRules"][0]["setValues"]
+            anonymization_pseudonymization = (
+                anonymization_pseudonymization_top_level[0].mappingRules[0].setValues
+            )
         else:
             anonymization_pseudonymization = None
-        if at := resource.get("alternativeTitle"):
-            alternative_title = at[0]["mappingRules"][0]["setValues"]
+        if at := resource.alternativeTitle:
+            alternative_title = at[0].mappingRules[0].setValues
         else:
             alternative_title = None
         contact = mex_persons_stable_target_id_by_email[
-            resource["contact"][0]["mappingRules"][0]["forValues"][1]
+            resource.contact[0].mappingRules[0].forValues[1]
         ]
-        if description_top_level := resource.get("description"):
-            description = description_top_level[0]["mappingRules"][0]["setValues"]
+        if description_top_level := resource.description:
+            description = description_top_level[0].mappingRules[0].setValues
         else:
             description = None
 
-        if ep := resource.get("externalPartner"):
+        if ep := resource.externalPartner:
             external_partner = organization_stable_target_id_by_query_voxco.get(
-                ep[0]["mappingRules"][0]["forValues"][0]
+                ep[0].mappingRules[0].forValues[0]
             )
         else:
             external_partner = None
-        identifier_in_primary_source = resource["identifierInPrimarySource"][0][
-            "mappingRules"
-        ][0]["setValues"][0]
-        if keyword_top_level := resource.get("keyword"):
-            keyword = keyword_top_level[0]["mappingRules"][0]["setValues"]
+        identifier_in_primary_source = (
+            resource.identifierInPrimarySource[0].mappingRules[0].setValues[0]
+        )
+        if keyword_top_level := resource.keyword:
+            keyword = keyword_top_level[0].mappingRules[0].setValues
         else:
             keyword = None
-        language = resource["language"][0]["mappingRules"][0]["setValues"]
-        mesh_id = resource["meshId"][0]["mappingRules"][0]["setValues"]
-        method = resource["method"][0]["mappingRules"][0]["setValues"]
+        language = resource.language[0].mappingRules[0].setValues
+        mesh_id = resource.meshId[0].mappingRules[0].setValues
+        method = resource.method[0].mappingRules[0].setValues
         publisher = extracted_organization_rki.stableTargetId
 
-        resource_creation_method = resource["resourceCreationMethod"][0][
-            "mappingRules"
-        ][0]["setValues"]
-        resource_type_general = resource["resourceTypeGeneral"][0]["mappingRules"][0][
-            "setValues"
-        ]
-        resource_type_specific = resource["resourceTypeSpecific"][0]["mappingRules"][0][
-            "setValues"
-        ]
-        quality_information = resource["qualityInformation"][0]["mappingRules"][0][
-            "setValues"
-        ]
-        rights = resource["rights"][0]["mappingRules"][0]["setValues"]
-        spatial = resource["spatial"][0]["mappingRules"][0]["setValues"]
-        theme = resource["theme"][0]["mappingRules"][0]["setValues"]
-        title = resource["title"][0]["mappingRules"][0]["setValues"]
+        resource_creation_method = (
+            resource.resourceCreationMethod[0].mappingRules[0].setValues
+        )
+        resource_type_general = (
+            resource.resourceTypeGeneral[0].mappingRules[0].setValues
+        )
+        resource_type_specific = (
+            resource.resourceTypeSpecific[0].mappingRules[0].setValues
+        )
+        quality_information = resource.qualityInformation[0].mappingRules[0].setValues
+        rights = resource.rights[0].mappingRules[0].setValues
+        spatial = resource.spatial[0].mappingRules[0].setValues
+        theme = resource.theme[0].mappingRules[0].setValues
+        title = resource.title[0].mappingRules[0].setValues
         unit_in_charge = unit_stable_target_ids_by_synonym[
-            resource["unitInCharge"][0]["mappingRules"][0]["forValues"][0]
+            resource.unitInCharge[0].mappingRules[0].forValues[0]
         ]
-        if wgb := resource["wasGeneratedBy"]:
+        if wgb := resource.wasGeneratedBy:
             was_generated_by = international_project_by_identifier_in_primary_source[
-                wgb[0]["mappingRules"][0]["forValues"][0]
+                wgb[0].mappingRules[0].forValues[0]
             ]
         else:
             was_generated_by = None

@@ -1,4 +1,3 @@
-from typing import Any
 from unittest.mock import MagicMock
 
 import pytest
@@ -21,6 +20,7 @@ from mex.extractors.biospecimen.models.source import BiospecimenResource
 from mex.extractors.biospecimen.transform import (
     transform_biospecimen_resource_to_mex_resource,
 )
+from mex.extractors.mapping.types import AnyMappingModel
 
 
 @pytest.fixture
@@ -79,7 +79,7 @@ def test_transform_biospecimen_resource_to_mex_resource(
     mex_persons: list[ExtractedPerson],
     extracted_organization_rki: ExtractedOrganization,
     extracted_synopse_activities: list[ExtractedActivity],
-    resource_mapping: dict[str, Any],
+    resource_mapping: AnyMappingModel,
 ) -> None:
     unit_stable_target_ids = MagicMock()
     unit_stable_target_ids.get.side_effect = lambda _: Identifier.generate(seed=42)

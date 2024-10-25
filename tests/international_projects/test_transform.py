@@ -1,5 +1,3 @@
-from typing import Any
-
 from pytz import timezone
 
 from mex.common.models import ExtractedPrimarySource
@@ -15,12 +13,13 @@ from mex.extractors.international_projects.extract import (
 from mex.extractors.international_projects.transform import (
     transform_international_projects_sources_to_extracted_activities,
 )
+from mex.extractors.mapping.types import AnyMappingModel
 
 
 def test_transform_international_projects_source_to_mex_source(
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
     unit_stable_target_ids_by_synonym: dict[str, Identifier],
-    international_projects_mapping_activity: dict[str, Any],
+    international_projects_mapping_activity: AnyMappingModel,
 ) -> None:
     organization_id = Identifier.generate(seed=44)
     funding_source_stable_target_ids_by_synonym = {"Test-Institute": organization_id}

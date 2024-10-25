@@ -81,7 +81,7 @@ def get_external_partner_and_publisher_by_label(
         value
         for resource in odk_resource_mappings
         for attribute in ["publisher", "externalPartner"]
-        for value in resource[attribute][0]["mappingRules"][0]["forValues"]
+        for value in resource[attribute][0].mappingRules[0].forValues
     }
     external_partner_and_publisher_by_label: dict[str, WikidataOrganization] = {}
     for label in labels:

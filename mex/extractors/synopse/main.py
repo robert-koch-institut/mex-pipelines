@@ -23,6 +23,7 @@ from mex.common.types import (
     MergedResourceIdentifier,
 )
 from mex.extractors.mapping.extract import extract_mapping_data
+from mex.extractors.mapping.transform import transform_mapping_data_to_model
 from mex.extractors.pipeline import asset, run_job_in_process
 from mex.extractors.settings import Settings
 from mex.extractors.sinks import load
@@ -213,8 +214,8 @@ def extracted_synopse_resource_stable_target_ids_by_synopse_id(
     Also transforms Synopse data to extracted resources
     """
     settings = Settings.get()
-    synopse_resource = extract_mapping_data(
-        settings.synopse.mapping_path / "resource.yaml",
+    synopse_resource = transform_mapping_data_to_model(
+        extract_mapping_data(settings.synopse.mapping_path / "resource.yaml"),
         ExtractedResource,
     )
     transformed_study_data_regular_resources = (
@@ -235,8 +236,10 @@ def extracted_synopse_resource_stable_target_ids_by_synopse_id(
     )
     load(transformed_study_data_regular_resource_gens[0])
     settings = Settings.get()
-    synopse_resource_extended_data_use = extract_mapping_data(
-        settings.synopse.mapping_path / "resource_extended-data-use.yaml",
+    synopse_resource_extended_data_use = transform_mapping_data_to_model(
+        extract_mapping_data(
+            settings.synopse.mapping_path / "resource_extended-data-use.yaml"
+        ),
         ExtractedResource,
     )
     transformed_study_data_resources_extended_data_use = (
@@ -274,8 +277,8 @@ def extracted_synopse_access_platforms(
 ) -> list[ExtractedAccessPlatform]:
     """Transform Synopse data to extracted access platforms and load result."""
     settings = Settings.get()
-    synopse_access_platform = extract_mapping_data(
-        settings.synopse.mapping_path / "access-platform.yaml",
+    synopse_access_platform = transform_mapping_data_to_model(
+        extract_mapping_data(settings.synopse.mapping_path / "access-platform.yaml"),
         ExtractedAccessPlatform,
     )
     synopse_studies_filtered = filter_and_log_access_platforms(
@@ -306,8 +309,8 @@ def extracted_synopse_activities(
 ) -> list[ExtractedActivity]:
     """Transforms Synopse data to extracted activities and load result."""
     settings = Settings.get()
-    synopse_activity = extract_mapping_data(
-        settings.synopse.mapping_path / "activity.yaml",
+    synopse_activity = transform_mapping_data_to_model(
+        extract_mapping_data(settings.synopse.mapping_path / "activity.yaml"),
         ExtractedActivity,
     )
     transformed_activities = list(

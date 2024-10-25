@@ -1,5 +1,3 @@
-from typing import Any
-
 import pytest
 
 from mex.common.models import (
@@ -23,6 +21,7 @@ from mex.common.types import (
     TextLanguage,
     Year,
 )
+from mex.extractors.mapping.types import AnyMappingModel
 from mex.extractors.synopse.models.project import SynopseProject
 from mex.extractors.synopse.models.study import SynopseStudy
 from mex.extractors.synopse.models.study_overview import SynopseStudyOverview
@@ -112,7 +111,7 @@ def test_split_off_extended_data_use_variables(
 def test_transform_synopse_studies_into_access_platforms(
     synopse_studies: list[SynopseStudy],
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
-    synopse_access_platform: dict[str, Any],
+    synopse_access_platform: AnyMappingModel,
 ) -> None:
     unit_merged_ids_by_synonym = {
         "C1": MergedOrganizationalUnitIdentifier.generate(seed=234)
@@ -418,7 +417,7 @@ def test_transform_synopse_data_to_mex_resources(
     documentation_by_study_id: dict[str, Link | None],
     keyword_text_by_study_id: dict[str, list[Text]],
     extracted_organization: list[ExtractedOrganization],
-    synopse_resource_extended_data_use: dict[str, Any],
+    synopse_resource_extended_data_use: AnyMappingModel,
 ) -> None:
     unit_merged_ids_by_synonym = {"C1": Identifier.generate(seed=234)}
     access_platform_by_identifier_in_primary_source = {
@@ -526,7 +525,7 @@ def test_transform_synopse_data_regular_to_mex_resources(
     extracted_activity: ExtractedActivity,
     extracted_access_platforms: list[ExtractedAccessPlatform],
     extracted_organization: list[ExtractedOrganization],
-    synopse_resource_extended_data_use: dict[str, Any],
+    synopse_resource_extended_data_use: AnyMappingModel,
 ) -> None:
     unit_merged_ids_by_synonym = {"C1": Identifier.generate(seed=234)}
     access_platform_by_identifier_in_primary_source = {
@@ -620,7 +619,7 @@ def test_transform_synopse_data_extended_data_use_to_mex_resources(
     extracted_activity: ExtractedActivity,
     extracted_access_platforms: list[ExtractedAccessPlatform],
     extracted_organization: list[ExtractedOrganization],
-    synopse_resource: dict[str, Any],
+    synopse_resource: AnyMappingModel,
 ) -> None:
     unit_merged_ids_by_synonym = {"C1": Identifier.generate(seed=234)}
     access_platform_by_identifier_in_primary_source = {
@@ -701,7 +700,7 @@ def test_transform_synopse_projects_to_mex_activities(
     synopse_projects: list[SynopseProject],
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
     extracted_person: ExtractedPerson,
-    synopse_activity: dict[str, Any],
+    synopse_activity: AnyMappingModel,
     synopse_organization_ids_by_query_string: dict[str, MergedOrganizationIdentifier],
 ) -> None:
     synopse_project = synopse_projects[0]

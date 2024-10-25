@@ -1,5 +1,3 @@
-from typing import Any
-
 from mex.common.models import (
     ExtractedOrganization,
     ExtractedPrimarySource,
@@ -29,10 +27,11 @@ from mex.extractors.ifsg.transform import (
     transform_resource_parent_to_mex_resource,
     transform_resource_state_to_mex_resource,
 )
+from mex.extractors.mapping.types import AnyMappingModel
 
 
 def test_transform_resource_parent_to_mex_resource(
-    resource_parent: dict[str, Any],
+    resource_parent: AnyMappingModel,
     extracted_primary_sources_ifsg: ExtractedPrimarySource,
     unit_stable_target_ids: dict[str, MergedOrganizationalUnitIdentifier],
 ) -> None:
@@ -84,7 +83,7 @@ def test_transform_resource_parent_to_mex_resource(
 
 
 def test_transform_resource_state_to_mex_resource(
-    resource_states: list[dict[str, Any]],
+    resource_states: list[AnyMappingModel],
     extracted_ifsg_resource_parent: ExtractedResource,
     extracted_primary_sources_ifsg: ExtractedPrimarySource,
     unit_stable_target_ids: dict[str, MergedOrganizationalUnitIdentifier],
@@ -157,7 +156,7 @@ def test_transform_resource_state_to_mex_resource(
 
 
 def test_get_instrument_tool_or_apparatus(
-    meta_disease: list[MetaDisease], resource_diseases: list[dict[str, Any]]
+    meta_disease: list[MetaDisease], resource_diseases: list[AnyMappingModel]
 ) -> None:
     instrument_tool_or_apparatus = get_instrument_tool_or_apparatus(
         meta_disease[0], resource_diseases[0]
@@ -170,7 +169,7 @@ def test_get_instrument_tool_or_apparatus(
 
 
 def test_transform_resource_disease_to_mex_resource(
-    resource_diseases: list[dict[str, Any]],
+    resource_diseases: list[AnyMappingModel],
     extracted_ifsg_resource_parent: ExtractedResource,
     extracted_ifsg_resource_state: list[ExtractedResource],
     meta_type: list[MetaType],
@@ -261,7 +260,7 @@ def test_transform_resource_disease_to_mex_resource(
 
 
 def test_transform_ifsg_data_to_mex_variable_group(
-    ifsg_variable_group: dict[str, Any],
+    ifsg_variable_group: AnyMappingModel,
     extracted_ifsg_resource_disease: list[ExtractedResource],
     extracted_primary_sources_ifsg: ExtractedPrimarySource,
     meta_field: list[MetaField],

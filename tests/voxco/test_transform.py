@@ -1,5 +1,3 @@
-from typing import Any
-
 from mex.common.models import (
     ExtractedActivity,
     ExtractedOrganization,
@@ -14,6 +12,7 @@ from mex.common.types import (
     MergedOrganizationIdentifier,
     TextLanguage,
 )
+from mex.extractors.mapping.types import AnyMappingModel
 from mex.extractors.voxco.model import VoxcoVariable
 from mex.extractors.voxco.transform import (
     transform_voxco_resource_mappings_to_extracted_resources,
@@ -22,7 +21,7 @@ from mex.extractors.voxco.transform import (
 
 
 def test_transform_voxco_resource_mappings_to_extracted_resources(
-    voxco_resource_mappings: list[dict[str, Any]],
+    voxco_resource_mappings: list[AnyMappingModel],
     organization_stable_target_id_by_query_voxco: dict[
         str, MergedOrganizationIdentifier
     ],

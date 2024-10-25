@@ -24,6 +24,10 @@ from mex.common.types import (
     MergedOrganizationalUnitIdentifier,
 )
 from mex.extractors.mapping.extract import extract_mapping_data
+from mex.extractors.mapping.transform import (
+    transform_mapping_data_to_model,
+    transform_mapping_data_to_models,
+)
 from mex.extractors.pipeline import asset, run_job_in_process
 from mex.extractors.settings import Settings
 from mex.extractors.sinks import load
@@ -78,8 +82,8 @@ def transformed_sumo_access_platform(
 ) -> ExtractedAccessPlatform:
     """Transform and load SUMO access platform and related LDAP actors."""
     settings = Settings.get()
-    sumo_access_platform = extract_mapping_data(
-        settings.sumo.mapping_path / "access-platform.yaml",
+    sumo_access_platform = transform_mapping_data_to_model(
+        extract_mapping_data(settings.sumo.mapping_path / "access-platform.yaml"),
         ExtractedAccessPlatform,
     )
     ldap_contact_points_access_platform = extract_ldap_contact_points_by_name(
@@ -117,7 +121,10 @@ def contact_merged_ids_by_emails_sumo(
     """Load contacts related to resources and return them by their e-mail addresses."""
     ldap_contact_points_resources = list(
         extract_ldap_contact_points_by_emails(
-            [extracted_resources_nokeda_sumo, extracted_resources_feat_sumo]
+            transform_mapping_data_to_models(
+                [extracted_resources_nokeda_sumo, extracted_resources_feat_sumo],
+                ExtractedResource,
+            )
         )
     )
     mex_actors_resources = list(
@@ -137,8 +144,9 @@ def transformed_activity_sumo(
 ) -> ExtractedActivity:
     """Extract, transform and load SUMO activity."""
     settings = Settings.get()
-    sumo_activity = extract_mapping_data(
-        settings.sumo.mapping_path / "activity.yaml", ExtractedActivity
+    sumo_activity = transform_mapping_data_to_model(
+        extract_mapping_data(settings.sumo.mapping_path / "activity.yaml"),
+        ExtractedActivity,
     )
     transformed_activity = transform_sumo_activity_to_extracted_activity(
         sumo_activity,
@@ -154,19 +162,14 @@ def transformed_activity_sumo(
 def extracted_resources_nokeda_sumo() -> dict[str, Any]:
     """Extract Nokeda Resource from SUMO."""
     settings = Settings.get()
-    return extract_mapping_data(
-        settings.sumo.mapping_path / "resource_nokeda.yaml", ExtractedResource
-    )
+    return extract_mapping_data(settings.sumo.mapping_path / "resource_nokeda.yaml")
 
 
 @asset(group_name="sumo")
 def extracted_resources_feat_sumo() -> dict[str, Any]:
     """Extract Resource feat from SUMO."""
     settings = Settings.get()
-    return extract_mapping_data(
-        settings.sumo.mapping_path / "resource_feat-model.yaml",
-        ExtractedResource,
-    )
+    return extract_mapping_data(settings.sumo.mapping_path / "resource_feat-model.yaml")
 
 
 @asset(group_name="sumo")
@@ -204,7 +207,9 @@ def transformed_resource_nokeda_sumo(
 ) -> ExtractedResource:
     """Transform and load extracted Nokeda Resource from SUMO."""
     mex_resource_nokeda = transform_resource_nokeda_to_mex_resource(
-        extracted_resources_nokeda_sumo,
+        transform_mapping_data_to_model(
+            extracted_resources_nokeda_sumo, ExtractedResource
+        ),
         extracted_primary_source_sumo,
         unit_stable_target_ids_by_synonym,
         contact_merged_ids_by_emails_sumo,
@@ -228,7 +233,9 @@ def transformed_resource_feat_sumo(
 ) -> ExtractedResource:
     """Transform and load extracted SUMO Resource feat."""
     mex_resource_feat = transform_resource_feat_model_to_mex_resource(
-        extracted_resources_feat_sumo,
+        transform_mapping_data_to_model(
+            extracted_resources_feat_sumo, ExtractedResource
+        ),
         extracted_primary_source_sumo,
         unit_stable_target_ids_by_synonym,
         contact_merged_ids_by_emails_sumo,

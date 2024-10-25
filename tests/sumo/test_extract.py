@@ -1,9 +1,9 @@
 from collections.abc import Iterable
-from typing import Any
 from uuid import UUID
 
 import pytest
 
+from mex.extractors.mapping.types import AnyMappingModel
 from mex.extractors.sumo.extract import (
     extract_cc1_data_model_nokeda,
     extract_cc1_data_valuesets,
@@ -95,7 +95,8 @@ def test_extract_cc2_feat_projection() -> None:
 
 @pytest.mark.usefixtures("mocked_ldap")
 def test_extract_ldap_contact_points_by_emails(
-    sumo_resources_feat: dict[str, Any], sumo_resources_nokeda: dict[str, Any]
+    sumo_resources_feat: AnyMappingModel,
+    sumo_resources_nokeda: AnyMappingModel,
 ) -> None:
     expected = {
         "mail": ["email@email.de", "contactc@rki.de"],
@@ -112,7 +113,7 @@ def test_extract_ldap_contact_points_by_emails(
 
 @pytest.mark.usefixtures("mocked_ldap")
 def test_extract_ldap_contact_points_by_name(
-    sumo_access_platform: dict[str, Any],
+    sumo_access_platform: AnyMappingModel,
 ) -> None:
     expected = {
         "person": {

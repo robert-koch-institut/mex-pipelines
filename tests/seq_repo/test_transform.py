@@ -1,5 +1,3 @@
-from typing import Any
-
 import pytest
 
 from mex.common.ldap.models.person import LDAPPersonWithQuery
@@ -16,6 +14,7 @@ from mex.common.types import (
     TextLanguage,
     YearMonthDay,
 )
+from mex.extractors.mapping.types import AnyMappingModel
 from mex.extractors.seq_repo.model import SeqRepoSource
 from mex.extractors.seq_repo.transform import (
     transform_seq_repo_access_platform_to_extracted_access_platform,
@@ -30,7 +29,7 @@ from mex.extractors.seq_repo.transform import (
 def test_transform_seq_repo_activities_to_extracted_activities(
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
     seq_repo_latest_sources: dict[str, SeqRepoSource],
-    seq_repo_activity: dict[str, Any],
+    seq_repo_activity: AnyMappingModel,
     seq_repo_source_resolved_project_coordinators: list[LDAPPersonWithQuery],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     project_coordinators_merged_ids_by_query_string: dict[
@@ -77,7 +76,7 @@ def test_transform_seq_repo_resource_to_extracted_resource(
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
     seq_repo_latest_sources: dict[str, SeqRepoSource],
     extracted_mex_activities_dict: dict[str, ExtractedActivity],
-    seq_repo_resource: dict[str, Any],
+    seq_repo_resource: AnyMappingModel,
     extracted_mex_access_platform: ExtractedAccessPlatform,
     seq_repo_source_resolved_project_coordinators: list[LDAPPersonWithQuery],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
@@ -170,7 +169,7 @@ def test_transform_seq_repo_resource_to_extracted_resource(
 
 def test_transform_seq_repo_access_platform_to_extracted_access_platform(
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
-    seq_repo_access_platform: dict[str, Any],
+    seq_repo_access_platform: AnyMappingModel,
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
 ) -> None:
     expected = {

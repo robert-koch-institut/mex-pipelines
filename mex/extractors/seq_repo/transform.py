@@ -1,5 +1,3 @@
-from typing import Any
-
 from mex.common.ldap.models.person import LDAPPersonWithQuery
 from mex.common.models import (
     ExtractedAccessPlatform,
@@ -13,12 +11,13 @@ from mex.common.types import (
     MergedPersonIdentifier,
     Text,
 )
+from mex.extractors.mapping.types import AnyMappingModel
 from mex.extractors.seq_repo.model import SeqRepoSource
 
 
 def transform_seq_repo_activities_to_extracted_activities(
     seq_repo_sources: dict[str, SeqRepoSource],
-    seq_repo_activity: dict[str, Any],
+    seq_repo_activity: AnyMappingModel,
     seq_repo_source_resolved_project_coordinators: list[LDAPPersonWithQuery],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     project_coordinators_merged_ids_by_query_string: dict[
@@ -41,7 +40,7 @@ def transform_seq_repo_activities_to_extracted_activities(
     Returns:
         list of unique ExtractedActivity
     """
-    theme = seq_repo_activity["theme"][0]["mappingRules"][0]["setValues"]
+    theme = seq_repo_activity.theme[0].mappingRules[0].setValues
     unique_activities = []
 
     for source in seq_repo_sources.values():
@@ -77,7 +76,7 @@ def transform_seq_repo_resource_to_extracted_resource(
     seq_repo_sources: dict[str, SeqRepoSource],
     seq_repo_activities: dict[str, ExtractedActivity],
     mex_access_platform: ExtractedAccessPlatform,
-    seq_repo_resource: dict[str, Any],
+    seq_repo_resource: AnyMappingModel,
     seq_repo_source_resolved_project_coordinators: list[LDAPPersonWithQuery],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     project_coordinators_merged_ids_by_query_string: dict[
@@ -105,43 +104,34 @@ def transform_seq_repo_resource_to_extracted_resource(
         list of ExtractedResource
     """
     # Resource values from mapping
-    access_restriction = seq_repo_resource["accessRestriction"][0]["mappingRules"][0][
-        "setValues"
-    ]
-    accrual_periodicity = seq_repo_resource["accrualPeriodicity"][0]["mappingRules"][0][
-        "setValues"
-    ]
-    anonymization_pseudonymization = seq_repo_resource["anonymizationPseudonymization"][
-        0
-    ]["mappingRules"][0]["setValues"]
-    method = [
-        Text(**k)
-        for k in seq_repo_resource["method"][0]["mappingRules"][0]["setValues"]
-    ]
+    access_restriction = (
+        seq_repo_resource.accessRestriction[0].mappingRules[0].setValues
+    )
+    accrual_periodicity = (
+        seq_repo_resource.accrualPeriodicity[0].mappingRules[0].setValues
+    )
+    anonymization_pseudonymization = (
+        seq_repo_resource.anonymizationPseudonymization[0].mappingRules[0].setValues
+    )
+    method = [Text(**k) for k in seq_repo_resource.method[0].mappingRules[0].setValues]
 
-    resource_creation_method = seq_repo_resource["resourceCreationMethod"][0][
-        "mappingRules"
-    ][0]["setValues"]
-    resource_type_general = seq_repo_resource["resourceTypeGeneral"][0]["mappingRules"][
-        0
-    ]["setValues"]
+    resource_creation_method = (
+        seq_repo_resource.resourceCreationMethod[0].mappingRules[0].setValues
+    )
+    resource_type_general = (
+        seq_repo_resource.resourceTypeGeneral[0].mappingRules[0].setValues
+    )
     resource_type_specific = [
         Text(**k)
-        for k in seq_repo_resource["resourceTypeSpecific"][0]["mappingRules"][0][
-            "setValues"
-        ]
+        for k in seq_repo_resource.resourceTypeSpecific[0].mappingRules[0].setValues
     ]
-    rights = [
-        Text(**k)
-        for k in seq_repo_resource["rights"][0]["mappingRules"][0]["setValues"]
-    ]
-    state_of_data_processing = seq_repo_resource["stateOfDataProcessing"][0][
-        "mappingRules"
-    ][0]["setValues"]
-    theme = seq_repo_resource["theme"][0]["mappingRules"][0]["setValues"]
+    rights = [Text(**k) for k in seq_repo_resource.rights[0].mappingRules[0].setValues]
+    state_of_data_processing = (
+        seq_repo_resource.stateOfDataProcessing[0].mappingRules[0].setValues
+    )
+    theme = seq_repo_resource.theme[0].mappingRules[0].setValues
     shared_keyword = [
-        Text(**k)
-        for k in seq_repo_resource["keyword"][0]["mappingRules"][0]["setValues"]
+        Text(**k) for k in seq_repo_resource.keyword[0].mappingRules[0].setValues
     ]
 
     extracted_resources = []
@@ -194,7 +184,7 @@ def transform_seq_repo_resource_to_extracted_resource(
 
 
 def transform_seq_repo_access_platform_to_extracted_access_platform(
-    seq_repo_access_platform: dict[str, Any],
+    seq_repo_access_platform: AnyMappingModel,
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     extracted_primary_source: ExtractedPrimarySource,
 ) -> ExtractedAccessPlatform:
@@ -208,29 +198,25 @@ def transform_seq_repo_access_platform_to_extracted_access_platform(
     Returns:
         ExtractedAccessPlatform
     """
-    alternative_title = seq_repo_access_platform["alternativeTitle"][0]["mappingRules"][
-        0
-    ]["setValues"]
+    alternative_title = (
+        seq_repo_access_platform.alternativeTitle[0].mappingRules[0].setValues
+    )
 
-    description = seq_repo_access_platform["description"][0]["mappingRules"][0][
-        "setValues"
-    ]
-    endpoint_type = seq_repo_access_platform["endpointType"][0]["mappingRules"][0][
-        "setValues"
-    ]
-    identifier_in_primary_source = seq_repo_access_platform[
-        "identifierInPrimarySource"
-    ][0]["mappingRules"][0]["setValues"]
-    landing_page = seq_repo_access_platform["landingPage"][0]["mappingRules"][0][
-        "setValues"
-    ]
+    description = seq_repo_access_platform.description[0].mappingRules[0].setValues
+    endpoint_type = seq_repo_access_platform.endpointType[0].mappingRules[0].setValues
+    identifier_in_primary_source = (
+        seq_repo_access_platform["identifierInPrimarySource"][0]
+        .mappingRules[0]
+        .setValues
+    )
+    landing_page = seq_repo_access_platform.landingPage[0].mappingRules[0].setValues
 
-    technical_accessibility = seq_repo_access_platform["technicalAccessibility"][0][
-        "mappingRules"
-    ][0]["setValues"]
-    title = seq_repo_access_platform["title"][0]["mappingRules"][0]["setValues"]
+    technical_accessibility = (
+        seq_repo_access_platform.technicalAccessibility[0].mappingRules[0].setValues
+    )
+    title = seq_repo_access_platform.title[0].mappingRules[0].setValues
 
-    contacts = seq_repo_access_platform["contact"][0]["mappingRules"][0]["forValues"]
+    contacts = seq_repo_access_platform.contact[0].mappingRules[0].forValues
 
     resolved_organigram = [
         unit_stable_target_ids_by_synonym.get(contact) for contact in contacts

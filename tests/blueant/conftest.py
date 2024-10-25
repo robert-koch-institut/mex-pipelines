@@ -1,10 +1,10 @@
-from typing import Any
-
 import pytest
 
-from mex.common.models import ExtractedPerson
+from mex.common.models import ExtractedActivity, ExtractedPerson
 from mex.common.types import ActivityType, Identifier, TemporalEntity
 from mex.extractors.blueant.models.source import BlueAntSource
+from mex.extractors.mapping.transform import transform_mapping_data_to_model
+from mex.extractors.mapping.types import AnyMappingModel
 
 
 @pytest.fixture
@@ -54,45 +54,48 @@ def blueant_source_without_leader() -> BlueAntSource:
 
 
 @pytest.fixture
-def blueant_activity() -> dict[str, Any]:
+def blueant_activity() -> AnyMappingModel:
     """Return activity default values."""
-    return {
-        "activityType": [
-            {
-                "fieldInPrimarySource": "typeId",
-                "locationInPrimarySource": None,
-                "examplesInPrimarySource": ["typeId: 18426, text: Standardprojekt"],
-                "mappingRules": [
-                    {
-                        "forValues": None,
-                        "setValues": None,
-                        "rule": "typeId resolved to text using api endpoint masterdata/projects/types/{typeId}.",
-                    },
-                    {
-                        "forValues": ["03 Drittmittelprojekt"],
-                        "setValues": [ActivityType["THIRD_PARTY_FUNDED_PROJECT"]],
-                        "rule": None,
-                    },
-                    {
-                        "forValues": [
-                            "01 Standardprojekt",
-                            "02 Standardprojekt agil",
-                            "04 Dienstleistung und Support",
-                            "05 Linienprojekt",
-                            "06 internes Projekt",
-                            "08 Organisationsprojekt",
-                            "09 Maßnahme",
-                        ],
-                        "setValues": [ActivityType["INTERNAL_PROJECT_ENDEAVOR"]],
-                        "rule": None,
-                    },
-                    {
-                        "forValues": ["07 Survey"],
-                        "setValues": [ActivityType["OTHER"]],
-                        "rule": None,
-                    },
-                ],
-                "comment": None,
-            }
-        ]
-    }
+    return transform_mapping_data_to_model(
+        {
+            "activityType": [
+                {
+                    "fieldInPrimarySource": "typeId",
+                    "locationInPrimarySource": None,
+                    "examplesInPrimarySource": ["typeId: 18426, text: Standardprojekt"],
+                    "mappingRules": [
+                        {
+                            "forValues": None,
+                            "setValues": None,
+                            "rule": "typeId resolved to text using api endpoint masterdata/projects/types/{typeId}.",
+                        },
+                        {
+                            "forValues": ["03 Drittmittelprojekt"],
+                            "setValues": [ActivityType["THIRD_PARTY_FUNDED_PROJECT"]],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": [
+                                "01 Standardprojekt",
+                                "02 Standardprojekt agil",
+                                "04 Dienstleistung und Support",
+                                "05 Linienprojekt",
+                                "06 internes Projekt",
+                                "08 Organisationsprojekt",
+                                "09 Maßnahme",
+                            ],
+                            "setValues": [ActivityType["INTERNAL_PROJECT_ENDEAVOR"]],
+                            "rule": None,
+                        },
+                        {
+                            "forValues": ["07 Survey"],
+                            "setValues": [ActivityType["OTHER"]],
+                            "rule": None,
+                        },
+                    ],
+                    "comment": None,
+                }
+            ]
+        },
+        ExtractedActivity,
+    )

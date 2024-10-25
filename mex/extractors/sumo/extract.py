@@ -1,5 +1,4 @@
 from collections.abc import Generator, Iterable
-from typing import Any
 
 import numpy as np
 from pandas import ExcelFile
@@ -8,6 +7,7 @@ from mex.common.ldap.connector import LDAPConnector
 from mex.common.ldap.models.actor import LDAPActor
 from mex.common.ldap.models.person import LDAPPersonWithQuery
 from mex.common.ldap.transform import analyse_person_string
+from mex.extractors.mapping.types import AnyMappingModel
 from mex.extractors.settings import Settings
 from mex.extractors.sumo.models.cc1_data_model_nokeda import Cc1DataModelNoKeda
 from mex.extractors.sumo.models.cc1_data_valuesets import Cc1DataValuesets
@@ -136,7 +136,7 @@ def extract_cc2_feat_projection() -> Generator[Cc2FeatProjection, None, None]:
 
 
 def extract_ldap_contact_points_by_emails(
-    extracted_resources: list[dict[str, Any]],
+    extracted_resources: list[AnyMappingModel],
 ) -> Generator[LDAPActor, None, None]:
     """Extract contact points from ldap for email in resource contacts.
 
@@ -148,16 +148,14 @@ def extract_ldap_contact_points_by_emails(
     """
     connector = LDAPConnector.get()
 
-    emails = {
-        r["contact"][0]["mappingRules"][0]["forValues"][0] for r in extracted_resources
-    }
+    emails = {r.contact[0].mappingRules[0].forValues[0] for r in extracted_resources}
     return (
         actor for email in emails for actor in connector.get_functional_accounts(email)
     )
 
 
 def extract_ldap_contact_points_by_name(
-    sumo_access_platform: dict[str, Any],
+    sumo_access_platform: AnyMappingModel,
 ) -> Generator[LDAPPersonWithQuery, None, None]:
     """Extract contact points from ldap for contact name in Sumo access platform.
 
@@ -168,7 +166,7 @@ def extract_ldap_contact_points_by_name(
         Iterable of ldap persons with query
     """
     connector = LDAPConnector.get()
-    names = sumo_access_platform["contact"][0]["mappingRules"][0]["forValues"]
+    names = sumo_access_platform.contact[0].mappingRules[0].forValues
     split_names = [
         split_name for name in names for split_name in analyse_person_string(name)
     ]

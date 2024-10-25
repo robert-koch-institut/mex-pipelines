@@ -1,5 +1,5 @@
 from collections.abc import Generator, Iterable
-from typing import Any, cast
+from typing import cast
 
 from mex.common.logging import watch
 from mex.common.models import (
@@ -17,6 +17,7 @@ from mex.common.types import (
     TemporalEntity,
 )
 from mex.extractors.biospecimen.models.source import BiospecimenResource
+from mex.extractors.mapping.types import AnyMappingModel
 
 
 @watch
@@ -27,7 +28,7 @@ def transform_biospecimen_resource_to_mex_resource(
     mex_persons: Iterable[ExtractedPerson],
     extracted_organization_rki: ExtractedOrganization,
     extracted_synopse_activities: Iterable[ExtractedActivity],
-    resource_mapping: dict[str, Any],
+    resource_mapping: AnyMappingModel,
     extracted_organizations: dict[str, MergedOrganizationIdentifier],
 ) -> Generator[ExtractedResource, None, None]:
     """Transform Biospecimen resources to extracted resources.
@@ -59,7 +60,7 @@ def transform_biospecimen_resource_to_mex_resource(
             )
         else:
             anonymization_pseudonymization = None
-        conforms_to = resource_mapping["conformsTo"][0]["mappingRules"][0]["setValues"]
+        conforms_to = resource_mapping.conformsTo[0].mappingRules[0].setValues
         contributing_unit = (
             unit_stable_target_ids_by_synonym.get(unit_name)
             if (unit_name := resource.mitwirkende_fachabteilung)
@@ -79,13 +80,11 @@ def transform_biospecimen_resource_to_mex_resource(
             if resource.externe_partner
             else []
         )
-        has_personal_data = resource_mapping["hasPersonalData"][0]["mappingRules"][0][
-            "setValues"
-        ]
-        has_legal_basis = resource_mapping["hasLegalBasis"][0]["mappingRules"][0][
-            "setValues"
-        ]
-        language = resource_mapping["language"][0]["mappingRules"][0]["setValues"]
+        has_personal_data = (
+            resource_mapping.hasPersonalData[0].mappingRules[0].setValues
+        )
+        has_legal_basis = resource_mapping.hasLegalBasis[0].mappingRules[0].setValues
+        language = resource_mapping.language[0].mappingRules[0].setValues
 
         contact = None
         for kontakt in resource.kontakt:
@@ -114,32 +113,27 @@ def transform_biospecimen_resource_to_mex_resource(
         ]
         if (
             resource.ressourcentyp_allgemein
-            in resource_mapping["resourceTypeGeneral"][0]["mappingRules"][0][
-                "forValues"
-            ]
+            in resource_mapping.resourceTypeGeneral[0].mappingRules[0].forValues
         ):
-            resource_type_general = resource_mapping["resourceTypeGeneral"][0][
-                "mappingRules"
-            ][0]["setValues"]
+            resource_type_general = (
+                resource_mapping.resourceTypeGeneral[0].mappingRules[0].setValues
+            )
         else:
             resource_type_general = []
-        resource_creation_method = resource_mapping["resourceCreationMethod"][0][
-            "mappingRules"
-        ][0]["setValues"]
+        resource_creation_method = (
+            resource_mapping.resourceCreationMethod[0].mappingRules[0].setValues
+        )
         unit_in_charge = unit_stable_target_ids_by_synonym.get(
             resource.verantwortliche_fachabteilung
         )
-        if (
-            resource_mapping["theme"][0]["mappingRules"][1]["forValues"]
-            in resource.thema
-        ):
-            theme = resource_mapping["theme"][0]["mappingRules"][1]["setValues"]
+        if resource_mapping.theme[0].mappingRules[1].forValues in resource.thema:
+            theme = resource_mapping.theme[0].mappingRules[1].setValues
         else:
-            theme = resource_mapping["theme"][0]["mappingRules"][0]["setValues"]
+            theme = resource_mapping.theme[0].mappingRules[0].setValues
         yield ExtractedResource(
-            accessRestriction=resource_mapping["accessRestriction"][0]["mappingRules"][
-                0
-            ]["setValues"],
+            accessRestriction=resource_mapping.accessRestriction[0]
+            .mappingRules[0]
+            .setValues,
             alternativeTitle=resource.alternativer_titel,
             anonymizationPseudonymization=anonymization_pseudonymization,
             conformsTo=conforms_to,

@@ -1,5 +1,3 @@
-from typing import Any
-
 import pytest
 from numpy import nan
 
@@ -16,6 +14,8 @@ from mex.common.types import (
     MergedResourceIdentifier,
     Text,
 )
+from mex.extractors.mapping.transform import transform_mapping_data_to_models
+from mex.extractors.mapping.types import AnyMappingModel
 from mex.extractors.odk.model import ODKData
 
 
@@ -28,468 +28,475 @@ def unit_stable_target_ids_by_synonym() -> (
 
 
 @pytest.fixture
-def odk_resource_mappings() -> list[dict[str, Any]]:
+def odk_resource_mappings() -> list[AnyMappingModel]:
     """Mocked odk resource mappings."""
-    return [
-        {
-            "identifier": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": None,
-                            "setValues": None,
-                            "rule": "Assign identifier.",
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "hadPrimarySource": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": None,
-                            "setValues": None,
-                            "rule": "Assign 'stable target id'",
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "identifierInPrimarySource": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": None,
-                            "setValues": ["test_raw_data"],
-                            "rule": "Use value as it is.",
-                        }
-                    ],
-                    "comment": "identifierInPrimarySource also for the corresponding activity extracted from international projects",
-                }
-            ],
-            "stableTargetId": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": None,
-                            "setValues": None,
-                            "rule": "Assign 'stable target id' of merged item.",
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "accessPlatform": None,
-            "accessRestriction": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": None,
-                            "setValues": [AccessRestriction["RESTRICTED"]],
-                            "rule": "Use value as it is.",
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "accrualPeriodicity": None,
-            "alternativeTitle": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": None,
-                            "setValues": [
-                                {"value": "dolor", "language": "en"},
-                                {"value": "sit", "language": "de"},
-                            ],
-                            "rule": "Set values as indicated.",
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "anonymizationPseudonymization": None,
-            "contact": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": ["C1"],
-                            "setValues": None,
-                            "rule": "Match value with corresponding identifier using organigram extractor.",
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "contributingUnit": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": ["C1"],
-                            "setValues": None,
-                            "rule": "Match value with corresponding identifier using organigram extractor.",
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "description": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": None,
-                            "setValues": [{"value": "amet", "language": "en"}],
-                            "rule": "Set value as indicated.",
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "distribution": None,
-            "documentation": None,
-            "externalPartner": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": ["consetetur", "invidunt", " sadipscing  "],
-                            "setValues": None,
-                            "rule": "Use value",
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "hasLegalBasis": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": None,
-                            "setValues": [
-                                {"value": "Informed consent", "language": "en"}
-                            ],
-                            "rule": "Set value as indicated.",
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "icd10code": None,
-            "instrumentToolOrApparatus": None,
-            "isPartOf": None,
-            "keyword": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": None,
-                            "setValues": [
-                                {"value": "elitr", "language": None},
-                                {"value": "sed", "language": "en"},
-                                {"value": "diam", "language": "en"},
-                            ],
-                            "rule": "Set values as indicated.",
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "language": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": None,
-                            "setValues": [Language["ENGLISH"]],
-                            "rule": "Set value as indicated.",
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "license": None,
-            "loincId": None,
-            "meshId": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": None,
-                            "setValues": ["http://id.nlm.nih.gov/mesh/D000086382"],
-                            "rule": "Set values as indicated.",
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "method": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": None,
-                            "setValues": [
-                                {"value": "nonumy", "language": "en"},
-                                {"value": "eirmod", "language": "de"},
-                            ],
-                            "rule": "Set values as indicated.",
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "methodDescription": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": None,
-                            "setValues": [{"value": "tempor", "language": "en"}],
-                            "rule": "Set value as indicated.",
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "publisher": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": ["invidunt", "consetetur"],
-                            "setValues": None,
-                            "rule": "Use value to match with wikidata extractor.",
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "resourceCreationMethod": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": None,
-                            "setValues": [
-                                "https://mex.rki.de/item/resource-creation-method-2"
-                            ],
-                            "rule": "Set value as indicated.",
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "resourceTypeGeneral": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": None,
-                            "setValues": [
-                                "https://mex.rki.de/item/resource-type-general-15"
-                            ],
-                            "rule": "Set value as indicated.",
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "resourceTypeSpecific": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": None,
-                            "setValues": [{"value": "tempor", "language": "en"}],
-                            "rule": "Set value as indicated.",
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "rights": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": None,
-                            "setValues": [{"value": "ut labore", "language": "de"}],
-                            "rule": "Set value as indicated.",
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "sizeOfDataBasis": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": None,
-                            "setValues": ["et dolore"],
-                            "rule": "Set value as indicated",
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "spatial": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": None,
-                            "setValues": [
-                                {"value": "magna", "language": "de"},
-                                {"value": "magna", "language": "en"},
-                            ],
-                            "rule": "Set values as indicated.",
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "stateOfDataProcessing": None,
-            "temporal": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": None,
-                            "setValues": ["2021-07-27 - 2021-12-31"],
-                            "rule": "Set value as indicated.",
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "theme": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": None,
-                            "setValues": [
-                                "https://mex.rki.de/item/theme-11",
-                                "https://mex.rki.de/item/theme-37",
-                            ],
-                            "rule": "Set values as indicated.",
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "title": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": None,
-                            "setValues": [
-                                {"value": "aliquyam", "language": "en"},
-                                {"value": "erat", "language": "de"},
-                            ],
-                            "rule": "Set values as indicated.",
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "unitInCharge": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": ["C1"],
-                            "setValues": None,
-                            "rule": "Match value with corresponding identifier using organigram extractor.",
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "wasGeneratedBy": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": ["0000-1000"],
-                            "setValues": None,
-                            "rule": "Use value",
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-        }
-    ]
+    return transform_mapping_data_to_models(
+        [
+            {
+                "identifier": [
+                    {
+                        "fieldInPrimarySource": "n/a",
+                        "locationInPrimarySource": None,
+                        "examplesInPrimarySource": None,
+                        "mappingRules": [
+                            {
+                                "forValues": None,
+                                "setValues": None,
+                                "rule": "Assign identifier.",
+                            }
+                        ],
+                        "comment": None,
+                    }
+                ],
+                "hadPrimarySource": [
+                    {
+                        "fieldInPrimarySource": "n/a",
+                        "locationInPrimarySource": None,
+                        "examplesInPrimarySource": None,
+                        "mappingRules": [
+                            {
+                                "forValues": None,
+                                "setValues": None,
+                                "rule": "Assign 'stable target id'",
+                            }
+                        ],
+                        "comment": None,
+                    }
+                ],
+                "identifierInPrimarySource": [
+                    {
+                        "fieldInPrimarySource": "n/a",
+                        "locationInPrimarySource": None,
+                        "examplesInPrimarySource": None,
+                        "mappingRules": [
+                            {
+                                "forValues": None,
+                                "setValues": ["test_raw_data"],
+                                "rule": "Use value as it is.",
+                            }
+                        ],
+                        "comment": "identifierInPrimarySource also for the corresponding activity extracted from international projects",
+                    }
+                ],
+                "stableTargetId": [
+                    {
+                        "fieldInPrimarySource": "n/a",
+                        "locationInPrimarySource": None,
+                        "examplesInPrimarySource": None,
+                        "mappingRules": [
+                            {
+                                "forValues": None,
+                                "setValues": None,
+                                "rule": "Assign 'stable target id' of merged item.",
+                            }
+                        ],
+                        "comment": None,
+                    }
+                ],
+                "accessPlatform": None,
+                "accessRestriction": [
+                    {
+                        "fieldInPrimarySource": "n/a",
+                        "locationInPrimarySource": None,
+                        "examplesInPrimarySource": None,
+                        "mappingRules": [
+                            {
+                                "forValues": None,
+                                "setValues": [AccessRestriction["RESTRICTED"]],
+                                "rule": "Use value as it is.",
+                            }
+                        ],
+                        "comment": None,
+                    }
+                ],
+                "accrualPeriodicity": None,
+                "alternativeTitle": [
+                    {
+                        "fieldInPrimarySource": "n/a",
+                        "locationInPrimarySource": None,
+                        "examplesInPrimarySource": None,
+                        "mappingRules": [
+                            {
+                                "forValues": None,
+                                "setValues": [
+                                    {"value": "dolor", "language": "en"},
+                                    {"value": "sit", "language": "de"},
+                                ],
+                                "rule": "Set values as indicated.",
+                            }
+                        ],
+                        "comment": None,
+                    }
+                ],
+                "anonymizationPseudonymization": None,
+                "contact": [
+                    {
+                        "fieldInPrimarySource": "n/a",
+                        "locationInPrimarySource": None,
+                        "examplesInPrimarySource": None,
+                        "mappingRules": [
+                            {
+                                "forValues": ["C1"],
+                                "setValues": None,
+                                "rule": "Match value with corresponding identifier using organigram extractor.",
+                            }
+                        ],
+                        "comment": None,
+                    }
+                ],
+                "contributingUnit": [
+                    {
+                        "fieldInPrimarySource": "n/a",
+                        "locationInPrimarySource": None,
+                        "examplesInPrimarySource": None,
+                        "mappingRules": [
+                            {
+                                "forValues": ["C1"],
+                                "setValues": None,
+                                "rule": "Match value with corresponding identifier using organigram extractor.",
+                            }
+                        ],
+                        "comment": None,
+                    }
+                ],
+                "description": [
+                    {
+                        "fieldInPrimarySource": "n/a",
+                        "locationInPrimarySource": None,
+                        "examplesInPrimarySource": None,
+                        "mappingRules": [
+                            {
+                                "forValues": None,
+                                "setValues": [{"value": "amet", "language": "en"}],
+                                "rule": "Set value as indicated.",
+                            }
+                        ],
+                        "comment": None,
+                    }
+                ],
+                "distribution": None,
+                "documentation": None,
+                "externalPartner": [
+                    {
+                        "fieldInPrimarySource": "n/a",
+                        "locationInPrimarySource": None,
+                        "examplesInPrimarySource": None,
+                        "mappingRules": [
+                            {
+                                "forValues": [
+                                    "consetetur",
+                                    "invidunt",
+                                    " sadipscing  ",
+                                ],
+                                "setValues": None,
+                                "rule": "Use value",
+                            }
+                        ],
+                        "comment": None,
+                    }
+                ],
+                "hasLegalBasis": [
+                    {
+                        "fieldInPrimarySource": "n/a",
+                        "locationInPrimarySource": None,
+                        "examplesInPrimarySource": None,
+                        "mappingRules": [
+                            {
+                                "forValues": None,
+                                "setValues": [
+                                    {"value": "Informed consent", "language": "en"}
+                                ],
+                                "rule": "Set value as indicated.",
+                            }
+                        ],
+                        "comment": None,
+                    }
+                ],
+                "icd10code": None,
+                "instrumentToolOrApparatus": None,
+                "isPartOf": None,
+                "keyword": [
+                    {
+                        "fieldInPrimarySource": "n/a",
+                        "locationInPrimarySource": None,
+                        "examplesInPrimarySource": None,
+                        "mappingRules": [
+                            {
+                                "forValues": None,
+                                "setValues": [
+                                    {"value": "elitr", "language": None},
+                                    {"value": "sed", "language": "en"},
+                                    {"value": "diam", "language": "en"},
+                                ],
+                                "rule": "Set values as indicated.",
+                            }
+                        ],
+                        "comment": None,
+                    }
+                ],
+                "language": [
+                    {
+                        "fieldInPrimarySource": "n/a",
+                        "locationInPrimarySource": None,
+                        "examplesInPrimarySource": None,
+                        "mappingRules": [
+                            {
+                                "forValues": None,
+                                "setValues": [Language["ENGLISH"]],
+                                "rule": "Set value as indicated.",
+                            }
+                        ],
+                        "comment": None,
+                    }
+                ],
+                "license": None,
+                "loincId": None,
+                "meshId": [
+                    {
+                        "fieldInPrimarySource": "n/a",
+                        "locationInPrimarySource": None,
+                        "examplesInPrimarySource": None,
+                        "mappingRules": [
+                            {
+                                "forValues": None,
+                                "setValues": ["http://id.nlm.nih.gov/mesh/D000086382"],
+                                "rule": "Set values as indicated.",
+                            }
+                        ],
+                        "comment": None,
+                    }
+                ],
+                "method": [
+                    {
+                        "fieldInPrimarySource": "n/a",
+                        "locationInPrimarySource": None,
+                        "examplesInPrimarySource": None,
+                        "mappingRules": [
+                            {
+                                "forValues": None,
+                                "setValues": [
+                                    {"value": "nonumy", "language": "en"},
+                                    {"value": "eirmod", "language": "de"},
+                                ],
+                                "rule": "Set values as indicated.",
+                            }
+                        ],
+                        "comment": None,
+                    }
+                ],
+                "methodDescription": [
+                    {
+                        "fieldInPrimarySource": "n/a",
+                        "locationInPrimarySource": None,
+                        "examplesInPrimarySource": None,
+                        "mappingRules": [
+                            {
+                                "forValues": None,
+                                "setValues": [{"value": "tempor", "language": "en"}],
+                                "rule": "Set value as indicated.",
+                            }
+                        ],
+                        "comment": None,
+                    }
+                ],
+                "publisher": [
+                    {
+                        "fieldInPrimarySource": "n/a",
+                        "locationInPrimarySource": None,
+                        "examplesInPrimarySource": None,
+                        "mappingRules": [
+                            {
+                                "forValues": ["invidunt", "consetetur"],
+                                "setValues": None,
+                                "rule": "Use value to match with wikidata extractor.",
+                            }
+                        ],
+                        "comment": None,
+                    }
+                ],
+                "resourceCreationMethod": [
+                    {
+                        "fieldInPrimarySource": "n/a",
+                        "locationInPrimarySource": None,
+                        "examplesInPrimarySource": None,
+                        "mappingRules": [
+                            {
+                                "forValues": None,
+                                "setValues": [
+                                    "https://mex.rki.de/item/resource-creation-method-2"
+                                ],
+                                "rule": "Set value as indicated.",
+                            }
+                        ],
+                        "comment": None,
+                    }
+                ],
+                "resourceTypeGeneral": [
+                    {
+                        "fieldInPrimarySource": "n/a",
+                        "locationInPrimarySource": None,
+                        "examplesInPrimarySource": None,
+                        "mappingRules": [
+                            {
+                                "forValues": None,
+                                "setValues": [
+                                    "https://mex.rki.de/item/resource-type-general-15"
+                                ],
+                                "rule": "Set value as indicated.",
+                            }
+                        ],
+                        "comment": None,
+                    }
+                ],
+                "resourceTypeSpecific": [
+                    {
+                        "fieldInPrimarySource": "n/a",
+                        "locationInPrimarySource": None,
+                        "examplesInPrimarySource": None,
+                        "mappingRules": [
+                            {
+                                "forValues": None,
+                                "setValues": [{"value": "tempor", "language": "en"}],
+                                "rule": "Set value as indicated.",
+                            }
+                        ],
+                        "comment": None,
+                    }
+                ],
+                "rights": [
+                    {
+                        "fieldInPrimarySource": "n/a",
+                        "locationInPrimarySource": None,
+                        "examplesInPrimarySource": None,
+                        "mappingRules": [
+                            {
+                                "forValues": None,
+                                "setValues": [{"value": "ut labore", "language": "de"}],
+                                "rule": "Set value as indicated.",
+                            }
+                        ],
+                        "comment": None,
+                    }
+                ],
+                "sizeOfDataBasis": [
+                    {
+                        "fieldInPrimarySource": "n/a",
+                        "locationInPrimarySource": None,
+                        "examplesInPrimarySource": None,
+                        "mappingRules": [
+                            {
+                                "forValues": None,
+                                "setValues": ["et dolore"],
+                                "rule": "Set value as indicated",
+                            }
+                        ],
+                        "comment": None,
+                    }
+                ],
+                "spatial": [
+                    {
+                        "fieldInPrimarySource": "n/a",
+                        "locationInPrimarySource": None,
+                        "examplesInPrimarySource": None,
+                        "mappingRules": [
+                            {
+                                "forValues": None,
+                                "setValues": [
+                                    {"value": "magna", "language": "de"},
+                                    {"value": "magna", "language": "en"},
+                                ],
+                                "rule": "Set values as indicated.",
+                            }
+                        ],
+                        "comment": None,
+                    }
+                ],
+                "stateOfDataProcessing": None,
+                "temporal": [
+                    {
+                        "fieldInPrimarySource": "n/a",
+                        "locationInPrimarySource": None,
+                        "examplesInPrimarySource": None,
+                        "mappingRules": [
+                            {
+                                "forValues": None,
+                                "setValues": ["2021-07-27 - 2021-12-31"],
+                                "rule": "Set value as indicated.",
+                            }
+                        ],
+                        "comment": None,
+                    }
+                ],
+                "theme": [
+                    {
+                        "fieldInPrimarySource": "n/a",
+                        "locationInPrimarySource": None,
+                        "examplesInPrimarySource": None,
+                        "mappingRules": [
+                            {
+                                "forValues": None,
+                                "setValues": [
+                                    "https://mex.rki.de/item/theme-11",
+                                    "https://mex.rki.de/item/theme-37",
+                                ],
+                                "rule": "Set values as indicated.",
+                            }
+                        ],
+                        "comment": None,
+                    }
+                ],
+                "title": [
+                    {
+                        "fieldInPrimarySource": "n/a",
+                        "locationInPrimarySource": None,
+                        "examplesInPrimarySource": None,
+                        "mappingRules": [
+                            {
+                                "forValues": None,
+                                "setValues": [
+                                    {"value": "aliquyam", "language": "en"},
+                                    {"value": "erat", "language": "de"},
+                                ],
+                                "rule": "Set values as indicated.",
+                            }
+                        ],
+                        "comment": None,
+                    }
+                ],
+                "unitInCharge": [
+                    {
+                        "fieldInPrimarySource": "n/a",
+                        "locationInPrimarySource": None,
+                        "examplesInPrimarySource": None,
+                        "mappingRules": [
+                            {
+                                "forValues": ["C1"],
+                                "setValues": None,
+                                "rule": "Match value with corresponding identifier using organigram extractor.",
+                            }
+                        ],
+                        "comment": None,
+                    }
+                ],
+                "wasGeneratedBy": [
+                    {
+                        "fieldInPrimarySource": "n/a",
+                        "locationInPrimarySource": None,
+                        "examplesInPrimarySource": None,
+                        "mappingRules": [
+                            {
+                                "forValues": ["0000-1000"],
+                                "setValues": None,
+                                "rule": "Use value",
+                            }
+                        ],
+                        "comment": None,
+                    }
+                ],
+            }
+        ],
+        ExtractedResource,
+    )
 
 
 @pytest.fixture

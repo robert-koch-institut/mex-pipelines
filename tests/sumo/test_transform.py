@@ -1,5 +1,3 @@
-from typing import Any
-
 from mex.common.models import (
     ExtractedAccessPlatform,
     ExtractedActivity,
@@ -21,6 +19,7 @@ from mex.common.types import (
     TextLanguage,
     YearMonthDay,
 )
+from mex.extractors.mapping.types import AnyMappingModel
 from mex.extractors.sumo.models.cc1_data_model_nokeda import Cc1DataModelNoKeda
 from mex.extractors.sumo.models.cc1_data_valuesets import Cc1DataValuesets
 from mex.extractors.sumo.models.cc2_aux_mapping import Cc2AuxMapping
@@ -68,7 +67,7 @@ def test_get_contact_merged_ids_by_names(
 def test_transform_resource_nokeda_to_mex_resource(
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
     unit_merged_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
-    sumo_resources_nokeda: dict[str, Any],
+    sumo_resources_nokeda: AnyMappingModel,
     extracted_organization_rki: ExtractedOrganization,
     transformed_activity: ExtractedActivity,
     transformed_sumo_access_platform: ExtractedAccessPlatform,
@@ -144,7 +143,7 @@ def test_transform_resource_nokeda_to_mex_resource(
 def test_transform_resource_feat_model_to_mex_resource(
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
     unit_merged_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
-    sumo_resources_feat: dict[str, Any],
+    sumo_resources_feat: AnyMappingModel,
     mex_resources_nokeda: ExtractedResource,
     transformed_activity: ExtractedActivity,
     transformed_sumo_access_platform: ExtractedAccessPlatform,
@@ -438,7 +437,7 @@ def test_transform_feat_projection_variable_to_mex_variable(
 def test_transform_sumo_access_platform_to_mex_access_platform(
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
     unit_merged_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
-    sumo_access_platform: dict[str, Any],
+    sumo_access_platform: AnyMappingModel,
 ) -> None:
     person_id = Identifier.generate(seed=30)
     person_stable_target_ids_by_query_string = {
@@ -466,7 +465,7 @@ def test_transform_sumo_access_platform_to_mex_access_platform(
 
 
 def test_transform_sumo_activity_to_extracted_activity(
-    sumo_activity: dict[str, Any],
+    sumo_activity: AnyMappingModel,
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
     unit_merged_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     contact_merged_ids_by_emails: dict[Email, MergedContactPointIdentifier],

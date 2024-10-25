@@ -21,6 +21,7 @@ from mex.common.types import (
     MergedOrganizationIdentifier,
 )
 from mex.extractors.mapping.extract import extract_mapping_data
+from mex.extractors.mapping.transform import transform_mapping_data_to_models
 from mex.extractors.pipeline import asset, run_job_in_process
 from mex.extractors.settings import Settings
 from mex.extractors.sinks import load
@@ -63,7 +64,7 @@ def voxco_resource_mappings() -> list[dict[str, Any]]:
     """Extract voxco resource mappings."""
     settings = Settings.get()
     return [
-        extract_mapping_data(file, ExtractedResource)
+        extract_mapping_data(file)
         for file in Path(settings.voxco.mapping_path).glob("resource_*.yaml")
     ]
 
@@ -74,7 +75,9 @@ def organization_stable_target_id_by_query_voxco(
     extracted_primary_source_wikidata: ExtractedPrimarySource,
 ) -> dict[str, MergedOrganizationIdentifier]:
     """Extract and load voxco organizations and group them by query."""
-    voxco_organizations = extract_voxco_organizations(voxco_resource_mappings)
+    voxco_organizations = extract_voxco_organizations(
+        transform_mapping_data_to_models(voxco_resource_mappings, ExtractedResource)
+    )
 
     return get_merged_organization_id_by_query_with_transform_and_load(
         voxco_organizations, extracted_primary_source_wikidata
@@ -88,7 +91,9 @@ def extracted_mex_persons_voxco(
     extracted_organizational_units: list[ExtractedOrganizationalUnit],
 ) -> list[ExtractedPerson]:
     """Extract ldap persons for voxco, transform them and load them to sinks."""
-    ldap_persons = extract_ldap_persons_voxco(voxco_resource_mappings)
+    ldap_persons = extract_ldap_persons_voxco(
+        transform_mapping_data_to_models(voxco_resource_mappings, ExtractedResource)
+    )
     mex_persons = list(
         transform_ldap_persons_to_mex_persons(
             ldap_persons, extracted_primary_source_ldap, extracted_organizational_units
@@ -112,7 +117,7 @@ def extracted_voxco_resources(
 ) -> dict[str, ExtractedResource]:
     """Transform mex resources, load to them to the sinks and return."""
     mex_resources = transform_voxco_resource_mappings_to_extracted_resources(
-        voxco_resource_mappings,
+        transform_mapping_data_to_models(voxco_resource_mappings, ExtractedResource),
         organization_stable_target_id_by_query_voxco,
         extracted_mex_persons_voxco,
         unit_stable_target_ids_by_synonym,
