@@ -93,7 +93,7 @@ def odk_resource_mappings() -> list[AnyMappingModel]:
                         "comment": None,
                     }
                 ],
-                "accessPlatform": None,
+                "accessPlatform": [],
                 "accessRestriction": [
                     {
                         "fieldInPrimarySource": "n/a",
@@ -109,7 +109,7 @@ def odk_resource_mappings() -> list[AnyMappingModel]:
                         "comment": None,
                     }
                 ],
-                "accrualPeriodicity": None,
+                "accrualPeriodicity": [],
                 "alternativeTitle": [
                     {
                         "fieldInPrimarySource": "n/a",
@@ -128,7 +128,7 @@ def odk_resource_mappings() -> list[AnyMappingModel]:
                         "comment": None,
                     }
                 ],
-                "anonymizationPseudonymization": None,
+                "anonymizationPseudonymization": [],
                 "contact": [
                     {
                         "fieldInPrimarySource": "n/a",
@@ -174,8 +174,8 @@ def odk_resource_mappings() -> list[AnyMappingModel]:
                         "comment": None,
                     }
                 ],
-                "distribution": None,
-                "documentation": None,
+                "distribution": [],
+                "documentation": [],
                 "externalPartner": [
                     {
                         "fieldInPrimarySource": "n/a",
@@ -212,9 +212,9 @@ def odk_resource_mappings() -> list[AnyMappingModel]:
                         "comment": None,
                     }
                 ],
-                "icd10code": None,
-                "instrumentToolOrApparatus": None,
-                "isPartOf": None,
+                "icd10code": [],
+                "instrumentToolOrApparatus": [],
+                "isPartOf": [],
                 "keyword": [
                     {
                         "fieldInPrimarySource": "n/a",
@@ -249,8 +249,8 @@ def odk_resource_mappings() -> list[AnyMappingModel]:
                         "comment": None,
                     }
                 ],
-                "license": None,
-                "loincId": None,
+                "license": [],
+                "loincId": [],
                 "meshId": [
                     {
                         "fieldInPrimarySource": "n/a",
@@ -411,7 +411,7 @@ def odk_resource_mappings() -> list[AnyMappingModel]:
                         "comment": None,
                     }
                 ],
-                "stateOfDataProcessing": None,
+                "stateOfDataProcessing": [],
                 "temporal": [
                     {
                         "fieldInPrimarySource": "n/a",
@@ -563,7 +563,7 @@ def extracted_resources_odk() -> list[ExtractedResource]:
 
 
 @pytest.fixture
-def odk_raw_data() -> ODKData:
+def odk_raw_data() -> list[ODKData]:
     """Mocked odk raw data."""
     return [
         ODKData(

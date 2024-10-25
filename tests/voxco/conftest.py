@@ -252,7 +252,10 @@ def voxco_resource_mappings() -> list[AnyMappingModel]:
                     }
                 ],
                 "externalPartner": [
-                    {"mappingRules": [{"forValues": ["Robert Koch-Institut"]}]}
+                    {
+                        "fieldInPrimarySource": "n/a",
+                        "mappingRules": [{"forValues": ["Robert Koch-Institut"]}],
+                    }
                 ],
                 "icd10code": [
                     {
@@ -265,7 +268,7 @@ def voxco_resource_mappings() -> list[AnyMappingModel]:
                         "comment": None,
                     }
                 ],
-                "instrumentToolOrApparatus": None,
+                "instrumentToolOrApparatus": [],
                 "isPartOf": [
                     {
                         "fieldInPrimarySource": "n/a",
@@ -374,13 +377,7 @@ def voxco_resource_mappings() -> list[AnyMappingModel]:
                         "mappingRules": [
                             {
                                 "forValues": None,
-                                "setValues": [
-                                    {
-                                        "language": "en",
-                                        "title": "Feasibility study",
-                                        "url": "https://doi.org/10.25646/11292",
-                                    }
-                                ],
+                                "setValues": ["eGPhFdrhslN7JIyWs4hghW"],
                                 "rule": None,
                             }
                         ],

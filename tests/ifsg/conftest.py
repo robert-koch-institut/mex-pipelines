@@ -200,6 +200,9 @@ def meta_field() -> list[MetaField]:
 def ifsg_variable_group() -> AnyMappingModel:
     return transform_mapping_data_to_model(
         {
+            "hadPrimarySource": [],
+            "identifierInPrimarySource": [],
+            "containedBy": [],
             "label": [
                 {
                     "fieldInPrimarySource": 'StatementAreaGroup="Epi|Technical|Clinical|Outbreak|Patient|AdditionalAttributes|NULL|Event|General|Labor|Address"\'',
@@ -270,7 +273,7 @@ def ifsg_variable_group() -> AnyMappingModel:
                         },
                     ],
                 }
-            ]
+            ],
         },
         ExtractedVariableGroup,
     )
@@ -280,6 +283,7 @@ def ifsg_variable_group() -> AnyMappingModel:
 def resource_parent() -> AnyMappingModel:
     return transform_mapping_data_to_model(
         {
+            "hadPrimarySource": [],
             "accessRestriction": [
                 {
                     "comment": "restriktiv",
@@ -415,33 +419,9 @@ def resource_parent() -> AnyMappingModel:
                 {
                     "fieldInPrimarySource": "n/a",
                     "mappingRules": [
-                        {
-                            "setValues": [
-                                {
-                                    "language": "de",
-                                    "title": "Infektionsepidemiologisches Jahrbuch",
-                                    "url": "https://www.rki.de/DE/Content/Infekt/Jahrbuch/jahrbuch_node.html",
-                                }
-                            ]
-                        },
-                        {
-                            "setValues": [
-                                {
-                                    "language": "de",
-                                    "title": "Epidemiologisches Bulletin",
-                                    "url": "https://www.rki.de/DE/Content/Infekt/EpidBull/epid_bull_node.html",
-                                }
-                            ]
-                        },
-                        {
-                            "setValues": [
-                                {
-                                    "language": "de",
-                                    "title": "Falldefinitionen",
-                                    "url": "https://www.rki.de/DE/Content/Infekt/IfSG/Falldefinition/falldefinition_node.html",
-                                }
-                            ]
-                        },
+                        {"setValues": ["hcWtMGZnvhl00Qx93sAaJm"]},
+                        {"setValues": ["hR6FXPu4U4VqZ46niDGb9c"]},
+                        {"setValues": ["hH5GODN7Wns6tpxz8kvYOI"]},
                     ],
                 }
             ],
@@ -550,6 +530,7 @@ def resource_states() -> list[AnyMappingModel]:
     return transform_mapping_data_to_models(
         [
             {
+                "hadPrimarySource": [],
                 "accessRestriction": [
                     {
                         "comment": "restriktiv",
@@ -821,21 +802,9 @@ def resource_states() -> list[AnyMappingModel]:
                         "mappingRules": [
                             {
                                 "setValues": [
-                                    {
-                                        "language": "de",
-                                        "title": "Infektionsepidemiologisches Jahrbuch",
-                                        "url": "https://www.rki.de/DE/Content/Infekt/Jahrbuch/jahrbuch_node.html",
-                                    },
-                                    {
-                                        "language": "de",
-                                        "title": "Epidemiologisches Bulletin",
-                                        "url": "https://www.rki.de/DE/Content/Infekt/EpidBull/epid_bull_node.html",
-                                    },
-                                    {
-                                        "language": "de",
-                                        "title": "Falldefinitionen",
-                                        "url": "https://www.rki.de/DE/Content/Infekt/IfSG/Falldefinition/falldefinition_node.html",
-                                    },
+                                    "bLsPRdhb0Xy7JLpBGLsw7o",
+                                    "doEmEPh37WX17yOu5OdwT9",
+                                    "dKPEq3pATRUAhtVzXKhPx6",
                                 ]
                             }
                         ],
@@ -846,93 +815,15 @@ def resource_states() -> list[AnyMappingModel]:
                         "mappingRules": [
                             {
                                 "forValues": ["01"],
-                                "setValues": [
-                                    {
-                                        "language": "de",
-                                        "title": "Rheinland-Pfalz",
-                                        "url": "http://landesrecht.rlp.de/jportal/portal/page/bsrlpprod.psml?doc.id=jlr-IfSGMeldpflVRPpP1%3Ajuris-lr00&showdoccase=1&doc.hl=1&documentnumber=1",
-                                    }
-                                ],
+                                "setValues": ["IIsceA7taQLHZrZmnYOX2"],
                             },
                             {
                                 "forValues": ["09"],
-                                "setValues": [
-                                    {
-                                        "language": "de",
-                                        "title": "Bayern",
-                                        "url": "https://www.gesetze-bayern.de/Content/Document/BayMeldePflV/true",
-                                    }
-                                ],
+                                "setValues": ["fQKgqEf8YfLnV6mLV4YFIK"],
                             },
                             {
                                 "forValues": ["10"],
-                                "setValues": [
-                                    {
-                                        "language": "de",
-                                        "title": "Saarland",
-                                        "url": "https://www.saarland.de/msgff/DE/portale/gesundheitundpraevention/leistungenabisz/gesundheitsschutz/infektionsschutzgesetz/infektionsschutzgesetz.html",
-                                    }
-                                ],
-                            },
-                            {
-                                "forValues": ["11"],
-                                "setValues": [
-                                    {
-                                        "language": "de",
-                                        "title": "Berlin",
-                                        "url": "https://gesetze.berlin.de/bsbe/document/jlr-IfSGMeldpflVBEpP1",
-                                    }
-                                ],
-                            },
-                            {
-                                "forValues": ["12"],
-                                "setValues": [
-                                    {
-                                        "language": "de",
-                                        "title": "Brandenburg",
-                                        "url": "https://bravors.brandenburg.de/verordnungen/infkrankmv_2016",
-                                    }
-                                ],
-                            },
-                            {
-                                "forValues": ["13"],
-                                "setValues": [
-                                    {
-                                        "language": "de",
-                                        "title": "Mecklenburg-Vorpommern",
-                                        "url": "https://www.landesrecht-mv.de/bsmv/document/jlr-InfSchAGMVrahmen",
-                                    }
-                                ],
-                            },
-                            {
-                                "forValues": ["14"],
-                                "setValues": [
-                                    {
-                                        "language": "de",
-                                        "title": "Sachsen",
-                                        "url": "https://www.revosax.sachsen.de/vorschrift/1307-IfSGMeldeVO",
-                                    }
-                                ],
-                            },
-                            {
-                                "forValues": ["15"],
-                                "setValues": [
-                                    {
-                                        "language": "de",
-                                        "title": "Sachsen-Anhalt",
-                                        "url": "https://www.landesrecht.sachsen-anhalt.de/bsst/document/jlr-IfSGMeldpflVST2005rahmen",
-                                    }
-                                ],
-                            },
-                            {
-                                "forValues": ["16"],
-                                "setValues": [
-                                    {
-                                        "language": "de",
-                                        "title": "Thüringen",
-                                        "url": "https://landesrecht.thueringen.de/bsth/document/jlr-IfKrMeldAnpVTHrahmen",
-                                    }
-                                ],
+                                "setValues": ["es1ddVZTauTiKXXcF2lcx2"],
                             },
                         ],
                     },
@@ -1193,6 +1084,7 @@ def resource_states() -> list[AnyMappingModel]:
                 ],
             },
             {
+                "hadPrimarySource": [],
                 "accessRestriction": [
                     {
                         "comment": "restriktiv",
@@ -1464,21 +1356,9 @@ def resource_states() -> list[AnyMappingModel]:
                         "mappingRules": [
                             {
                                 "setValues": [
-                                    {
-                                        "language": "de",
-                                        "title": "Infektionsepidemiologisches Jahrbuch",
-                                        "url": "https://www.rki.de/DE/Content/Infekt/Jahrbuch/jahrbuch_node.html",
-                                    },
-                                    {
-                                        "language": "de",
-                                        "title": "Epidemiologisches Bulletin",
-                                        "url": "https://www.rki.de/DE/Content/Infekt/EpidBull/epid_bull_node.html",
-                                    },
-                                    {
-                                        "language": "de",
-                                        "title": "Falldefinitionen",
-                                        "url": "https://www.rki.de/DE/Content/Infekt/IfSG/Falldefinition/falldefinition_node.html",
-                                    },
+                                    "bLsPRdhb0Xy7JLpBGLsw7o",
+                                    "doEmEPh37WX17yOu5OdwT9",
+                                    "dKPEq3pATRUAhtVzXKhPx6",
                                 ]
                             }
                         ],
@@ -1488,94 +1368,16 @@ def resource_states() -> list[AnyMappingModel]:
                         "locationInPrimarySource": "Meta.Disease",
                         "mappingRules": [
                             {
-                                "forValues": ["07"],
-                                "setValues": [
-                                    {
-                                        "language": "de",
-                                        "title": "Rheinland-Pfalz",
-                                        "url": "http://landesrecht.rlp.de/jportal/portal/page/bsrlpprod.psml?doc.id=jlr-IfSGMeldpflVRPpP1%3Ajuris-lr00&showdoccase=1&doc.hl=1&documentnumber=1",
-                                    }
-                                ],
+                                "forValues": ["01"],
+                                "setValues": ["IIsceA7taQLHZrZmnYOX2"],
                             },
                             {
                                 "forValues": ["09"],
-                                "setValues": [
-                                    {
-                                        "language": "de",
-                                        "title": "Bayern",
-                                        "url": "https://www.gesetze-bayern.de/Content/Document/BayMeldePflV/true",
-                                    }
-                                ],
+                                "setValues": ["fQKgqEf8YfLnV6mLV4YFIK"],
                             },
                             {
                                 "forValues": ["10"],
-                                "setValues": [
-                                    {
-                                        "language": "de",
-                                        "title": "Saarland",
-                                        "url": "https://www.saarland.de/msgff/DE/portale/gesundheitundpraevention/leistungenabisz/gesundheitsschutz/infektionsschutzgesetz/infektionsschutzgesetz.html",
-                                    }
-                                ],
-                            },
-                            {
-                                "forValues": ["11"],
-                                "setValues": [
-                                    {
-                                        "language": "de",
-                                        "title": "Berlin",
-                                        "url": "https://gesetze.berlin.de/bsbe/document/jlr-IfSGMeldpflVBEpP1",
-                                    }
-                                ],
-                            },
-                            {
-                                "forValues": ["12"],
-                                "setValues": [
-                                    {
-                                        "language": "de",
-                                        "title": "Brandenburg",
-                                        "url": "https://bravors.brandenburg.de/verordnungen/infkrankmv_2016",
-                                    }
-                                ],
-                            },
-                            {
-                                "forValues": ["13"],
-                                "setValues": [
-                                    {
-                                        "language": "de",
-                                        "title": "Mecklenburg-Vorpommern",
-                                        "url": "https://www.landesrecht-mv.de/bsmv/document/jlr-InfSchAGMVrahmen",
-                                    }
-                                ],
-                            },
-                            {
-                                "forValues": ["14"],
-                                "setValues": [
-                                    {
-                                        "language": "de",
-                                        "title": "Sachsen",
-                                        "url": "https://www.revosax.sachsen.de/vorschrift/1307-IfSGMeldeVO",
-                                    }
-                                ],
-                            },
-                            {
-                                "forValues": ["15"],
-                                "setValues": [
-                                    {
-                                        "language": "de",
-                                        "title": "Sachsen-Anhalt",
-                                        "url": "https://www.landesrecht.sachsen-anhalt.de/bsst/document/jlr-IfSGMeldpflVST2005rahmen",
-                                    }
-                                ],
-                            },
-                            {
-                                "forValues": ["16"],
-                                "setValues": [
-                                    {
-                                        "language": "de",
-                                        "title": "Thüringen",
-                                        "url": "https://landesrecht.thueringen.de/bsth/document/jlr-IfKrMeldAnpVTHrahmen",
-                                    }
-                                ],
+                                "setValues": ["es1ddVZTauTiKXXcF2lcx2"],
                             },
                         ],
                     },
@@ -2228,17 +2030,7 @@ def resource_diseases() -> list[AnyMappingModel]:
                 "publication": [
                     {
                         "fieldInPrimarySource": "n/a",
-                        "mappingRules": [
-                            {
-                                "setValues": [
-                                    {
-                                        "language": "de",
-                                        "title": "Falldefinitionen",
-                                        "url": "https://www.rki.de/DE/Content/Infekt/IfSG/Falldefinition/falldefinition_node.html",
-                                    }
-                                ]
-                            }
-                        ],
+                        "mappingRules": [{"setValues": ["ctdBX3StWbg9nabBXgTjut"]}],
                     }
                 ],
                 "resourceCreationMethod": [
@@ -2395,6 +2187,7 @@ def resource_diseases() -> list[AnyMappingModel]:
                 ],
             },
             {
+                "hadPrimarySource": [],
                 "accessRestriction": [
                     {
                         "comment": "restriktiv",
@@ -2727,6 +2520,7 @@ def resource_diseases() -> list[AnyMappingModel]:
                 ],
                 "keyword": [
                     {
+                        "fieldInPrimarySource": "n/a",
                         "mappingRules": [
                             {
                                 "forValues": None,
@@ -2761,17 +2555,7 @@ def resource_diseases() -> list[AnyMappingModel]:
                 "publication": [
                     {
                         "fieldInPrimarySource": "n/a",
-                        "mappingRules": [
-                            {
-                                "setValues": [
-                                    {
-                                        "language": "de",
-                                        "title": "Falldefinitionen",
-                                        "url": "https://www.rki.de/DE/Content/Infekt/IfSG/Falldefinition/falldefinition_node.html",
-                                    }
-                                ]
-                            }
-                        ],
+                        "mappingRules": [{"setValues": ["dWW7NdYS7SZVCqzjMI5SSg"]}],
                     }
                 ],
                 "resourceCreationMethod": [

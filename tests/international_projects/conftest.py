@@ -47,6 +47,11 @@ def unit_stable_target_ids_by_synonym(
 def international_projects_mapping_activity() -> AnyMappingModel:
     return transform_mapping_data_to_model(
         {
+            "hadPrimarySource": [],
+            "identifierInPrimarySource": [],
+            "contact": [],
+            "responsibleUnit": [],
+            "title": [],
             "activityType": [
                 {
                     "comment": None,

@@ -8,6 +8,7 @@ from mex.common.testing import Joker
 from mex.common.types import (
     Identifier,
     MergedOrganizationalUnitIdentifier,
+    Text,
     TextLanguage,
 )
 from mex.extractors.ifsg.models.meta_catalogue2item import MetaCatalogue2Item
@@ -156,16 +157,17 @@ def test_transform_resource_state_to_mex_resource(
 
 
 def test_get_instrument_tool_or_apparatus(
-    meta_disease: list[MetaDisease], resource_diseases: list[AnyMappingModel]
+    meta_disease: list[MetaDisease],
+    resource_diseases: list[AnyMappingModel],
 ) -> None:
     instrument_tool_or_apparatus = get_instrument_tool_or_apparatus(
         meta_disease[0], resource_diseases[0]
     )
-    expected = [
-        {"language": "de", "value": "Falldefinition B"},
-        {"language": "de", "value": "Falldefinition C"},
+
+    assert instrument_tool_or_apparatus == [
+        Text(value="Falldefinition B", language=TextLanguage.DE),
+        Text(value="Falldefinition C", language=TextLanguage.DE),
     ]
-    assert instrument_tool_or_apparatus == expected
 
 
 def test_transform_resource_disease_to_mex_resource(

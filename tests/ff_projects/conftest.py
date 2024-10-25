@@ -102,7 +102,7 @@ def ff_projects_activity() -> AnyMappingModel:
                     "comment": None,
                 }
             ],
-            "abstract": None,
+            "abstract": [],
             "activityType": [
                 {
                     "fieldInPrimarySource": "RKI-AZ",
@@ -118,8 +118,8 @@ def ff_projects_activity() -> AnyMappingModel:
                     "comment": None,
                 }
             ],
-            "alternativeTitle": None,
-            "documentation": None,
+            "alternativeTitle": [],
+            "documentation": [],
             "end": [
                 {
                     "fieldInPrimarySource": "Laufzeit bis",
@@ -135,7 +135,7 @@ def ff_projects_activity() -> AnyMappingModel:
                     "comment": None,
                 }
             ],
-            "externalAssociate": None,
+            "externalAssociate": [],
             "funderOrCommissioner": [
                 {
                     "fieldInPrimarySource": "Zuwendungs-/Auftraggeber",
@@ -187,10 +187,10 @@ def ff_projects_activity() -> AnyMappingModel:
                     "comment": None,
                 }
             ],
-            "involvedUnit": None,
-            "isPartOfActivity": None,
-            "publication": None,
-            "shortName": None,
+            "involvedUnit": [],
+            "isPartOfActivity": [],
+            "publication": [],
+            "shortName": [],
             "start": [
                 {
                     "fieldInPrimarySource": "Laufzeit von",
@@ -206,9 +206,9 @@ def ff_projects_activity() -> AnyMappingModel:
                     "comment": None,
                 }
             ],
-            "succeeds": None,
-            "theme": None,
-            "website": None,
+            "succeeds": [],
+            "theme": [],
+            "website": [],
         },
         ExtractedActivity,
     )

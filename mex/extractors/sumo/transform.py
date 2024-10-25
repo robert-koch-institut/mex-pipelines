@@ -130,7 +130,8 @@ def transform_resource_feat_model_to_mex_resource(
         hadPrimarySource=extracted_primary_source.stableTargetId,
         identifierInPrimarySource=extracted_sumo_resource_feat.title[0]
         .mappingRules[0]
-        .setValues[0]["value"],
+        .setValues[0]
+        .value,
         isPartOf=mex_resource_nokeda.stableTargetId,
         keyword=keyword,
         meshId=extracted_sumo_resource_feat.meshId[0].mappingRules[0].setValues[0],
@@ -233,7 +234,8 @@ def transform_resource_nokeda_to_mex_resource(
         hadPrimarySource=extracted_primary_source.stableTargetId,
         identifierInPrimarySource=extracted_sumo_resource_nokeda.title[0]
         .mappingRules[0]
-        .setValues[0]["value"],
+        .setValues[0]
+        .value,
         keyword=keyword,
         meshId=extracted_sumo_resource_nokeda.meshId[0].mappingRules[0].setValues,
         publication=[],

@@ -113,7 +113,7 @@ def transform_seq_repo_resource_to_extracted_resource(
     anonymization_pseudonymization = (
         seq_repo_resource.anonymizationPseudonymization[0].mappingRules[0].setValues
     )
-    method = [Text(**k) for k in seq_repo_resource.method[0].mappingRules[0].setValues]
+    method = seq_repo_resource.method[0].mappingRules[0].setValues
 
     resource_creation_method = (
         seq_repo_resource.resourceCreationMethod[0].mappingRules[0].setValues
@@ -121,18 +121,15 @@ def transform_seq_repo_resource_to_extracted_resource(
     resource_type_general = (
         seq_repo_resource.resourceTypeGeneral[0].mappingRules[0].setValues
     )
-    resource_type_specific = [
-        Text(**k)
-        for k in seq_repo_resource.resourceTypeSpecific[0].mappingRules[0].setValues
-    ]
-    rights = [Text(**k) for k in seq_repo_resource.rights[0].mappingRules[0].setValues]
+    resource_type_specific = (
+        seq_repo_resource.resourceTypeSpecific[0].mappingRules[0].setValues
+    )
+    rights = seq_repo_resource.rights[0].mappingRules[0].setValues
     state_of_data_processing = (
         seq_repo_resource.stateOfDataProcessing[0].mappingRules[0].setValues
     )
     theme = seq_repo_resource.theme[0].mappingRules[0].setValues
-    shared_keyword = [
-        Text(**k) for k in seq_repo_resource.keyword[0].mappingRules[0].setValues
-    ]
+    shared_keyword = seq_repo_resource.keyword[0].mappingRules[0].setValues
 
     extracted_resources = []
     for identifier_in_primary_source, source in seq_repo_sources.items():
@@ -205,9 +202,7 @@ def transform_seq_repo_access_platform_to_extracted_access_platform(
     description = seq_repo_access_platform.description[0].mappingRules[0].setValues
     endpoint_type = seq_repo_access_platform.endpointType[0].mappingRules[0].setValues
     identifier_in_primary_source = (
-        seq_repo_access_platform["identifierInPrimarySource"][0]
-        .mappingRules[0]
-        .setValues
+        seq_repo_access_platform.identifierInPrimarySource[0].mappingRules[0].setValues
     )
     landing_page = seq_repo_access_platform.landingPage[0].mappingRules[0].setValues
 

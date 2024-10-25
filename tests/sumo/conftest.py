@@ -1,5 +1,3 @@
-from uuid import UUID
-
 import pytest
 
 from mex.common.models import (
@@ -87,6 +85,8 @@ def sumo_resources_feat() -> AnyMappingModel:
     """Return feat SumoResource."""
     return transform_mapping_data_to_model(
         {
+            "hadPrimarySource": [],
+            "identifierInPrimarySource": [],
             "accessRestriction": [
                 {
                     "fieldInPrimarySource": "n/a",
@@ -236,6 +236,8 @@ def sumo_resources_nokeda() -> AnyMappingModel:
     """Return feat SumoResource."""
     return transform_mapping_data_to_model(
         {
+            "hadPrimarySource": [],
+            "identifierInPrimarySource": [],
             "accessRestriction": [
                 {
                     "fieldInPrimarySource": "n/a",
@@ -349,17 +351,7 @@ def sumo_resources_nokeda() -> AnyMappingModel:
             "publication": [
                 {
                     "fieldInPrimarySource": "n/a",
-                    "mappingRules": [
-                        {
-                            "setValues": [
-                                {
-                                    "language": "de",
-                                    "title": "Situationsreport",
-                                    "url": "https://link.com",
-                                }
-                            ]
-                        }
-                    ],
+                    "mappingRules": [{"setValues": ["dAwHSewECLW7j6YvVXElYZ"]}],
                 }
             ],
             "publisher": [
@@ -545,7 +537,7 @@ def sumo_access_platform() -> AnyMappingModel:
 def transformed_sumo_access_platform() -> ExtractedAccessPlatform:
     return ExtractedAccessPlatform(
         identifierInPrimarySource="sumo",
-        hadPrimarySource=UUID(int=5, version=4),
+        hadPrimarySource=MergedPrimarySourceIdentifier("eOURPBjMZDfyhAVRo5N4mv"),
         title=[Text(value="SUMO Access Platform", language=TextLanguage.EN)],
         technicalAccessibility=TechnicalAccessibility(
             "https://mex.rki.de/item/technical-accessibility-1"
@@ -560,6 +552,7 @@ def sumo_activity() -> AnyMappingModel:
     """Return Sumo Activity."""
     return transform_mapping_data_to_model(
         {
+            "hadPrimarySource": [],
             "abstract": [
                 {
                     "fieldInPrimarySource": "n/a",
@@ -773,15 +766,15 @@ def transformed_activity() -> ExtractedActivity:
 def mex_resources_nokeda() -> ExtractedResource:
     """Return Nokeda ExtractedResources."""
     return ExtractedResource(
-        hadPrimarySource=UUID(int=5, version=4),
+        hadPrimarySource=Identifier.generate(seed=5),
         identifierInPrimarySource="test_project",
         accessPlatform=[],
         accessRestriction="https://mex.rki.de/item/access-restriction-2",
         accrualPeriodicity="https://mex.rki.de/item/frequency-15",
-        contact=[UUID(int=5, version=4)],
-        contributingUnit=[UUID(int=5, version=4)],
+        contact=[Identifier.generate(seed=5)],
+        contributingUnit=[Identifier.generate(seed=5)],
         description=["Echtzeitdaten der Routinedokumenation"],
-        externalPartner=[UUID(int=5, version=4)],
+        externalPartner=[Identifier.generate(seed=5)],
         keyword=["keyword1", "keyword2"],
         meshId=["http://id.nlm.nih.gov/mesh/D004636"],
         publication=["Situationsreport"],
@@ -804,12 +797,12 @@ def mex_resources_nokeda() -> ExtractedResource:
 def mex_resources_feat() -> ExtractedResource:
     """Return feat ExtractedResources."""
     return ExtractedResource(
-        hadPrimarySource=UUID(int=5, version=4),
+        hadPrimarySource=Identifier.generate(seed=5),
         identifierInPrimarySource="test_project",
         accessRestriction="https://mex.rki.de/item/access-restriction-2",
         accrualPeriodicity="https://mex.rki.de/item/frequency-17",
-        contact=[UUID(int=5, version=4)],
-        contributingUnit=[UUID(int=5, version=4)],
+        contact=[Identifier.generate(seed=5)],
+        contributingUnit=[Identifier.generate(seed=5)],
         keyword=["keyword 1", "keyword 2"],
         meshId=["http://id.nlm.nih.gov/mesh/D004636"],
         resourceTypeGeneral=["https://mex.rki.de/item/resource-type-general-14"],

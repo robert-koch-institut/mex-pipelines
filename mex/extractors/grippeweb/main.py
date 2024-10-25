@@ -170,7 +170,9 @@ def extracted_access_platform_grippeweb(
     """Transform Grippeweb mappings to extracted access platform and load to sinks."""
     extracted_access_platform_grippeweb = (
         transform_grippeweb_access_platform_to_extracted_access_platform(
-            grippeweb_access_platform,
+            transform_mapping_data_to_model(
+                grippeweb_access_platform, ExtractedAccessPlatform
+            ),
             unit_stable_target_ids_by_synonym,
             extracted_primary_source_grippeweb,
             extracted_mex_persons_grippeweb,

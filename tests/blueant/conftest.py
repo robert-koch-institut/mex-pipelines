@@ -58,6 +58,11 @@ def blueant_activity() -> AnyMappingModel:
     """Return activity default values."""
     return transform_mapping_data_to_model(
         {
+            "hadPrimarySource": [],
+            "identifierInPrimarySource": [],
+            "contact": [],
+            "responsibleUnit": [],
+            "title": [],
             "activityType": [
                 {
                     "fieldInPrimarySource": "typeId",
@@ -95,7 +100,7 @@ def blueant_activity() -> AnyMappingModel:
                     ],
                     "comment": None,
                 }
-            ]
+            ],
         },
         ExtractedActivity,
     )

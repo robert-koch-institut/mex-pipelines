@@ -263,7 +263,9 @@ def grippeweb_resource_mappings() -> list[AnyMappingModel]:
                         "mappingRules": [
                             {
                                 "forValues": None,
-                                "setValues": "https://mex.rki.de/item/anonymization-pseudonymization-2",
+                                "setValues": [
+                                    "https://mex.rki.de/item/anonymization-pseudonymization-2"
+                                ],
                                 "rule": None,
                             }
                         ],
@@ -326,7 +328,7 @@ def grippeweb_resource_mappings() -> list[AnyMappingModel]:
                         "comment": None,
                     }
                 ],
-                "creator": None,
+                "creator": [],
                 "description": [
                     {
                         "fieldInPrimarySource": "n/a",
@@ -347,7 +349,7 @@ def grippeweb_resource_mappings() -> list[AnyMappingModel]:
                         "comment": None,
                     }
                 ],
-                "distribution": None,
+                "distribution": [],
                 "documentation": [
                     {
                         "fieldInPrimarySource": "n/a",
@@ -369,7 +371,7 @@ def grippeweb_resource_mappings() -> list[AnyMappingModel]:
                         "comment": None,
                     }
                 ],
-                "externalPartner": None,
+                "externalPartner": [],
                 "hasLegalBasis": [
                     {
                         "fieldInPrimarySource": "n/a",
@@ -416,7 +418,7 @@ def grippeweb_resource_mappings() -> list[AnyMappingModel]:
                         "comment": None,
                     }
                 ],
-                "instrumentToolOrApparatus": None,
+                "instrumentToolOrApparatus": [],
                 "isPartOf": [
                     {
                         "fieldInPrimarySource": "n/a",
@@ -457,7 +459,7 @@ def grippeweb_resource_mappings() -> list[AnyMappingModel]:
                         "mappingRules": [
                             {
                                 "forValues": None,
-                                "setValues": "https://mex.rki.de/item/language-1",
+                                "setValues": ["https://mex.rki.de/item/language-1"],
                                 "rule": None,
                             }
                         ],
@@ -601,7 +603,9 @@ def grippeweb_resource_mappings() -> list[AnyMappingModel]:
                         "mappingRules": [
                             {
                                 "forValues": None,
-                                "setValues": "https://mex.rki.de/item/resource-type-general-13",
+                                "setValues": [
+                                    "https://mex.rki.de/item/resource-type-general-13"
+                                ],
                                 "rule": None,
                             }
                         ],
@@ -680,7 +684,9 @@ def grippeweb_resource_mappings() -> list[AnyMappingModel]:
                         "mappingRules": [
                             {
                                 "forValues": None,
-                                "setValues": "https://mex.rki.de/item/data-processing-state-1",
+                                "setValues": [
+                                    "https://mex.rki.de/item/data-processing-state-1"
+                                ],
                                 "rule": None,
                             }
                         ],
@@ -710,7 +716,7 @@ def grippeweb_resource_mappings() -> list[AnyMappingModel]:
                         "mappingRules": [
                             {
                                 "forValues": None,
-                                "setValues": "https://mex.rki.de/item/theme-11",
+                                "setValues": ["https://mex.rki.de/item/theme-11"],
                                 "rule": None,
                             }
                         ],
@@ -819,7 +825,9 @@ def grippeweb_resource_mappings() -> list[AnyMappingModel]:
                         "mappingRules": [
                             {
                                 "forValues": None,
-                                "setValues": "https://mex.rki.de/item/access-restriction-2",
+                                "setValues": [
+                                    "https://mex.rki.de/item/access-restriction-2"
+                                ],
                                 "rule": None,
                             }
                         ],
@@ -834,14 +842,14 @@ def grippeweb_resource_mappings() -> list[AnyMappingModel]:
                         "mappingRules": [
                             {
                                 "forValues": None,
-                                "setValues": "https://mex.rki.de/item/frequency-15",
+                                "setValues": ["https://mex.rki.de/item/frequency-15"],
                                 "rule": None,
                             }
                         ],
                         "comment": None,
                     }
                 ],
-                "alternativeTitle": None,
+                "alternativeTitle": [],
                 "anonymizationPseudonymization": [
                     {
                         "fieldInPrimarySource": "n/a",
@@ -850,7 +858,9 @@ def grippeweb_resource_mappings() -> list[AnyMappingModel]:
                         "mappingRules": [
                             {
                                 "forValues": None,
-                                "setValues": "https://mex.rki.de/item/anonymization-pseudonymization-2",
+                                "setValues": [
+                                    "https://mex.rki.de/item/anonymization-pseudonymization-2"
+                                ],
                                 "rule": None,
                             }
                         ],
@@ -913,7 +923,7 @@ def grippeweb_resource_mappings() -> list[AnyMappingModel]:
                         "comment": None,
                     }
                 ],
-                "creator": None,
+                "creator": [],
                 "description": [
                     {
                         "fieldInPrimarySource": "n/a",
@@ -929,7 +939,7 @@ def grippeweb_resource_mappings() -> list[AnyMappingModel]:
                         "comment": None,
                     }
                 ],
-                "distribution": None,
+                "distribution": [],
                 "documentation": [
                     {
                         "fieldInPrimarySource": "n/a",
@@ -997,8 +1007,8 @@ def grippeweb_resource_mappings() -> list[AnyMappingModel]:
                         "comment": None,
                     }
                 ],
-                "instrumentToolOrApparatus": None,
-                "isPartOf": None,
+                "instrumentToolOrApparatus": [],
+                "isPartOf": [],
                 "keyword": [
                     {
                         "fieldInPrimarySource": "n/a",
@@ -1024,15 +1034,15 @@ def grippeweb_resource_mappings() -> list[AnyMappingModel]:
                         "mappingRules": [
                             {
                                 "forValues": None,
-                                "setValues": "https://mex.rki.de/item/language-1",
+                                "setValues": ["https://mex.rki.de/item/language-1"],
                                 "rule": None,
                             }
                         ],
                         "comment": None,
                     }
                 ],
-                "license": None,
-                "loincId": None,
+                "license": [],
+                "loincId": [],
                 "meshId": [
                     {
                         "fieldInPrimarySource": "n/a",
@@ -1116,7 +1126,7 @@ def grippeweb_resource_mappings() -> list[AnyMappingModel]:
                         "comment": None,
                     }
                 ],
-                "modified": None,
+                "modified": [],
                 "publication": [
                     {
                         "fieldInPrimarySource": "n/a",
@@ -1162,7 +1172,7 @@ def grippeweb_resource_mappings() -> list[AnyMappingModel]:
                         "comment": None,
                     }
                 ],
-                "qualityInformation": None,
+                "qualityInformation": [],
                 "resourceTypeGeneral": [
                     {
                         "fieldInPrimarySource": "n/a",
@@ -1171,7 +1181,9 @@ def grippeweb_resource_mappings() -> list[AnyMappingModel]:
                         "mappingRules": [
                             {
                                 "forValues": None,
-                                "setValues": "https://mex.rki.de/item/resource-type-general-13",
+                                "setValues": [
+                                    "https://mex.rki.de/item/resource-type-general-13"
+                                ],
                                 "rule": None,
                             }
                         ],
@@ -1253,7 +1265,9 @@ def grippeweb_resource_mappings() -> list[AnyMappingModel]:
                         "mappingRules": [
                             {
                                 "forValues": None,
-                                "setValues": "https://mex.rki.de/item/data-processing-state-1",
+                                "setValues": [
+                                    "https://mex.rki.de/item/data-processing-state-1"
+                                ],
                                 "rule": None,
                             }
                         ],
@@ -1283,7 +1297,7 @@ def grippeweb_resource_mappings() -> list[AnyMappingModel]:
                         "mappingRules": [
                             {
                                 "forValues": None,
-                                "setValues": "https://mex.rki.de/item/theme-11",
+                                "setValues": ["https://mex.rki.de/item/theme-11"],
                                 "rule": None,
                             },
                         ],
@@ -1419,6 +1433,9 @@ def mocked_grippeweb_sql_tables() -> dict[str, dict[str, list[str | None]]]:
 def grippeweb_variable_group() -> AnyMappingModel:
     return transform_mapping_data_to_model(
         {
+            "hadPrimarySource": [],
+            "identifierInPrimarySource": [],
+            "containedBy": [],
             "label": [
                 {
                     "fieldInPrimarySource": "label of the SQL-table",
@@ -1457,6 +1474,10 @@ def grippeweb_variable_group() -> AnyMappingModel:
 def grippeweb_variable() -> AnyMappingModel:
     return transform_mapping_data_to_model(
         {
+            "hadPrimarySource": [],
+            "identifierInPrimarySource": [],
+            "label": [],
+            "usedIn": [],
             "valueSet": [
                 {
                     "fieldInPrimarySource": "Id",

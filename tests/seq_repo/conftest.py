@@ -86,6 +86,11 @@ def seq_repo_latest_sources(
 def seq_repo_activity() -> AnyMappingModel:
     return transform_mapping_data_to_model(
         {
+            "hadPrimarySource": [],
+            "identifierInPrimarySource": [],
+            "contact": [],
+            "responsibleUnit": [],
+            "title": [],
             "theme": [
                 {
                     "fieldInPrimarySource": "n/a",
@@ -108,6 +113,7 @@ def seq_repo_activity() -> AnyMappingModel:
 def seq_repo_access_platform() -> AnyMappingModel:
     return transform_mapping_data_to_model(
         {
+            "hadPrimarySource": [],
             "identifierInPrimarySource": [
                 {
                     "fieldInPrimarySource": "n/a",
@@ -193,6 +199,7 @@ def seq_repo_access_platform() -> AnyMappingModel:
             ],
             "contact": [
                 {
+                    "fieldInPrimarySource": "n/a",
                     "mappingRules": [
                         {
                             "forValues": ["FG99"],
@@ -210,6 +217,11 @@ def seq_repo_access_platform() -> AnyMappingModel:
 def seq_repo_resource() -> AnyMappingModel:
     return transform_mapping_data_to_model(
         {
+            "hadPrimarySource": [],
+            "identifierInPrimarySource": [],
+            "contact": [],
+            "title": [],
+            "unitInCharge": [],
             "accessRestriction": [
                 {
                     "fieldInPrimarySource": "n/a",

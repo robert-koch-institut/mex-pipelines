@@ -50,8 +50,9 @@ def transform_voxco_resource_mappings_to_extracted_resources(
     }
     for resource in voxco_resource_mappings:
         access_restriction = resource.accessRestriction[0].mappingRules[0].setValues
-        if anonymization_pseudonymization_top_level := resource.get(
-            "anonymizationPseudonymization"
+        if (
+            anonymization_pseudonymization_top_level
+            := resource.anonymizationPseudonymization
         ):
             anonymization_pseudonymization = (
                 anonymization_pseudonymization_top_level[0].mappingRules[0].setValues

@@ -1,5 +1,5 @@
 from mex.common.models import ExtractedAccessPlatform
-from mex.common.types import AssetsPath, TechnicalAccessibility, TextLanguage
+from mex.common.types import AssetsPath, TextLanguage
 from mex.extractors.mapping.extract import extract_mapping_data
 from mex.extractors.mapping.transform import transform_mapping_data_to_model
 
@@ -72,7 +72,9 @@ def test_get_mapping_model() -> None:
                 "mappingRules": [
                     {
                         "forValues": None,
-                        "setValues": [TechnicalAccessibility["INTERNAL"]],
+                        "setValues": [
+                            "https://mex.rki.de/item/technical-accessibility-1"
+                        ],
                         "rule": None,
                     }
                 ],

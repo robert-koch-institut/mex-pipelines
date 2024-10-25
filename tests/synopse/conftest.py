@@ -1,5 +1,4 @@
 from itertools import groupby
-from uuid import UUID
 
 import pytest
 
@@ -480,34 +479,34 @@ def extracted_resources() -> list[ExtractedResource]:
             accessRestriction=AccessRestriction(
                 "https://mex.rki.de/item/access-restriction-1"
             ),
-            contact=UUID(int=5, version=4),
-            hadPrimarySource=UUID(int=5, version=4),
+            contact=Identifier.generate(seed=5),
+            hadPrimarySource=Identifier.generate(seed=5),
             identifierInPrimarySource="23456-17-set1",
             theme="https://mex.rki.de/item/theme-11",
             title="Found in overview",
-            unitInCharge=UUID(int=6, version=4),
+            unitInCharge=Identifier.generate(seed=6),
         ),
         ExtractedResource(
             accessRestriction=AccessRestriction(
                 "https://mex.rki.de/item/access-restriction-1"
             ),
-            contact=UUID(int=5, version=4),
-            hadPrimarySource=UUID(int=5, version=4),
+            contact=Identifier.generate(seed=5),
+            hadPrimarySource=Identifier.generate(seed=5),
             identifierInPrimarySource="12345-12-set2",
             theme="https://mex.rki.de/item/theme-11",
             title="The other one",
-            unitInCharge=UUID(int=6, version=4),
+            unitInCharge=Identifier.generate(seed=6),
         ),
         ExtractedResource(
             accessRestriction=AccessRestriction(
                 "https://mex.rki.de/item/access-restriction-1"
             ),
-            contact=UUID(int=5, version=4),
-            hadPrimarySource=UUID(int=5, version=4),
+            contact=Identifier.generate(seed=5),
+            hadPrimarySource=Identifier.generate(seed=5),
             identifierInPrimarySource="12345-13-set13",
             theme="https://mex.rki.de/item/theme-11",
             title="The other one",
-            unitInCharge=UUID(int=6, version=4),
+            unitInCharge=Identifier.generate(seed=6),
         ),
     ]
 
@@ -605,6 +604,8 @@ def synopse_access_platform() -> AnyMappingModel:
     """Return a dict with access platform default values."""
     return transform_mapping_data_to_model(
         {
+            "hadPrimarySource": [],
+            "identifierInPrimarySource": [],
             "technicalAccessibility": [
                 {
                     "fieldInPrimarySource": "n/a",
@@ -660,6 +661,11 @@ def synopse_activity() -> AnyMappingModel:
     """Return a dict with activity default values."""
     return transform_mapping_data_to_model(
         {
+            "hadPrimarySource": [],
+            "identifierInPrimarySource": [],
+            "title": [],
+            "responsibleUnit": [],
+            "contact": [],
             "activityType": [
                 {
                     "fieldInPrimarySource": "n/a",
@@ -692,6 +698,9 @@ def synopse_resource_extended_data_use() -> AnyMappingModel:
     """Return a dict with resource extended data use default values."""
     return transform_mapping_data_to_model(
         {
+            "hadPrimarySource": [],
+            "identifierInPrimarySource": [],
+            "title": [],
             "accessRestriction": [
                 {
                     "fieldInPrimarySource": "Zugangsbeschraenkung",
@@ -793,7 +802,7 @@ def synopse_resource_extended_data_use() -> AnyMappingModel:
                     "comment": "Deutsch",
                 }
             ],
-            "qualityInformation": None,
+            "qualityInformation": [],
             "resourceCreationMethod": [
                 {
                     "fieldInPrimarySource": "n/a",
@@ -871,6 +880,9 @@ def synopse_resource() -> AnyMappingModel:
     """Return a dict with resource extended data use default values."""
     return transform_mapping_data_to_model(
         {
+            "hadPrimarySource": [],
+            "identifierInPrimarySource": [],
+            "title": [],
             "accessRestriction": [
                 {
                     "fieldInPrimarySource": "Zugangsbeschraenkung",
@@ -1039,7 +1051,7 @@ def synopse_resource() -> AnyMappingModel:
                     "comment": None,
                 }
             ],
-            "stateOfDataProcessing": None,
+            "stateOfDataProcessing": [],
         },
         ExtractedResource,
     )
