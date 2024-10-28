@@ -1,10 +1,10 @@
 from pathlib import Path
-from typing import Any
 
 from pandas import DataFrame, ExcelFile
 
 from mex.common.wikidata.extract import search_organization_by_label
 from mex.common.wikidata.models.organization import WikidataOrganization
+from mex.extractors.mapping.types import AnyMappingModel
 from mex.extractors.odk.model import ODKData
 from mex.extractors.settings import Settings
 
@@ -67,12 +67,12 @@ def get_column_dict_by_pattern(
 
 
 def get_external_partner_and_publisher_by_label(
-    odk_resource_mappings: list[dict[str, Any]],
+    odk_resource_mappings: list[AnyMappingModel],
 ) -> dict[str, WikidataOrganization]:
     """Search and extract partner organization from wikidata.
 
     Args:
-        odk_resource_mappings: list of resource mappings
+        odk_resource_mappings: list of resource mapping models
 
     Returns:
         Dict with organization label and WikidataOrganization
@@ -80,8 +80,11 @@ def get_external_partner_and_publisher_by_label(
     labels = {
         value
         for resource in odk_resource_mappings
-        for attribute in ["publisher", "externalPartner"]
-        for value in getattr(resource, attribute)[0].mappingRules[0].forValues
+        for for_values in [
+            resource.publisher[0].mappingRules[0].forValues,
+            resource.externalPartner[0].mappingRules[0].forValues,
+        ]
+        for value in for_values
     }
     external_partner_and_publisher_by_label: dict[str, WikidataOrganization] = {}
     for label in labels:
