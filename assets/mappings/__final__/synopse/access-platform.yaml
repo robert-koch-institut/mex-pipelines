@@ -36,8 +36,7 @@ title:
   - fieldInPrimarySource: PlattfromAdresse
     locationInPrimarySource: metadaten_zu_datensaetzen.csv
     examplesInPrimarySource:
-    - "S:\Projekte\\Abt2_Daten\\SURVEYS\\GEDA21\\GEDA21_t1\\Daten"
-    - "S:\Projekte\\Abt2_Daten\\SURVEYS\\GEDA22kida\\GEDA22\\t1"
+    - "Path"
     mappingRules:
       - rule: Extract original value.
 unitInCharge:
