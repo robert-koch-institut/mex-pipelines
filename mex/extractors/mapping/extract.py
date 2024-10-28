@@ -9,7 +9,6 @@ def extract_mapping_data(path: PathLike[str]) -> dict[str, Any]:
 
     Args:
         path: path to mapping json
-        model_type: model type of BaseModel to be extracted
 
     Returns:
         mapping model with default value data from specified path
