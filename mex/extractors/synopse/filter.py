@@ -9,7 +9,7 @@ def filter_and_log_access_platforms(
     synopse_studies: Iterable[SynopseStudy],
     extracted_primary_source: ExtractedPrimarySource,
 ) -> Generator[SynopseStudy, None, None]:
-    """Filter out and log studies which annot be accessed via an internal netword drive.
+    """Filter out and log studies which cannot be accessed via an internal netword drive.
 
     Args:
         synopse_studies: iterable of synopse studies

@@ -601,7 +601,7 @@ def extracted_variable_groups(
 
 @pytest.fixture()
 def synopse_access_platform() -> AnyMappingModel:
-    """Return a dict with access platform default values."""
+    """Return a mapping model with access platform default values."""
     return transform_mapping_data_to_model(
         {
             "hadPrimarySource": [],
@@ -658,7 +658,7 @@ def synopse_access_platform() -> AnyMappingModel:
 
 @pytest.fixture()
 def synopse_activity() -> AnyMappingModel:
-    """Return a dict with activity default values."""
+    """Return a mapping model with activity default values."""
     return transform_mapping_data_to_model(
         {
             "hadPrimarySource": [],
@@ -695,7 +695,7 @@ def synopse_activity() -> AnyMappingModel:
 
 @pytest.fixture()
 def synopse_resource_extended_data_use() -> AnyMappingModel:
-    """Return a dict with resource extended data use default values."""
+    """Return a mapping model with resource extended data use default values."""
     return transform_mapping_data_to_model(
         {
             "hadPrimarySource": [],
@@ -877,7 +877,7 @@ def synopse_resource_extended_data_use() -> AnyMappingModel:
 
 @pytest.fixture()
 def synopse_resource() -> AnyMappingModel:
-    """Return a dict with resource extended data use default values."""
+    """Return a mapping model with resource extended data use default values."""
     return transform_mapping_data_to_model(
         {
             "hadPrimarySource": [],

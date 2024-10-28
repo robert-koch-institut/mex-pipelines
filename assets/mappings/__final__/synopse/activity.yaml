@@ -24,12 +24,9 @@ documentation:
   - fieldInPrimarySource: Projektdokumentation
     locationInPrimarySource: projekt_und_studienverwaltung.csv
     examplesInPrimarySource:
-    - "S:\Projekte\\Abt2_Daten\\SURVEYS\\KiGGS2\\Dokumentation.\n-
-      Fragebogen-Ausschnitte\n- Labor\n- Manuals\n- Untersuchungsorte\n- Publikationen\n-
-      Dateninformation\n- Releaseiniformation\n- Datensatzbeschreibung\n- Releaseinformation\n-
-      Variablenübersicht"
+    - "path"
     mappingRules:
-    - rule: 'Use the path starting with "S:\\ "as the url property of the link object. Use the text following "-" as the title property of the link object. Example: "language": "de", "title":"- Fragebogen-Ausschnitte - Labor - Manuals - Untersuchungsorte - Publikationen - Dateninformation - Releaseiniformation - Datensatzbeschreibung - Releaseinformation - Variablenübersicht","url": "S:\\Projekte\\Abt2_Daten\\SURVEYS\\KiGGS2\\Dokumentation\".'
+    - rule: 'Use the path.'
 end:
   - fieldInPrimarySource: Projektende
     locationInPrimarySource: projekt_und_studienverwaltung.csv
