@@ -695,7 +695,7 @@ def synopse_activity() -> AnyMappingModel:
 
 @pytest.fixture()
 def synopse_resource_extended_data_use() -> AnyMappingModel:
-    """Return a dict with resource extended data use default values."""
+    """Return a mapping model with resource extended data use default values."""
     return transform_mapping_data_to_model(
         {
             "hadPrimarySource": [],
