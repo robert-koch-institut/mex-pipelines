@@ -32,7 +32,7 @@ def extract_voxco_organizations(
     """Search and extract voxco organization from wikidata.
 
     Args:
-        voxco_resource_mappings: voxco resource mappings
+        voxco_resource_mappings: voxco resource mapping models
 
     Returns:
         Dict with organization label and WikidataOrganization
@@ -55,7 +55,7 @@ def extract_ldap_persons_voxco(
     """Extract LDAP persons for voxco.
 
     Args:
-        voxco_resource_mappings: list of resource default values from mapping model
+        voxco_resource_mappings: list of resource mapping models with default values
 
     Returns:
         list of LDAP persons

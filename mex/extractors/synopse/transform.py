@@ -85,7 +85,7 @@ def transform_synopse_studies_into_access_platforms(
         synopse_studies: Iterable of Synopse Studies
         unit_merged_ids_by_synonym: Map from unit acronyms and labels to their merged ID
         extracted_primary_source: Extracted report server primary source
-        synopse_access_platform: access platform default values
+        synopse_access_platform: access platform mapping model with default values
 
     Returns:
         extracted access platform
@@ -303,7 +303,7 @@ def transform_synopse_data_to_mex_resources(
         description_by_study_id: Description Text by study ID
         documentation_by_study_id: Documentation Link by study ID
         keyword_text_by_study_id: List of keywords by study ID
-        synopse_resource: resource default values
+        synopse_resource: resource mapping model with default values
         identifier_in_primary_source_by_study_id: identifierInPrimarySource by study ID
         title_by_study_id: title by study ID
 

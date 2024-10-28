@@ -28,9 +28,8 @@ def transform_voxco_resource_mappings_to_extracted_resources(
     """Transform voxco resource mappings to extracted resources.
 
     Args:
-        voxco_resource_mappings: voxco  resource mappings
-        organization_stable_target_id_by_query_voxco:
-            extracted voxco organizations dict
+        voxco_resource_mappings: voxco resource mapping models
+        organization_stable_target_id_by_query_voxco: extracted voxco organizations dict
         extracted_mex_persons_voxco: extracted voxco mex persons
         unit_stable_target_ids_by_synonym: merged organizational units by name
         extracted_organization_rki: extracted rki organization

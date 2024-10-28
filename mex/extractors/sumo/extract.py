@@ -136,19 +136,19 @@ def extract_cc2_feat_projection() -> Generator[Cc2FeatProjection, None, None]:
 
 
 def extract_ldap_contact_points_by_emails(
-    extracted_resources: list[AnyMappingModel],
+    resources: list[AnyMappingModel],
 ) -> Generator[LDAPActor, None, None]:
     """Extract contact points from ldap for email in resource contacts.
 
     Args:
-        extracted_resources: iterable of sumo resources
+        resources: list of sumo resource mapping models
 
     Returns:
         Iterable of ldap actors
     """
     connector = LDAPConnector.get()
 
-    emails = {r.contact[0].mappingRules[0].forValues[0] for r in extracted_resources}
+    emails = {r.contact[0].mappingRules[0].forValues[0] for r in resources}
     return (
         actor for email in emails for actor in connector.get_functional_accounts(email)
     )
@@ -160,7 +160,7 @@ def extract_ldap_contact_points_by_name(
     """Extract contact points from ldap for contact name in Sumo access platform.
 
     Args:
-        sumo_access_platform: SUMO extracted access platform
+        sumo_access_platform: SUMO access platform mapping model
 
     Returns:
         Iterable of ldap persons with query

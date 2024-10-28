@@ -29,7 +29,7 @@ def transform_seq_repo_activities_to_extracted_activities(
 
     Args:
         seq_repo_sources: Seq Repo extracted sources
-        seq_repo_activity: Seq Repo extracted activity for default values from mapping
+        seq_repo_activity: Seq Repo activity mapping models with default values
         seq_repo_source_resolved_project_coordinators: Seq Repo sources resolved project
                                             coordinators ldap query results
         unit_stable_target_ids_by_synonym: Unit stable target ids by synonym
@@ -91,12 +91,12 @@ def transform_seq_repo_resource_to_extracted_resource(
         seq_repo_sources: Seq Repo extracted sources
         seq_repo_activities: Seq Repo extracted activity for default values from mapping
         mex_access_platform: Extracted access platform
-        seq_repo_resource: Seq Repo extracted resource
+        seq_repo_resource: Seq Repo resource mapping model with default values
         seq_repo_source_resolved_project_coordinators: Seq Repo sources resolved project
-                                            coordinators ldap query results
+                                                       coordinators ldap query results
         unit_stable_target_ids_by_synonym: Unit stable target ids by synonym
         project_coordinators_merged_ids_by_query_string: Seq Repo Sources resolved
-                                                        project coordinators merged ids
+                                                         project coordinators merged ids
         extracted_organization_rki: wikidata extracted organization
         extracted_primary_source: Extracted primary source
 
@@ -188,7 +188,7 @@ def transform_seq_repo_access_platform_to_extracted_access_platform(
     """Transform seq-repo access platform to ExtractedAccessPlatform.
 
     Args:
-        seq_repo_access_platform: Seq Repo extracted access platform
+        seq_repo_access_platform: Seq Repo access platform mapping model
         unit_stable_target_ids_by_synonym: Unit stable target ids by synonym
         extracted_primary_source: Extracted primary source
 
