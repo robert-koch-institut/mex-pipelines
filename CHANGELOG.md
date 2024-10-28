@@ -12,12 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changes
 
 - BREAKING: refactor package structure from `mex.foo` to `mex.extractors.foo`
-- model update: international-projects, seqrepo, synopse, blueant, sumo, biospecimen,
+- model v3 update: international-projects, seqrepo, synopse, blueant, sumo, biospecimen,
   odk, datscha-web, confluence-vvt, grippeweb, voxco, ifsg
 - confluence vvt now ignores ill templated pages
 - make ifsg identifierInPrimarySource unique to avoid stableTargetId collisions
 - artifical extractor now creates data for type 'consent'
-
+- setting for configuring extractors to skip in dagster
 
 ### Deprecated
 
@@ -36,7 +36,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - transform voxco resources and variables
-- setting for configuring extractors to skip in dagster
 
 ### Changes
 
