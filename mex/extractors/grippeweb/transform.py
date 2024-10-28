@@ -14,10 +14,11 @@ from mex.common.types import (
     MergedOrganizationalUnitIdentifier,
     MergedOrganizationIdentifier,
 )
+from mex.extractors.mapping.types import AnyMappingModel
 
 
 def transform_grippeweb_resource_mappings_to_extracted_resources(
-    grippeweb_resource_mappings: list[dict[str, Any]],
+    grippeweb_resource_mappings: list[AnyMappingModel],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     grippeweb_extracted_access_platform: ExtractedAccessPlatform,
     extracted_primary_source_grippeweb: ExtractedPrimarySource,
@@ -59,7 +60,7 @@ def transform_grippeweb_resource_mappings_to_extracted_resources(
 
 
 def transform_grippeweb_resource_mappings_to_dict(
-    grippeweb_resource_mappings: list[dict[str, Any]],
+    grippeweb_resource_mappings: list[AnyMappingModel],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     grippeweb_extracted_access_platform: ExtractedAccessPlatform,
     extracted_primary_source_grippeweb: ExtractedPrimarySource,
@@ -88,88 +89,76 @@ def transform_grippeweb_resource_mappings_to_dict(
         person.fullName[0]: person for person in extracted_mex_persons_grippeweb
     }
     for resource in grippeweb_resource_mappings:
-        access_restriction = resource["accessRestriction"][0]["mappingRules"][0][
-            "setValues"
-        ]
-        accrual_periodicity = resource["accrualPeriodicity"][0]["mappingRules"][0][
-            "setValues"
-        ]
-        anonymization_pseudonymization = resource["anonymizationPseudonymization"][0][
-            "mappingRules"
-        ][0]["setValues"]
+        access_restriction = resource.accessRestriction[0].mappingRules[0].setValues
+        accrual_periodicity = resource.accrualPeriodicity[0].mappingRules[0].setValues
+        anonymization_pseudonymization = (
+            resource.anonymizationPseudonymization[0].mappingRules[0].setValues
+        )
         contact = extracted_mex_functional_units_grippeweb[
-            resource["contact"][0]["mappingRules"][0]["forValues"][0].lower()
+            resource.contact[0].mappingRules[0].forValues[0].lower()
         ]
         contributing_unit = unit_stable_target_ids_by_synonym[
-            resource["contributingUnit"][0]["mappingRules"][0]["forValues"][0]
+            resource.contributingUnit[0].mappingRules[0].forValues[0]
         ]
         contributor = [
             mex_persons_by_name[
                 f"{name.split(' ')[1]}, {name.split(' ')[0]}"
             ].stableTargetId
-            for name in resource["contributor"][0]["mappingRules"][0]["forValues"]
+            for name in resource.contributor[0].mappingRules[0].forValues
         ]
-        created = resource["created"][0]["mappingRules"][0]["setValues"]
-        description = resource["description"][0]["mappingRules"][0]["setValues"]
-        documentation = resource["documentation"][0]["mappingRules"][0]["setValues"]
-        has_legal_basis = resource["hasLegalBasis"][0]["mappingRules"][0]["setValues"]
-        has_personal_data = resource["hasPersonalData"][0]["mappingRules"][0][
-            "setValues"
-        ]
-        icd10code = resource["icd10code"][0]["mappingRules"][0]["setValues"]
-        identifier_in_primary_source_mapping_rules = resource[
-            "identifierInPrimarySource"
-        ][0]["mappingRules"][0]
-        if set_values := identifier_in_primary_source_mapping_rules["setValues"]:
+        created = resource.created[0].mappingRules[0].setValues
+        description = resource.description[0].mappingRules[0].setValues
+        documentation = resource.documentation[0].mappingRules[0].setValues
+        has_legal_basis = resource.hasLegalBasis[0].mappingRules[0].setValues
+        has_personal_data = resource.hasPersonalData[0].mappingRules[0].setValues
+        icd10code = resource.icd10code[0].mappingRules[0].setValues
+        identifier_in_primary_source_mapping_rules = resource.identifierInPrimarySource[
+            0
+        ].mappingRules[0]
+        if set_values := identifier_in_primary_source_mapping_rules.setValues:
             identifier_in_primary_source = set_values[0]
         else:
-            identifier_in_primary_source = identifier_in_primary_source_mapping_rules[
-                "forValues"
-            ][0]
-        keyword = resource["keyword"][0]["mappingRules"][0]["setValues"]
-        language = resource["language"][0]["mappingRules"][0]["setValues"]
-        mesh_id = resource["meshId"][0]["mappingRules"][0]["setValues"]
-        method = resource["method"][0]["mappingRules"][0]["setValues"]
-        method_description = resource["methodDescription"][0]["mappingRules"][0][
-            "setValues"
-        ]
-        min_typical_age = resource["minTypicalAge"][0]["mappingRules"][0]["setValues"]
-        population_coverage = resource["populationCoverage"][0]["mappingRules"][0][
-            "setValues"
-        ]
+            identifier_in_primary_source = (
+                identifier_in_primary_source_mapping_rules.forValues[0]
+            )
+        keyword = resource.keyword[0].mappingRules[0].setValues
+        language = resource.language[0].mappingRules[0].setValues
+        mesh_id = resource.meshId[0].mappingRules[0].setValues
+        method = resource.method[0].mappingRules[0].setValues
+        method_description = resource.methodDescription[0].mappingRules[0].setValues
+        min_typical_age = resource.minTypicalAge[0].mappingRules[0].setValues
+        population_coverage = resource.populationCoverage[0].mappingRules[0].setValues
         publisher = grippeweb_organization_ids_by_query_string.get(
-            resource["publisher"][0]["mappingRules"][0]["forValues"][0]
+            resource.publisher[0].mappingRules[0].forValues[0]
         )
 
-        resource_creation_method = resource["resourceCreationMethod"][0][
-            "mappingRules"
-        ][0]["setValues"]
-        resource_type_general = resource["resourceTypeGeneral"][0]["mappingRules"][0][
-            "setValues"
-        ]
-        resource_type_specific = resource["resourceTypeSpecific"][0]["mappingRules"][0][
-            "setValues"
-        ]
-        rights = resource["rights"][0]["mappingRules"][0]["setValues"]
-        size_of_data_basis = resource["sizeOfDataBasis"][0]["mappingRules"][0][
-            "setValues"
-        ]
-        spatial = resource["spatial"][0]["mappingRules"][0]["setValues"]
-        state_of_data_processing = resource["stateOfDataProcessing"][0]["mappingRules"][
-            0
-        ]["setValues"]
-        temporal = resource["temporal"][0]["mappingRules"][0]["setValues"]
-        theme = resource["theme"][0]["mappingRules"][0]["setValues"]
-        title = resource["title"][0]["mappingRules"][0]["setValues"]
+        resource_creation_method = (
+            resource.resourceCreationMethod[0].mappingRules[0].setValues
+        )
+        resource_type_general = (
+            resource.resourceTypeGeneral[0].mappingRules[0].setValues
+        )
+        resource_type_specific = (
+            resource.resourceTypeSpecific[0].mappingRules[0].setValues
+        )
+        rights = resource.rights[0].mappingRules[0].setValues
+        size_of_data_basis = resource.sizeOfDataBasis[0].mappingRules[0].setValues
+        spatial = resource.spatial[0].mappingRules[0].setValues
+        state_of_data_processing = (
+            resource.stateOfDataProcessing[0].mappingRules[0].setValues
+        )
+        temporal = resource.temporal[0].mappingRules[0].setValues
+        theme = resource.theme[0].mappingRules[0].setValues
+        title = resource.title[0].mappingRules[0].setValues
         unit_in_charge = unit_stable_target_ids_by_synonym[
-            resource["unitInCharge"][0]["mappingRules"][0]["forValues"][0]
+            resource.unitInCharge[0].mappingRules[0].forValues[0]
         ]
         # wasGeneratedField was removed for one resource mapping, but kept for the other
         # only look this field up if it exists in mapping
         was_generated_by = None
-        if wgb := resource.get("wasGeneratedBy"):
+        if wgb := resource.wasGeneratedBy:
             was_generated_by = unit_stable_target_ids_by_synonym[
-                wgb[0]["mappingRules"][0]["forValues"][0]
+                wgb[0].mappingRules[0].forValues[0]
             ]
         resource_dict[identifier_in_primary_source] = ExtractedResource(
             hasLegalBasis=has_legal_basis,
@@ -212,7 +201,7 @@ def transform_grippeweb_resource_mappings_to_dict(
 
 
 def transform_grippeweb_access_platform_to_extracted_access_platform(
-    grippeweb_access_platform: dict[str, Any],
+    grippeweb_access_platform: AnyMappingModel,
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     extracted_primary_source: ExtractedPrimarySource,
     extracted_mex_persons_grippeweb: list[ExtractedPerson],
@@ -232,24 +221,22 @@ def transform_grippeweb_access_platform_to_extracted_access_platform(
         person.email[0]: person.stableTargetId
         for person in extracted_mex_persons_grippeweb
     }
-    identifier_in_primary_source = grippeweb_access_platform[
-        "identifierInPrimarySource"
-    ][0]["mappingRules"][0]["setValues"]
+    identifier_in_primary_source = (
+        grippeweb_access_platform.identifierInPrimarySource[0].mappingRules[0].setValues
+    )
 
     contact = [
         mex_person_stable_target_id_by_email[email]
-        for email in grippeweb_access_platform["contact"][0]["mappingRules"][0][
-            "forValues"
-        ]
+        for email in grippeweb_access_platform.contact[0].mappingRules[0].forValues
     ]
 
-    technical_accessibility = grippeweb_access_platform["technicalAccessibility"][0][
-        "mappingRules"
-    ][0]["setValues"]
-    title = grippeweb_access_platform["title"][0]["mappingRules"][0]["setValues"]
+    technical_accessibility = (
+        grippeweb_access_platform.technicalAccessibility[0].mappingRules[0].setValues
+    )
+    title = grippeweb_access_platform.title[0].mappingRules[0].setValues
 
     unit_in_charge = unit_stable_target_ids_by_synonym[
-        grippeweb_access_platform["unitInCharge"][0]["mappingRules"][0]["forValues"][0]
+        grippeweb_access_platform.unitInCharge[0].mappingRules[0].forValues[0]
     ]
 
     return ExtractedAccessPlatform(
@@ -263,7 +250,7 @@ def transform_grippeweb_access_platform_to_extracted_access_platform(
 
 
 def transform_grippeweb_variable_group_to_extracted_variable_groups(
-    grippeweb_variable_group: dict[str, Any],
+    grippeweb_variable_group: AnyMappingModel,
     grippeweb_columns: dict[str, dict[str, list[Any]]],
     grippeweb_extracted_resource_dict: dict[str, ExtractedResource],
     extracted_primary_source_grippeweb: ExtractedPrimarySource,
@@ -280,8 +267,8 @@ def transform_grippeweb_variable_group_to_extracted_variable_groups(
         list of extracted variable groups
     """
     label_by_table_name = {
-        mapping_rules["forValues"][0]: mapping_rules["setValues"][0]
-        for mapping_rules in grippeweb_variable_group["label"][0]["mappingRules"]
+        mapping_rules.forValues[0]: mapping_rules.setValues[0]
+        for mapping_rules in grippeweb_variable_group.label[0].mappingRules
     }
     return [
         ExtractedVariableGroup(
@@ -295,7 +282,7 @@ def transform_grippeweb_variable_group_to_extracted_variable_groups(
 
 
 def transform_grippeweb_variable_to_extracted_variables(
-    grippeweb_variable: dict[str, Any],
+    grippeweb_variable: AnyMappingModel,
     grippeweb_extracted_variable_group: list[ExtractedVariableGroup],
     grippeweb_columns: dict[str, dict[str, list[Any]]],
     grippeweb_extracted_resource_dict: dict[str, ExtractedResource],
@@ -314,8 +301,8 @@ def transform_grippeweb_variable_to_extracted_variables(
         list of extracted variables
     """
     valueset_locations_by_field = {
-        valueset["fieldInPrimarySource"]: valueset["locationInPrimarySource"]
-        for valueset in grippeweb_variable["valueSet"]
+        valueset.fieldInPrimarySource: valueset.locationInPrimarySource
+        for valueset in grippeweb_variable.valueSet
     }
     variable_group_by_location = {
         group.identifierInPrimarySource: group.stableTargetId

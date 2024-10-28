@@ -1,5 +1,5 @@
 from collections.abc import Generator, Hashable, Iterable
-from typing import Any
+from typing import cast
 
 from mex.common.logging import watch
 from mex.common.models import (
@@ -7,6 +7,7 @@ from mex.common.models import (
     ExtractedOrganization,
     ExtractedPrimarySource,
 )
+from mex.common.models.base.mapping import GenericField
 from mex.common.types import (
     Link,
     MergedOrganizationalUnitIdentifier,
@@ -19,12 +20,13 @@ from mex.common.types import (
 from mex.extractors.international_projects.models.source import (
     InternationalProjectsSource,
 )
+from mex.extractors.mapping.types import AnyMappingModel
 from mex.extractors.sinks import load
 
 
 def transform_international_projects_source_to_extracted_activity(
     source: InternationalProjectsSource,
-    international_projects_activity: dict[str, Any],
+    international_projects_activity: AnyMappingModel,
     extracted_primary_source: ExtractedPrimarySource,
     person_stable_target_ids_by_query_string: dict[
         Hashable, list[MergedPersonIdentifier]
@@ -89,17 +91,17 @@ def transform_international_projects_source_to_extracted_activity(
             if (wfc := funding_sources_stable_target_id_by_query.get(fc))
         )
 
-    activity_type_from_mapping = international_projects_activity["activityType"][0][
-        "mappingRules"
-    ]
-    if source.funding_type == activity_type_from_mapping[0]["forValues"][0]:
-        activity_type = activity_type_from_mapping[0]["setValues"][0]
-    elif source.funding_type == activity_type_from_mapping[1]["forValues"][0]:
-        activity_type = activity_type_from_mapping[1]["setValues"][0]
+    activity_type_from_mapping = international_projects_activity.activityType[
+        0
+    ].mappingRules
+    if source.funding_type == activity_type_from_mapping[0].forValues[0]:
+        activity_type = activity_type_from_mapping[0].setValues[0]
+    elif source.funding_type == activity_type_from_mapping[1].forValues[0]:
+        activity_type = activity_type_from_mapping[1].setValues[0]
     else:
-        activity_type = activity_type_from_mapping[2]["setValues"][0]
+        activity_type = activity_type_from_mapping[2].setValues[0]
 
-    theme = international_projects_activity["theme"]
+    theme = international_projects_activity.theme
 
     return ExtractedActivity(
         title=[Text(language=TextLanguage.EN, value=source.full_project_name)],
@@ -148,7 +150,7 @@ def transform_international_projects_source_to_extracted_activity(
 @watch
 def transform_international_projects_sources_to_extracted_activities(
     international_projects_sources: Iterable[InternationalProjectsSource],
-    international_projects_activity: dict[str, Any],
+    international_projects_activity: AnyMappingModel,
     extracted_primary_source: ExtractedPrimarySource,
     person_stable_target_ids_by_query_string: dict[
         Hashable, list[MergedPersonIdentifier]
@@ -192,7 +194,7 @@ def transform_international_projects_sources_to_extracted_activities(
 
 
 def get_theme_for_activity_or_topic(
-    theme: list[dict[str, Any]],
+    theme: list[GenericField],
     activity1: str | None,
     activity2: str | None,
     topic1: str | None,
@@ -211,14 +213,18 @@ def get_theme_for_activity_or_topic(
         Sorted list of Theme
     """
     themes_dict_from_mapping: dict[str, Theme] = {}
-    default_theme_from_mapping: Theme = theme[0]["mappingRules"][0]["setValues"][0]
+    default_theme_from_mapping = cast(
+        list[Theme],
+        theme[0].mappingRules[0].setValues,
+    )[0]
 
     for theme_item in theme:
-        for mapping_rule in theme_item["mappingRules"]:
-            rule_for_values = mapping_rule["forValues"]
-            if rule_for_values:
+        for mapping_rule in theme_item.mappingRules:
+            if mapping_rule.forValues and mapping_rule.setValues:
                 themes_dict_from_mapping.update(
-                    dict.fromkeys(rule_for_values, mapping_rule["setValues"][0])
+                    dict.fromkeys(
+                        mapping_rule.forValues, cast(Theme, mapping_rule.setValues[0])
+                    )
                 )
 
     def get_theme_or_default(key: str | None) -> Theme:

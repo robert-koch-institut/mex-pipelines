@@ -1,5 +1,4 @@
 from collections.abc import Generator, Hashable, Iterable
-from typing import Any
 
 from mex.common.logging import watch
 from mex.common.models import (
@@ -9,6 +8,7 @@ from mex.common.models import (
 )
 from mex.common.types import Identifier, MergedOrganizationIdentifier
 from mex.extractors.blueant.models.source import BlueAntSource
+from mex.extractors.mapping.types import AnyMappingModel
 from mex.extractors.sinks import load
 
 
@@ -18,7 +18,7 @@ def transform_blueant_sources_to_extracted_activities(
     primary_source: ExtractedPrimarySource,
     person_stable_target_ids_by_employee_id: dict[Hashable, list[Identifier]],
     unit_stable_target_ids_by_synonym: dict[str, Identifier],
-    activity: dict[str, Any],
+    activity: AnyMappingModel,
     blueant_organization_ids_by_query_string: dict[str, MergedOrganizationIdentifier],
 ) -> Generator[ExtractedActivity, None, None]:
     """Transform Blue Ant sources to ExtractedActivities.
@@ -37,10 +37,10 @@ def transform_blueant_sources_to_extracted_activities(
         Generator for ExtractedActivity instances
     """
     activity_type_values_by_type_id = {
-        for_value: mapping_rule["setValues"]
-        for mapping_rule in activity["activityType"][0]["mappingRules"]
-        if mapping_rule["forValues"]
-        for for_value in mapping_rule["forValues"]
+        for_value: mapping_rule.setValues
+        for mapping_rule in activity.activityType[0].mappingRules
+        if mapping_rule.forValues
+        for for_value in mapping_rule.forValues
     }
     for source in blueant_sources:
         # find source type

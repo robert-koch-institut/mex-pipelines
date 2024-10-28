@@ -14,6 +14,7 @@ from mex.common.types import (
     MergedOrganizationIdentifier,
 )
 from mex.extractors.mapping.extract import extract_mapping_data
+from mex.extractors.mapping.transform import transform_mapping_data_to_models
 from mex.extractors.odk.extract import (
     extract_odk_raw_data,
     get_external_partner_and_publisher_by_label,
@@ -57,7 +58,7 @@ def odk_resource_mappings() -> list[dict[str, Any]]:
     """Extract odk resource mappings."""
     settings = Settings.get()
     return [
-        extract_mapping_data(file, ExtractedResource)
+        extract_mapping_data(file)
         for file in Path(settings.odk.mapping_path).glob("resource_*.yaml")
     ]
 
@@ -69,7 +70,9 @@ def external_partner_and_publisher_by_label(
 ) -> dict[str, MergedOrganizationIdentifier]:
     """Extract partner organizations and return their IDs grouped by query string."""
     wikidata_partner_organizations_by_query = (
-        get_external_partner_and_publisher_by_label(odk_resource_mappings)
+        get_external_partner_and_publisher_by_label(
+            transform_mapping_data_to_models(odk_resource_mappings, ExtractedResource)
+        )
     )
 
     return get_merged_organization_id_by_query_with_transform_and_load(
@@ -87,7 +90,7 @@ def extracted_resources_odk(
 ) -> list[ExtractedResource]:
     """Transform odk resources to mex resource, load to sinks and return."""
     extracted_resources_odk, is_part_of = transform_odk_resources_to_mex_resources(
-        odk_resource_mappings,
+        transform_mapping_data_to_models(odk_resource_mappings, ExtractedResource),
         unit_stable_target_ids_by_synonym,
         external_partner_and_publisher_by_label,
         extracted_international_projects_activities,

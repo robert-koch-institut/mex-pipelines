@@ -1,5 +1,3 @@
-from typing import Any
-
 from mex.common.models import ExtractedPrimarySource
 from mex.common.testing import Joker
 from mex.common.types import (
@@ -13,11 +11,12 @@ from mex.extractors.ff_projects.models.source import FFProjectsSource
 from mex.extractors.ff_projects.transform import (
     transform_ff_projects_source_to_extracted_activity,
 )
+from mex.extractors.mapping.types import AnyMappingModel
 
 
 def test_transform_ff_projects_source_to_extracted_activity(
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
-    ff_projects_activity: dict[str, Any],
+    ff_projects_activity: AnyMappingModel,
 ) -> None:
     organization_id = MergedOrganizationIdentifier.generate(seed=44)
     organizations_stable_target_ids_by_synonym = {"Test-Institute": organization_id}

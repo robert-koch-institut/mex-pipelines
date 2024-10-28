@@ -1,5 +1,3 @@
-from typing import Any
-
 import pytest
 
 from mex.common.models import (
@@ -15,6 +13,7 @@ from mex.common.types import (
     MergedOrganizationIdentifier,
     TextLanguage,
 )
+from mex.extractors.mapping.types import AnyMappingModel
 from mex.extractors.odk.model import ODKData
 from mex.extractors.odk.transform import (
     get_variable_groups_from_raw_data,
@@ -96,7 +95,7 @@ def extracted_international_projects_activities() -> list[ExtractedActivity]:
 
 
 def test_transform_odk_resources_to_mex_resources(
-    odk_resource_mappings: list[dict[str, Any]],
+    odk_resource_mappings: list[AnyMappingModel],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     external_partner_and_publisher_by_label: dict[str, MergedOrganizationIdentifier],
     extracted_international_projects_activities: list[ExtractedActivity],

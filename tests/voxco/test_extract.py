@@ -1,9 +1,9 @@
-from typing import Any
 from uuid import UUID
 
 import pytest
 
 from mex.common.wikidata.models.organization import WikidataOrganization
+from mex.extractors.mapping.types import AnyMappingModel
 from mex.extractors.voxco.extract import (
     extract_ldap_persons_voxco,
     extract_voxco_organizations,
@@ -34,7 +34,7 @@ def test_extract_voxco_variables() -> None:
     "mocked_wikidata",
 )
 def test_extract_voxco_organizations(
-    voxco_resource_mappings: dict[str, Any],
+    voxco_resource_mappings: AnyMappingModel,
     wikidata_organization: WikidataOrganization,
 ) -> None:
     organizations = extract_voxco_organizations(voxco_resource_mappings)
@@ -47,7 +47,7 @@ def test_extract_voxco_organizations(
     "mocked_ldap",
 )
 def test_extract_ldap_persons_voxco(
-    voxco_resource_mappings: dict[str, Any],
+    voxco_resource_mappings: AnyMappingModel,
 ) -> None:
     organizations = extract_ldap_persons_voxco(voxco_resource_mappings)
 

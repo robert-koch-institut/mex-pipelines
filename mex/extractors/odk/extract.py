@@ -54,14 +54,14 @@ def extract_odk_raw_data() -> list[ODKData]:
 def get_column_dict_by_pattern(
     sheet: DataFrame, pattern: str
 ) -> dict[str, list[str | float]]:
-    """Get a dict of columns by matchting pattern.
+    """Get a dict of columns by matching pattern.
 
     Args:
         sheet: sheet to extract columns from
         pattern: pattern to match column names
 
     Returns:
-        dictionary of mathing columns by column names
+        dictionary of matching columns by column names
     """
     return {col: sheet[col].to_list() for col in sheet.columns if pattern in col}
 
@@ -81,7 +81,7 @@ def get_external_partner_and_publisher_by_label(
         value
         for resource in odk_resource_mappings
         for attribute in ["publisher", "externalPartner"]
-        for value in resource[attribute][0]["mappingRules"][0]["forValues"]
+        for value in getattr(resource, attribute)[0].mappingRules[0].forValues
     }
     external_partner_and_publisher_by_label: dict[str, WikidataOrganization] = {}
     for label in labels:

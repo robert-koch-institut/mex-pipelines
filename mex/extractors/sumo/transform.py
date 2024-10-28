@@ -1,6 +1,5 @@
 from collections import defaultdict
 from collections.abc import Generator, Iterable
-from typing import Any
 
 from mex.common.logging import watch
 from mex.common.models import (
@@ -24,6 +23,7 @@ from mex.common.types import (
     Text,
     TextLanguage,
 )
+from mex.extractors.mapping.types import AnyMappingModel
 from mex.extractors.sinks import load
 from mex.extractors.sumo.models.cc1_data_model_nokeda import Cc1DataModelNoKeda
 from mex.extractors.sumo.models.cc1_data_valuesets import Cc1DataValuesets
@@ -78,7 +78,7 @@ def get_contact_merged_ids_by_names(
 
 
 def transform_resource_feat_model_to_mex_resource(
-    extracted_sumo_resource_feat: dict[str, Any],
+    extracted_sumo_resource_feat: AnyMappingModel,
     extracted_primary_source: ExtractedPrimarySource,
     unit_merged_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     contact_merged_ids_by_emails: dict[Email, MergedContactPointIdentifier],
@@ -102,64 +102,56 @@ def transform_resource_feat_model_to_mex_resource(
         ExtractedResource
     """
     keyword = [
-        k["setValues"][0]
-        for k in extracted_sumo_resource_feat["keyword"][0]["mappingRules"]
+        k.setValues[0] for k in extracted_sumo_resource_feat.keyword[0].mappingRules
     ]
     return ExtractedResource(
         accessPlatform=[sumo_access_platform.stableTargetId],
-        accessRestriction=extracted_sumo_resource_feat["accessRestriction"][0][
-            "mappingRules"
-        ][0]["setValues"][0],
-        accrualPeriodicity=extracted_sumo_resource_feat["accrualPeriodicity"][0][
-            "mappingRules"
-        ][0]["setValues"][0],
+        accessRestriction=extracted_sumo_resource_feat.accessRestriction[0]
+        .mappingRules[0]
+        .setValues[0],
+        accrualPeriodicity=extracted_sumo_resource_feat.accrualPeriodicity[0]
+        .mappingRules[0]
+        .setValues[0],
         contact=[
             contact_merged_ids_by_emails[
-                extracted_sumo_resource_feat["contact"][0]["mappingRules"][0][
-                    "forValues"
-                ][0]
+                extracted_sumo_resource_feat.contact[0].mappingRules[0].forValues[0]
             ]
         ],
         contributingUnit=[
             unit_merged_ids_by_synonym[
-                extracted_sumo_resource_feat["contributingUnit"][0]["mappingRules"][0][
-                    "forValues"
-                ][0]
+                extracted_sumo_resource_feat.contributingUnit[0]
+                .mappingRules[0]
+                .forValues[0]
             ]
         ],
-        hasPersonalData=extracted_sumo_resource_feat["hasPersonalData"][0][
-            "mappingRules"
-        ][0]["setValues"][0],
+        hasPersonalData=extracted_sumo_resource_feat.hasPersonalData[0]
+        .mappingRules[0]
+        .setValues[0],
         hadPrimarySource=extracted_primary_source.stableTargetId,
-        identifierInPrimarySource=extracted_sumo_resource_feat["title"][0][
-            "mappingRules"
-        ][0]["setValues"][0]["value"],
+        identifierInPrimarySource=extracted_sumo_resource_feat.title[0]
+        .mappingRules[0]
+        .setValues[0]
+        .value,
         isPartOf=mex_resource_nokeda.stableTargetId,
         keyword=keyword,
-        meshId=extracted_sumo_resource_feat["meshId"][0]["mappingRules"][0][
-            "setValues"
-        ][0],
-        resourceCreationMethod=extracted_sumo_resource_feat["resourceCreationMethod"][
-            0
-        ]["mappingRules"][0]["setValues"][0],
-        resourceTypeGeneral=extracted_sumo_resource_feat["resourceTypeGeneral"][0][
-            "mappingRules"
-        ][0]["setValues"],
-        resourceTypeSpecific=extracted_sumo_resource_feat["resourceTypeSpecific"][0][
-            "mappingRules"
-        ][0]["setValues"],
-        spatial=extracted_sumo_resource_feat["spatial"][0]["mappingRules"][0][
-            "setValues"
-        ][0],
-        theme=extracted_sumo_resource_feat["theme"][0]["mappingRules"][0]["setValues"],
-        title=extracted_sumo_resource_feat["title"][0]["mappingRules"][0]["setValues"][
-            0
-        ],
+        meshId=extracted_sumo_resource_feat.meshId[0].mappingRules[0].setValues[0],
+        resourceCreationMethod=extracted_sumo_resource_feat.resourceCreationMethod[0]
+        .mappingRules[0]
+        .setValues[0],
+        resourceTypeGeneral=extracted_sumo_resource_feat.resourceTypeGeneral[0]
+        .mappingRules[0]
+        .setValues,
+        resourceTypeSpecific=extracted_sumo_resource_feat.resourceTypeSpecific[0]
+        .mappingRules[0]
+        .setValues,
+        spatial=extracted_sumo_resource_feat.spatial[0].mappingRules[0].setValues[0],
+        theme=extracted_sumo_resource_feat.theme[0].mappingRules[0].setValues,
+        title=extracted_sumo_resource_feat.title[0].mappingRules[0].setValues[0],
         unitInCharge=[
             unit_merged_ids_by_synonym[
-                extracted_sumo_resource_feat["unitInCharge"][0]["mappingRules"][0][
-                    "forValues"
-                ][0]
+                extracted_sumo_resource_feat.unitInCharge[0]
+                .mappingRules[0]
+                .forValues[0]
             ]
         ],
         wasGeneratedBy=transformed_activity.stableTargetId,
@@ -167,7 +159,7 @@ def transform_resource_feat_model_to_mex_resource(
 
 
 def transform_resource_nokeda_to_mex_resource(
-    extracted_sumo_resource_nokeda: dict[str, Any],
+    extracted_sumo_resource_nokeda: AnyMappingModel,
     extracted_primary_source: ExtractedPrimarySource,
     unit_merged_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     contact_merged_ids_by_emails: dict[Email, MergedContactPointIdentifier],
@@ -192,99 +184,87 @@ def transform_resource_nokeda_to_mex_resource(
         ExtractedResource
     """
     keyword = [
-        k["setValues"][0]
-        for k in extracted_sumo_resource_nokeda["keyword"][0]["mappingRules"]
+        k.setValues[0] for k in extracted_sumo_resource_nokeda.keyword[0].mappingRules
     ]
     return ExtractedResource(
         accessPlatform=[sumo_access_platform.stableTargetId],
-        accessRestriction=extracted_sumo_resource_nokeda["accessRestriction"][0][
-            "mappingRules"
-        ][0]["setValues"][0],
-        accrualPeriodicity=extracted_sumo_resource_nokeda["accrualPeriodicity"][0][
-            "mappingRules"
-        ][0]["setValues"][0],
+        accessRestriction=extracted_sumo_resource_nokeda.accessRestriction[0]
+        .mappingRules[0]
+        .setValues[0],
+        accrualPeriodicity=extracted_sumo_resource_nokeda.accrualPeriodicity[0]
+        .mappingRules[0]
+        .setValues[0],
         contact=[
             contact_merged_ids_by_emails[
-                extracted_sumo_resource_nokeda["contact"][0]["mappingRules"][0][
-                    "forValues"
-                ][0]
+                extracted_sumo_resource_nokeda.contact[0].mappingRules[0].forValues[0]
             ]
         ],
         contributingUnit=[
             unit_merged_ids_by_synonym[
-                extracted_sumo_resource_nokeda["contributingUnit"][0]["mappingRules"][
-                    0
-                ]["forValues"][0]
+                extracted_sumo_resource_nokeda.contributingUnit[0]
+                .mappingRules[0]
+                .forValues[0]
             ]
         ],
         description=[
             Text.model_validate(
-                extracted_sumo_resource_nokeda["description"][0]["mappingRules"][0][
-                    "setValues"
-                ][0]
+                extracted_sumo_resource_nokeda.description[0]
+                .mappingRules[0]
+                .setValues[0]
             )
         ],
         documentation=[
             Link.model_validate(
-                extracted_sumo_resource_nokeda["documentation"][0]["mappingRules"][0][
-                    "setValues"
-                ][0]
+                extracted_sumo_resource_nokeda.documentation[0]
+                .mappingRules[0]
+                .setValues[0]
             )
         ],
         externalPartner=[
             create_new_organization_with_official_name(
-                extracted_sumo_resource_nokeda["externalPartner"][0]["mappingRules"][0][
-                    "forValues"
-                ][0],
+                extracted_sumo_resource_nokeda.externalPartner[0]
+                .mappingRules[0]
+                .forValues[0],
                 extracted_primary_source,
             )
         ],
-        hasPersonalData=extracted_sumo_resource_nokeda["hasPersonalData"][0][
-            "mappingRules"
-        ][0]["setValues"][0],
+        hasPersonalData=extracted_sumo_resource_nokeda.hasPersonalData[0]
+        .mappingRules[0]
+        .setValues[0],
         hadPrimarySource=extracted_primary_source.stableTargetId,
-        identifierInPrimarySource=extracted_sumo_resource_nokeda["title"][0][
-            "mappingRules"
-        ][0]["setValues"][0]["value"],
+        identifierInPrimarySource=extracted_sumo_resource_nokeda.title[0]
+        .mappingRules[0]
+        .setValues[0]
+        .value,
         keyword=keyword,
-        meshId=extracted_sumo_resource_nokeda["meshId"][0]["mappingRules"][0][
-            "setValues"
-        ],
+        meshId=extracted_sumo_resource_nokeda.meshId[0].mappingRules[0].setValues,
         publication=[],
         publisher=extracted_organization_rki.stableTargetId,
-        resourceCreationMethod=extracted_sumo_resource_nokeda["resourceCreationMethod"][
-            0
-        ]["mappingRules"][0]["setValues"][0],
-        resourceTypeGeneral=extracted_sumo_resource_nokeda["resourceTypeGeneral"][0][
-            "mappingRules"
-        ][0]["setValues"][0],
-        resourceTypeSpecific=extracted_sumo_resource_nokeda["resourceTypeSpecific"][0][
-            "mappingRules"
-        ][0]["setValues"],
+        resourceCreationMethod=extracted_sumo_resource_nokeda.resourceCreationMethod[0]
+        .mappingRules[0]
+        .setValues[0],
+        resourceTypeGeneral=extracted_sumo_resource_nokeda.resourceTypeGeneral[0]
+        .mappingRules[0]
+        .setValues[0],
+        resourceTypeSpecific=extracted_sumo_resource_nokeda.resourceTypeSpecific[0]
+        .mappingRules[0]
+        .setValues,
         rights=[
             Text.model_validate(
-                extracted_sumo_resource_nokeda["rights"][0]["mappingRules"][0][
-                    "setValues"
-                ][0]
+                extracted_sumo_resource_nokeda.rights[0].mappingRules[0].setValues[0]
             )
         ],
-        spatial=extracted_sumo_resource_nokeda["spatial"][0]["mappingRules"][0][
-            "setValues"
-        ][0],
-        stateOfDataProcessing=extracted_sumo_resource_nokeda["stateOfDataProcessing"][
-            0
-        ]["mappingRules"][0]["setValues"][0],
-        theme=extracted_sumo_resource_nokeda["theme"][0]["mappingRules"][0][
-            "setValues"
-        ],
-        title=extracted_sumo_resource_nokeda["title"][0]["mappingRules"][0][
-            "setValues"
-        ][0],
+        spatial=extracted_sumo_resource_nokeda.spatial[0].mappingRules[0].setValues[0],
+        stateOfDataProcessing=extracted_sumo_resource_nokeda.stateOfDataProcessing[0]
+        .mappingRules[0]
+        .setValues[0],
+        theme=extracted_sumo_resource_nokeda.theme[0].mappingRules[0].setValues,
+        title=extracted_sumo_resource_nokeda.title[0].mappingRules[0].setValues[0],
         unitInCharge=[
             unit_merged_ids_by_synonym[
-                extracted_sumo_resource_nokeda["unitInCharge"][0]["mappingRules"][0][
-                    "forValues"
-                ][0]
+                extracted_sumo_resource_nokeda.unitInCharge[0]
+                .mappingRules[0]
+                .forValues[0]
             ]
         ],
         wasGeneratedBy=transformed_activity.stableTargetId,
@@ -538,7 +518,7 @@ def transform_feat_projection_variable_to_mex_variable(
 
 
 def transform_sumo_access_platform_to_mex_access_platform(
-    sumo_access_platform: dict[str, Any],
+    sumo_access_platform: AnyMappingModel,
     unit_merged_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     person_stable_target_ids_by_query_string: dict[str, MergedPersonIdentifier],
     extracted_primary_source: ExtractedPrimarySource,
@@ -557,36 +537,32 @@ def transform_sumo_access_platform_to_mex_access_platform(
     """
     unit_in_charge = [
         unit_merged_ids_by_synonym[unit]
-        for unit in sumo_access_platform["unitInCharge"][0]["mappingRules"][0][
-            "forValues"
-        ]
+        for unit in sumo_access_platform.unitInCharge[0].mappingRules[0].forValues
         if unit
     ]
     if not unit_in_charge[0]:
         unit_in_charge = []
     contact = [
         person_stable_target_ids_by_query_string[contact]
-        for contact in sumo_access_platform["contact"][0]["mappingRules"][0][
-            "forValues"
-        ]
+        for contact in sumo_access_platform.contact[0].mappingRules[0].forValues
         if contact
     ]
     return ExtractedAccessPlatform(
-        identifierInPrimarySource=sumo_access_platform["identifierInPrimarySource"][0][
-            "mappingRules"
-        ][0]["setValues"],
+        identifierInPrimarySource=sumo_access_platform.identifierInPrimarySource[0]
+        .mappingRules[0]
+        .setValues,
         hadPrimarySource=extracted_primary_source.stableTargetId,
-        title=sumo_access_platform["title"][0]["mappingRules"][0]["setValues"],
-        technicalAccessibility=sumo_access_platform["technicalAccessibility"][0][
-            "mappingRules"
-        ][0]["setValues"],
+        title=sumo_access_platform.title[0].mappingRules[0].setValues,
+        technicalAccessibility=sumo_access_platform.technicalAccessibility[0]
+        .mappingRules[0]
+        .setValues,
         unitInCharge=unit_in_charge,
         contact=contact,
     )
 
 
 def transform_sumo_activity_to_extracted_activity(
-    sumo_activity: dict[str, Any],
+    sumo_activity: AnyMappingModel,
     unit_merged_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     contact_merged_ids_by_emails: dict[Email, MergedContactPointIdentifier],
     extracted_primary_source: ExtractedPrimarySource,
@@ -603,32 +579,30 @@ def transform_sumo_activity_to_extracted_activity(
     Returns:
         ExtractedActivity
     """
-    abstract = sumo_activity["abstract"][0]["mappingRules"][0]["setValues"]
+    abstract = sumo_activity.abstract[0].mappingRules[0].setValues
     contact = [
         contact_merged_ids_by_emails[contact]
-        for contact in sumo_activity["contact"][0]["mappingRules"][0]["forValues"]
+        for contact in sumo_activity.contact[0].mappingRules[0].forValues
     ]
-    documentation = sumo_activity["documentation"][0]["mappingRules"][0]["setValues"]
+    documentation = sumo_activity.documentation[0].mappingRules[0].setValues
     involved_unit = [
         unit_merged_ids_by_synonym[unit]
-        for unit in sumo_activity["involvedUnit"][0]["mappingRules"][0]["forValues"]
+        for unit in sumo_activity.involvedUnit[0].mappingRules[0].forValues
     ]
     responsible_unit = [
         unit_merged_ids_by_synonym[unit]
-        for unit in sumo_activity["responsibleUnit"][0]["mappingRules"][0]["forValues"]
+        for unit in sumo_activity.responsibleUnit[0].mappingRules[0].forValues
     ]
-    short_name = sumo_activity["shortName"][0]["mappingRules"][0]["setValues"]
-    title = sumo_activity["title"][0]["mappingRules"][0]["setValues"]
-    theme = sumo_activity["theme"][0]["mappingRules"][0]["setValues"]
-    website = sumo_activity["website"][0]["mappingRules"][0]["setValues"]
-    external_associate = sumo_activity["externalAssociate"][0]["mappingRules"][0][
-        "forValues"
-    ][0]
-    start = sumo_activity["start"][0]["mappingRules"][0]["setValues"]
-    activity_type = sumo_activity["activityType"][0]["mappingRules"][0]["setValues"]
-    identifier_in_primary_source = sumo_activity["identifierInPrimarySource"][0][
-        "mappingRules"
-    ][0]["setValues"]
+    short_name = sumo_activity.shortName[0].mappingRules[0].setValues
+    title = sumo_activity.title[0].mappingRules[0].setValues
+    theme = sumo_activity.theme[0].mappingRules[0].setValues
+    website = sumo_activity.website[0].mappingRules[0].setValues
+    external_associate = sumo_activity.externalAssociate[0].mappingRules[0].forValues[0]
+    start = sumo_activity.start[0].mappingRules[0].setValues
+    activity_type = sumo_activity.activityType[0].mappingRules[0].setValues
+    identifier_in_primary_source = (
+        sumo_activity.identifierInPrimarySource[0].mappingRules[0].setValues
+    )
 
     return ExtractedActivity(
         abstract=abstract,

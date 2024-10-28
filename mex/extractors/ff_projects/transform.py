@@ -1,5 +1,3 @@
-from typing import Any
-
 from mex.common.exceptions import MExError
 from mex.common.models import ExtractedActivity, ExtractedPrimarySource
 from mex.common.types import (
@@ -10,6 +8,7 @@ from mex.common.types import (
     YearMonthDay,
 )
 from mex.extractors.ff_projects.models.source import FFProjectsSource
+from mex.extractors.mapping.types import AnyMappingModel
 
 
 def transform_ff_projects_source_to_extracted_activity(
@@ -18,7 +17,7 @@ def transform_ff_projects_source_to_extracted_activity(
     person_stable_target_ids_by_query_string: dict[str, list[MergedPersonIdentifier]],
     unit_stable_target_id_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     organization_stable_target_id_by_synonyms: dict[str, MergedOrganizationIdentifier],
-    ff_projects_activity: dict[str, Any],
+    ff_projects_activity: AnyMappingModel,
 ) -> ExtractedActivity:
     """Transform FF Projects source to an extracted activity.
 
@@ -64,18 +63,14 @@ def transform_ff_projects_source_to_extracted_activity(
     activity_type = []
     if (
         ff_projects_source.rki_az
-        in ff_projects_activity["activityType"][0]["mappingRules"][0]["forValues"]
+        in ff_projects_activity.activityType[0].mappingRules[0].forValues
     ):
-        activity_type = ff_projects_activity["activityType"][0]["mappingRules"][0][
-            "setValues"
-        ]
+        activity_type = ff_projects_activity.activityType[0].mappingRules[0].setValues
     elif (
         ff_projects_source.rki_az
-        in ff_projects_activity["activityType"][0]["mappingRules"][1]["forValues"]
+        in ff_projects_activity.activityType[0].mappingRules[1].forValues
     ):
-        activity_type = ff_projects_activity["activityType"][0]["mappingRules"][1][
-            "setValues"
-        ]
+        activity_type = ff_projects_activity.activityType[0].mappingRules[1].setValues
     start = (
         [
             YearMonthDay(

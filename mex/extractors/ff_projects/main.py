@@ -24,6 +24,7 @@ from mex.extractors.ff_projects.transform import (
     transform_ff_projects_source_to_extracted_activity,
 )
 from mex.extractors.mapping.extract import extract_mapping_data
+from mex.extractors.mapping.transform import transform_mapping_data_to_model
 from mex.extractors.pipeline import asset, run_job_in_process
 from mex.extractors.settings import Settings
 from mex.extractors.sinks import load
@@ -110,8 +111,8 @@ def extract_ff_projects(
 ) -> list[ExtractedActivity]:
     """Transform FF Projects to extracted activities and load them to the sinks."""
     settings = Settings.get()
-    ff_projects_activity = extract_mapping_data(
-        settings.ff_projects.mapping_path / "activity.yaml",
+    ff_projects_activity = transform_mapping_data_to_model(
+        extract_mapping_data(settings.ff_projects.mapping_path / "activity.yaml"),
         ExtractedActivity,
     )
     extracted_activities = [

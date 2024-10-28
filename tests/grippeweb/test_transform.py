@@ -23,10 +23,11 @@ from mex.extractors.grippeweb.transform import (
     transform_grippeweb_variable_group_to_extracted_variable_groups,
     transform_grippeweb_variable_to_extracted_variables,
 )
+from mex.extractors.mapping.types import AnyMappingModel
 
 
 def test_transform_grippeweb_access_platform_to_extracted_access_platform(
-    grippeweb_access_platform: dict[str, Any],
+    grippeweb_access_platform: AnyMappingModel,
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
     extracted_mex_persons_grippeweb: list[ExtractedPerson],
@@ -56,7 +57,7 @@ def test_transform_grippeweb_access_platform_to_extracted_access_platform(
 
 
 def test_transform_grippeweb_resource_mappings_to_dict(
-    grippeweb_resource_mappings: list[dict[str, Any]],
+    grippeweb_resource_mappings: list[AnyMappingModel],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     grippeweb_extracted_access_platform: ExtractedAccessPlatform,
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
@@ -147,7 +148,7 @@ def test_transform_grippeweb_resource_mappings_to_dict(
 
 
 def test_transform_grippeweb_resource_mappings_to_extracted_resources(
-    grippeweb_resource_mappings: list[dict[str, Any]],
+    grippeweb_resource_mappings: list[AnyMappingModel],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     grippeweb_extracted_access_platform: ExtractedAccessPlatform,
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
@@ -170,7 +171,7 @@ def test_transform_grippeweb_resource_mappings_to_extracted_resources(
 
 
 def test_transform_grippeweb_variable_group_to_extracted_variable_groups(
-    grippeweb_variable_group: dict[str, Any],
+    grippeweb_variable_group: AnyMappingModel,
     mocked_grippeweb_sql_tables: dict[str, dict[str, list[Any]]],
     grippeweb_extracted_resource_dict: dict[str, ExtractedResource],
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
@@ -200,7 +201,7 @@ def test_transform_grippeweb_variable_group_to_extracted_variable_groups(
 
 
 def test_transform_grippeweb_variable_to_extracted_variables(
-    grippeweb_variable: dict[str, Any],
+    grippeweb_variable: AnyMappingModel,
     extracted_variable_groups: list[ExtractedVariableGroup],
     mocked_grippeweb_sql_tables: dict[str, dict[str, list[Any]]],
     grippeweb_extracted_resource_dict: dict[str, ExtractedResource],
