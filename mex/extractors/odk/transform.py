@@ -79,7 +79,7 @@ def transform_odk_resources_to_mex_resources(
         )
         external_partner: list[MergedOrganizationIdentifier] = []
         for partner in resource.externalPartner[0].mappingRules[0].forValues:
-            if partner in external_partner_and_publisher_by_label.keys():
+            if partner in external_partner_and_publisher_by_label:
                 external_partner.append(
                     external_partner_and_publisher_by_label[partner]
                 )

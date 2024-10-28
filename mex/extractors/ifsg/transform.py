@@ -144,7 +144,7 @@ def transform_resource_state_to_mex_resource(
             spatial = spatial_by_bundesland_id[id_bundesland]
         documentation = (
             documentation_by_bundesland_id[id_bundesland]
-            if id_bundesland in documentation_by_bundesland_id.keys()
+            if id_bundesland in documentation_by_bundesland_id
             else []
         )
         mex_resource_state.append(
@@ -329,7 +329,7 @@ def transform_resource_disease_to_mex_resource_row(
         is_part_of.extend(
             stable_target_id_by_bundesland_id[bundesland_id]
             for bundesland_id in meta_disease_row.in_bundesland.split(",")
-            if bundesland_id in stable_target_id_by_bundesland_id.keys()
+            if bundesland_id in stable_target_id_by_bundesland_id
         )
 
     keyword = [
@@ -348,7 +348,7 @@ def transform_resource_disease_to_mex_resource_row(
         spatial = resource_disease.spatial[0].mappingRules[0].setValues
     elif meta_disease_row.ifsg_bundesland == 1 and meta_disease_row.in_bundesland:
         for bundesland_id in meta_disease_row.in_bundesland.split(","):
-            if bundesland_id in bundesland_by_in_bundesland.keys():
+            if bundesland_id in bundesland_by_in_bundesland:
                 spatial.append(bundesland_by_in_bundesland[bundesland_id])
 
     return ExtractedResource(
@@ -480,9 +480,7 @@ def transform_ifsg_data_to_mex_variables(
         row.id_item: row.id_catalogue for row in meta_catalogue2item
     }
     item_by_id_item = {
-        row.id_item: row
-        for row in meta_item
-        if row.id_item in catalogue_id_by_id_item.keys()
+        row.id_item: row for row in meta_item if row.id_item in catalogue_id_by_id_item
     }
     id_catalogue2item_list = [
         c2i.id_catalogue2item

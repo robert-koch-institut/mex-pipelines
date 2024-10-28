@@ -46,7 +46,7 @@ def transform_ff_projects_source_to_extracted_activity(
     project_lead = [
         sti
         for person in ff_projects_source.projektleiter.replace("/", ",").split(",")
-        if person in person_stable_target_ids_by_query_string.keys()
+        if person in person_stable_target_ids_by_query_string
         for sti in person_stable_target_ids_by_query_string[person]
     ]
     orgs = ff_projects_source.zuwendungs_oder_auftraggeber.replace("/", ",").split(",")
@@ -54,7 +54,7 @@ def transform_ff_projects_source_to_extracted_activity(
     for org in orgs:
         if org in ["Sonderforschung", "AA"]:
             continue
-        if org in organization_stable_target_id_by_synonyms.keys():
+        if org in organization_stable_target_id_by_synonyms:
             funder_or_commissioner.append(
                 organization_stable_target_id_by_synonyms[org]
             )

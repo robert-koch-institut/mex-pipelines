@@ -184,7 +184,7 @@ def get_or_create_externe_partner(
     Returns:
         matched or created merged organization identifier
     """
-    if externe_partner in extracted_organizations.keys():
+    if externe_partner in extracted_organizations:
         return extracted_organizations[externe_partner]
     return ExtractedOrganization(
         officialName=externe_partner,

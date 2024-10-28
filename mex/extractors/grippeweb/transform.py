@@ -277,7 +277,7 @@ def transform_grippeweb_variable_group_to_extracted_variable_groups(
             identifierInPrimarySource=table_name,
             label=label_by_table_name[f"MEx.{table_name}"],
         )
-        for table_name in grippeweb_columns.keys()
+        for table_name in grippeweb_columns
     ]
 
 

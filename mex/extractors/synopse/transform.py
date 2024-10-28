@@ -178,7 +178,7 @@ def transform_synopse_variables_belonging_to_same_variable_group_to_mex_variable
     for synopse_id, levels_iter in groupby(variables, lambda x: x.synopse_id):
         levels = list(levels_iter)
         variable = levels[0]
-        if variable.synopse_id in resource_ids_by_synopse_id.keys():
+        if variable.synopse_id in resource_ids_by_synopse_id:
             used_in = resource_ids_by_synopse_id[variable.synopse_id]
         else:
             continue
@@ -685,7 +685,7 @@ def transform_synopse_project_to_activity(
     external_associate = []
     if synopse_project.externe_partner:
         for org in synopse_project.externe_partner.split(", "):
-            if org in synopse_organization_ids_by_query_string.keys():
+            if org in synopse_organization_ids_by_query_string:
                 external_associate.append(synopse_organization_ids_by_query_string[org])
             else:
                 extracted_organization = ExtractedOrganization(
@@ -700,7 +700,7 @@ def transform_synopse_project_to_activity(
 
     if (
         synopse_project.foerderinstitution_oder_auftraggeber
-        in synopse_organization_ids_by_query_string.keys()
+        in synopse_organization_ids_by_query_string
     ):
         funder_or_commissioner = [
             synopse_organization_ids_by_query_string[
