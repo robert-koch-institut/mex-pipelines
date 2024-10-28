@@ -114,6 +114,7 @@ def extract_synopse_organizations(
 
     Args:
         synopse_projects: list of synopse projects
+
     Returns:
         Dict with organization label and WikidataOrganization
     """
