@@ -58,7 +58,7 @@ documentation:
   - fieldInPrimarySource: Dokumentation
     locationInPrimarySource: metadaten_zu_datensaetzen.csv
     examplesInPrimarySource:
-    - S:\Projekte\Abt2_Daten\SURVEYS\GEDA12\Dokumentation
+    - path
     mappingRules:
     - rule: Use value to match with url property of the link object.
 hasLegalBasis:
