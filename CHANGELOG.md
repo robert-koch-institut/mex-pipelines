@@ -9,15 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- setting for configuring extractors to skip in dagster
+
 ### Changes
 
 - BREAKING: refactor package structure from `mex.foo` to `mex.extractors.foo`
-- model v3 update: international-projects, seqrepo, synopse, blueant, sumo, biospecimen,
-  odk, datscha-web, confluence-vvt, grippeweb, voxco, ifsg
-- confluence vvt now ignores ill templated pages
-- make ifsg identifierInPrimarySource unique to avoid stableTargetId collisions
-- artifical extractor now creates data for type 'consent'
-- setting for configuring extractors to skip in dagster
+- BREAKING: Mapping extractors now returns Mapping models instead of nested dictionaries
+- model v3 update: artifical, international-projects, seqrepo, synopse, blueant, sumo,
+  biospecimen, odk, datscha-web, confluence-vvt, grippeweb, voxco, ifsg
 
 ### Deprecated
 
@@ -25,9 +24,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- bug in seq-repo that caused exponential run-time as well as incorrect resource
-  keywords
-- fixed artificial data generation for Integers, Loinc, and BibliographicResources
+- fix bug in seq-repo that caused exponential run-time and incorrect resource keywords
+- fix artificial data generation for Integers, Loinc, and BibliographicResources
+- make confluence-vvt ignore ill templated pages
+- make ifsg identifierInPrimarySource unique to avoid stableTargetId collisions
 
 ### Security
 
