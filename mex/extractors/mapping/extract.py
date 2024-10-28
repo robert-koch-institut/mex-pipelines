@@ -5,7 +5,7 @@ import yaml
 
 
 def extract_mapping_data(path: PathLike[str]) -> dict[str, Any]:
-    """Return a mapping model with default values.
+    """Return a nested dictionary with default values.
 
     Args:
         path: path to mapping json
