@@ -25,7 +25,7 @@ contributingUnit:
   - fieldInPrimarySource: Partner_intern
     locationInPrimarySource: projekt_und_studienverwaltung.csv
     examplesInPrimarySource:
-    - fg23
+    - C1
     mappingRules:
     - rule: Use the field 'StudienID' to identify the correct study in 'projekt_und_studienverwaltung.csv'. Then use the field 'Partner_intern' given in projekt_und_studienverwaltung.csv. Use value to match with identifer in /raw-data/organigram/organizational-units.json.
   - fieldInPrimarySource: VerantwortlicheOE
