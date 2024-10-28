@@ -30,7 +30,7 @@ def transform_ff_projects_source_to_extracted_activity(
                                           to unit stable target ID
         organization_stable_target_id_by_synonyms: Mapping from organization synonyms
                                                    to organization stable target ID
-        ff_projects_activity: activity default values
+        ff_projects_activity: activity mapping model with default values
 
     Returns:
         Extracted activity for the given projects source

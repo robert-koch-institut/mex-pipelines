@@ -55,7 +55,7 @@ def extract_ldap_persons_voxco(
     """Extract LDAP persons for voxco.
 
     Args:
-        voxco_resource_mappings: list of resources default value dicts
+        voxco_resource_mappings: list of resource default values from mapping model
 
     Returns:
         list of LDAP persons

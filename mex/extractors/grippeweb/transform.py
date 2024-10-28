@@ -29,7 +29,7 @@ def transform_grippeweb_resource_mappings_to_extracted_resources(
     """Transform grippe web values to extracted resources and link them.
 
     Args:
-        grippeweb_resource_mappings: grippeweb  resource mappings
+        grippeweb_resource_mappings: grippeweb resource mapping models
         unit_stable_target_ids_by_synonym: merged organizational units by name
         grippeweb_extracted_access_platform: extracted grippeweb access platform
         extracted_primary_source_grippeweb: extracted grippeweb primary source
@@ -71,7 +71,7 @@ def transform_grippeweb_resource_mappings_to_dict(
     """Transform grippe web values to extracted resources.
 
     Args:
-        grippeweb_resource_mappings: grippeweb  resource mappings
+        grippeweb_resource_mappings: grippeweb resource mapping models
         unit_stable_target_ids_by_synonym: merged organizational units by name
         grippeweb_extracted_access_platform: extracted grippeweb access platform
         extracted_primary_source_grippeweb: extracted grippeweb primary source
@@ -209,7 +209,7 @@ def transform_grippeweb_access_platform_to_extracted_access_platform(
     """Transform grippeweb access platform to ExtractedAccessPlatform.
 
     Args:
-        grippeweb_access_platform: grippeweb extracted access platform
+        grippeweb_access_platform: grippeweb access platform mapping model
         unit_stable_target_ids_by_synonym: Unit stable target ids by synonym
         extracted_primary_source: Extracted primary source
         extracted_mex_persons_grippeweb: extracted grippeweb persons
@@ -258,7 +258,7 @@ def transform_grippeweb_variable_group_to_extracted_variable_groups(
     """Transform Grippeweb variable groups to extracted variable groups.
 
     Args:
-        grippeweb_variable_group: grippeweb variable group default values
+        grippeweb_variable_group: grippeweb variable group mapping model
         grippeweb_columns: grippeweb data by column and table
         grippeweb_extracted_resource_dict: extracted resources by name
         extracted_primary_source_grippeweb: Extracted primary source
@@ -291,7 +291,7 @@ def transform_grippeweb_variable_to_extracted_variables(
     """Transform Grippeweb variables to extracted variables.
 
     Args:
-        grippeweb_variable: grippeweb variable default values
+        grippeweb_variable: grippeweb variable mapping model
         grippeweb_extracted_variable_group: extracted grippeweb variable groups
         grippeweb_columns: grippeweb data by column and table
         grippeweb_extracted_resource_dict: extracted resources by name

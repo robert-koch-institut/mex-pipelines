@@ -31,7 +31,7 @@ def transform_resource_parent_to_mex_resource(
     """Transform resource parent to mex resource.
 
     Args:
-        resource_parent: resource_parent default values
+        resource_parent: resource parent mapping model
         extracted_primary_source: ExtractedPrimarySource
         unit_stable_target_ids_by_synonym: mapping unit synonyms to
                                            MergedOrganizationalUnitIdentifier
@@ -85,7 +85,7 @@ def transform_resource_state_to_mex_resource(
     """Transform resource state to mex resource.
 
     Args:
-        resource_state: resource_state default values
+        resource_state: resource state mapping model
         extracted_ifsg_resource_parent: ExtractedResource
         extracted_primary_source: ExtractedPrimarySource
         unit_stable_target_ids_by_synonym: mapping unit synonyms to
@@ -195,7 +195,7 @@ def get_instrument_tool_or_apparatus(
 
     Args:
         meta_disease: list of MetaDisease table rows
-        resource_disease: resource_disease default values
+        resource_disease: resource disease mapping model
 
     Returns:
         instrument_tool_or_apparatus list
@@ -243,7 +243,7 @@ def transform_resource_disease_to_mex_resource(
     """Transform resource disease to mex resource.
 
     Args:
-        resource_disease: resource_disease default values
+        resource_disease: resource disease mapping model
         extracted_ifsg_resource_parent: ExtractedResource
         extracted_ifsg_resource_state: ExtractedResource
         meta_disease: list of MetaDisease table rows
@@ -302,11 +302,11 @@ def transform_resource_disease_to_mex_resource_row(
     """Transform resource disease row to mex resource.
 
     Args:
-        id_type: id_type of Resource row
-        resource_disease: resource_disease default values
+        id_type: id_type of resource row
+        resource_disease: resource disease mapping model
         extracted_ifsg_resource_parent: ExtractedResource
         extracted_primary_source: ExtractedPrimarySource
-        stable_target_id_by_bundesland_id: stable target id ti bundesland_id map
+        stable_target_id_by_bundesland_id: stable target id to bundesland_id map
         meta_disease_row_by_id_type: id type to meta disease row map
         bundesland_by_in_bundesland: in bundesland str to bundesland Text map
         code_by_id_type: id type to code map
@@ -399,7 +399,7 @@ def transform_ifsg_data_to_mex_variable_group(
     """Transform ifsg data to mex VariableGroup.
 
     Args:
-        ifsg_variable_group: ifsg_variable_group default values
+        ifsg_variable_group: ifsg variable_group mapping model
         extracted_ifsg_resource_disease: ExtractedResource disease list
         extracted_primary_source: ExtractedPrimarySource
         meta_field: MetaField list

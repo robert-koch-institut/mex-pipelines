@@ -28,7 +28,7 @@ def extract_ldap_actors_for_functional_accounts(
     """Extract LDAP actors functional accounts from grippeweb resource mapping contacts.
 
     Args:
-        grippeweb_resource_mappings: list of resources default value dicts
+        grippeweb_resource_mappings: list of resources default value mapping models
 
     Returns:
         list of LDAP actors
@@ -49,8 +49,8 @@ def extract_ldap_persons(
     """Extract LDAP persons for grippeweb.
 
     Args:
-        grippeweb_resource_mappings: list of resources default value dicts
-        grippeweb_access_platform: grippeweb access platform
+        grippeweb_resource_mappings: list of resources default value mapping models
+        grippeweb_access_platform: grippeweb access platform mapping model
 
     Returns:
         list of LDAP persons
@@ -75,7 +75,7 @@ def extract_grippeweb_organizations(
     """Search and extract grippeweb organization from wikidata.
 
     Args:
-        grippeweb_resource_mappings: grippeweb resource mappings
+        grippeweb_resource_mappings: grippeweb resource mapping models
 
     Returns:
         Dict with keys: mapping default values

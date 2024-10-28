@@ -30,7 +30,7 @@ def transform_blueant_sources_to_extracted_activities(
                                                  to person stable target IDs
         unit_stable_target_ids_by_synonym: Map from unit acronyms and labels
                                            to unit stable target IDs
-        activity: activity mapping default values
+        activity: activity mapping model with default values
         blueant_organization_ids_by_query_string: extracted blueant organizations dict
 
     Returns:

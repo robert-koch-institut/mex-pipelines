@@ -41,8 +41,7 @@ def transform_international_projects_source_to_extracted_activity(
 
     Args:
         source: international projects sources
-        international_projects_activity: extracted activity for default
-                                         values from mapping
+        international_projects_activity: activity mapping model with default values
         extracted_primary_source: Extracted primary_source for international Projects
         person_stable_target_ids_by_query_string: Mapping from author query
                                                   to person stable target ID
@@ -165,8 +164,7 @@ def transform_international_projects_sources_to_extracted_activities(
 
     Args:
         international_projects_sources: international projects sources
-        international_projects_activity: extracted activity for default
-                                         values from mapping
+        international_projects_activity: activity mapping model with default values
         extracted_primary_source: Extracted primary_source for FF Projects
         person_stable_target_ids_by_query_string: Mapping from author query
                                                   to person stable target ID

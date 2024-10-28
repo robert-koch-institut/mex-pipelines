@@ -38,10 +38,10 @@ def transform_biospecimen_resource_to_mex_resource(
         extracted_primary_source_biospecimen: Extracted platform for Biospecimen
         unit_stable_target_ids_by_synonym: Unit stable target ids by synonym
         mex_persons: Generator for ExtractedPerson
-        extracted_synopse_activities: extracted synopse activitiesq
+        extracted_synopse_activities: extracted synopse activities
         extracted_organization_rki: extracted organization
-        resource_mapping: resource default values
-        extracted_organizations: exttracted organizations by label
+        resource_mapping: resource mapping model with default values
+        extracted_organizations: extracted organizations by label
 
     Returns:
         Generator for ExtractedResource instances
