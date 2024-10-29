@@ -9,6 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changes
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [0.19.0] - 2024-10-29
+
+### Added
+
 - setting for configuring extractors to skip in dagster
 
 ### Changes
@@ -18,18 +32,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - model v3 update: artifical, international-projects, seqrepo, synopse, blueant, sumo,
   biospecimen, odk, datscha-web, confluence-vvt, grippeweb, voxco, ifsg
 
-### Deprecated
-
-### Removed
-
 ### Fixed
 
 - fix bug in seq-repo that caused exponential run-time and incorrect resource keywords
 - fix artificial data generation for Integers, Loinc, and BibliographicResources
 - make confluence-vvt ignore ill templated pages
 - make ifsg identifierInPrimarySource unique to avoid stableTargetId collisions
-
-### Security
 
 ## [0.18.0] - 2024-08-07
 
