@@ -13,8 +13,8 @@ from mex.common.models import (
 )
 from mex.common.testing import Joker
 from mex.common.types import MergedPrimarySourceIdentifier
-from mex.identity import BackendIdentityProvider
-from mex.sinks import load
+from mex.extractors.identity import BackendIdentityProvider
+from mex.extractors.sinks import load
 
 
 @pytest.fixture
@@ -121,7 +121,7 @@ def test_fetch_mocked(
 
 @pytest.mark.skip("Backend might not be running. To be fixed in MX-1523")
 @pytest.mark.integration
-def test_availability() -> None:
+def test_availability() -> None:  # pragma: no cover
     provider = BackendIdentityProvider.get()
     try:
         provider._check_availability()
@@ -131,7 +131,7 @@ def test_availability() -> None:
 
 @pytest.mark.skip("Backend might not be running. To be fixed in MX-1523")
 @pytest.mark.integration
-def test_assign_identity() -> None:
+def test_assign_identity() -> None:  # pragma: no cover
     provider = BackendIdentityProvider.get()
     provider.assign.cache_clear()
     identity_first = provider.assign(
@@ -163,7 +163,7 @@ def test_assign_identity() -> None:
 
 @pytest.mark.skip("Backend might not be running. To be fixed in MX-1523")
 @pytest.mark.integration
-def test_fetch_identity() -> None:
+def test_fetch_identity() -> None:  # pragma: no cover
     provider = BackendIdentityProvider.get()
 
     primary_source = ExtractedPrimarySource(

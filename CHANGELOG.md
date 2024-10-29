@@ -9,13 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- setting for configuring extractors to skip in dagster
+
 ### Changes
+
+- BREAKING: refactor package structure from `mex.foo` to `mex.extractors.foo`
+- BREAKING: Mapping extractors now returns Mapping models instead of nested dictionaries
+- model v3 update: artifical, international-projects, seqrepo, synopse, blueant, sumo,
+  biospecimen, odk, datscha-web, confluence-vvt, grippeweb, voxco, ifsg
 
 ### Deprecated
 
 ### Removed
 
 ### Fixed
+
+- fix bug in seq-repo that caused exponential run-time and incorrect resource keywords
+- fix artificial data generation for Integers, Loinc, and BibliographicResources
+- make confluence-vvt ignore ill templated pages
+- make ifsg identifierInPrimarySource unique to avoid stableTargetId collisions
 
 ### Security
 
@@ -141,7 +153,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - documentation workflow to Makefile, mex.bat and as github action
 - README.md for mesh data
 - ifsg raw data extraction
-- ifsg resource tranformation
+- ifsg resource transformation
 - add IFSG Variable and VariableGroup transformation
 - add wikidata dagster assets
 - integrate wikidata and organigram into the ifsg extractor

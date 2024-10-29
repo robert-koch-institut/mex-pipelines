@@ -1,10 +1,7 @@
 from typing import Any
 
-import pytest
-
 from mex.common.models import (
     ExtractedAccessPlatform,
-    ExtractedActivity,
     ExtractedPerson,
     ExtractedPrimarySource,
     ExtractedResource,
@@ -16,19 +13,21 @@ from mex.common.types import (
     MergedContactPointIdentifier,
     MergedOrganizationalUnitIdentifier,
     MergedOrganizationIdentifier,
-    YearMonth,
+    TextLanguage,
+    Year,
 )
-from mex.grippeweb.transform import (
+from mex.extractors.grippeweb.transform import (
     transform_grippeweb_access_platform_to_extracted_access_platform,
     transform_grippeweb_resource_mappings_to_dict,
     transform_grippeweb_resource_mappings_to_extracted_resources,
     transform_grippeweb_variable_group_to_extracted_variable_groups,
     transform_grippeweb_variable_to_extracted_variables,
 )
+from mex.extractors.mapping.types import AnyMappingModel
 
 
 def test_transform_grippeweb_access_platform_to_extracted_access_platform(
-    grippeweb_access_platform: dict[str, Any],
+    grippeweb_access_platform: AnyMappingModel,
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
     extracted_mex_persons_grippeweb: list[ExtractedPerson],
@@ -57,36 +56,14 @@ def test_transform_grippeweb_access_platform_to_extracted_access_platform(
     )
 
 
-@pytest.fixture
-def extracted_confluence_vvt_source(
-    extracted_primary_sources: dict[str, ExtractedPrimarySource],
-) -> ExtractedActivity:
-    return ExtractedActivity(
-        hadPrimarySource=extracted_primary_sources["confluence-vvt"].stableTargetId,
-        identifierInPrimarySource="2022-006",
-        contact=["b8MsFK6g26tXE5payCNcCm"],
-        responsibleUnit=["cjna2jitPngp6yIV63cdi9"],
-        title="Test Title",
-        abstract="test description, test test test, test zwecke des vorhabens",
-        activityType=["https://mex.rki.de/item/activity-type-6"],
-        involvedPerson=[
-            "b8MsFK6g26tXE5payCNcCm",
-            "b8MsFK6g26tXE5payCNcCm",
-            "b8MsFK6g26tXE5payCNcCm",
-        ],
-        involvedUnit=["cjna2jitPngp6yIV63cdi9"],
-    )
-
-
 def test_transform_grippeweb_resource_mappings_to_dict(
-    grippeweb_resource_mappings: list[dict[str, Any]],
+    grippeweb_resource_mappings: list[AnyMappingModel],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     grippeweb_extracted_access_platform: ExtractedAccessPlatform,
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
     extracted_mex_persons_grippeweb: list[ExtractedPerson],
     grippeweb_organization_ids_by_query_string: dict[str, MergedOrganizationIdentifier],
     extracted_mex_functional_units_grippeweb: dict[Email, MergedContactPointIdentifier],
-    extracted_confluence_vvt_source: ExtractedActivity,
 ) -> None:
     resource_dict = transform_grippeweb_resource_mappings_to_dict(
         grippeweb_resource_mappings,
@@ -96,58 +73,73 @@ def test_transform_grippeweb_resource_mappings_to_dict(
         extracted_mex_persons_grippeweb,
         grippeweb_organization_ids_by_query_string,
         extracted_mex_functional_units_grippeweb,
-        [extracted_confluence_vvt_source],
     )
     expected = {
-        "hadPrimarySource": extracted_primary_sources["grippeweb"].stableTargetId,
+        "hadPrimarySource": str(extracted_primary_sources["grippeweb"].stableTargetId),
         "identifierInPrimarySource": "grippeweb",
-        "accessPlatform": [grippeweb_extracted_access_platform.stableTargetId],
+        "accessPlatform": [str(grippeweb_extracted_access_platform.stableTargetId)],
         "accessRestriction": "https://mex.rki.de/item/access-restriction-2",
         "accrualPeriodicity": "https://mex.rki.de/item/frequency-15",
         "anonymizationPseudonymization": [
             "https://mex.rki.de/item/anonymization-pseudonymization-2"
         ],
-        "contact": [extracted_mex_functional_units_grippeweb["contactc@rki.de"]],
-        "contributingUnit": [unit_stable_target_ids_by_synonym["C1"]],
+        "contact": [str(extracted_mex_functional_units_grippeweb["contactc@rki.de"])],
+        "contributingUnit": [str(unit_stable_target_ids_by_synonym["C1"])],
         "contributor": [extracted_mex_persons_grippeweb[0].stableTargetId],
-        "created": YearMonth("2011"),
-        "description": [{"value": "GrippeWeb", "language": "de"}],
+        "created": Year("2011"),
+        "description": [{"value": "GrippeWeb", "language": TextLanguage.DE}],
         "documentation": [
-            {"language": "de", "title": "RKI Website", "url": "https://www.rki.de"}
+            {
+                "language": TextLanguage.DE,
+                "title": "RKI Website",
+                "url": "https://www.rki.de",
+            }
         ],
+        "hasLegalBasis": [
+            {
+                "language": TextLanguage.DE,
+                "value": "Bei dem Verfahren.",
+            },
+        ],
+        "hasPersonalData": "https://mex.rki.de/item/personal-data-1",
         "icd10code": ["J00-J99"],
         "keyword": [{"value": "Citizen Science", "language": "en"}],
         "language": ["https://mex.rki.de/item/language-1"],
         "meshId": ["http://id.nlm.nih.gov/mesh/D012140"],
-        "method": [{"value": "Online-Befragung", "language": "de"}],
+        "method": [{"value": "Online-Befragung", "language": TextLanguage.DE}],
         "methodDescription": [
-            {"value": "Online-Surveillanceintrument", "language": "de"}
+            {"value": "Online-Surveillanceintrument", "language": TextLanguage.DE}
         ],
-        "publication": [
+        "minTypicalAge": 0,
+        "populationCoverage": [
             {
-                "language": "de",
-                "title": "COVID-19-Raten",
-                "url": "https://doi.org/10.25646/11292",
+                "language": TextLanguage.DE,
+                "value": "Alle Personen.",
             }
         ],
         "publisher": [
             grippeweb_organization_ids_by_query_string["Robert Koch-Institut"]
         ],
-        "resourceTypeGeneral": ["https://mex.rki.de/item/resource-type-general-10"],
-        "resourceTypeSpecific": [
-            {"value": "bevölkerungsbasierte Surveillancedaten", "language": "de"}
+        "resourceCreationMethod": [
+            "https://mex.rki.de/item/resource-creation-method-3"
         ],
-        "rights": [{"value": "Verfahren", "language": "de"}],
+        "resourceTypeGeneral": ["https://mex.rki.de/item/resource-type-general-13"],
+        "resourceTypeSpecific": [
+            {
+                "value": "bevölkerungsbasierte Surveillancedaten",
+                "language": TextLanguage.DE,
+            }
+        ],
+        "rights": [{"value": "Verfahren", "language": TextLanguage.DE}],
         "sizeOfDataBasis": "Meldungen",
-        "spatial": [{"language": "de", "value": "Deutschland"}],
+        "spatial": [{"language": TextLanguage.DE, "value": "Deutschland"}],
         "stateOfDataProcessing": ["https://mex.rki.de/item/data-processing-state-1"],
         "temporal": "seit 2011",
-        "theme": ["https://mex.rki.de/item/theme-35"],
-        "title": [{"value": "GrippeWeb", "language": "de"}],
-        "unitInCharge": [unit_stable_target_ids_by_synonym["C1"]],
+        "theme": ["https://mex.rki.de/item/theme-11"],
+        "title": [{"value": "GrippeWeb", "language": TextLanguage.DE}],
+        "unitInCharge": [str(unit_stable_target_ids_by_synonym["C1"])],
         "identifier": Joker(),
         "stableTargetId": Joker(),
-        "wasGeneratedBy": extracted_confluence_vvt_source.stableTargetId,
     }
     assert (
         resource_dict["grippeweb"].model_dump(exclude_none=True, exclude_defaults=True)
@@ -156,14 +148,13 @@ def test_transform_grippeweb_resource_mappings_to_dict(
 
 
 def test_transform_grippeweb_resource_mappings_to_extracted_resources(
-    grippeweb_resource_mappings: list[dict[str, Any]],
+    grippeweb_resource_mappings: list[AnyMappingModel],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     grippeweb_extracted_access_platform: ExtractedAccessPlatform,
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
     extracted_mex_persons_grippeweb: list[ExtractedPerson],
     grippeweb_organization_ids_by_query_string: dict[str, MergedOrganizationIdentifier],
     extracted_mex_functional_units_grippeweb: dict[Email, MergedContactPointIdentifier],
-    extracted_confluence_vvt_source: ExtractedActivity,
 ) -> None:
     resource_dict = transform_grippeweb_resource_mappings_to_extracted_resources(
         grippeweb_resource_mappings,
@@ -173,7 +164,6 @@ def test_transform_grippeweb_resource_mappings_to_extracted_resources(
         extracted_mex_persons_grippeweb,
         grippeweb_organization_ids_by_query_string,
         extracted_mex_functional_units_grippeweb,
-        [extracted_confluence_vvt_source],
     )
     assert resource_dict["grippeweb-plus"].isPartOf == [
         resource_dict["grippeweb"].stableTargetId
@@ -181,7 +171,7 @@ def test_transform_grippeweb_resource_mappings_to_extracted_resources(
 
 
 def test_transform_grippeweb_variable_group_to_extracted_variable_groups(
-    grippeweb_variable_group: dict[str, Any],
+    grippeweb_variable_group: AnyMappingModel,
     mocked_grippeweb_sql_tables: dict[str, dict[str, list[Any]]],
     grippeweb_extracted_resource_dict: dict[str, ExtractedResource],
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
@@ -211,7 +201,7 @@ def test_transform_grippeweb_variable_group_to_extracted_variable_groups(
 
 
 def test_transform_grippeweb_variable_to_extracted_variables(
-    grippeweb_variable: dict[str, Any],
+    grippeweb_variable: AnyMappingModel,
     extracted_variable_groups: list[ExtractedVariableGroup],
     mocked_grippeweb_sql_tables: dict[str, dict[str, list[Any]]],
     grippeweb_extracted_resource_dict: dict[str, ExtractedResource],

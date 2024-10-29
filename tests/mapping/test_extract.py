@@ -1,12 +1,16 @@
 from mex.common.models import ExtractedAccessPlatform
-from mex.common.types import AssetsPath, TechnicalAccessibility, TextLanguage
-from mex.mapping.extract import extract_mapping_data
+from mex.common.types import AssetsPath, TextLanguage
+from mex.extractors.mapping.extract import extract_mapping_data
+from mex.extractors.mapping.transform import transform_mapping_data_to_model
 
 
 def test_get_mapping_model() -> None:
     mapping_path = AssetsPath("assets/mappings/__final__/odk/access-platform.yaml")
 
-    mapping_model = extract_mapping_data(mapping_path, ExtractedAccessPlatform)
+    raw_mapping_data = extract_mapping_data(mapping_path)
+    mapping_model = transform_mapping_data_to_model(
+        raw_mapping_data, ExtractedAccessPlatform
+    )
 
     expected = {
         "hadPrimarySource": [
@@ -68,7 +72,9 @@ def test_get_mapping_model() -> None:
                 "mappingRules": [
                     {
                         "forValues": None,
-                        "setValues": [TechnicalAccessibility["INTERNAL"]],
+                        "setValues": [
+                            "https://mex.rki.de/item/technical-accessibility-1"
+                        ],
                         "rule": None,
                     }
                 ],
@@ -108,4 +114,4 @@ def test_get_mapping_model() -> None:
             }
         ],
     }
-    assert mapping_model == expected
+    assert mapping_model.model_dump() == expected

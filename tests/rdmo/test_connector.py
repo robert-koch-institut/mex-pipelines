@@ -5,7 +5,7 @@ import requests
 from pytest import MonkeyPatch
 
 from mex.common.exceptions import MExError
-from mex.rdmo.connector import RDMOConnector
+from mex.extractors.rdmo.connector import RDMOConnector
 
 
 @pytest.fixture
@@ -81,6 +81,7 @@ def test_rdmo_connector_get_question_path_not_found_mocked(
         connector.get_question_path(1)
 
 
+@pytest.mark.skip(reason="RDMO platform is skipped due to major changes: MX-1535")
 @pytest.mark.integration
 def test_rdmo_connector_get_question_path() -> None:
     connector = RDMOConnector.get()
@@ -107,7 +108,7 @@ def test_rdmo_connector_get_option_key_mocked(mocked_rdmo: requests.Session) -> 
     assert option_key == "some-option"
 
 
-@pytest.mark.skip(reason="RDMO platform is due to major changes: MX-1535")
+@pytest.mark.skip(reason="RDMO platform is skipped due to major changes: MX-1535")
 @pytest.mark.integration
 def test_rdmo_connector_get_option_key() -> None:
     connector = RDMOConnector.get()
@@ -158,7 +159,7 @@ def test_rdmo_connector_get_question_answer_pairs_mocked(
     }
 
 
-@pytest.mark.skip(reason="RDMO platform is due to major changes: MX-1535")
+@pytest.mark.skip(reason="RDMO platform is skipped due to major changes: MX-1535")
 @pytest.mark.integration
 def test_rdmo_connector_get_question_answer_pairs() -> None:
     connector = RDMOConnector.get()
