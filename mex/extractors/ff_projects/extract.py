@@ -225,8 +225,9 @@ def extract_ff_projects_organizations(
     organizations = {
         source.zuwendungs_oder_auftraggeber: org
         for source in ff_projects_sources
-        if source.zuwendungs_oder_auftraggeber
-        and (org := search_organization_by_label(source.zuwendungs_oder_auftraggeber))
+        for label in source.zuwendungs_oder_auftraggeber.replace("/", ",").split(",")
+        if source.zuwendungs_oder_auftraggeber not in ["Sonderforschung", "AA"]
+        and (org := search_organization_by_label(label))
     }
     for abbreviation, organization in ORGANIZATIONS_BY_ABBREVIATIONS.items():
         if wiki_org := search_organization_by_label(organization):
