@@ -15,10 +15,7 @@ def get_merged_items() -> Generator[MergedItem, None, None]:
 
     for item_counter in range(0, total_item_number + 1, item_number_limit):
         response = connector.fetch_merged_items(
-            query_string=None,
-            entity_type=None,
-            skip=item_counter,
-            limit=item_number_limit,
+            None, None, item_counter, item_number_limit
         )
 
         yield from response.items
