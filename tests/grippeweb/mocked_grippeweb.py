@@ -1443,19 +1443,19 @@ def grippeweb_variable_group() -> AnyMappingModel:
                     "examplesInPrimarySource": None,
                     "mappingRules": [
                         {
-                            "forValues": ["MEx.vActualQuestion"],
+                            "forValues": ["vActualQuestion"],
                             "setValues": [
                                 {"value": "Additional Questions", "language": "en"}
                             ],
                             "rule": None,
                         },
                         {
-                            "forValues": ["MEx.vMasterDataMEx"],
+                            "forValues": ["vMasterDataMEx"],
                             "setValues": [{"value": "Master Data", "language": None}],
                             "rule": None,
                         },
                         {
-                            "forValues": ["MEx.vWeeklyResponsesMEx"],
+                            "forValues": ["vWeeklyResponsesMEx"],
                             "setValues": [
                                 {"value": "Weekly Responses", "language": "en"}
                             ],
@@ -1548,5 +1548,19 @@ def extracted_variable_groups(
             containedBy=[grippeweb_extracted_resource_dict["grippeweb"].stableTargetId],
             label=[Text(value="Additional Questions", language="en")],
             entityType="ExtractedVariableGroup",
-        )
+        ),
+        ExtractedVariableGroup(
+            hadPrimarySource=extracted_primary_sources["grippeweb"].stableTargetId,
+            identifierInPrimarySource="vWeeklyResponsesMEx",
+            containedBy=[grippeweb_extracted_resource_dict["grippeweb"].stableTargetId],
+            label=[Text(value="Weekly Responses", language="en")],
+            entityType="ExtractedVariableGroup",
+        ),
+        ExtractedVariableGroup(
+            hadPrimarySource=extracted_primary_sources["grippeweb"].stableTargetId,
+            identifierInPrimarySource="vMasterDataMEx",
+            containedBy=[grippeweb_extracted_resource_dict["grippeweb"].stableTargetId],
+            label=[Text(value="Master Data", language="en")],
+            entityType="ExtractedVariableGroup",
+        ),
     ]
