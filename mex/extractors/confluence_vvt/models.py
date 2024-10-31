@@ -1,57 +1,64 @@
+import re
+from abc import abstractmethod
 from collections.abc import Sequence
 from typing import cast
-from mex.common.models import BaseModel
 
+from mex.common.models import BaseModel
 from mex.common.types import TemporalEntity
 from mex.extractors.models import BaseRawData
 
 
-class ConfluenceVvtHeading(BaseModel):
+class ConfluenceVvtCell(BaseModel):
+    def search(self, pattern: str) -> list[str]:
+        return [hit for text in self.get_texts() for hit in re.findall(pattern, text)]
+
+    @abstractmethod
+    def get_texts(self) -> list[str]: ...
+
+
+class ConfluenceVvtHeading(ConfluenceVvtCell):
     text: str | None
 
+    def get_texts(self) -> list[str]:
+        return [self.text] if self.text else []
 
-class ConfluenceVvtValue(BaseModel):
+
+class ConfluenceVvtValue(ConfluenceVvtCell):
     texts: list[str]
+
+    def get_texts(self) -> list[str]:
+        return self.texts
 
 
 class ConfluenceVvtRow(BaseModel):
     cells: list[ConfluenceVvtHeading | ConfluenceVvtValue]
 
+    def get_texts(self) -> list[str]:
+        return [text for cell in self.cells for text in cell.get_texts()]
+
+    def is_heading(self) -> bool:
+        return all(isinstance(cell, ConfluenceVvtHeading) for cell in self.cells)
+
 
 class ConfluenceVvtTable(BaseModel):
     rows: list[ConfluenceVvtRow]
 
+    def get_value_by_heading(self, heading: str) -> ConfluenceVvtRow:
+        for index in range(len(self.rows)):
+            row = self.rows[index]
+            if not row.is_heading():
+                continue
+            if heading in row.get_texts():
+                # if isinstance(self.rows[index + 1], ConfluenceVvtValue):
+                return self.rows[index + 1]
+                # return None
+        raise ValueError(f"No row found for heading {heading}")
 
-class ConfluenceVvtPage(BaseModel):
+
+class ConfluenceVvtPage(BaseRawData):
+    id: int
     title: str
     tables: list[ConfluenceVvtTable]
-
-
-class ConfluenceVvtSource(BaseRawData):
-    """Model class for Confluence-vvt sources."""
-
-    abstract: str | None
-    activity_type: str | None = None
-    alternative_title: str | None = None
-    contact: list[str] = []
-    documentation: str | None = None
-    end: str | None = None
-    gemeinsam_verantwortliche: str | None = None
-    funder_or_commissioner: str | None = None
-    funding_program: str | None = None
-    identifier: str
-    identifier_in_primary_source: list[str]
-    involved_person: list[str] = []
-    involved_unit: list[str] = []
-    is_part_of_activity: str | None = None
-    publication: str | None = None
-    responsible_unit: list[str]
-    short_name: str | None = None
-    start: str | None = None
-    succeeds: str | None = None
-    theme: str
-    title: str | None = None
-    website: str | None = None
 
     def get_partners(self) -> Sequence[str | None]:
         """Return partners from extractor."""
@@ -67,8 +74,16 @@ class ConfluenceVvtSource(BaseRawData):
 
     def get_units(self) -> Sequence[str | None]:
         """Return units from extractor."""
-        return cast(list[str | None], self.contact)
+        return [None]
 
     def get_identifier_in_primary_source(self) -> str | None:
         """Return identifier in primary source from extractor."""
-        return None
+        identifier_in_primary_source = list(
+            set(
+                self.tables[0].rows[0].cells[0].search(r"(\d{4}-\d{3})")
+                + self.tables[0].rows[1].cells[0].search(r"(\d{4}-\d{3})")
+            )
+        )
+        if len(identifier_in_primary_source) != 1:
+            return None
+        return identifier_in_primary_source[0]

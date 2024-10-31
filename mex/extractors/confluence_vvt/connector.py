@@ -53,4 +53,7 @@ class ConfluenceVvtConnector(HTTPConnector):
                 rows.append({"cells": cells})
             tables.append({"rows": rows})
 
-        return ConfluenceVvtPage.model_validate({"title": title, "tables": tables})
+        breakpoint()
+        return ConfluenceVvtPage.model_validate(
+            {"title": title, "id": page_id, "tables": tables}
+        )

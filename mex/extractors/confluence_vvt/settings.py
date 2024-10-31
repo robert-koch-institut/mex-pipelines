@@ -1,6 +1,7 @@
 from pydantic import Field, SecretStr
 
 from mex.common.models import BaseModel
+from mex.common.types import AssetsPath
 
 
 class ConfluenceVvtSettings(BaseModel):
@@ -17,4 +18,11 @@ class ConfluenceVvtSettings(BaseModel):
     )
     overview_page_id: str = Field(
         "123456", description="Confluence id of the overview page."
+    )
+    template_v1_mapping_path: AssetsPath = Field(
+        AssetsPath("mappings/__final__/confluence-vvt_template_v1"),
+        description=(
+            "Path to the directory with the confluence-vvt mapping files containing the "
+            "default values, absolute path or relative to `assets_dir`."
+        ),
     )
