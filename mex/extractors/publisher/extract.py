@@ -9,7 +9,7 @@ def get_merged_items() -> Generator[dict[str, Any], None, None]:
     connector = BackendApiConnector.get()
 
     response = connector.request(
-        method="GET", endpoint="extracted-item", params={"limit": "1"}
+        method="GET", endpoint="merged-item", params={"limit": "1"}
     )
     total_item_number = response["total"]
 
@@ -19,7 +19,7 @@ def get_merged_items() -> Generator[dict[str, Any], None, None]:
     while item_counter <= total_item_number:
         response = connector.request(
             method="GET",
-            endpoint="extracted-item",
+            endpoint="merged-item",
             params={"limit": str(item_number_limit), "skip": str(item_counter)},
         )
 
