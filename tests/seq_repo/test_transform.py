@@ -1,5 +1,3 @@
-from typing import Any
-
 import pytest
 
 from mex.common.ldap.models.person import LDAPPersonWithQuery
@@ -14,12 +12,14 @@ from mex.common.types import (
     MergedOrganizationalUnitIdentifier,
     MergedPersonIdentifier,
     TextLanguage,
+    YearMonthDay,
 )
-from mex.seq_repo.model import SeqRepoSource
-from mex.seq_repo.transform import (
+from mex.extractors.mapping.types import AnyMappingModel
+from mex.extractors.seq_repo.model import SeqRepoSource
+from mex.extractors.seq_repo.transform import (
     transform_seq_repo_access_platform_to_extracted_access_platform,
     transform_seq_repo_activities_to_extracted_activities,
-    transform_seq_repo_resource_to_extracted_resource_and_distribution,
+    transform_seq_repo_resource_to_extracted_resource,
 )
 
 
@@ -29,7 +29,7 @@ from mex.seq_repo.transform import (
 def test_transform_seq_repo_activities_to_extracted_activities(
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
     seq_repo_latest_sources: dict[str, SeqRepoSource],
-    seq_repo_activity: dict[str, Any],
+    seq_repo_activity: AnyMappingModel,
     seq_repo_source_resolved_project_coordinators: list[LDAPPersonWithQuery],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     project_coordinators_merged_ids_by_query_string: dict[
@@ -37,7 +37,7 @@ def test_transform_seq_repo_activities_to_extracted_activities(
     ],
 ) -> None:
     expected = {
-        "hadPrimarySource": extracted_primary_source_seq_repo.stableTargetId,
+        "hadPrimarySource": str(extracted_primary_source_seq_repo.stableTargetId),
         "identifierInPrimarySource": "TEST-ID",
         "contact": [
             str(project_coordinators_merged_ids_by_query_string["max"][0]),
@@ -50,7 +50,7 @@ def test_transform_seq_repo_activities_to_extracted_activities(
         "responsibleUnit": [str(unit_stable_target_ids_by_synonym["FG99"])],
         "theme": [
             "https://mex.rki.de/item/theme-11",
-            "https://mex.rki.de/item/theme-34",
+            "https://mex.rki.de/item/theme-23",
         ],
         "title": [{"value": "FG99-ABC-123", "language": TextLanguage.DE}],
         "identifier": Joker(),
@@ -72,15 +72,11 @@ def test_transform_seq_repo_activities_to_extracted_activities(
     )
 
 
-@pytest.mark.usefixtures(
-    "mocked_ldap",
-)
-def test_transform_seq_repo_resource_to_extracted_resource_and_distribution(
+def test_transform_seq_repo_resource_to_extracted_resource(
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
     seq_repo_latest_sources: dict[str, SeqRepoSource],
-    seq_repo_distribution: dict[str, Any],
     extracted_mex_activities_dict: dict[str, ExtractedActivity],
-    seq_repo_resource: dict[str, Any],
+    seq_repo_resource: AnyMappingModel,
     extracted_mex_access_platform: ExtractedAccessPlatform,
     seq_repo_source_resolved_project_coordinators: list[LDAPPersonWithQuery],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
@@ -91,8 +87,8 @@ def test_transform_seq_repo_resource_to_extracted_resource_and_distribution(
 ) -> None:
     activity = extracted_mex_activities_dict["TEST-ID"]
     expected_resource = {
-        "accessPlatform": [extracted_mex_access_platform.stableTargetId],
-        "hadPrimarySource": extracted_primary_source_seq_repo.stableTargetId,
+        "accessPlatform": [str(extracted_mex_access_platform.stableTargetId)],
+        "hadPrimarySource": str(extracted_primary_source_seq_repo.stableTargetId),
         "identifierInPrimarySource": "test-sample-id.TEST",
         "accessRestriction": "https://mex.rki.de/item/access-restriction-2",
         "accrualPeriodicity": "https://mex.rki.de/item/frequency-15",
@@ -104,71 +100,65 @@ def test_transform_seq_repo_resource_to_extracted_resource_and_distribution(
             str(project_coordinators_merged_ids_by_query_string["mustermann"][0]),
         ],
         "contributingUnit": [str(unit_stable_target_ids_by_synonym["FG99"])],
-        "created": "2023-08-07",
-        "distribution": [Joker()],
+        "created": YearMonthDay("2023-08-07"),
         "instrumentToolOrApparatus": [{"value": "TEST"}],
         "keyword": [
             {
+                "value": "fastc",
+                "language": TextLanguage.DE,
+            },
+            {
+                "value": "fastd",
+                "language": TextLanguage.DE,
+            },
+            {
                 "value": "Severe acute respiratory syndrome coronavirus 2",
-                "language": "en",
-            }
+                "language": TextLanguage.EN,
+            },
         ],
         "method": [
-            {"value": "Next-Generation Sequencing", "language": "de"},
-            {"value": "NGS", "language": "de"},
+            {"value": "Next-Generation Sequencing", "language": TextLanguage.DE},
+            {"value": "NGS", "language": TextLanguage.DE},
         ],
-        "publisher": [extracted_organization_rki.stableTargetId],
-        "resourceTypeGeneral": ["https://mex.rki.de/item/resource-type-general-1"],
+        "publisher": [str(extracted_organization_rki.stableTargetId)],
+        "resourceCreationMethod": [
+            "https://mex.rki.de/item/resource-creation-method-4"
+        ],
+        "resourceTypeGeneral": ["https://mex.rki.de/item/resource-type-general-13"],
         "resourceTypeSpecific": [
-            {"value": "Sequencing Data", "language": "de"},
-            {"value": "Sequenzdaten", "language": "de"},
+            {"value": "Sequencing Data", "language": TextLanguage.DE},
+            {"value": "Sequenzdaten", "language": TextLanguage.DE},
         ],
-        "rights": [{"value": "Example content", "language": "de"}],
+        "rights": [{"value": "Example content", "language": TextLanguage.DE}],
         "stateOfDataProcessing": ["https://mex.rki.de/item/data-processing-state-1"],
         "theme": [
             "https://mex.rki.de/item/theme-11",
-            "https://mex.rki.de/item/theme-34",
+            "https://mex.rki.de/item/theme-23",
         ],
         "title": [
-            {"value": "FG99-ABC-123 sample test-customer-name-1", "language": "en"}
+            {
+                "value": "FG99-ABC-123 sample test-customer-name-1",
+                "language": TextLanguage.EN,
+            }
         ],
         "unitInCharge": [
             str(unit_stable_target_ids_by_synonym["FG99"]),
         ],
-        "wasGeneratedBy": activity.stableTargetId,
+        "wasGeneratedBy": str(activity.stableTargetId),
         "identifier": Joker(),
         "stableTargetId": Joker(),
     }
-    expected_distribution = {
-        "hadPrimarySource": extracted_primary_source_seq_repo.stableTargetId,
-        "identifierInPrimarySource": "test-sample-id.TEST",
-        "accessRestriction": "https://mex.rki.de/item/access-restriction-2",
-        "issued": "2023-08-07",
-        "title": "dummy-fastq-file",
-        "accessService": "gLB9vC2lPMy5rCmuot99xu",
-        "mediaType": "https://mex.rki.de/item/mime-type-12",
-        "publisher": [extracted_organization_rki.stableTargetId],
-        "identifier": Joker(),
-        "stableTargetId": Joker(),
-    }
-    mex_resources, mex_distributions = (
-        transform_seq_repo_resource_to_extracted_resource_and_distribution(
-            seq_repo_latest_sources,
-            extracted_mex_activities_dict,
-            extracted_mex_access_platform,
-            seq_repo_resource,
-            seq_repo_distribution,
-            seq_repo_source_resolved_project_coordinators,
-            unit_stable_target_ids_by_synonym,
-            project_coordinators_merged_ids_by_query_string,
-            extracted_organization_rki,
-            extracted_primary_source_seq_repo,
-        )
-    )
 
-    assert (
-        mex_distributions[0].model_dump(exclude_none=True, exclude_defaults=True)
-        == expected_distribution
+    mex_resources = transform_seq_repo_resource_to_extracted_resource(
+        seq_repo_latest_sources,
+        extracted_mex_activities_dict,
+        extracted_mex_access_platform,
+        seq_repo_resource,
+        seq_repo_source_resolved_project_coordinators,
+        unit_stable_target_ids_by_synonym,
+        project_coordinators_merged_ids_by_query_string,
+        extracted_organization_rki,
+        extracted_primary_source_seq_repo,
     )
 
     assert (
@@ -179,7 +169,7 @@ def test_transform_seq_repo_resource_to_extracted_resource_and_distribution(
 
 def test_transform_seq_repo_access_platform_to_extracted_access_platform(
     extracted_primary_source_seq_repo: ExtractedPrimarySource,
-    seq_repo_access_platform: dict[str, Any],
+    seq_repo_access_platform: AnyMappingModel,
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
 ) -> None:
     expected = {

@@ -1,11 +1,11 @@
 from mex.common.models import ExtractedPrimarySource
 from mex.common.types import MergedOrganizationalUnitIdentifier
-from mex.ff_projects.extract import extract_ff_projects_sources
-from mex.ff_projects.filter import filter_and_log_ff_projects_sources
+from mex.extractors.ff_projects.extract import extract_ff_projects_sources
+from mex.extractors.ff_projects.filter import filter_and_log_ff_projects_sources
 
 
 def test_filter_and_log_ff_projects_sources(
-    extracted_primary_sources: dict[str, ExtractedPrimarySource]
+    extracted_primary_sources: dict[str, ExtractedPrimarySource],
 ) -> None:
     unit_stable_target_ids_by_synonym = {
         "FG33": MergedOrganizationalUnitIdentifier.generate(33),

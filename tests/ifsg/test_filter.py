@@ -1,13 +1,13 @@
-from mex.ifsg.filter import (
+from mex.extractors.ifsg.filter import (
     filter_id_type_of_diseases,
     filter_id_type_with_max_id_schema,
     filter_variables,
     get_max_id_schema,
 )
-from mex.ifsg.models.meta_field import MetaField
-from mex.ifsg.models.meta_schema2field import MetaSchema2Field
-from mex.ifsg.models.meta_schema2type import MetaSchema2Type
-from mex.ifsg.models.meta_type import MetaType
+from mex.extractors.ifsg.models.meta_field import MetaField
+from mex.extractors.ifsg.models.meta_schema2field import MetaSchema2Field
+from mex.extractors.ifsg.models.meta_schema2type import MetaSchema2Type
+from mex.extractors.ifsg.models.meta_type import MetaType
 
 
 def test_get_max_id_schema(meta_schema2type: list[MetaSchema2Type]) -> None:
@@ -42,7 +42,7 @@ def test_filter_variables(
         "gui_tool_tip": "lokaler",
         "id_catalogue": 0,
         "id_type": 101,
-        "id_data_type": 2,
+        "id_data_type": 0,
         "id_field": 1,
         "id_field_type": 3,
         "to_transport": 0,

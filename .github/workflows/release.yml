@@ -2,7 +2,6 @@ name: Release
 
 run-name: bump ${{ inputs.version }} version by @${{ github.actor }}
 
-
 on:
   push:
     branches: ["main"]
