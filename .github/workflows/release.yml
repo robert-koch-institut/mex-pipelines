@@ -87,6 +87,7 @@ jobs:
 
       - name: run publishing pipeline
         env:
+          MEX_SINK: "[\"ndjson\"]"
           MEX_BACKEND_API_KEY: ${{ secrets.MEX_BACKEND_API_KEY }}
           MEX_BACKEND_API_URL: "http://localhost:8080"
         run: |

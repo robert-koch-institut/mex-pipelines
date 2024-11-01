@@ -1,8 +1,10 @@
+import sys
+
 from pydantic import AnyUrl, Field, SecretStr
 from pydantic_core import Url
 
 from mex.common.settings import BaseSettings
-from mex.common.types import IdentityProvider
+from mex.common.types import IdentityProvider, Sink
 from mex.extractors.artificial.settings import ArtificialSettings
 from mex.extractors.biospecimen.settings import BiospecimenSettings
 from mex.extractors.blueant.settings import BlueAntSettings
@@ -24,6 +26,8 @@ from mex.extractors.voxco.settings import VoxcoSettings
 class Settings(BaseSettings):
     """Settings definition class for extractors and related scripts."""
 
+    if "artificial" in str(sys.argv):
+        sink: list[Sink] = Field([Sink.BACKEND])
     skip_extractors: list[str] = Field(
         [],
         description="Skip execution of these extractors in dagster",
