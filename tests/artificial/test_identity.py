@@ -7,8 +7,6 @@ from mex.common.identity import get_provider
 from mex.common.identity.memory import MemoryIdentityProvider
 from mex.common.models import (
     EXTRACTED_MODEL_CLASSES,
-    ExtractedAccessPlatform,
-    ExtractedPrimarySource,
 )
 from mex.common.testing import Joker
 from mex.common.types import MergedPrimarySourceIdentifier
@@ -46,16 +44,21 @@ def test_restore_identities() -> None:
 
 
 def test_create_numeric_ids(faker: Faker) -> None:
-    numeric_ids = _create_numeric_ids(
-        faker,
-        {
-            ExtractedPrimarySource: 5,
-            ExtractedAccessPlatform: 2,
-        },
-    )
+    numeric_ids = _create_numeric_ids(faker)
     assert numeric_ids == {
-        "AccessPlatform": range(3427526317, 3427526324),
-        "PrimarySource": range(2516530558, 2516530566),
+        "AccessPlatform": [3427526317, 3427526318],
+        "Activity": [2405477151, 2405477152],
+        "BibliographicResource": [2035724763, 2035724764],
+        "Consent": [2933388007, 2933388008],
+        "ContactPoint": [4181830114, 4181830115],
+        "Distribution": [1589096615, 1589096616],
+        "Organization": [991028314, 991028315],
+        "OrganizationalUnit": [3284134756, 3284134757],
+        "Person": [639677827, 639677828],
+        "PrimarySource": [2516530558, 2516530559],
+        "Resource": [2676315731, 2676315732],
+        "Variable": [4015597000, 4015597001],
+        "VariableGroup": [1476619723, 1476619724],
     }
 
 
@@ -75,14 +78,8 @@ def test_get_offset_int() -> None:
 
 
 def test_create_identities(faker: Faker) -> None:
-    identity_map = create_identities(
-        faker,
-        {
-            ExtractedPrimarySource: 1,
-            ExtractedAccessPlatform: 3,
-        },
-    )
-    assert len(identity_map["AccessPlatform"]) > len(identity_map["PrimarySource"])
+    identity_map = create_identities(faker)
+    assert len(identity_map) == len(EXTRACTED_MODEL_CLASSES)
     assert identity_map["PrimarySource"][0].model_dump() == {
         "identifier": Joker(),
         "hadPrimarySource": "00000000000000",
