@@ -16,6 +16,7 @@ from mex.common.types import (
     MergedOrganizationIdentifier,
 )
 from mex.extractors.mapping.types import AnyMappingModel
+from mex.extractors.sinks import load
 
 
 def transform_grippeweb_resource_mappings_to_extracted_resources(
@@ -110,7 +111,7 @@ def transform_grippeweb_resource_mappings_to_dict(
         created = resource.created[0].mappingRules[0].setValues
         description = resource.description[0].mappingRules[0].setValues
         documentation = resource.documentation[0].mappingRules[0].setValues
-        external_partner_organization: list[MergedOrganizationIdentifier] = []
+        external_partner_identifier: list[MergedOrganizationIdentifier] = []
         if external_partner_dict := resource.externalPartner:
             external_partner_string = (
                 external_partner_dict[0].mappingRules[0].forValues[0]
@@ -119,7 +120,7 @@ def transform_grippeweb_resource_mappings_to_dict(
                 external_partner_string
                 in grippeweb_organization_ids_by_query_string.keys()
             ):
-                external_partner_organization = [
+                external_partner_identifier = [
                     grippeweb_organization_ids_by_query_string[external_partner_string]
                 ]
             else:
@@ -128,7 +129,11 @@ def transform_grippeweb_resource_mappings_to_dict(
                         officialName=external_partner_string,
                         identifierInPrimarySource=external_partner_string,
                         hadPrimarySource=extracted_primary_source_grippeweb.stableTargetId,
-                    ).stableTargetId
+                    )
+                ]
+                load(external_partner_organization)
+                external_partner_identifier = [
+                    external_partner_organization[0].stableTargetId
                 ]
         has_legal_basis = resource.hasLegalBasis[0].mappingRules[0].setValues
         has_personal_data = resource.hasPersonalData[0].mappingRules[0].setValues
@@ -197,7 +202,7 @@ def transform_grippeweb_resource_mappings_to_dict(
             created=created,
             description=description,
             documentation=documentation,
-            externalPartner=external_partner_organization,
+            externalPartner=external_partner_identifier,
             hadPrimarySource=extracted_primary_source_grippeweb.stableTargetId,
             icd10code=icd10code,
             identifierInPrimarySource=identifier_in_primary_source,
