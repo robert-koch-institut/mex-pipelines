@@ -25,8 +25,8 @@ def test_log_processed_merged_items(caplog: LogCaptureFixture) -> None:
     with caplog.at_level(logging.INFO, logger="mex"):
         log_processed_merged_items(
             "20",
-            "10000000001032",
-            "42",
+            10000000001032,
+            42,
         )
     expected = "10000000001032 of 42 merged items where 20."
     assert expected in caplog.text
