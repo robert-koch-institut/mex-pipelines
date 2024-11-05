@@ -120,74 +120,59 @@ components of the MEx project are open-sourced under the same license as well.
 ### biospecimen extractor
 
 - `pdm run biospecimen` extracts sources from the Biospecimen excel files
-- based on biospecimen to MEx mapping commit e629af3
 
 ### blueant extractor
 
 - `pdm run blueant` extracts sources from the Blue Ant project management software
-- based on blueant to MEx mapping commit e629af3
 
 ### confluence-vvt extractor
 
 - `pdm run confluence-vvt` extracts sources from the VVT confluence page
-- based on confluence-vvt to MEx mapping commit bbaf91e
 
 ### datscha-web extractor
 
 - `pdm run datscha-web` extracts sources from the datscha web app
-- based on datscha-web to MEx mapping commit e629af3
 
 ### ff-projects extractor
 
 - `pdm run ff-projects` extracts sources from the FF Projects excel file
-- based on ff-projects to MEx mapping commit a913b9e
 
 ### ifsg extractor
 
 - `pdm run ifsg` extracts sources from the ifsg data base
-- based on ifsg to MEx mapping commit f0e54cd
 
 ### international-projects extractor
 
 - `pdm run international-projects` extracts sources from the international projects excel
-- based on international-projects to MEx mapping version a913b9e
 
 ### grippeweb extractor
 
 - `pdm run grippeweb` extracts grippeweb metadata from grippeweb database
-- based on grippeweb to MEx mapping commit eb88773
 
 ### odk extractor
 
 - `pdm run odk` extracts ODK survey data from excel files
-- based on odk to MEx mapping commit 6696577
 
 ### organigram extractor
 
 - `pdm run organigram` extracts organizational units from JSON file
-- based on organigram to MEx mapping commit a913b9e
 
 ### rdmo extractor
 
 - `pdm run rdmo` extracts sources from RDMO using its REST API
-- based on rdmo to MEx mapping commit e629af3
 
 ### seq-repo extractor
 
 - `pdm run seq-repo` extracts sources from seq-repo JSON file
-- based on seq-repo to MEx mapping commit f2814f9
 
 ### sumo extractor
 
 - `pdm run sumo` extract sumo data from xlsx files
-- based on sumo to MEx mapping commit f5e2b5f
 
 ### synopse extractor
 
 - `pdm run synopse` extracts synopse data from report-server exports
-- based on synopse to MEx mapping commit 6472329
 
 ### voxco extractor
 
 - `pdm run voxco` extracts voxco data from voxco JSON files
-- based on voxco to MEx mapping commit 307d275
