@@ -19,21 +19,6 @@ from mex.common.wikidata.models.organization import WikidataOrganization
 from mex.extractors.ff_projects.models.source import FFProjectsSource
 from mex.extractors.settings import Settings
 
-ORGANIZATIONS_BY_ABBREVIATIONS = {
-    "BMG": "Federal Ministry of Health of Germany",
-    "EC": "European Commission",
-    "UBA": "Federal Environment Agency",
-    "BBK": "Bundesamt für Bevölkerungsschutz und Katastrophenhilfe",
-    "DGE": "Deutsche Gesellschaft für Ernährung",
-    "FLI": "Friedrich Loeffler Institute",
-    "BMWK (ehem. BMWi)": "Federal Ministry for Economic Affairs and Climate Action",
-    "BMWK": "Federal Ministry for Economic Affairs and Climate Action",
-    "BMWiW": "Federal Ministry for Economic Affairs and Climate Action",
-    "IBB": "Investitionsbank Berlin",
-    "Sepsis-Stiftung": "Sepsis-Stiftung",
-    "DG-Sante": "Directorate-General for Health and Food Safety",
-}
-
 
 @watch
 def extract_ff_projects_sources() -> Generator[FFProjectsSource, None, None]:
@@ -222,14 +207,12 @@ def extract_ff_projects_organizations(
     Returns:
         Dict with organization label and WikidataOrganization
     """
-    organizations = {
-        source.zuwendungs_oder_auftraggeber: org
+    return {
+        zuwendungs_oder_auftraggeber: org
         for source in ff_projects_sources
-        for label in source.zuwendungs_oder_auftraggeber.replace("/", ",").split(",")
-        if source.zuwendungs_oder_auftraggeber not in ["Sonderforschung", "AA"]
-        and (org := search_organization_by_label(label))
+        if source.zuwendungs_oder_auftraggeber
+        for zuwendungs_oder_auftraggeber in source.zuwendungs_oder_auftraggeber.split(
+            "/"
+        )
+        if (org := search_organization_by_label(zuwendungs_oder_auftraggeber))
     }
-    for abbreviation, organization in ORGANIZATIONS_BY_ABBREVIATIONS.items():
-        if wiki_org := search_organization_by_label(organization):
-            organizations[abbreviation] = wiki_org
-    return organizations

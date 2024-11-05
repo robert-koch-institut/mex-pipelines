@@ -52,14 +52,12 @@ def transform_ff_projects_source_to_extracted_activity(
     orgs = ff_projects_source.zuwendungs_oder_auftraggeber.replace("/", ",").split(",")
     funder_or_commissioner: list[MergedOrganizationIdentifier] = []
     for org in orgs:
-        if org in ["Sonderforschung", "AA"]:
+        if org in ["Sonderforschung"]:
             continue
         if org in organization_stable_target_id_by_synonyms:
             funder_or_commissioner.append(
                 organization_stable_target_id_by_synonyms[org]
             )
-        elif sti := organization_stable_target_id_by_synonyms.get(org):
-            funder_or_commissioner.append(sti)
     activity_type = []
     if (
         ff_projects_source.rki_az
