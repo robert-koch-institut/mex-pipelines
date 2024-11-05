@@ -1,8 +1,8 @@
 from collections.abc import Generator
 
 from mex.common.backend_api.connector import BackendApiConnector
+from mex.common.logging import logger
 from mex.common.models import MergedItem
-from mex.extractors.logging import log_processed_merged_items
 
 
 def get_merged_items() -> Generator[MergedItem, None, None]:
@@ -22,4 +22,6 @@ def get_merged_items() -> Generator[MergedItem, None, None]:
         for item in response.items:
             logging_counter += 1
             yield item
-        log_processed_merged_items("extracted", logging_counter, total_item_number)
+        logger.info(
+            "%s of %s merged items where extracted.", logging_counter, total_item_number
+        )

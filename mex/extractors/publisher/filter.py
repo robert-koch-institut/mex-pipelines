@@ -1,7 +1,7 @@
 from collections.abc import Generator, Iterable
 
+from mex.common.logging import logger
 from mex.common.models import MergedItem
-from mex.extractors.logging import log_processed_merged_items
 from mex.extractors.settings import Settings
 
 
@@ -22,4 +22,4 @@ def filter_merged_items(
             total_items += 1
             yield item
 
-    log_processed_merged_items("filtered out", skipped_items, total_items)
+    logger.info("%s of %s merged items where filtered out.", skipped_items, total_items)

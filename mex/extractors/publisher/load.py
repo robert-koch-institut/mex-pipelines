@@ -1,10 +1,10 @@
 import json
 from collections.abc import Iterable
 
+from mex.common.logging import logger
 from mex.common.models import MergedItem
 from mex.common.settings import BaseSettings
 from mex.common.transform import MExEncoder
-from mex.extractors.logging import log_processed_merged_items
 
 
 def write_merged_items(items: Iterable[MergedItem]) -> None:
@@ -19,4 +19,4 @@ def write_merged_items(items: Iterable[MergedItem]) -> None:
             file.write(json.dumps(item, cls=MExEncoder) + "\n")
             logging_counter += 1
 
-    log_processed_merged_items("written", logging_counter)
+    logger.info("%s merged items where written.", logging_counter)

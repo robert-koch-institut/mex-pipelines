@@ -22,24 +22,3 @@ def log_filter(
         primary_source_id,
         identifier_in_primary_source,
     )
-
-
-def log_processed_merged_items(
-    action: str,
-    logging_counter: int,
-    total: int | None = None,
-) -> None:
-    """Log the handling of merged items during publishing."""
-    if total:
-        logger.info(
-            "%s of %s merged items where %s.",
-            logging_counter,
-            total,
-            action,
-        )
-    else:
-        logger.info(
-            "%s merged items where %s.",
-            logging_counter,
-            action,
-        )
