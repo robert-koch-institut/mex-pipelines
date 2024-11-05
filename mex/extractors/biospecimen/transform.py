@@ -54,8 +54,8 @@ def transform_biospecimen_resource_to_mex_resource(
         for activity in extracted_synopse_activities
     }
     access_restriction_by_zugriffsbeschraenkung = {
-        rule["forValues"][0]: rule["setValues"][0]
-        for rule in resource_mapping["accessRestriction"][0]["mappingRules"]
+        rule.forValues[0]: rule.setValues[0]
+        for rule in resource_mapping.accessRestriction[0].mappingRules
     }
     for resource in biospecimen_resources:
         if resource.anonymisiert_pseudonymisiert:
