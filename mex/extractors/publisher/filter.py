@@ -11,8 +11,8 @@ def filter_merged_items(
     """Filter to be published items by allow list."""
     settings = Settings.get()
 
-    logging_counter = 0
-    total_counter = 0
+    skipped_items = 0
+    total_items = 0
 
     for item in items:
         if item.entityType in settings.skip_merged_items:
