@@ -83,7 +83,7 @@ def transform_blueant_sources_to_extracted_activities(
         source_name = re.sub(
             r"[\d*_]+|[FG\d* ]+[- ]+", "", source.name
         )  # strip according to mapping
-        if source_name not in activity["title"][0]["mappingRules"][1]["forValues"]:
+        if source_name not in activity.title[0].mappingRules[1].forValues:
             title = source_name
 
         yield ExtractedActivity(
