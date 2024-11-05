@@ -371,7 +371,23 @@ def grippeweb_resource_mappings() -> list[AnyMappingModel]:
                         "comment": None,
                     }
                 ],
-                "externalPartner": [],
+                "externalPartner": [
+                    {
+                        "fieldInPrimarySource": "n/a",
+                        "locationInPrimarySource": None,
+                        "examplesInPrimarySource": None,
+                        "mappingRules": [
+                            {
+                                "forValues": [
+                                    "org not in wikidata",
+                                ],
+                                "setValues": None,
+                                "rule": "Use value",
+                            }
+                        ],
+                        "comment": None,
+                    }
+                ],
                 "hasLegalBasis": [
                     {
                         "fieldInPrimarySource": "n/a",
@@ -956,6 +972,23 @@ def grippeweb_resource_mappings() -> list[AnyMappingModel]:
                                     }
                                 ],
                                 "rule": None,
+                            }
+                        ],
+                        "comment": None,
+                    }
+                ],
+                "externalPartner": [
+                    {
+                        "fieldInPrimarySource": "n/a",
+                        "locationInPrimarySource": None,
+                        "examplesInPrimarySource": None,
+                        "mappingRules": [
+                            {
+                                "forValues": [
+                                    "Robert Koch-Institut",
+                                ],
+                                "setValues": None,
+                                "rule": "Use value",
                             }
                         ],
                         "comment": None,
