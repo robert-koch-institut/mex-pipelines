@@ -88,9 +88,9 @@ def transform_biospecimen_resource_to_mex_resource(
 
         contact = None
         for kontakt in resource.kontakt:
-            if k := person_stable_target_id_by_email.get(kontakt):
-                contact = k
-            elif k := unit_stable_target_ids_by_synonym.get(kontakt):
+            if (k := person_stable_target_id_by_email.get(kontakt)) or (
+                k := unit_stable_target_ids_by_synonym.get(kontakt)
+            ):
                 contact = k
         was_generated_by = sysnopse_stable_target_id_by_studien_id.get(
             resource.studienbezug[0], None
