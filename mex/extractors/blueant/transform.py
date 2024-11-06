@@ -85,6 +85,8 @@ def transform_blueant_sources_to_extracted_activities(
         )  # strip according to mapping
         if source_name not in activity.title[0].mappingRules[1].forValues:
             title = source_name
+        else:
+            title = []
 
         yield ExtractedActivity(
             start=source.start,
