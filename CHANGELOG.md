@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - increase minimum valid artificial data count to two times the number of entity types
 
+### Changes
+
+- improve pubilishing pipeline: logging, Backend connector, allow-list
+
 ### Deprecated
 
 ### Removed
