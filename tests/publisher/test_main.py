@@ -4,6 +4,6 @@ from mex.extractors.pipeline import run_job_in_process
 
 
 @pytest.mark.usefixtures("mocked_backend")
-def test_job() -> None:
+def test_run() -> None:
     result = run_job_in_process("publisher")
     assert result.success
