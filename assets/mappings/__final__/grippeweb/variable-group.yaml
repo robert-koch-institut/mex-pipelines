@@ -17,33 +17,33 @@ identifierInPrimarySource:
     locationInPrimarySource: Tabellen
     mappingRules:
     - forValues:
-      - "MEx.vActualQuestion"
+      - "vActualQuestion"
       setValues:
-      - "MEx.vActualQuestion"
+      - "vActualQuestion"
     - forValues:
-      - "MEx.vMasterData"
+      - "vMasterData"
       setValues:
-      -  "MEx.vMasterData"
+      -  "vMasterData"
     - forValues:
-      - "MEx.vWeeklyResponses"
+      - "vWeeklyResponses"
       setValues:
-      -  "MEx.vWeeklyResponses"
+      -  "vWeeklyResponses"
 label:
   - fieldInPrimarySource: label of the SQL-table
     locationInPrimarySource: Tabellen
     mappingRules:
     - forValues:
-      - "MEx.vActualQuestion"
+      - "vActualQuestion"
       setValues:
       - language: en
         value: "Additional Questions"
     - forValues:
-      - "MEx.vMasterDataMEx"
+      - "vMasterDataMEx"
       setValues:
       - langauge: en
         value: "Master Data"
     - forValues:
-      - "MEx.vWeeklyResponsesMEx"
+      - "vWeeklyResponsesMEx"
       setValues:
       - language: en
         value: "Weekly Responses"

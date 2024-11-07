@@ -9,7 +9,7 @@ from mex.extractors.settings import Settings
 def reduce_output(settings: Settings) -> None:
     """Automatically reduce the chattiness for text fields and item count for tests."""
     settings.artificial.chattiness = 5
-    settings.artificial.count = 15
+    settings.artificial.count = settings.artificial.model_fields["count"].metadata[0].ge
 
 
 @pytest.fixture(name="faker")
