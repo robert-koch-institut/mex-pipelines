@@ -1,3 +1,4 @@
+import re
 from collections.abc import Generator, Hashable, Iterable
 
 from mex.common.logging import watch
@@ -45,8 +46,8 @@ def transform_blueant_sources_to_extracted_activities(
     for source in blueant_sources:
         # find source type
         activity_type = (
-            [activity_type_values_by_type_id[source.type_]]
-            if source.type_ in activity_type_values_by_type_id
+            activity_type_values_by_type_id[source.type_]
+            if source.type_ in activity_type_values_by_type_id.keys()
             else []
         )
         funder_or_commissioner: list[MergedOrganizationIdentifier] = []
@@ -55,7 +56,7 @@ def transform_blueant_sources_to_extracted_activities(
                 funder_or_commissioner.append(
                     blueant_organization_ids_by_query_string[name]
                 )
-            elif name != "Robert Koch-Institut":
+            elif name not in ["Robert Koch-Institut", "RKI"]:
                 extracted_organization = ExtractedOrganization(
                     officialName=name,
                     identifierInPrimarySource=name,
@@ -68,8 +69,8 @@ def transform_blueant_sources_to_extracted_activities(
 
         # find responsible unit
         department = source.department.replace("(h)", "").strip()
-        if department in unit_stable_target_ids_by_synonym:
-            responsible_unit = unit_stable_target_ids_by_synonym.get(department)
+        if department in unit_stable_target_ids_by_synonym.keys():
+            department_id = unit_stable_target_ids_by_synonym.get(department)
         else:
             continue
 
@@ -77,20 +78,26 @@ def transform_blueant_sources_to_extracted_activities(
         contact = person_stable_target_ids_by_employee_id[
             source.projectLeaderEmployeeId
         ]
-        if not contact and responsible_unit:
-            contact.append(responsible_unit)
+        if not contact and department_id:
+            contact.append(department_id)
+        source_name = re.sub(
+            r"[\d*_]+|[FG\d* ]+[- ]+", "", source.name
+        )  # strip according to mapping
+        if source_name not in activity.title[0].mappingRules[1].forValues:
+            title = [source_name]
+        else:
+            title = []
 
         yield ExtractedActivity(
             start=source.start,
-            end=source.end,
             activityType=activity_type,
             contact=contact,
             involvedPerson=person_stable_target_ids_by_employee_id[
                 source.projectLeaderEmployeeId
             ],
             hadPrimarySource=primary_source.stableTargetId,
-            responsibleUnit=responsible_unit,
+            responsibleUnit=department_id,
             funderOrCommissioner=funder_or_commissioner,
-            title=source.name,
+            title=title or [],
             identifierInPrimarySource=source.number,
         )
