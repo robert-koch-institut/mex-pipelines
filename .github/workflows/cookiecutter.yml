@@ -54,7 +54,7 @@ jobs:
           MEX_BOT_USER: ${{ vars.MEX_BOT_USER }}
         run: |
           eval "$(ssh-agent -s)"
-          pdm setup-commit-signing
+          pdm setup-commit-signing -v
 
       - name: Update template
         env:
