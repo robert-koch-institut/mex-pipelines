@@ -58,12 +58,14 @@ jobs:
         run: make setup
 
       - name: Setup commit signing
-        run: pdm setup-commit-signing
         env:
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
           SIGNING_PUB: ${{ secrets.SIGNING_PUB }}
           MEX_BOT_EMAIL: ${{ vars.MEX_BOT_EMAIL }}
           MEX_BOT_USER: ${{ vars.MEX_BOT_USER }}
+        run: |
+          eval "$(ssh-agent -s)"
+          pdm setup-commit-signing
 
       - name: Release new version
         id: release
@@ -72,8 +74,6 @@ jobs:
         run: |
           pdm release ${{ inputs.version }}
           echo "tag=$(git describe --abbrev=0 --tags)" >> "$GITHUB_OUTPUT"
-
-
 
   containerize:
     runs-on: ubuntu-latest
