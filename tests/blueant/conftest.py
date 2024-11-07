@@ -62,7 +62,6 @@ def blueant_activity() -> AnyMappingModel:
             "identifierInPrimarySource": [],
             "contact": [],
             "responsibleUnit": [],
-            "title": [],
             "activityType": [
                 {
                     "fieldInPrimarySource": "typeId",
@@ -99,6 +98,12 @@ def blueant_activity() -> AnyMappingModel:
                         },
                     ],
                     "comment": None,
+                }
+            ],
+            "title": [
+                {
+                    "fieldInPrimarySource": "",
+                    "mappingRules": [{}, {"forValues": ["text"]}],
                 }
             ],
         },
