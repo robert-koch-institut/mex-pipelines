@@ -1,28 +1,27 @@
 from collections.abc import Generator
-from typing import Any
 
 from mex.common.backend_api.connector import BackendApiConnector
+from mex.common.logging import logger
+from mex.common.models import MergedItem
 
 
-def get_merged_items() -> Generator[dict[str, Any], None, None]:
+def get_merged_items() -> Generator[MergedItem, None, None]:
     """Read merged items from backend."""
     connector = BackendApiConnector.get()
 
-    response = connector.request(
-        method="GET", endpoint="merged-item", params={"limit": "1"}
-    )
-    total_item_number = response["total"]
+    response = connector.fetch_merged_items(None, None, 0, 1)
+    total_item_number = response.total
 
-    item_number_limit = 100  # max limit
-    item_counter = 0
+    item_number_limit = 100  # 100 is the maximum possible number per get-request
 
-    while item_counter <= total_item_number:
-        response = connector.request(
-            method="GET",
-            endpoint="merged-item",
-            params={"limit": str(item_number_limit), "skip": str(item_counter)},
+    logging_counter = 0
+    for item_counter in range(0, total_item_number, item_number_limit):
+        response = connector.fetch_merged_items(
+            None, None, item_counter, item_number_limit
         )
-
-        item_counter += item_number_limit
-
-        yield from response["items"]
+        for item in response.items:
+            logging_counter += 1
+            yield item
+        logger.info(
+            "%s of %s merged items where extracted.", logging_counter, total_item_number
+        )

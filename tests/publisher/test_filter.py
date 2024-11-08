@@ -1,16 +1,9 @@
-import pytest
-
 from mex.common.models import MergedConsent, MergedContactPoint, MergedPrimarySource
-from mex.extractors.publisher.extract import get_merged_items
+from mex.extractors.publisher.filter import filter_merged_items
 
 
-@pytest.mark.usefixtures("mocked_backend")
-def test_get_merged_items_mocked() -> None:
-    item_generator = get_merged_items()
-    items = list(item_generator)
-    assert len(items) == 4
-    assert isinstance(items[0], MergedPrimarySource)
-    assert items == [
+def test_filter_merged_items() -> None:
+    items = [
         MergedPrimarySource(
             entityType="MergedPrimarySource", identifier="fakefakefakeJA"
         ),
@@ -32,3 +25,7 @@ def test_get_merged_items_mocked() -> None:
             identifier="alsofakefakefakeYO",
         ),
     ]
+    allowed_items_generator = filter_merged_items(items)
+    allowed_items = list(allowed_items_generator)
+
+    assert allowed_items == [items[1], items[3]]
