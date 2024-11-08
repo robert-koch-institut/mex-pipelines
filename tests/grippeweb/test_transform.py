@@ -95,9 +95,7 @@ def test_transform_grippeweb_resource_mappings_to_dict(
                 "url": "https://www.rki.de",
             }
         ],
-        "externalPartner": [
-            str(grippeweb_organization_ids_by_query_string["Robert Koch-Institut"])
-        ],
+        "externalPartner": ["hIOhGEYgr1ZO2hmdN23zeg"],
         "hasLegalBasis": [
             {
                 "language": TextLanguage.DE,

@@ -213,7 +213,7 @@ def get_or_create_external_partner(
     resource: AnyMappingModel,
     grippeweb_organization_ids_by_query_string: dict[str, MergedOrganizationIdentifier],
     extracted_primary_source_grippeweb: ExtractedPrimarySource,
-) -> list[MergedOrganizationIdentifier]:
+) -> list[MergedOrganizationIdentifier] | None:
     """Get external partner from wikidata or create organization.
 
     Args:
@@ -227,7 +227,7 @@ def get_or_create_external_partner(
     """
     if external_partner_dict := resource.externalPartner:
         external_partner_string = external_partner_dict[0].mappingRules[0].forValues[0]
-        if external_partner_string in resource.keys():
+        if external_partner_string in resource.model_fields.keys():
             external_partner_identifier = [
                 grippeweb_organization_ids_by_query_string[external_partner_string]
             ]
@@ -239,7 +239,8 @@ def get_or_create_external_partner(
             )
             load([external_partner_organization])
             external_partner_identifier = [external_partner_organization.stableTargetId]
-    return external_partner_identifier
+        return external_partner_identifier
+    return None
 
 
 def transform_grippeweb_access_platform_to_extracted_access_platform(
@@ -365,14 +366,17 @@ def transform_grippeweb_variable_to_extracted_variables(
                     variable_group_by_location["vMasterDataMEx"],
                     variable_group_by_location["vWeeklyResponsesMEx"],
                 ]
-                value_set = set(
+                value_set = {
                     *grippeweb_columns["vMasterDataMEx"][column_name],
                     *grippeweb_columns["vWeeklyResponsesMEx"][column_name],
-                )
+                }
             else:
                 belongs_to = [variable_group_by_location[table_name]]
-                value_set = set(
-                    column if column_name in valueset_locations_by_field.keys() else []
+                column_strings = {cell for cell in column if isinstance(cell, str)}
+                value_set = (
+                    column_strings
+                    if column_name in valueset_locations_by_field.keys()
+                    else set()
                 )
             extracted_variables.append(
                 ExtractedVariable(
