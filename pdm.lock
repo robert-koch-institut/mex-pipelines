@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:69949cb709301e4b4433d853d41ddcc9d6683ab67143d887d77e373b665cedcb"
+content_hash = "sha256:c5db3d286b26b77ac18d7484f4ca4d4fc1e69cab235def16da526ed7dc1dc642"
 
 [[metadata.targets]]
 requires_python = "==3.11.*"
@@ -1654,10 +1654,6 @@ dependencies = [
     "cryptography>=1.3",
     "pyspnego>=0.4.0",
     "requests>=2.0.0",
-]
-files = [
-    {file = "requests_ntlm-1.3.0-py3-none-any.whl", hash = "sha256:4c7534a7d0e482bb0928531d621be4b2c74ace437e88c5a357ceb7452d25a510"},
-    {file = "requests_ntlm-1.3.0.tar.gz", hash = "sha256:b29cc2462623dffdf9b88c43e180ccb735b4007228a542220e882c58ae56c668"},
 ]
 
 [[package]]
