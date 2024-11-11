@@ -45,11 +45,7 @@ def transform_blueant_sources_to_extracted_activities(
     }
     for source in blueant_sources:
         # find source type
-        activity_type = (
-            activity_type_values_by_type_id[source.type_]
-            if source.type_ in activity_type_values_by_type_id.keys()
-            else []
-        )
+        activity_type = activity_type_values_by_type_id.get(source.type_, [])
         funder_or_commissioner: list[MergedOrganizationIdentifier] = []
         for name in source.client_names:
             if name in blueant_organization_ids_by_query_string:
@@ -69,7 +65,7 @@ def transform_blueant_sources_to_extracted_activities(
 
         # find responsible unit
         department = source.department.replace("(h)", "").strip()
-        if department in unit_stable_target_ids_by_synonym.keys():
+        if department in unit_stable_target_ids_by_synonym:
             department_id = unit_stable_target_ids_by_synonym.get(department)
         else:
             continue

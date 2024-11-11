@@ -111,30 +111,12 @@ def transform_grippeweb_resource_mappings_to_dict(
         created = resource.created[0].mappingRules[0].setValues
         description = resource.description[0].mappingRules[0].setValues
         documentation = resource.documentation[0].mappingRules[0].setValues
-        external_partner_identifier: list[MergedOrganizationIdentifier] = []
-        if external_partner_dict := resource.externalPartner:
-            external_partner_string = (
-                external_partner_dict[0].mappingRules[0].forValues[0]
-            )
-            if (
-                external_partner_string
-                in grippeweb_organization_ids_by_query_string.keys()
-            ):
-                external_partner_identifier = [
-                    grippeweb_organization_ids_by_query_string[external_partner_string]
-                ]
-            else:
-                external_partner_organization = [
-                    ExtractedOrganization(
-                        officialName=external_partner_string,
-                        identifierInPrimarySource=external_partner_string,
-                        hadPrimarySource=extracted_primary_source_grippeweb.stableTargetId,
-                    )
-                ]
-                load(external_partner_organization)
-                external_partner_identifier = [
-                    external_partner_organization[0].stableTargetId
-                ]
+        external_partner_identifier = get_or_create_external_partner(
+            resource,
+            grippeweb_organization_ids_by_query_string,
+            extracted_primary_source_grippeweb,
+        )
+
         has_legal_basis = resource.hasLegalBasis[0].mappingRules[0].setValues
         has_personal_data = resource.hasPersonalData[0].mappingRules[0].setValues
         icd10code = resource.icd10code[0].mappingRules[0].setValues
@@ -225,6 +207,40 @@ def transform_grippeweb_resource_mappings_to_dict(
             wasGeneratedBy=was_generated_by,
         )
     return resource_dict
+
+
+def get_or_create_external_partner(
+    resource: AnyMappingModel,
+    grippeweb_organization_ids_by_query_string: dict[str, MergedOrganizationIdentifier],
+    extracted_primary_source_grippeweb: ExtractedPrimarySource,
+) -> list[MergedOrganizationIdentifier] | None:
+    """Get external partner from wikidata or create organization.
+
+    Args:
+        resource: grippeweb resource mapping model
+        grippeweb_organization_ids_by_query_string:
+            extracted grippeweb organizations dict
+        extracted_primary_source_grippeweb: extracted grippeweb primary source
+
+    Returns:
+        dict extracted grippeweb resource by identifier in primary source
+    """
+    if external_partner_dict := resource.externalPartner:
+        external_partner_string = external_partner_dict[0].mappingRules[0].forValues[0]
+        if external_partner_string in resource.model_fields.keys():
+            external_partner_identifier = [
+                grippeweb_organization_ids_by_query_string[external_partner_string]
+            ]
+        else:
+            external_partner_organization = ExtractedOrganization(
+                officialName=external_partner_string,
+                identifierInPrimarySource=external_partner_string,
+                hadPrimarySource=extracted_primary_source_grippeweb.stableTargetId,
+            )
+            load([external_partner_organization])
+            external_partner_identifier = [external_partner_organization.stableTargetId]
+        return external_partner_identifier
+    return None
 
 
 def transform_grippeweb_access_platform_to_extracted_access_platform(
@@ -350,16 +366,17 @@ def transform_grippeweb_variable_to_extracted_variables(
                     variable_group_by_location["vMasterDataMEx"],
                     variable_group_by_location["vWeeklyResponsesMEx"],
                 ]
-                value_set = set(
-                    [
-                        *grippeweb_columns["vMasterDataMEx"][column_name],
-                        *grippeweb_columns["vWeeklyResponsesMEx"][column_name],
-                    ]
-                )
+                value_set = {
+                    *grippeweb_columns["vMasterDataMEx"][column_name],
+                    *grippeweb_columns["vWeeklyResponsesMEx"][column_name],
+                }
             else:
                 belongs_to = [variable_group_by_location[table_name]]
-                value_set = set(
-                    column if column_name in valueset_locations_by_field.keys() else []
+                column_strings = {cell for cell in column if isinstance(cell, str)}
+                value_set = (
+                    column_strings
+                    if column_name in valueset_locations_by_field.keys()
+                    else set()
                 )
             extracted_variables.append(
                 ExtractedVariable(
