@@ -7,7 +7,7 @@ from mex.common.types import AssetsPath
 class BiospecimenSettings(BaseModel):
     """Settings submodel for the Biospecimen extractor."""
 
-    dir_path: AssetsPath = Field(
+    raw_data_path: AssetsPath = Field(
         AssetsPath("raw-data/biospecimen"),
         description=(
             "Path to the directory with the biospecimen excel files, "

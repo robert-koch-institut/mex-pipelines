@@ -203,7 +203,7 @@ class TextProvider(PythonFakerProvider):
 class PatternProvider(BaseFakerProvider):
     """Faker provider to create strings matching given patterns."""
 
-    # XXX: Hardcoding is not an ideal but a quick way to get matching random strings
+    # TODO(ND): Try to avoid hardcoding the numerify patterns
     REGEX_TO_NUMERIFY = {
         r"^https://www\.wikidata\.org/entity/[PQ0-9]{2,64}$": "https://www.wikidata.org/entity/P######",
         r"^https://isni\.org/isni/[X0-9]{16}$": "https://isni.org/isni/################",
