@@ -109,6 +109,6 @@ def extract_blueant_organizations(
         name: org
         for source in blueant_sources
         for name in source.client_names
-        if name != "Robert Koch-Institut"
+        if name not in ["Robert Koch-Institut", "RKI"]
         and (org := search_organization_by_label(name))
     }

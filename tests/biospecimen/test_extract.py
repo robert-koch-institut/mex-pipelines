@@ -46,6 +46,7 @@ def test_extract_biospecimen_resources() -> None:
 
     source_dicts = [r.model_dump(exclude_none=True) for r in resources]
     assert source_dicts[0] == {
+        "file_name": "test_bioproben.xlsx",
         "offizieller_titel_der_probensammlung": ["test_titel"],
         "beschreibung": ["Testbeschreibung"],
         "schlagworte": ["Testschlagwort 1, Testschlagwort 2"],
@@ -74,7 +75,7 @@ def test_extract_biospecimen_resources() -> None:
         "vorhandene_anzahl_der_proben": "Testanzahl",
         "weiterfuehrende_dokumentation_titel": "Testdokutitel",
         "weiterfuehrende_dokumentation_url_oder_dateipfad": "Testdokupfad",
-        "zugriffsbeschraenkung": "Testbeschränkung",
+        "zugriffsbeschraenkung": "restriktiv",
     }
 
 

@@ -45,12 +45,14 @@ def transform_rdmo_sources_to_extracted_activities(
             "/domain/project/funder/name"
         )
 
-        if name := rdmo_source.question_answer_pairs.get(
-            "/domain/project/coordination/name"
-        ):
-            involved_person = name
-        elif name := rdmo_source.question_answer_pairs.get(
-            "/domain/project/coordination/deputy/name"
+        if (
+            name := rdmo_source.question_answer_pairs.get(
+                "/domain/project/coordination/name"
+            )
+        ) or (
+            name := rdmo_source.question_answer_pairs.get(
+                "/domain/project/coordination/deputy/name"
+            )
         ):
             involved_person = name
         else:
