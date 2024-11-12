@@ -92,7 +92,7 @@ def transform_biospecimen_resource_to_mex_resource(
 
         contact: list[Identifier] = []
         for kontakt in resource.kontakt:
-            if k := person_stable_target_id_by_email.get(kontakt):
+            if k := person_stable_target_id_by_email.get(kontakt):  # noqa: SIM114
                 contact.append(k)
             elif k := unit_stable_target_ids_by_synonym.get(kontakt):
                 contact.append(k)

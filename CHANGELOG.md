@@ -9,13 +9,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- convenience / helper functions for wikidata and primary source
+
+### Changes
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [0.20.0] - 2024-11-11
+
+### Added
+
 - increase minimum valid artificial data count to two times the number of entity types
 
 ### Changes
 
 - improve pubilishing pipeline: logging, Backend connector, allow-list
-
-### Deprecated
 
 ### Removed
 
@@ -23,10 +37,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - stop configuring entity-type weights for artificial data, since that broke determinism
 - removed unused `-c` alias for the count setting of the artificial extractor
 - deprecated mapping commit hashes in README
-
-### Fixed
-
-### Security
 
 ## [0.19.0] - 2024-10-29
 
