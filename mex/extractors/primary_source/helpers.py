@@ -1,9 +1,11 @@
+from functools import cache
+
 from mex.common.primary_source.helpers import get_extracted_primary_source_by_name
 from mex.common.types import MergedPrimarySourceIdentifier
 from mex.extractors.sinks import load
 
 
-# Helper for primary source
+@cache
 def get_extracted_primary_source_id_by_name(
     name: str,
 ) -> MergedPrimarySourceIdentifier | None:

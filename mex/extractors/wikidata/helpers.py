@@ -1,8 +1,11 @@
+from functools import cache
+
 from mex.common.types import MergedOrganizationIdentifier
 from mex.common.wikidata.helpers import get_extracted_organization_from_wikidata
 from mex.extractors.sinks import load
 
 
+@cache
 def get_wikidata_extracted_organization_id_by_name(
     name: str,
 ) -> MergedOrganizationIdentifier | None:
