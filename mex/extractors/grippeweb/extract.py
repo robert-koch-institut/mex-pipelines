@@ -81,9 +81,13 @@ def extract_grippeweb_organizations(
         Dict with keys: mapping default values
             and values: WikidataOrganization
     """
-    publisher_by_name = {}
+    organization_by_name = {}
     for resource in grippeweb_resource_mappings:
-        publisher_name = str(resource.publisher[0].mappingRules[0].forValues[0])
+        if external_partner_dict := resource.externalPartner:
+            external_partner = external_partner_dict[0].mappingRules[0].forValues[0]
+            if org := search_organization_by_label(external_partner):
+                organization_by_name[external_partner] = org
+        publisher_name = resource.publisher[0].mappingRules[0].forValues[0]
         if publisher := search_organization_by_label(publisher_name):
-            publisher_by_name[publisher_name] = publisher
-    return publisher_by_name
+            organization_by_name[publisher_name] = publisher
+    return organization_by_name

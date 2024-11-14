@@ -19,6 +19,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [0.20.0] - 2024-11-11
+
+### Added
+
+- increase minimum valid artificial data count to two times the number of entity types
+
+### Changes
+
+- improve pubilishing pipeline: logging, Backend connector, allow-list
+
+### Removed
+
+- remove `matched` setting for the artificial extractor, since that was not implemented
+- stop configuring entity-type weights for artificial data, since that broke determinism
+- removed unused `-c` alias for the count setting of the artificial extractor
+- deprecated mapping commit hashes in README
+
 ## [0.19.0] - 2024-10-29
 
 ### Added
@@ -29,7 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - BREAKING: refactor package structure from `mex.foo` to `mex.extractors.foo`
 - BREAKING: Mapping extractors now returns Mapping models instead of nested dictionaries
-- model v3 update: artifical, international-projects, seqrepo, synopse, blueant, sumo,
+- model v3 update: artificial, international-projects, seqrepo, synopse, blueant, sumo,
   biospecimen, odk, datscha-web, confluence-vvt, grippeweb, voxco, ifsg
 
 ### Fixed

@@ -295,7 +295,7 @@ def transform_odk_data_to_extracted_variables(
                 if column_name.startswith("label") and isinstance(cell, str)
             ]
             if label == []:
-                continue  # TODO: address empty label list in MX-1568
+                continue  # TODO(EH): address empty label list in MX-1568
             value_set = []
             if isinstance(row["type"], str) and row["type"].startswith(
                 ("select_one", "select_multiple")

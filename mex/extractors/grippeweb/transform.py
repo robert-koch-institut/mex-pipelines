@@ -2,6 +2,7 @@ from typing import Any
 
 from mex.common.models import (
     ExtractedAccessPlatform,
+    ExtractedOrganization,
     ExtractedPerson,
     ExtractedPrimarySource,
     ExtractedResource,
@@ -15,6 +16,7 @@ from mex.common.types import (
     MergedOrganizationIdentifier,
 )
 from mex.extractors.mapping.types import AnyMappingModel
+from mex.extractors.sinks import load
 
 
 def transform_grippeweb_resource_mappings_to_extracted_resources(
@@ -109,6 +111,12 @@ def transform_grippeweb_resource_mappings_to_dict(
         created = resource.created[0].mappingRules[0].setValues
         description = resource.description[0].mappingRules[0].setValues
         documentation = resource.documentation[0].mappingRules[0].setValues
+        external_partner_identifier = get_or_create_external_partner(
+            resource,
+            grippeweb_organization_ids_by_query_string,
+            extracted_primary_source_grippeweb,
+        )
+
         has_legal_basis = resource.hasLegalBasis[0].mappingRules[0].setValues
         has_personal_data = resource.hasPersonalData[0].mappingRules[0].setValues
         icd10code = resource.icd10code[0].mappingRules[0].setValues
@@ -176,6 +184,7 @@ def transform_grippeweb_resource_mappings_to_dict(
             created=created,
             description=description,
             documentation=documentation,
+            externalPartner=external_partner_identifier,
             hadPrimarySource=extracted_primary_source_grippeweb.stableTargetId,
             icd10code=icd10code,
             identifierInPrimarySource=identifier_in_primary_source,
@@ -198,6 +207,40 @@ def transform_grippeweb_resource_mappings_to_dict(
             wasGeneratedBy=was_generated_by,
         )
     return resource_dict
+
+
+def get_or_create_external_partner(
+    resource: AnyMappingModel,
+    grippeweb_organization_ids_by_query_string: dict[str, MergedOrganizationIdentifier],
+    extracted_primary_source_grippeweb: ExtractedPrimarySource,
+) -> list[MergedOrganizationIdentifier] | None:
+    """Get external partner from wikidata or create organization.
+
+    Args:
+        resource: grippeweb resource mapping model
+        grippeweb_organization_ids_by_query_string:
+            extracted grippeweb organizations dict
+        extracted_primary_source_grippeweb: extracted grippeweb primary source
+
+    Returns:
+        dict extracted grippeweb resource by identifier in primary source
+    """
+    if external_partner_dict := resource.externalPartner:
+        external_partner_string = external_partner_dict[0].mappingRules[0].forValues[0]
+        if external_partner_string in resource.model_fields.keys():
+            external_partner_identifier = [
+                grippeweb_organization_ids_by_query_string[external_partner_string]
+            ]
+        else:
+            external_partner_organization = ExtractedOrganization(
+                officialName=external_partner_string,
+                identifierInPrimarySource=external_partner_string,
+                hadPrimarySource=extracted_primary_source_grippeweb.stableTargetId,
+            )
+            load([external_partner_organization])
+            external_partner_identifier = [external_partner_organization.stableTargetId]
+        return external_partner_identifier
+    return None
 
 
 def transform_grippeweb_access_platform_to_extracted_access_platform(
@@ -267,15 +310,15 @@ def transform_grippeweb_variable_group_to_extracted_variable_groups(
         list of extracted variable groups
     """
     label_by_table_name = {
-        mapping_rules.forValues[0]: mapping_rules.setValues[0]
-        for mapping_rules in grippeweb_variable_group.label[0].mappingRules
+        mapping_rule.forValues[0]: mapping_rule.setValues
+        for mapping_rule in grippeweb_variable_group.label[0].mappingRules
     }
     return [
         ExtractedVariableGroup(
             containedBy=grippeweb_extracted_resource_dict["grippeweb"].stableTargetId,
             hadPrimarySource=extracted_primary_source_grippeweb.stableTargetId,
             identifierInPrimarySource=table_name,
-            label=label_by_table_name[f"MEx.{table_name}"],
+            label=label_by_table_name[table_name],
         )
         for table_name in grippeweb_columns
     ]
@@ -308,30 +351,43 @@ def transform_grippeweb_variable_to_extracted_variables(
         group.identifierInPrimarySource: group.stableTargetId
         for group in grippeweb_extracted_variable_group
     }
-    return [
-        ExtractedVariable(
-            belongsTo=(
-                [
+    extracted_variables: list[ExtractedVariable] = []
+    seen_column_names: list[str] = []
+    for table_name, table in grippeweb_columns.items():
+        for column_name, column in table.items():
+            if column_name in seen_column_names:
+                continue
+            seen_column_names.append(column_name)
+            if (
+                valueset_locations_by_field.get(column_name)
+                == "vMasterDataMEx AND vWeeklyResponsesMEx"
+            ):
+                belongs_to = [
                     variable_group_by_location["vMasterDataMEx"],
                     variable_group_by_location["vWeeklyResponsesMEx"],
                 ]
-                if location == "vMasterDataMEx AND vWeeklyResponsesMEx"
-                else [variable_group_by_location[location]]
-            ),
-            hadPrimarySource=extracted_primary_source_grippeweb.stableTargetId,
-            identifierInPrimarySource=field,
-            label=field,
-            usedIn=grippeweb_extracted_resource_dict["grippeweb"].stableTargetId,
-            valueSet=list(
-                (
-                    set(grippeweb_columns["vMasterDataMEx"][field]).union(
-                        set(grippeweb_columns["vWeeklyResponsesMEx"][field])
-                    )
-                    if location == "vMasterDataMEx AND vWeeklyResponsesMEx"
-                    else set(grippeweb_columns[location][field])
+                value_set = {
+                    *grippeweb_columns["vMasterDataMEx"][column_name],
+                    *grippeweb_columns["vWeeklyResponsesMEx"][column_name],
+                }
+            else:
+                belongs_to = [variable_group_by_location[table_name]]
+                column_strings = {cell for cell in column if isinstance(cell, str)}
+                value_set = (
+                    column_strings
+                    if column_name in valueset_locations_by_field.keys()
+                    else set()
                 )
-                - {None}
-            ),
-        )
-        for field, location in valueset_locations_by_field.items()
-    ]
+            extracted_variables.append(
+                ExtractedVariable(
+                    belongsTo=belongs_to,
+                    hadPrimarySource=extracted_primary_source_grippeweb.stableTargetId,
+                    identifierInPrimarySource=column_name,
+                    label=column_name,
+                    usedIn=grippeweb_extracted_resource_dict[
+                        "grippeweb"
+                    ].stableTargetId,
+                    valueSet=list(value_set - {None}),
+                )
+            )
+    return extracted_variables

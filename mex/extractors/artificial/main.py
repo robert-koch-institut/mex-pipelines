@@ -1,22 +1,7 @@
 from faker import Faker
 
 from mex.common.cli import entrypoint
-from mex.common.models import (
-    EXTRACTED_MODEL_CLASSES,
-    ExtractedAccessPlatform,
-    ExtractedActivity,
-    ExtractedBibliographicResource,
-    ExtractedConsent,
-    ExtractedContactPoint,
-    ExtractedDistribution,
-    ExtractedOrganization,
-    ExtractedOrganizationalUnit,
-    ExtractedPerson,
-    ExtractedPrimarySource,
-    ExtractedResource,
-    ExtractedVariable,
-    ExtractedVariableGroup,
-)
+from mex.common.models import EXTRACTED_MODEL_CLASSES
 from mex.extractors.artificial.identity import (
     IdentityMap,
     create_identities,
@@ -46,25 +31,8 @@ def faker() -> Faker:
 
 @asset(group_name="artificial")
 def identities(faker: Faker) -> IdentityMap:
-    """Create a map of identities for each of the weighted model classes."""
-    return create_identities(
-        faker,
-        {
-            ExtractedPrimarySource: 10,
-            ExtractedAccessPlatform: 10,
-            ExtractedActivity: 50,
-            ExtractedBibliographicResource: 10,
-            ExtractedConsent: 10,
-            ExtractedContactPoint: 5,
-            ExtractedDistribution: 50,
-            ExtractedOrganization: 5,
-            ExtractedOrganizationalUnit: 10,
-            ExtractedPerson: 100,
-            ExtractedResource: 70,
-            ExtractedVariable: 500,
-            ExtractedVariableGroup: 200,
-        },
-    )
+    """Create a list of identities for each of the model classes."""
+    return create_identities(faker)
 
 
 @asset(group_name="artificial")
@@ -84,8 +52,7 @@ def factories(faker: Faker, identities: IdentityMap) -> Faker:
 def artificial_data(factories: Faker, identities: IdentityMap) -> None:
     """Create artificial data and load the models to the sinks."""
     restore_identities(identities)  # restore state of memory identity provider
-    for model in EXTRACTED_MODEL_CLASSES:
-        load(factories.extracted_data(model))
+    load(m for c in EXTRACTED_MODEL_CLASSES for m in factories.extracted_data(c))
 
 
 @entrypoint(Settings)
