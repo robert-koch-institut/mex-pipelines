@@ -21,8 +21,21 @@ class ConfluenceVvtConnector(HTTPConnector):
             settings.confluence_vvt.password.get_secret_value(),
         )
 
-    def get_page_by_id(self, page_id: str) -> ConfluenceVvtPage:
+    def get_page_by_id(self, page_id: str) -> ConfluenceVvtPage | None:
         settings = Settings.get()
+        if page_id in settings.confluence_vvt.skip_pages:
+            return None
+
+        page_labels = self.session.get(
+            urljoin(
+                settings.confluence_vvt.url,
+                f"rest/api/content/{page_id}/label",
+            ),
+        )
+        for label in page_labels.json()["results"]:
+            if "vvt-template-v2" in label["name"]:
+                return None
+
         response = self.session.get(
             urljoin(
                 settings.confluence_vvt.url,
@@ -49,11 +62,9 @@ class ConfluenceVvtConnector(HTTPConnector):
                         for child in value.children
                         if (text := child.get_text().strip())
                     ]
-                    cells.append({"texts": texts})
+                    cells.append({"texts": texts or None})
                 rows.append({"cells": cells})
             tables.append({"rows": rows})
-
-        breakpoint()
         return ConfluenceVvtPage.model_validate(
             {"title": title, "id": page_id, "tables": tables}
         )

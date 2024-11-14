@@ -43,16 +43,20 @@ def transform_confluence_vvt_page_to_extracted_activity(
         for author in get_involved_persons_from_page(page, activity_mapping)
         for merged_id in merged_ids_by_query_string[author]
     ]
-    responsible_unit_merged_ids = [
-        unit_id
-        for oe in get_responsible_unit_from_page(page, activity_mapping)
-        if (unit_id := unit_merged_ids_by_synonym.get(oe))
-    ]
-    involved_unit_merged_ids = [
-        unit_id
-        for oe in get_involved_units_from_page(page, activity_mapping)
-        if (unit_id := unit_merged_ids_by_synonym.get(oe))
-    ]
+    responsible_unit_merged_ids = list(
+        {
+            unit_id
+            for oe in get_responsible_unit_from_page(page, activity_mapping)
+            if (unit_id := unit_merged_ids_by_synonym.get(oe))
+        }
+    )
+    involved_unit_merged_ids = list(
+        {
+            unit_id
+            for oe in get_involved_units_from_page(page, activity_mapping)
+            if (unit_id := unit_merged_ids_by_synonym.get(oe))
+        }
+    )
 
     return ExtractedActivity(
         abstract=Text(

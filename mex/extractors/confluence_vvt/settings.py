@@ -26,3 +26,10 @@ class ConfluenceVvtSettings(BaseModel):
             "default values, absolute path or relative to `assets_dir`."
         ),
     )
+    skip_pages: list[str] = Field(
+        ["123456"],
+        description=(
+            "List of Confluence-vvt page ids that must be skipped for incomplete "
+            "or broken data, otherwise it will break the extractor."
+        ),
+    )

@@ -6,7 +6,7 @@ from pytest import MonkeyPatch
 from requests import HTTPError
 
 from mex.extractors.confluence_vvt.connector import ConfluenceVvtConnector
-from mex.extractors.confluence_vvt.extract import fetch_all_data_page_ids
+from mex.extractors.confluence_vvt.extract import fetch_all_vvt_pages_ids
 from mex.extractors.confluence_vvt.models import (
     ConfluenceVvtHeading,
     ConfluenceVvtValue,
@@ -121,7 +121,7 @@ def test_get_page_by_id() -> None:
 
     # start by mapping rows to values below. do it row loop here.
 
-    all_pages_ids = fetch_all_data_page_ids()
+    all_pages_ids = fetch_all_vvt_pages_ids()
     # for page_id in all_pages_ids:
     #     pagedata = connector.get_page_by_id(page_id)
 

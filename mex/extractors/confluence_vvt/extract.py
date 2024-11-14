@@ -55,7 +55,10 @@ def get_page_data_by_id(
 ) -> Generator[ConfluenceVvtPage, None, None]:
     connector = ConfluenceVvtConnector.get()
     for page_id in page_ids:
-        yield connector.get_page_by_id(page_id)
+        page_data = connector.get_page_by_id(page_id)
+        if not page_data:
+            continue
+        yield page_data
 
 
 def extract_confluence_vvt_authors(
@@ -126,7 +129,6 @@ def get_all_persons_from_all_pages(
         all_persons_on_page.extend(contacts)
         all_persons_on_page.extend(involved_persons)
 
-    breakpoint()
     return all_persons_on_page
 
 

@@ -24,10 +24,10 @@ class ConfluenceVvtHeading(ConfluenceVvtCell):
 
 
 class ConfluenceVvtValue(ConfluenceVvtCell):
-    texts: list[str]
+    texts: list[str] | None
 
     def get_texts(self) -> list[str]:
-        return self.texts
+        return self.texts if self.texts else []
 
 
 class ConfluenceVvtRow(BaseModel):
