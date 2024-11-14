@@ -51,7 +51,7 @@ def extract_biospecimen_organizations(
         biospecimen_resources: Iterable of biospecimen resources
 
     Returns:
-        dict with WikidataOrganization by externe partner
+        dict with WikidataOrganization ID by externe partner
     """
     return {
         resource.externe_partner: org_id
