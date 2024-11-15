@@ -152,7 +152,8 @@ def ff_projects_activity() -> AnyMappingModel:
                             "forValues": None,
                             "setValues": None,
                             "rule": "Match value using wikidata extractor.",
-                        }
+                        },
+                        {"forValues": ["Sonderforschung"]},
                     ],
                     "comment": None,
                 }
