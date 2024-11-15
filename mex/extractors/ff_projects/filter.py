@@ -42,7 +42,6 @@ def filter_and_log_ff_projects_source(
         unit_stable_target_ids_by_synonym: Unit IDs grouped by synonyms
 
     Settings:
-        ff_projects.skip_categories: Skip sources with these categories
         ff_projects.skip_funding: Skip sources with this funding
         ff_projects.skip_topics: Skip sources with these topics
         ff_projects.skip_years_strings: Skip sources with these years
@@ -53,13 +52,6 @@ def filter_and_log_ff_projects_source(
     """
     settings = Settings.get()
     identifier_in_primary_source = source.lfd_nr
-    if source.kategorie in settings.ff_projects.skip_categories:
-        log_filter(
-            identifier_in_primary_source,
-            primary_source_id,
-            f"Kategorie [{source.kategorie}] in settings.ff_projects.skip_categories",
-        )
-        return False
 
     if source.foerderprogr in settings.ff_projects.skip_funding:
         log_filter(
@@ -117,11 +109,22 @@ def filter_and_log_ff_projects_source(
         )
         return False
 
-    if source.rki_oe not in unit_stable_target_ids_by_synonym:
+    if not source.rki_oe:
         log_filter(
             identifier_in_primary_source,
             primary_source_id,
-            f"RKI- OE [{source.rki_oe}] is not a valid unit",
+            "RKI- OE is None",
+        )
+        return False
+
+    if all(
+        oe not in unit_stable_target_ids_by_synonym
+        for oe in source.rki_oe.replace("/", ",").split(",")
+    ):
+        log_filter(
+            identifier_in_primary_source,
+            primary_source_id,
+            f'RKI- OE [{source.rki_oe.replace("/", ",")}] are all not valid units',
         )
         return False
 

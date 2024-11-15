@@ -211,6 +211,7 @@ def extract_ff_projects_organizations(
         zuwendungs_oder_auftraggeber: org
         for source in ff_projects_sources
         if source.zuwendungs_oder_auftraggeber
+        and source.zuwendungs_oder_auftraggeber != "Sonderforschung"
         for zuwendungs_oder_auftraggeber in source.zuwendungs_oder_auftraggeber.split(
             "/"
         )
