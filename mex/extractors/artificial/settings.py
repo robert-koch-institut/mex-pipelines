@@ -1,6 +1,6 @@
 from pydantic import Field
 
-from mex.common.models import BaseModel
+from mex.common.models import EXTRACTED_MODEL_CLASSES, BaseModel
 from mex.common.types import AssetsPath
 
 
@@ -9,20 +9,11 @@ class ArtificialSettings(BaseModel):
 
     count: int = Field(
         100,
-        gt=10,
+        ge=len(EXTRACTED_MODEL_CLASSES) * 2,
         lt=10e6,
-        alias="c",
         description=(
-            "Amount of artificial entities to create. At least 2 per entity type will "
-            "be created regardless of setting or hardcoded weights."
-        ),
-    )
-    matched: int = Field(
-        25,
-        ge=0,
-        le=100,
-        description=(
-            "Integer percentage of matched items with same target ID to produce."
+            "Amount of artificial entities to create. At least 2 per entity type are "
+            "required, to ensure valid linking between the entities."
         ),
     )
     chattiness: int = Field(
