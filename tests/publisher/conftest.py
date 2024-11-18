@@ -17,12 +17,12 @@ from mex.common.models import (
 @pytest.fixture
 def mocked_backend(monkeypatch: MonkeyPatch) -> None:
     def mocked_request(
-        self: BackendApiConnector,
-        method: str,
-        endpoint: str | None = None,
-        payload: Any = None,
-        params: dict[str, str] | None = None,
-        **kwargs: Any,
+        _self: BackendApiConnector,
+        _method: str,
+        _endpoint: str | None = None,
+        _payload: Any = None,
+        _params: dict[str, str] | None = None,
+        **_kwargs: Any,
     ) -> MergedItem:
         return MergedItemsResponse(
             total=1,
