@@ -14,12 +14,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changes
 
 - make datscha ignore organizations with name "None"
+- update mex-common to 0.41 and mex-model to 3.2
 
 ### Deprecated
 
 ### Removed
 
 ### Fixed
+
+- fix a bunch of linting errors and remove ignored ruff codes
 
 ### Security
 
