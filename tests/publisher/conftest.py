@@ -9,7 +9,6 @@ from mex.common.backend_api.models import MergedItemsResponse
 from mex.common.models import (
     MergedConsent,
     MergedContactPoint,
-    MergedItem,
     MergedPrimarySource,
 )
 
@@ -18,17 +17,18 @@ from mex.common.models import (
 def mocked_backend(monkeypatch: MonkeyPatch) -> None:
     def mocked_request(
         _self: BackendApiConnector,
-        _method: str,
+        _method: str = "GET",
         _endpoint: str | None = None,
         _payload: Any = None,
         _params: dict[str, str] | None = None,
         **_kwargs: Any,
-    ) -> MergedItem:
+    ) -> dict[str, Any]:
         return MergedItemsResponse(
             total=1,
             items=[
                 MergedPrimarySource(
-                    entityType="MergedPrimarySource", identifier="fakefakefakeJA"
+                    entityType="MergedPrimarySource",
+                    identifier="fakefakefakeJA",
                 ),
                 MergedContactPoint(
                     email=["1fake@e.mail"],
@@ -48,7 +48,7 @@ def mocked_backend(monkeypatch: MonkeyPatch) -> None:
                     identifier="alsofakefakefakeYO",
                 ),
             ],
-        )
+        ).model_dump()
 
     monkeypatch.setattr(BackendApiConnector, "request", mocked_request)
 
