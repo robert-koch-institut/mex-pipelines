@@ -98,7 +98,8 @@ class BuilderProvider(PythonFakerProvider):
         elif issubclass(inner_type, int):
             factory = self.generator.random_int
         else:
-            raise RuntimeError(f"Cannot create fake data for {field}")
+            msg = f"Cannot create fake data for {field}"
+            raise RuntimeError(msg)
         return [factory() for _ in range(self.pyint(*self.min_max_for_field(field)))]
 
     def extracted_data(self, model: type[ExtractedData]) -> list[ExtractedData]:
@@ -106,13 +107,13 @@ class BuilderProvider(PythonFakerProvider):
         models = []
         for identity in cast(list[Identity], self.generator.identities(model)):
             # manually set identity related fields
-            payload: dict[str, Any] = dict(
-                identifier=identity.identifier,
-                hadPrimarySource=identity.hadPrimarySource,
-                identifierInPrimarySource=identity.identifierInPrimarySource,
-                stableTargetId=identity.stableTargetId,
-                entityType=model.__name__,
-            )
+            payload: dict[str, Any] = {
+                "identifier": identity.identifier,
+                "hadPrimarySource": identity.hadPrimarySource,
+                "identifierInPrimarySource": identity.identifierInPrimarySource,
+                "stableTargetId": identity.stableTargetId,
+                "entityType": model.__name__,
+            }
             # dynamically populate all other fields
             for name, field in model.model_fields.items():
                 if name not in payload:
@@ -174,7 +175,7 @@ class TemporalEntityProvider(PythonFakerProvider):
         """Return a custom temporal entity with random date, time and precision."""
         return TemporalEntity(
             datetime.fromtimestamp(
-                self.pyint(int(8e8), int(datetime.now().timestamp())), tz=UTC
+                self.pyint(int(8e8), int(datetime.now(tz=UTC).timestamp())), tz=UTC
             ).strftime(
                 TEMPORAL_ENTITY_FORMATS_BY_PRECISION[
                     self.random_element(allowed_precision_levels)
