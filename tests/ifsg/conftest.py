@@ -73,8 +73,8 @@ def meta_datatype() -> list[MetaDataType]:
 @pytest.fixture
 def meta_schema2type() -> list[MetaSchema2Type]:
     return [
-        MetaSchema2Type(id_schema=1, id_type=0),
-        MetaSchema2Type(id_schema=42, id_type=11),
+        MetaSchema2Type(id_schema=1, id_type=101),
+        MetaSchema2Type(id_schema=42, id_type=102),
     ]
 
 

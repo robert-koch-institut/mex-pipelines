@@ -19,6 +19,7 @@ from mex.extractors.ifsg.models.meta_datatype import MetaDataType
 from mex.extractors.ifsg.models.meta_disease import MetaDisease
 from mex.extractors.ifsg.models.meta_field import MetaField
 from mex.extractors.ifsg.models.meta_item import MetaItem
+from mex.extractors.ifsg.models.meta_schema2field import MetaSchema2Field
 from mex.extractors.ifsg.models.meta_type import MetaType
 from mex.extractors.ifsg.transform import (
     get_instrument_tool_or_apparatus,
@@ -191,14 +192,13 @@ def test_transform_resource_disease_to_mex_resource(
             extracted_primary_sources_ifsg,
             unit_stable_target_ids,
             extracted_organization_rki,
-            1,
         )
         for resource_disease in resource_diseases
     ]
     expected = {
         "identifier": Joker(),
         "hadPrimarySource": str(extracted_primary_sources_ifsg.stableTargetId),
-        "identifierInPrimarySource": "Meta.Disease_101_1",
+        "identifierInPrimarySource": "101_1",
         "stableTargetId": Joker(),
         "accessRestriction": "https://mex.rki.de/item/access-restriction-2",
         "accrualPeriodicity": "https://mex.rki.de/item/frequency-17",
@@ -253,7 +253,7 @@ def test_transform_resource_disease_to_mex_resource(
         "title": [
             {
                 "language": TextLanguage.DE,
-                "value": "Meldedaten nach Infektionsschutzgesetz (IfSG) zu virus",
+                "value": "Meldedaten nach Infektionsschutzgesetz (IfSG) zu virus (SurvNet Schema 1)",
             }
         ],
         "unitInCharge": [str(Identifier.generate(43))],
@@ -273,7 +273,6 @@ def test_transform_ifsg_data_to_mex_variable_group(
         extracted_primary_sources_ifsg,
         [meta_field[0]],
         [101],
-        1,
     )
     expected = {
         "identifier": Joker(),
@@ -297,6 +296,7 @@ def test_transform_ifsg_data_to_mex_variable(
     meta_catalogue2item2schema: list[MetaCatalogue2Item2Schema],
     meta_item: list[MetaItem],
     meta_datatype: list[MetaDataType],
+    meta_schema2field: list[MetaSchema2Field],
 ) -> None:
     extracted_variable = transform_ifsg_data_to_mex_variables(
         meta_field,
@@ -307,14 +307,14 @@ def test_transform_ifsg_data_to_mex_variable(
         meta_catalogue2item2schema,
         meta_item,
         meta_datatype,
-        1,
+        meta_schema2field,
     )
 
     expected = {
         "identifier": Joker(),
         "hadPrimarySource": str(extracted_primary_sources_ifsg.stableTargetId),
         "dataType": "DummyType",
-        "identifierInPrimarySource": "Meta.Field_1_1",
+        "identifierInPrimarySource": "1_10",
         "stableTargetId": Joker(),
         "belongsTo": [str(extracted_ifsg_variable_group[0].stableTargetId)],
         "description": [{"value": "lokaler"}],
