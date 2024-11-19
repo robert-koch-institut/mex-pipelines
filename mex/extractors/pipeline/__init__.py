@@ -61,10 +61,11 @@ Pipelines can be run in a couple of different ways:
 - run `pdm run dagster job execute -m mex -j foo_system` using the asset group name
 """
 
-from collections.abc import Callable
 from typing import TYPE_CHECKING, Any, TypeVar
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Callable
+
     _AssetFn = TypeVar("_AssetFn")
 
     def asset(**_: Any) -> Callable[[_AssetFn], _AssetFn]:

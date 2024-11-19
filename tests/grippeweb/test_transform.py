@@ -10,11 +10,11 @@ from mex.common.models import (
 from mex.common.testing import Joker
 from mex.common.types import (
     Email,
+    LinkLanguage,
     MergedContactPointIdentifier,
     MergedOrganizationalUnitIdentifier,
     MergedOrganizationIdentifier,
     TextLanguage,
-    Year,
 )
 from mex.extractors.grippeweb.transform import (
     transform_grippeweb_access_platform_to_extracted_access_platform,
@@ -85,16 +85,17 @@ def test_transform_grippeweb_resource_mappings_to_dict(
         ],
         "contact": [str(extracted_mex_functional_units_grippeweb["contactc@rki.de"])],
         "contributingUnit": [str(unit_stable_target_ids_by_synonym["C1"])],
-        "contributor": [extracted_mex_persons_grippeweb[0].stableTargetId],
-        "created": Year("2011"),
+        "contributor": [str(extracted_mex_persons_grippeweb[0].stableTargetId)],
+        "created": "2011",
         "description": [{"value": "GrippeWeb", "language": TextLanguage.DE}],
         "documentation": [
             {
-                "language": TextLanguage.DE,
+                "language": LinkLanguage.DE,
                 "title": "RKI Website",
                 "url": "https://www.rki.de",
             }
         ],
+        "externalPartner": ["hIOhGEYgr1ZO2hmdN23zeg"],
         "hasLegalBasis": [
             {
                 "language": TextLanguage.DE,
@@ -103,7 +104,7 @@ def test_transform_grippeweb_resource_mappings_to_dict(
         ],
         "hasPersonalData": "https://mex.rki.de/item/personal-data-1",
         "icd10code": ["J00-J99"],
-        "keyword": [{"value": "Citizen Science", "language": "en"}],
+        "keyword": [{"value": "Citizen Science", "language": TextLanguage.EN}],
         "language": ["https://mex.rki.de/item/language-1"],
         "meshId": ["http://id.nlm.nih.gov/mesh/D012140"],
         "method": [{"value": "Online-Befragung", "language": TextLanguage.DE}],
@@ -118,7 +119,7 @@ def test_transform_grippeweb_resource_mappings_to_dict(
             }
         ],
         "publisher": [
-            grippeweb_organization_ids_by_query_string["Robert Koch-Institut"]
+            str(grippeweb_organization_ids_by_query_string["Robert Koch-Institut"])
         ],
         "resourceCreationMethod": [
             "https://mex.rki.de/item/resource-creation-method-3"
@@ -213,8 +214,8 @@ def test_transform_grippeweb_variable_to_extracted_variables(
         mocked_grippeweb_sql_tables,
         grippeweb_extracted_resource_dict,
         extracted_primary_sources["grippeweb"],
-    )[0].model_dump(exclude_none=True, exclude_defaults=True)
-    extracted_variables["valueSet"] = sorted(extracted_variables["valueSet"])
+    )
+    extracted_variables[0].valueSet = sorted(extracted_variables[0].valueSet)
     expected = {
         "belongsTo": [extracted_variable_groups[0].stableTargetId],
         "hadPrimarySource": extracted_primary_sources["grippeweb"].stableTargetId,
@@ -225,4 +226,7 @@ def test_transform_grippeweb_variable_to_extracted_variables(
         "usedIn": [grippeweb_extracted_resource_dict["grippeweb"].stableTargetId],
         "valueSet": ["AAA", "BBB"],
     }
-    assert extracted_variables == expected
+    assert (
+        extracted_variables[0].model_dump(exclude_none=True, exclude_defaults=True)
+        == expected
+    )

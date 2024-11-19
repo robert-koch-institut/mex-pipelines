@@ -29,6 +29,11 @@ class Settings(BaseSettings):
         description="Skip execution of these extractors in dagster",
         validation_alias="MEX_SKIP_EXTRACTORS",
     )
+    skip_merged_items: list[str] = Field(
+        ["MergedPrimarySource", "MergedConsent"],
+        description="Skip merged items with these types",
+        validation_alias="MEX_SKIP_MERGED_ITEMS",
+    )
     skip_partners: list[str] = Field(
         ["test"],
         description="Skip projects with these external partners",

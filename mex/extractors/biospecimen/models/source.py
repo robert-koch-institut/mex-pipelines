@@ -4,6 +4,7 @@ from mex.common.models import BaseModel
 class BiospecimenResource(BaseModel):
     """Model class for Biospecimen source entities."""
 
+    file_name: str
     sheet_name: str
     zugriffsbeschraenkung: str
     alternativer_titel: str | None

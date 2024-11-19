@@ -569,7 +569,7 @@ def test_transform_synopse_data_regular_to_mex_resources(
         ],
         "language": ["https://mex.rki.de/item/language-1"],
         "publisher": [str(extracted_organization[0].stableTargetId)],
-        # TODO add MergedOrganizationIdentifier of Robert Koch-Institut
+        # TODO(HS): add MergedOrganizationIdentifier of Robert Koch-Institut
         "resourceCreationMethod": [
             "https://mex.rki.de/item/resource-creation-method-2",
         ],
@@ -653,7 +653,7 @@ def test_transform_synopse_data_extended_data_use_to_mex_resources(
         "keyword": [{"language": TextLanguage.DE, "value": "Krankheiten allgemein"}],
         "language": ["https://mex.rki.de/item/language-1"],
         "publisher": [str(extracted_organization[0].stableTargetId)],
-        # TODO add MergedOrganizationIdentifier of Robert Koch-Institut
+        # TODO(HS): add MergedOrganizationIdentifier of Robert Koch-Institut
         "resourceCreationMethod": [
             "https://mex.rki.de/item/resource-creation-method-2",
         ],

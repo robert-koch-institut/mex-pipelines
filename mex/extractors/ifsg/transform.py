@@ -138,16 +138,9 @@ def transform_resource_state_to_mex_resource(
         bundesland_meldedaten,
     ) in bundesland_meldedaten_by_bundesland_id.items():
         spatial = []
-        if (
-            spatial_by_bundesland_id
-            and id_bundesland in spatial_by_bundesland_id.keys()
-        ):
+        if spatial_by_bundesland_id and id_bundesland in spatial_by_bundesland_id:
             spatial = spatial_by_bundesland_id[id_bundesland]
-        documentation = (
-            documentation_by_bundesland_id[id_bundesland]
-            if id_bundesland in documentation_by_bundesland_id
-            else []
-        )
+        documentation = documentation_by_bundesland_id.get(id_bundesland, [])
         mex_resource_state.append(
             ExtractedResource(
                 accessRestriction=resource_state.accessRestriction[0]
