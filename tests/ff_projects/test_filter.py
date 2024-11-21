@@ -21,7 +21,24 @@ def test_filter_and_log_ff_projects_sources(
             unit_stable_target_ids_by_synonym,
         )
     )
-    assert len(sources) == 2
+    assert len(sources) == 16
 
     project_topics = [s.thema_des_projekts for s in sources]
-    assert project_topics == ["Fully Specified Source", "OE without Projektleiter"]
+    assert project_topics == [
+        "Skipped missing lfd. Nr.",
+        "Skipped Kategorie",
+        "Missing RKI-OE and Laufzeiten",
+        "Skipped Laufzeiten",
+        "Fully Specified Source",
+        "Minimally Specified Source",
+        "Duplicate lfd. Nr. A",
+        "Duplicate lfd. Nr. B",
+        "Messy Projektleiter entry",
+        "Multiple Azs",
+        "Messy lfd. Nr.",
+        "OE without Projektleiter",
+        "Projektleiter without OE",
+        "Laufzeit von and bis None",
+        "Skipped Laufzeit von before skipped years",
+        "Skipped Laufzeit bis before skipped years",
+    ]

@@ -84,7 +84,7 @@ def mocked_wikidata(
     # mock search_wikidata_with_query
 
     def get_data_by_query(
-        self: WikidataQueryServiceConnector, query: str
+        _self: WikidataQueryServiceConnector, _query: str
     ) -> list[dict[str, dict[str, str]]]:
         return [
             {
@@ -108,7 +108,7 @@ def mocked_wikidata(
     # mock get_wikidata_org_with_org_id
 
     def get_wikidata_item_details_by_id(
-        self: WikidataQueryServiceConnector, item_id: str
+        _self: WikidataQueryServiceConnector, _item_id: str
     ) -> dict[str, str]:
         return wikidata_organization_raw
 

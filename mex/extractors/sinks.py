@@ -29,7 +29,8 @@ def load(models: Iterable[ExtractedData]) -> None:
         elif sink == Sink.NDJSON:
             func = write_ndjson
         else:
-            raise MExError(f"Cannot load to {sink}.")
+            msg = f"Cannot load to {sink}."
+            raise MExError(msg)
 
         for _ in func(model_gen):
             continue  # unpacking the generator

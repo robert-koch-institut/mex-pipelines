@@ -66,7 +66,7 @@ def extracted_organization() -> list[ExtractedOrganization]:
     ]
 
 
-@pytest.fixture()
+@pytest.fixture
 def synopse_variables_raw() -> list[dict[str, str | int | float | None]]:
     """Return a list of dicts in the required format for Synopse Variables."""
     return [
@@ -169,7 +169,7 @@ def synopse_variables_raw() -> list[dict[str, str | int | float | None]]:
     ]
 
 
-@pytest.fixture()
+@pytest.fixture
 def synopse_variables(
     synopse_variables_raw: list[dict[str, str | int]],
 ) -> list[SynopseVariable]:
@@ -177,7 +177,7 @@ def synopse_variables(
     return [SynopseVariable.model_validate(v) for v in synopse_variables_raw]
 
 
-@pytest.fixture()
+@pytest.fixture
 def synopse_variables_by_study_id(
     synopse_variables: list[SynopseVariable],
 ) -> dict[int, list[SynopseVariable]]:
@@ -191,7 +191,7 @@ def synopse_variables_by_study_id(
     }
 
 
-@pytest.fixture()
+@pytest.fixture
 def synopse_variables_by_thema(
     synopse_variables: list[SynopseVariable],
 ) -> dict[str, list[SynopseVariable]]:
@@ -207,7 +207,7 @@ def synopse_variables_by_thema(
     }
 
 
-@pytest.fixture()
+@pytest.fixture
 def synopse_variables_extended_data_use_raw() -> (
     list[dict[str, str | int | float | None]]
 ):
@@ -231,7 +231,7 @@ def synopse_variables_extended_data_use_raw() -> (
     ]
 
 
-@pytest.fixture()
+@pytest.fixture
 def synopse_variables_extended_data_use(
     synopse_variables_extended_data_use_raw: list[dict[str, str | int]],
 ) -> list[SynopseVariable]:
@@ -242,7 +242,7 @@ def synopse_variables_extended_data_use(
     ]
 
 
-@pytest.fixture()
+@pytest.fixture
 def synopse_variables_extended_data_use_by_study_id(
     synopse_variables_extended_data_use: list[SynopseVariable],
 ) -> dict[int, list[SynopseVariable]]:
@@ -258,7 +258,7 @@ def synopse_variables_extended_data_use_by_study_id(
     }
 
 
-@pytest.fixture()
+@pytest.fixture
 def synopse_studies() -> list[SynopseStudy]:
     """Return a list of Synopse Studies."""
     return [
@@ -332,37 +332,37 @@ def synopse_studies() -> list[SynopseStudy]:
     ]
 
 
-@pytest.fixture()
+@pytest.fixture
 def created_by_study_id(synopse_studies) -> dict[str, str]:
     """Return a lookup from study ID to created string."""
     return {s.studien_id: s.erstellungs_datum for s in synopse_studies}
 
 
-@pytest.fixture()
+@pytest.fixture
 def description_by_study_id(synopse_studies) -> dict[str, str]:
     """Return a lookup from study ID to description string."""
     return {s.studien_id: s.beschreibung for s in synopse_studies}
 
 
-@pytest.fixture()
+@pytest.fixture
 def documentation_by_study_id(synopse_studies) -> dict[str, Link]:
     """Return a lookup from study ID to documentation Link."""
     return {s.studien_id: s.dokumentation for s in synopse_studies}
 
 
-@pytest.fixture()
+@pytest.fixture
 def keyword_text_by_study_id(synopse_studies) -> dict[str, list[Text]]:
     """Return a lookup from study ID to list of keyword Text."""
     return {s.studien_id: s.schlagworte_themen for s in synopse_studies}
 
 
-@pytest.fixture()
+@pytest.fixture
 def synopse_study(synopse_studies: list[SynopseStudy]) -> SynopseStudy:
     """Return a Synopse Study."""
     return synopse_studies[0]
 
 
-@pytest.fixture()
+@pytest.fixture
 def synopse_organization_ids_by_query_string() -> (
     dict[str, MergedOrganizationIdentifier]
 ):
@@ -371,7 +371,7 @@ def synopse_organization_ids_by_query_string() -> (
     return {"Test-Institute": organization_id}
 
 
-@pytest.fixture()
+@pytest.fixture
 def synopse_projects() -> list[SynopseProject]:
     """Return a list of Synopse Projects."""
     return [
@@ -411,13 +411,13 @@ def synopse_projects() -> list[SynopseProject]:
     ]
 
 
-@pytest.fixture()
+@pytest.fixture
 def synopse_project(synopse_projects: list[SynopseProject]) -> SynopseProject:
     """Return a Synopse Project."""
     return synopse_projects[0]
 
 
-@pytest.fixture()
+@pytest.fixture
 def extracted_access_platforms(
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
 ) -> list[ExtractedAccessPlatform]:
@@ -444,7 +444,7 @@ def extracted_access_platforms(
     ]
 
 
-@pytest.fixture()
+@pytest.fixture
 def extracted_activity(
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
 ) -> ExtractedActivity:
@@ -471,7 +471,7 @@ def extracted_activity(
     )
 
 
-@pytest.fixture()
+@pytest.fixture
 def extracted_resources() -> list[ExtractedResource]:
     """Return an list of extracted resources."""
     return [
@@ -511,7 +511,7 @@ def extracted_resources() -> list[ExtractedResource]:
     ]
 
 
-@pytest.fixture()
+@pytest.fixture
 def synopse_overviews() -> list[SynopseStudyOverview]:
     """Return list of Synopse Overviews."""
     return [
@@ -572,7 +572,7 @@ def synopse_overviews() -> list[SynopseStudyOverview]:
     ]
 
 
-@pytest.fixture()
+@pytest.fixture
 def resource_ids_by_synopse_id(
     extracted_resources: list[ExtractedResource],
     synopse_overviews: list[SynopseStudyOverview],
@@ -583,7 +583,7 @@ def resource_ids_by_synopse_id(
     )
 
 
-@pytest.fixture()
+@pytest.fixture
 def extracted_variable_groups(
     synopse_variables_by_thema: dict[int, list[SynopseVariable]],
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
@@ -599,7 +599,7 @@ def extracted_variable_groups(
     )
 
 
-@pytest.fixture()
+@pytest.fixture
 def synopse_access_platform() -> AnyMappingModel:
     """Return a mapping model with access platform default values."""
     return transform_mapping_data_to_model(
@@ -656,7 +656,7 @@ def synopse_access_platform() -> AnyMappingModel:
     )
 
 
-@pytest.fixture()
+@pytest.fixture
 def synopse_activity() -> AnyMappingModel:
     """Return a mapping model with activity default values."""
     return transform_mapping_data_to_model(
@@ -693,7 +693,7 @@ def synopse_activity() -> AnyMappingModel:
     )
 
 
-@pytest.fixture()
+@pytest.fixture
 def synopse_resource_extended_data_use() -> AnyMappingModel:
     """Return a mapping model with resource extended data use default values."""
     return transform_mapping_data_to_model(
@@ -875,7 +875,7 @@ def synopse_resource_extended_data_use() -> AnyMappingModel:
     )
 
 
-@pytest.fixture()
+@pytest.fixture
 def synopse_resource() -> AnyMappingModel:
     """Return a mapping model with resource extended data use default values."""
     return transform_mapping_data_to_model(

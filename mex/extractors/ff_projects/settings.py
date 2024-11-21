@@ -14,10 +14,6 @@ class FFProjectsSettings(BaseModel):
             "absolute path or relative to `assets_dir`."
         ),
     )
-    skip_categories: list[str] = Field(
-        ["Sonstige"],
-        description="Skip sources with these categories",
-    )
     skip_funding: list[str] = Field(
         ["Sonstige"], description="Skip sources with this funding"
     )
