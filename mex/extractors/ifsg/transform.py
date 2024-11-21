@@ -467,7 +467,7 @@ def transform_ifsg_data_to_mex_variables(
         for group in extracted_ifsg_variable_group
     }
     resource_disease_stable_target_id_by_id_type = {
-        row.identifierInPrimarySource.split("_")[1]: row.stableTargetId
+        row.identifierInPrimarySource.split("_")[0]: row.stableTargetId
         for row in extracted_ifsg_resource_disease
     }
     extracted_variables = []
