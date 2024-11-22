@@ -227,10 +227,8 @@ def get_clean_organizations_names(organizations_str: str) -> list[str]:
         .replace("…", "")
     )
     unclean_organizations = organizations_str.split("\n")
-    clean_organizations = []
-    for org in unclean_organizations:
-        if org:
-            org = re.sub("^[0-9]+", "", org)
-            clean_organizations.append(org.strip())
-
-    return clean_organizations
+    return [
+        re.sub("^[0-9]+", "", organization).strip()
+        for organization in unclean_organizations
+        if organization
+    ]

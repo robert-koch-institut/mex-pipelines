@@ -189,7 +189,7 @@ def test_identity_provider_identities(faker: Faker) -> None:
 
 
 def test_identity_provider_reference(faker: Faker) -> None:
-    identities = [identity for identity in faker.identities(ExtractedPrimarySource)]
+    identities = list(faker.identities(ExtractedPrimarySource))
 
     for identity in identities:
         reference = faker.reference(MergedPrimarySourceIdentifier, identity)

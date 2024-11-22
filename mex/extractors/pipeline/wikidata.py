@@ -14,7 +14,8 @@ def wikidata_organization_rki() -> WikidataOrganization:
     """Extract WikidataOrganization for Robert Koch-Institut."""
     if org := search_organization_by_label("Robert Koch-Institut"):
         return org
-    raise MExError("RKI not found on wikidata, cannot proceed.")
+    msg = "RKI not found on wikidata, cannot proceed."
+    raise MExError(msg)
 
 
 @asset(group_name="default")

@@ -28,7 +28,7 @@ def restore_identities(identity_map: IdentityMap) -> None:
     identity_provider = get_provider()
     if isinstance(identity_provider, MemoryIdentityProvider):
         for identities in identity_map.values():
-            identity_provider._database.extend(identities)
+            identity_provider._database.extend(identities)  # noqa: SLF001
     # if the identity_provider is not `memory`, we don't need to restore its state
     # because it should persist its state in its own database anyway
 

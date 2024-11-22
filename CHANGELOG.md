@@ -9,10 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- convenience / helper functions for wikidata and primary source
-
 ### Changes
-- make Datscha ignoring organizations with name "None"
 
 ### Deprecated
 
@@ -22,6 +19,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [0.21.0] - 2024-11-19
+
+### Added
+
+- convenience / helper functions for wikidata and primary source
+
+### Changes
+
+- make datscha ignore organizations with name "None"
+- update mex-common to 0.41 and mex-model to 3.2
+
+### Fixed
+
+- fix a bunch of linting errors and remove ignored ruff codes
+
 ## [0.20.0] - 2024-11-11
 
 ### Added
@@ -30,7 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes
 
-- improve pubilishing pipeline: logging, Backend connector, allow-list
+- improve publishing pipeline: logging, Backend connector, allow-list
 
 ### Removed
 
@@ -49,7 +61,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - BREAKING: refactor package structure from `mex.foo` to `mex.extractors.foo`
 - BREAKING: Mapping extractors now returns Mapping models instead of nested dictionaries
-- model v3 update: artificial, international-projects, seqrepo, synopse, blueant, sumo,
+- model v3 update: artificial, international-projects, seq-repo, synopse, blueant, sumo,
   biospecimen, odk, datscha-web, confluence-vvt, grippeweb, voxco, ifsg
 
 ### Fixed
