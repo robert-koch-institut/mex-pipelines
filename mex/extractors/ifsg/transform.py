@@ -104,24 +104,27 @@ def transform_resource_state_to_mex_resource(
         value.forValues[0]: value.setValues
         for value in resource_state.documentation[0].mappingRules
     }
-    keyword = [
-        keyword
-        for keyword in [
-            *resource_state.keyword[0].mappingRules[0].setValues,
-            *[
+    keyword = sorted(
+        set(
+            resource_state.keyword[0].mappingRules[0].setValues
+            + [
                 Text(value=row.disease_name, language=TextLanguage.DE)
                 for row in meta_disease
                 if row.disease_name
-            ],
-            *[
+            ]
+            + [
                 Text(value=row.disease_name_en, language=TextLanguage.EN)
                 for row in meta_disease
                 if row.disease_name_en
-            ],
-            *[row.specimen_name for row in meta_disease if row.specimen_name],
-        ]
-    ]
-
+            ]
+            + [
+                Text(value=row.specimen_name, language=TextLanguage.DE)
+                for row in meta_disease
+                if row.specimen_name
+            ]
+        ),
+        key=lambda x: x.value,
+    )
     spatial_by_bundesland_id = None
     if resource_state.spatial:
         spatial_by_bundesland_id = {
@@ -459,8 +462,8 @@ def transform_ifsg_data_to_mex_variables(
         group.identifierInPrimarySource: group.stableTargetId
         for group in extracted_ifsg_variable_group
     }
-    resource_disease_stable_target_id_by_id_type = {
-        row.identifierInPrimarySource.split("_")[0]: row.stableTargetId
+    resource_disease_stable_target_id_by_id = {
+        row.identifierInPrimarySource: row.stableTargetId
         for row in extracted_ifsg_resource_disease
     }
     extracted_variables = []
@@ -487,19 +490,25 @@ def transform_ifsg_data_to_mex_variables(
             if c2i.id_catalogue == row.id_catalogue
             and c2i.id_catalogue2item in id_catalogue2item_list
         ]
+        id_schema = id_schema_by_id_field[row.id_field]
         value_set = []
         for id_item in id_item_list:
             item_row = item_by_id_item[id_item]
             value_set.append(item_row.item_name)
-
-        used_in = resource_disease_stable_target_id_by_id_type[str(row.id_type)]
+        resource_identifier_in_primary_source = f"{row.id_type}_{id_schema}"
+        if (
+            resource_identifier_in_primary_source
+            not in resource_disease_stable_target_id_by_id
+        ):
+            continue
+        used_in = resource_disease_stable_target_id_by_id[f"{row.id_type}_{id_schema}"]
         extracted_variables.append(
             ExtractedVariable(
                 belongsTo=belongs_to,
                 description=row.gui_tool_tip,
                 dataType=data_type_by_id[row.id_data_type],
                 hadPrimarySource=extracted_primary_sources_ifsg.stableTargetId,
-                identifierInPrimarySource=f"{row.id_field}_{id_schema_by_id_field[row.id_field]}",
+                identifierInPrimarySource=f"{row.id_field}_{id_schema}",
                 label=f"{row.gui_text} (berechneter Wert)",
                 usedIn=used_in,
                 valueSet=value_set,

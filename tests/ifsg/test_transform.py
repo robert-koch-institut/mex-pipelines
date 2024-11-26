@@ -114,11 +114,11 @@ def test_transform_resource_state_to_mex_resource(
         "contact": [str(Identifier.generate(43))],
         "hasLegalBasis": [
             {
-                "language": "de",
+                "language": TextLanguage.DE,
                 "value": "Infektionsschutzgesetz (IfSG)",
             },
             {
-                "language": "en",
+                "language": TextLanguage.EN,
                 "value": "German Federal Law on the Prevention of Infectious Diseases "
                 "(IfSG)",
             },
@@ -126,20 +126,10 @@ def test_transform_resource_state_to_mex_resource(
         "hasPersonalData": "https://mex.rki.de/item/personal-data-1",
         "isPartOf": [str(extracted_ifsg_resource_parent.stableTargetId)],
         "keyword": [
+            {"value": "Epidemic", "language": TextLanguage.EN},
             {"value": "Infektionsschutzgesetz", "language": TextLanguage.DE},
-            {"value": "virus", "language": TextLanguage.DE},
-            {"value": "virus", "language": TextLanguage.DE},
-            {"value": "virus", "language": TextLanguage.DE},
-            {"value": "Epidemic", "language": TextLanguage.EN},
-            {"value": "Epidemic", "language": TextLanguage.EN},
-            {"value": "Epidemic", "language": TextLanguage.EN},
             {
-                "value": "virus",
-            },
-            {
-                "value": "virus",
-            },
-            {
+                "language": TextLanguage.DE,
                 "value": "virus",
             },
         ],
