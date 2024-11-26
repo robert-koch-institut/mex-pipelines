@@ -1,6 +1,5 @@
 from unittest.mock import Mock
 
-import pytest
 from pytest import MonkeyPatch
 
 from mex.common.models import ExtractedPrimarySource
@@ -16,7 +15,9 @@ def test_load_extracted_primary_source_by_name(
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
     monkeypatch: MonkeyPatch,
 ) -> None:
-    """Primary source helper finds "Wikidata" and returns None for nonsense query."""
+    """Helper finds "Wikidata" and loads, returns None for nonsense query."""
+    load_extracted_primary_source_by_name.cache_clear()
+
     query_wiki = "wikidata"
     query_nonsense = "this should give None"
 
@@ -24,7 +25,7 @@ def test_load_extracted_primary_source_by_name(
     monkeypatch.setattr(helpers, "load", mocked_load)
 
     returned = load_extracted_primary_source_by_name(query_wiki)
-    mocked_load.assert_called_once()  ##???
+    mocked_load.assert_called_once()
 
     expected = extracted_primary_sources["wikidata"]
 
@@ -32,9 +33,8 @@ def test_load_extracted_primary_source_by_name(
     assert load_extracted_primary_source_by_name(query_nonsense) is None
 
 
-@pytest.mark.usefixtures("extracted_primary_sources")  ##???
 def test_get_extracted_primary_source_id_by_name() -> None:
-    """Primary source helper finds "Wikidata" and returns None for nonsense query."""
+    """Helper finds "Wikidata" and returns its ID, returns None for nonsense query."""
     query_wiki = "wikidata"
     query_nonsense = "this should give None"
 
