@@ -76,7 +76,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - transform voxco resources and variables
-- setting for configuring extractors to skip in dagster
 
 ### Changes
 
@@ -89,10 +88,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Environment variables change from `EXTRACTOR_PARAMETER` to `MEX_EXTRACTOR__PARAMETER`,
   access from `ExtractorSettings.parameter` to `settings.extractor.parameter`.
 - update mex-common to 0.32.0
-- BREAKING: refactor package structure from `mex.foo` to `mex.extractors.foo`
-- model update: international-projects, seqrepo, synopse, blueant, sumo, biospecimen,
-  odk, datscha-web, confluence-vvt, grippeweb, voxco
-- confluence vvt now ignores ill templated pages
 
 ### Removed
 
@@ -103,8 +98,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - fix confluence_vvt: use interne Vorgangsnummer as identifierInPrimarySource
 - remaining issues in voxco extractor
-- bug in seq-repo that caused exponential run-time as well as incorrect resource
-  keywords
 
 ## [0.17.1] - 2024-06-14
 
