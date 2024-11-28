@@ -1,4 +1,3 @@
-from typing import Any
 from unittest.mock import MagicMock
 
 import pytest
@@ -105,7 +104,7 @@ def test_transform_biospecimen_resource_to_mex_resource(
     mex_source = next(mex_sources)
 
     expected = {
-        "accessRestriction": "https://mex.rki.de/item/access-restriction-1",
+        "accessRestriction": "https://mex.rki.de/item/access-restriction-2",
         "alternativeTitle": [{"value": "alternativer Testitel"}],
         "anonymizationPseudonymization": [
             "https://mex.rki.de/item/anonymization-pseudonymization-2"

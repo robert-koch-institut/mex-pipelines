@@ -14,7 +14,6 @@ from mex.common.types import (
     Email,
     Identifier,
     Link,
-    LinkLanguage,
     MergedPrimarySourceIdentifier,
     TemporalEntity,
     TemporalEntityPrecision,
@@ -76,7 +75,7 @@ def test_builder_provider_inner_type_and_pattern(faker: Faker) -> None:
     assert inner_types == {
         "has_min": (bytes, None),
         "has_max": (bytes, None),
-        "is_inner_union": (float, None),
+        "is_inner_union": (int, None),
         "is_nested_pattern": (
             str,
             "^https://gepris\\.dfg\\.de/gepris/institution/[0-9]{1,64}$",

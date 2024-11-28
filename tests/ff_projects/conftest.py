@@ -1,5 +1,3 @@
-from typing import Any
-
 import pytest
 
 from mex.common.models import ExtractedActivity, ExtractedPerson
