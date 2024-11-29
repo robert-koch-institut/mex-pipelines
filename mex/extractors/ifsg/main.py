@@ -17,9 +17,7 @@ from mex.extractors.ifsg.extract import (
 from mex.extractors.ifsg.filter import (
     filter_empty_statement_area_group,
     filter_id_type_of_diseases,
-    filter_id_type_with_max_id_schema,
     filter_variables,
-    get_max_id_schema,
 )
 from mex.extractors.ifsg.models.meta_catalogue2item import MetaCatalogue2Item
 from mex.extractors.ifsg.models.meta_catalogue2item2schema import (
@@ -98,14 +96,10 @@ def filtered_empty_statement_area_group(meta_field: list[MetaField]) -> list[Met
 @asset(group_name="ifsg")
 def filtered_variables(
     meta_field: list[MetaField],
-    meta_schema2field: list[MetaSchema2Field],
-    max_id_schema: int,
     id_types_of_diseases: list[int],
 ) -> list[MetaField]:
     """Filter MetaField list."""
-    return filter_variables(
-        meta_field, meta_schema2field, max_id_schema, id_types_of_diseases
-    )
+    return filter_variables(meta_field, id_types_of_diseases)
 
 
 @asset(group_name="ifsg")
@@ -127,25 +121,11 @@ def meta_schema2type() -> list[MetaSchema2Type]:
 
 
 @asset(group_name="ifsg")
-def max_id_schema(meta_schema2type: list[MetaSchema2Type]) -> int:
-    """Calculate the latest id_schema."""
-    return get_max_id_schema(meta_schema2type)
-
-
-@asset(group_name="ifsg")
-def id_types_with_max_id_schema(
-    meta_schema2type: list[MetaSchema2Type], max_id_schema: int
-) -> list[int]:
-    """Filter for id_types with latest id_schema."""
-    return filter_id_type_with_max_id_schema(meta_schema2type, max_id_schema)
-
-
-@asset(group_name="ifsg")
 def id_types_of_diseases(
-    id_types_with_max_id_schema: list[int], meta_type: list[MetaType]
+    meta_schema2type: list[MetaSchema2Type], meta_type: list[MetaType]
 ) -> list[int]:
     """Extract id_types that correspond to a disease."""
-    return filter_id_type_of_diseases(id_types_with_max_id_schema, meta_type)
+    return filter_id_type_of_diseases(meta_schema2type, meta_type)
 
 
 @asset(group_name="ifsg")
@@ -232,7 +212,6 @@ def extracted_ifsg_resource_disease(
     extracted_primary_sources_ifsg: ExtractedPrimarySource,
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     extracted_organization_rki: ExtractedOrganization,
-    max_id_schema: int,
 ) -> list[ExtractedResource]:
     """Extracted and loaded ifsg resource disease."""
     mex_resource_disease = transform_resource_disease_to_mex_resource(
@@ -245,7 +224,6 @@ def extracted_ifsg_resource_disease(
         extracted_primary_sources_ifsg,
         unit_stable_target_ids_by_synonym,
         extracted_organization_rki,
-        max_id_schema,
     )
     load(mex_resource_disease)
 
@@ -259,7 +237,6 @@ def extracted_ifsg_variable_group(
     extracted_primary_sources_ifsg: ExtractedPrimarySource,
     filtered_empty_statement_area_group: list[MetaField],
     id_types_of_diseases: list[int],
-    max_id_schema: int,
 ) -> list[ExtractedVariableGroup]:
     """Extracted and loaded ifsg variable group."""
     extracted_variable_group = transform_ifsg_data_to_mex_variable_group(
@@ -268,7 +245,6 @@ def extracted_ifsg_variable_group(
         extracted_primary_sources_ifsg,
         filtered_empty_statement_area_group,
         id_types_of_diseases,
-        max_id_schema,
     )
     load(extracted_variable_group)
 
@@ -285,7 +261,7 @@ def extracted_ifsg_variable(
     meta_catalogue2item2schema: list[MetaCatalogue2Item2Schema],
     meta_item: list[MetaItem],
     meta_datatype: list[MetaDataType],
-    max_id_schema: int,
+    meta_schema2field: list[MetaSchema2Field],
 ) -> None:
     """Extracted and loaded ifsg variable."""
     extracted_variables = transform_ifsg_data_to_mex_variables(
@@ -297,7 +273,7 @@ def extracted_ifsg_variable(
         meta_catalogue2item2schema,
         meta_item,
         meta_datatype,
-        max_id_schema,
+        meta_schema2field,
     )
     load(extracted_variables)
 

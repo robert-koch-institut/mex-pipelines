@@ -113,6 +113,7 @@ def transform_seq_repo_resource_to_extracted_resource(
     anonymization_pseudonymization = (
         seq_repo_resource.anonymizationPseudonymization[0].mappingRules[0].setValues
     )
+    description = seq_repo_resource.description[0].mappingRules[0].setValues
     method = seq_repo_resource.method[0].mappingRules[0].setValues
 
     resource_creation_method = (
@@ -159,6 +160,7 @@ def transform_seq_repo_resource_to_extracted_resource(
             contact=project_coordinators_ids,
             contributingUnit=contributing_unit or [],
             created=source.sequencing_date,
+            description=description,
             hadPrimarySource=extracted_primary_source.stableTargetId,
             identifierInPrimarySource=identifier_in_primary_source,
             instrumentToolOrApparatus=source.sequencing_platform,
