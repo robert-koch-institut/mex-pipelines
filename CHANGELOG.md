@@ -24,6 +24,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.22.0] - 2024-12-10
 
+### Changes
+
+- wrap up ifsg model v3 update
+- wrap up seq-repo model v3 update
+
 ## [0.21.0] - 2024-11-19
 
 ### Added
