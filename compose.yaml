@@ -16,7 +16,6 @@ services:
       - 3000:3000
     environment:
       - DAGSTER_HOME=/app/work
-      - MEX_WORK_DIR=/app/work
     entrypoint: ["dagster-webserver", "--host", "0.0.0.0", "--module-name", "mex"]
     expose:
       - 3000
