@@ -220,7 +220,11 @@ def get_clean_organizations_names(organizations_str: str) -> list[str]:
         list of clean organizations names
     """
     organizations_str = (
-        organizations_str.replace(",,", ",").replace("»", "").replace("•", "")
+        organizations_str.replace(",,", ",")
+        .replace("»", "")
+        .replace("•", "")
+        .replace("...", "")
+        .replace("…", "")
     )
     unclean_organizations = organizations_str.split("\n")
     return [
