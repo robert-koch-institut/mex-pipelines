@@ -1,17 +1,42 @@
 from pydantic import BaseModel
 
 
-class ZenodoParentRecordMetadata(BaseModel):
-    """Model subclass for Zenodo resource parent metadata dict."""
+class ZenodoCreatorsOrContributors(BaseModel):
+    """Model subclass for Zenodo metadata Creators or Contributors."""
+
+    name: str | None = None
+
+
+class ZenodoRelateditdentifiers(BaseModel):
+    """Model subclass for Zenodo metadata related identifiers."""
+
+    identifier: str | None = None
+    relation: str | None = None
+
+
+class ZenodoLicense(BaseModel):
+    """Model subclass for Zenodo metadata license."""
+
+    id: str | None = None
+
+
+class ZenodoFiles(BaseModel):
+    """Model subclass for Zenodo file id."""
+
+    id: str | None = None
+
+
+class ZenodoMetadata(BaseModel):
+    """Model subclass for Zenodo metadata dict."""
 
     title: str | None = None
     description: str | None = None
-    creators: list[dict[str, str]] = []
-    contributors: list[dict[str, str]] = []
+    creators: list[ZenodoCreatorsOrContributors] = []
+    contributors: list[ZenodoCreatorsOrContributors] = []
     keywords: list[str] = []
-    related_identifiers: list[dict[str, str]] = []
+    related_identifiers: list[ZenodoRelateditdentifiers] = []
     language: str | None = None
-    license: dict[str, str] = {}
+    license: ZenodoLicense
 
 
 class ZenodoParentRecordSource(BaseModel):
@@ -21,7 +46,7 @@ class ZenodoParentRecordSource(BaseModel):
     modified: str | None = None
     id: int | None = None
     conceptdoi: str | None = None
-    metadata: ZenodoParentRecordMetadata
+    metadata: ZenodoMetadata
 
 
 class ZenodoRecordVersion(BaseModel):
@@ -29,12 +54,8 @@ class ZenodoRecordVersion(BaseModel):
 
     created: str | None = None
     doi_url: str | None = None
-    downloadURL: str | None = None
-    issued: str | None = None
-    license: str | None = None
-    mediaType: str | None = None
+    id: int | None = None
+    metadata: ZenodoMetadata
+    files: list[ZenodoFiles]
     modified: str | None = None
-    title: str | None = None
-    affiliation: str | None = None
-    name: str | None = None
-    orcid: str | None = None
+    conceptrecid: str | None = None

@@ -3,7 +3,6 @@ from collections.abc import Generator
 from urllib.parse import urljoin
 
 from mex.common.connector import HTTPConnector
-from mex.common.exceptions import MExError
 from mex.extractors.open_data.models.source import (
     ZenodoParentRecordSource,
     ZenodoRecordVersion,
@@ -50,17 +49,18 @@ class OpenDataConnector(HTTPConnector):
 
             for item in response.json()["hits"]["hits"]:
                 yield ZenodoParentRecordSource.model_validate(item)
-        msg = "Pagination limit reached to fetch all data pages list"
-        raise MExError(msg)
 
-    def get_record_versions(self) -> Generator[ZenodoRecordVersion, None, None]:
-        """Load parent sources by querying the Zenodo API.
+    def get_record_versions(
+        self, record_id: int
+    ) -> Generator[ZenodoRecordVersion, None, None]:
+        """Load versions of different records by querying the Zenodo API.
+
+        Args:
+            record_id: id of the record version
 
         Returns:
-            Generator for Zenodo parent sources
+            Generator for Zenodo record versions
         """
-        record_id = 14229891
-
         base_url = urljoin(
             self.url,
             f"records/{record_id}/",
@@ -84,17 +84,16 @@ class OpenDataConnector(HTTPConnector):
 
             for item in response.json()["hits"]["hits"]:
                 yield ZenodoRecordVersion.model_validate(item)
-        msg = "Pagination limit reached to fetch all data pages list"
-        raise MExError(msg)
 
-    def get_oldest_record_versions(self) -> ZenodoRecordVersion:
-        """Load parent sources by querying the Zenodo API.
+    def get_oldest_record_versions(self, record_id: int) -> ZenodoRecordVersion:
+        """Load oldest version of a record by querying the Zenodo API.
+
+        Args:
+            record_id: id of the record version
 
         Returns:
             Generator for Zenodo parent sources
         """
-        record_id = 14229891
-
         base_url = urljoin(
             self.url,
             f"records/{record_id}/",
@@ -109,3 +108,16 @@ class OpenDataConnector(HTTPConnector):
         item = oldest_record.json()["hits"]["hits"][0]
 
         return ZenodoRecordVersion.model_validate(item)
+
+    def get_totals(self, record_id: int | None) -> int:
+        """Get totals."""
+        base_url = urljoin(
+            self.url,
+            f"records/{record_id}/",
+        )
+
+        return int(
+            self.session.get(urljoin(base_url, "versions?size=1")).json()["hits"][
+                "total"
+            ]
+        )

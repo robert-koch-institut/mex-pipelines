@@ -2,75 +2,52 @@ from collections.abc import Generator
 
 from mex.common.logging import watch
 from mex.extractors.open_data.connector import OpenDataConnector
-from mex.extractors.open_data.models.source import ZenodoParentRecordSource
+from mex.extractors.open_data.models.source import (
+    ZenodoParentRecordSource,
+    ZenodoRecordVersion,
+)
 
 
 @watch
-def get_parent_records() -> Generator[ZenodoParentRecordSource, None, None]:
+def extract_parent_records() -> Generator[ZenodoParentRecordSource, None, None]:
     """Load Open Data sources by querying the Zenodo API.
 
-    Get all records of  Zenodo community 'robertkochinstitut'
+    Get all records of  Zenodo community 'robertkochinstitut'.
+    These are called 'parent records'.
 
     Returns:
-        Generator for Open Data sources
-
-    contact_names = [creator["name"] for creator in item.metadata.creators].
-    contributor_names = [
-        contributor["name"] for contributor in item.metadata.contributors
-    ].
-    creation_date = "TODO"  # API-Call for oldest version.
-    description = item.metadata.description  # TODO: Clean Up according to yaml.
-    documentation = [
-        identifier["identifier"]
-        for identifier in item.metadata.related_identifiers
-        if identifier["relation"] == "isDocumentedBy"
-    ].
-    doi = item.conceptdoi  # TODO: add "https://doi.org/".
-    identifierInPrimarySource = item.conceptrecid.
-    license = item.metadata.license.id.
-    modified = item.modified.
-    keyword = [word for word in item.metadata.keywords].
-    language = item.metadata.language.
-    title = item.metadata.title.
+        Generator for Zenodo sources
     """
     connector = OpenDataConnector()
 
-    yield from connector.get_parent_sources()  ## for item in XY: yield item
+    yield from connector.get_parent_sources()
 
 
-def get_record_versions() -> Generator[ZenodoParentRecordSource, None, None]:
-    """Fetch all the data from the parent resource.
-
-    Args:
-        conceptrecid: Iterable of parent record ids
-
-    Raises:
-        MExError: When the pagination limit is exceeded
+@watch
+def extract_record_versions() -> Generator[ZenodoRecordVersion, None, None]:
+    """Fetch all the versions of a parent resource.
 
     Returns:
-        Generator for ZenodoParentRecordSource items
-
-    contact_names = [creator["name"] for creator in item.metadata.creators].
-    contributor_names = [
-        contributor["name"] for contributor in item.metadata.contributors
-    ].
-    creation_date = item.created.
-    description = item.metadata.description  # TODO: Clean Up according to yaml.
-    distribution = [file["id"] for file in item.files].
-    documentation = [
-        identifier["identifier"]
-        for identifier in item.metadata.related_identifiers
-        if identifier["relation"] == "isDocumentedBy"
-    ].
-    doi = item.doi_url.
-    identifierInPrimarySource = item.id.
-    license = item.metadata.license.id.
-    modified = item.modified.
-    isPartOf = item.conceptrecid.
-    keyword = [word for word in item.metadata.keywords].
-    language = item.metadata.language.
-    title = item.metadata.title.
+        Generator for ZenodoRecordVersion items
     """
     connector = OpenDataConnector()
 
-    yield from connector.get_parent_sources()  # for item in XY: yield item
+    for parent_source in extract_parent_records():
+        if parent_source.id:
+            yield from connector.get_record_versions(parent_source.id)
+
+
+def extract_totals() -> dict[int | None, int]:
+    """Fetch all the versions of a parent resource.
+
+    Returns:
+        Generator for ZenodoRecordVersion items
+    """
+    connector = OpenDataConnector()
+
+    totals_dict = {}
+
+    for parent_source in extract_parent_records():
+        totals_dict[parent_source.id] = connector.get_totals(parent_source.id)
+
+    return totals_dict
