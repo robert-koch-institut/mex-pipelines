@@ -21,6 +21,9 @@ class OpenDataConnector(HTTPConnector):
     def get_parent_sources(self) -> Generator[ZenodoParentRecordSource, None, None]:
         """Load parent sources by querying the Zenodo API.
 
+        Gets the parent sources (~ latest version) of all the sources of the
+        Zenodo communitiy "robertkochinstitut".
+
         Returns:
             Generator for Zenodo parent sources
         """
@@ -55,8 +58,13 @@ class OpenDataConnector(HTTPConnector):
     ) -> Generator[ZenodoRecordVersion, None, None]:
         """Load versions of different records by querying the Zenodo API.
 
+        For a specific parent source get all the versions of this source.
+        The Zenodo API doesn't work by giving it the parent source id ("conceptrecid")
+        but call it with the id ("id") of any version of that parent source and then
+        'ask' for the versions in general.
+
         Args:
-            record_id: id of the record version
+            record_id: id of any record version
 
         Returns:
             Generator for Zenodo record versions
@@ -86,13 +94,13 @@ class OpenDataConnector(HTTPConnector):
                 yield ZenodoRecordVersion.model_validate(item)
 
     def get_oldest_record_versions(self, record_id: int) -> ZenodoRecordVersion:
-        """Load oldest version of a record by querying the Zenodo API.
+        """Load oldest (first) version of a record by querying the Zenodo API.
 
         Args:
-            record_id: id of the record version
+            record_id: id of any record version
 
         Returns:
-            Generator for Zenodo parent sources
+            Zenodo record version (oldest)
         """
         base_url = urljoin(
             self.url,

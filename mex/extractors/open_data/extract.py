@@ -37,6 +37,17 @@ def extract_record_versions() -> Generator[ZenodoRecordVersion, None, None]:
             yield from connector.get_record_versions(parent_source.id)
 
 
+def extract_oldest_record_version(record_id: int) -> ZenodoRecordVersion:
+    """Fetch only the oldest version of a parent resource.
+
+    Returns:
+        ZenodoRecordVersion
+    """
+    connector = OpenDataConnector()
+
+    return connector.get_oldest_record_versions(record_id)
+
+
 def extract_totals() -> dict[int | None, int]:
     """Fetch all the versions of a parent resource.
 

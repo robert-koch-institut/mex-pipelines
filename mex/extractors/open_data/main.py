@@ -17,5 +17,5 @@ def zenodo_parent_records() -> list[ZenodoParentRecordSource]:
 
 @asset(group_name="opendata")
 def zenodo_record_versions() -> list[ZenodoRecordVersion]:
-    """Extract parent sources from Zenodo."""
+    """Extract all versions of the parent sources from Zenodo."""
     return list(extract_record_versions())
