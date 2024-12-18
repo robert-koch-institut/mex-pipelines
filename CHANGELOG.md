@@ -11,20 +11,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes
 
-- extractors now use wikidata helper function
-- BREAKING: rename artificial provider function `extracted_data` to `extracted_items`
-- prefer concrete unions over base classes for merged and extracted item typing
-- update mex-common to 0.45.0 and mex-model to 3.4.0
-
 ### Deprecated
 
 ### Removed
 
 ### Fixed
 
-- fix coverage and linting issues
-
 ### Security
+
+## [0.23.0] - 2024-12-18
+
+### Changes
+
+- extractors now use wikidata helper function
+- BREAKING: rename artificial provider function `extracted_data` to `extracted_items`
+- prefer concrete unions over base classes for merged and extracted item typing
+- update mex-common to 0.45.0 and mex-model to 3.4.0
+
+### Fixed
+
+- fix coverage and linting issues
 
 ## [0.22.0] - 2024-12-10
 
