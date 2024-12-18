@@ -1,61 +1,61 @@
 from pydantic import BaseModel
 
 
-class ZenodoCreatorsOrContributors(BaseModel):
+class OpenDataCreatorsOrContributors(BaseModel):
     """Model subclass for Zenodo metadata Creators or Contributors."""
 
     name: str | None = None
 
 
-class ZenodoRelateditdentifiers(BaseModel):
+class OpenDataRelateditdentifiers(BaseModel):
     """Model subclass for Zenodo metadata related identifiers."""
 
     identifier: str | None = None
     relation: str | None = None
 
 
-class ZenodoLicense(BaseModel):
+class OpenDataLicense(BaseModel):
     """Model subclass for Zenodo metadata license."""
 
     id: str | None = None
 
 
-class ZenodoFiles(BaseModel):
+class OpenDataFiles(BaseModel):
     """Model subclass for Zenodo file id."""
 
     id: str | None = None
 
 
-class ZenodoMetadata(BaseModel):
+class OpenDataMetadata(BaseModel):
     """Model subclass for Zenodo metadata dict."""
 
     title: str | None = None
     description: str | None = None
-    creators: list[ZenodoCreatorsOrContributors] = []
-    contributors: list[ZenodoCreatorsOrContributors] = []
+    creators: list[OpenDataCreatorsOrContributors] = []
+    contributors: list[OpenDataCreatorsOrContributors] = []
     keywords: list[str] = []
-    related_identifiers: list[ZenodoRelateditdentifiers] = []
+    related_identifiers: list[OpenDataRelateditdentifiers] = []
     language: str | None = None
-    license: ZenodoLicense
+    license: OpenDataLicense | None = None
 
 
-class ZenodoParentRecordSource(BaseModel):
+class OpenDataParentResource(BaseModel):
     """Model class for a Zenodo record as resource parent."""
 
-    conceptrecid: str | None = None
+    conceptrecid: str
+    id: int
     modified: str | None = None
-    id: int | None = None
     conceptdoi: str | None = None
-    metadata: ZenodoMetadata
+    metadata: OpenDataMetadata | None = None
 
 
-class ZenodoRecordVersion(BaseModel):
+class OpenDataResourceVersion(BaseModel):
     """Model class for Versions of a record."""
 
+    id: int
+    conceptrecid: str
     created: str | None = None
     doi_url: str | None = None
-    id: int | None = None
-    metadata: ZenodoMetadata
-    files: list[ZenodoFiles]
+    metadata: OpenDataMetadata | None = None
+    files: list[OpenDataFiles] = []
     modified: str | None = None
-    conceptrecid: str | None = None

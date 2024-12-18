@@ -3,62 +3,46 @@ from collections.abc import Generator
 from mex.common.logging import watch
 from mex.extractors.open_data.connector import OpenDataConnector
 from mex.extractors.open_data.models.source import (
-    ZenodoParentRecordSource,
-    ZenodoRecordVersion,
+    OpenDataParentResource,
+    OpenDataResourceVersion,
 )
 
 
 @watch
-def extract_parent_records() -> Generator[ZenodoParentRecordSource, None, None]:
-    """Load Open Data sources by querying the Zenodo API.
+def extract_parent_resources() -> Generator[OpenDataParentResource, None, None]:
+    """Load Open Data resources by querying the Zenodo API.
 
-    Get all records of  Zenodo community 'robertkochinstitut'.
-    These are called 'parent records'.
+    Get all resources of  Zenodo community 'robertkochinstitut'.
+    These are called 'parent resources'.
 
     Returns:
-        Generator for Zenodo sources
+        Generator for parent resources
     """
     connector = OpenDataConnector()
 
-    yield from connector.get_parent_sources()
+    yield from connector.get_parent_resources()
 
 
 @watch
-def extract_record_versions() -> Generator[ZenodoRecordVersion, None, None]:
+def extract_resource_versions() -> Generator[OpenDataResourceVersion, None, None]:
     """Fetch all the versions of a parent resource.
 
     Returns:
-        Generator for ZenodoRecordVersion items
+        Generator for OpenDataResourceVersion items
     """
     connector = OpenDataConnector()
 
-    for parent_source in extract_parent_records():
-        if parent_source.id:
-            yield from connector.get_record_versions(parent_source.id)
+    for parent_resource in extract_parent_resources():
+        if parent_resource.id:
+            yield from connector.get_resource_versions(parent_resource.id)
 
 
-def extract_oldest_record_version(record_id: int) -> ZenodoRecordVersion:
+def extract_oldest_record_version(record_id: int) -> OpenDataResourceVersion:
     """Fetch only the oldest version of a parent resource.
 
     Returns:
-        ZenodoRecordVersion
+        OpenDataResourceVersion
     """
     connector = OpenDataConnector()
 
-    return connector.get_oldest_record_versions(record_id)
-
-
-def extract_totals() -> dict[int | None, int]:
-    """Fetch all the versions of a parent resource.
-
-    Returns:
-        Generator for ZenodoRecordVersion items
-    """
-    connector = OpenDataConnector()
-
-    totals_dict = {}
-
-    for parent_source in extract_parent_records():
-        totals_dict[parent_source.id] = connector.get_totals(parent_source.id)
-
-    return totals_dict
+    return connector.get_oldest_resource_version(record_id)
