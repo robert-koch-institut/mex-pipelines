@@ -227,7 +227,7 @@ def get_or_create_external_partner(
     """
     if external_partner_dict := resource.externalPartner:
         external_partner_string = external_partner_dict[0].mappingRules[0].forValues[0]
-        if external_partner_string in resource.model_fields.keys():
+        if external_partner_string in resource.model_fields:
             external_partner_identifier = [
                 grippeweb_organization_ids_by_query_string[external_partner_string]
             ]
@@ -375,7 +375,7 @@ def transform_grippeweb_variable_to_extracted_variables(
                 column_strings = {cell for cell in column if isinstance(cell, str)}
                 value_set = (
                     column_strings
-                    if column_name in valueset_locations_by_field.keys()
+                    if column_name in valueset_locations_by_field
                     else set()
                 )
             extracted_variables.append(

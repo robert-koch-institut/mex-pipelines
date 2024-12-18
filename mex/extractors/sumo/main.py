@@ -369,6 +369,6 @@ def transformed_sumo_feat_projection_variables(
 
 
 @entrypoint(Settings)
-def run() -> None:
+def run() -> None:  # pragma: no cover
     """Run the sumo extractor job in-process."""
     run_job_in_process("sumo")

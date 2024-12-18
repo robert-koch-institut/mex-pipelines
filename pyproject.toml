@@ -13,7 +13,7 @@ dependencies = [
     "dagster-webserver>=1,<2",
     "dagster>=1,<2",
     "faker>=33,<34",
-    "mex-common @ git+https://github.com/robert-koch-institut/mex-common.git@0.43.0",
+    "mex-common @ git+https://github.com/robert-koch-institut/mex-common.git@0.45.0",
     "numpy>=2,<3",
     "openpyxl>=3,<4",
     "pandas>=2,<3",
@@ -175,27 +175,25 @@ select = ["ALL"]
 ]
 "mex/extractors/biospecimen/**" = ["PD003", "PLR0913", "PTH207"]
 "mex/extractors/blueant/**" = ["PLR0913", "PLR2004"]
-"mex/extractors/confluence_vvt/**" = ["EM101", "PLR2004", "SIM105"]
-"mex/extractors/datscha_web/**" = ["EM102", "PLR2004", "SIM102"]
+"mex/extractors/confluence_vvt/**" = ["EM101", "PLR2004"]
+"mex/extractors/datscha_web/**" = ["EM102", "PLR2004"]
 "mex/extractors/ff_projects/**" = ["EM101", "PD901", "PLR0911", "PLR0913"]
-"mex/extractors/grippeweb/**" = ["PLR0913", "SIM118"]
+"mex/extractors/grippeweb/**" = ["PLR0913"]
 "mex/extractors/ifsg/**" = ["C403", "C416", "PLR0913", "PLR1714", "PLR2004"]
 "mex/extractors/international_projects/**" = ["C414", "PD901", "PLR0913"]
-"mex/extractors/rdmo/**" = ["EM102", "PLW0127", "TD002"]
+"mex/extractors/rdmo/**" = ["EM102", "PLW0127"]
 "mex/extractors/seq_repo/**" = ["DTZ007", "EM102", "PLR0913", "SIM102"]
-"mex/extractors/sumo/**" = ["FLY002", "PD002", "PLR0913", "TD002"]
-"mex/extractors/synopse/**" = ["C416", "EM101", "PLR0913", "TD002"]
+"mex/extractors/sumo/**" = ["FLY002", "PD002", "PLR0913"]
+"mex/extractors/synopse/**" = ["C416", "EM101", "PLR0913"]
 "mex/extractors/voxco/**" = ["PLR0912", "PLR0913"]
 "tests/biospecimen/**" = ["PLR0913"]
-"tests/drop/**" = ["ARG001"]
 "tests/ff_projects/**" = ["DTZ001"]
 "tests/grippeweb/**" = ["PLR0913"]
 "tests/ifsg/**" = ["DTZ001", "PLR0913"]
-"tests/odk/**" = ["ARG001"]
 "tests/rdmo/**" = ["ARG001", "PT012"]
 "tests/seq_repo/**" = ["PLR0913"]
 "tests/sumo/**" = ["FLY002", "PLR0913"]
-"tests/synopse/**" = ["C408", "C419", "PLR0913", "TD002"]
+"tests/synopse/**" = ["C408", "C419", "PLR0913"]
 "tests/voxco/**" = ["PLR0913"]
 "tests/wikidata/**" = ["INP001", "INP001"]
 

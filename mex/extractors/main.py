@@ -4,6 +4,6 @@ from mex.extractors.settings import Settings
 
 
 @entrypoint(Settings)
-def run() -> None:
+def run() -> None:  # pragma: no cover
     """Run all extractor jobs in-process."""
     run_job_in_process("all_extractors")

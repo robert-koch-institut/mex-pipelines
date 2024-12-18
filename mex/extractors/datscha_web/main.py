@@ -109,6 +109,6 @@ def extract_datscha_web(
 
 
 @entrypoint(Settings)
-def run() -> None:
+def run() -> None:  # pragma: no cover
     """Run the datscha-web extractor job in-process."""
     run_job_in_process("datscha_web")

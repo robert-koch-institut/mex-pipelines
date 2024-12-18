@@ -594,7 +594,7 @@ def transform_sumo_activity_to_extracted_activity(
         hadPrimarySource=extracted_primary_source.stableTargetId,
         identifierInPrimarySource=identifier_in_primary_source,
         involvedUnit=involved_unit,
-        publication=[],  # TODO: add bibliographic resource item
+        publication=[],  # TODO(KA): add bibliographic resource item
         responsibleUnit=responsible_unit,
         shortName=short_name,
         start=start,

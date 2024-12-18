@@ -69,9 +69,14 @@ def extract_datscha_web_organizations(
     partner_to_org_map = {}
     for item in datscha_web_items:
         for partner in item.get_partners():
-            if partner and partner != "None":
-                if organization := get_wikidata_extracted_organization_id_by_name(
-                    partner
-                ):
-                    partner_to_org_map[partner] = organization
+            if (
+                partner
+                and partner != "None"
+                and (
+                    organization := get_wikidata_extracted_organization_id_by_name(
+                        partner
+                    )
+                )
+            ):
+                partner_to_org_map[partner] = organization
     return partner_to_org_map

@@ -1,3 +1,4 @@
+import contextlib
 import re
 from itertools import zip_longest
 from typing import Any, cast
@@ -216,10 +217,8 @@ def get_interne_vorgangsnummer_from_title(
     )
 
     for item in unwanted_elements:
-        try:
+        with contextlib.suppress(ValueError):
             interne_vorgangsnummers.remove(item)
-        except ValueError:
-            pass
 
     return [x for x in interne_vorgangsnummers if x]  # clean empty strings
 

@@ -111,6 +111,6 @@ def extracted_blueant_activities(
 
 
 @entrypoint(Settings)
-def run() -> None:
+def run() -> None:  # pragma: no cover
     """Run the blueant extractor job in-process."""
     run_job_in_process("blueant")
