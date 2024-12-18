@@ -20,7 +20,7 @@ def extract_columns_by_table_and_column_name() -> dict[str, dict[str, list[Any]]
     connection = GrippewebConnector.get()
     return {
         table_name: connection.parse_columns_by_column_name(table_name)
-        for table_name in QUERY_BY_TABLE_NAME.keys()
+        for table_name in QUERY_BY_TABLE_NAME
     }
 
 

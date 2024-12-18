@@ -183,6 +183,6 @@ def seq_repo_resource(
 
 
 @entrypoint(Settings)
-def run() -> None:
+def run() -> None:  # pragma: no cover
     """Run the seq-repo extractor job in-process."""
     run_job_in_process("seq_repo")

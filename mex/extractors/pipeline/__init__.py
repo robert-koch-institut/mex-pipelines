@@ -77,4 +77,4 @@ else:
 
 from mex.extractors.pipeline.base import load_job_definitions, run_job_in_process
 
-__all__ = ("asset", "run_job_in_process", "load_job_definitions")
+__all__ = ("asset", "load_job_definitions", "run_job_in_process")

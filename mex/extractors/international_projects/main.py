@@ -127,6 +127,6 @@ def extracted_international_projects_activities(
 
 
 @entrypoint(Settings)
-def run() -> None:
+def run() -> None:  # pragma: no cover
     """Run the international-projects extractor job in-process."""
     run_job_in_process("international_projects")
