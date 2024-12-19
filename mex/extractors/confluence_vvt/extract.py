@@ -199,9 +199,8 @@ def get_involved_units_from_page(
     """
     all_units = []
     for unit in activity_mapping.involvedUnit:
-        if (
-            unit == activity_mapping.involvedUnit[3]
-        ):  # skipping it because its always empty and breaks things
+        if unit == activity_mapping.involvedUnit[3]:
+            # skipping it because its always empty and breaks things
             continue
         for p in (
             page.tables[0]
