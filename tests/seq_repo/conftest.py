@@ -250,6 +250,19 @@ def seq_repo_resource() -> AnyMappingModel:
                     ],
                 }
             ],
+            "description": [
+                {
+                    "fieldInPrimarySource": "n/a",
+                    "mappingRules": [
+                        {
+                            "setValues": [
+                                {"value": "Testbeschreibung", "language": "de"},
+                                {"value": "test description", "language": "en"},
+                            ],
+                        }
+                    ],
+                }
+            ],
             "keyword": [
                 {
                     "fieldInPrimarySource": "n/a",
