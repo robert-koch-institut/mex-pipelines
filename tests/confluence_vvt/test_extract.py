@@ -91,7 +91,7 @@ def test_fetch_all_pages_data_mocked(
 
     monkeypatch.setattr(
         ConfluenceVvtConnector,
-        "get_page_by_id",
+        "__init__",
         lambda self: setattr(self, "session", session),
     )
     all_pages_data = list(get_page_data_by_id([str(expected["identifier"])]))

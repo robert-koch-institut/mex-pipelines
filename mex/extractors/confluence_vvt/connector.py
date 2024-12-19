@@ -22,6 +22,14 @@ class ConfluenceVvtConnector(HTTPConnector):
         )
 
     def get_page_by_id(self, page_id: str) -> ConfluenceVvtPage | None:
+        """Get confluence page data by its id.
+
+        Args:
+            page_id: confluence page id
+
+        Returns:
+            ConfluenceVvtPage or None
+        """
         settings = Settings.get()
         if page_id in settings.confluence_vvt.skip_pages:
             return None
