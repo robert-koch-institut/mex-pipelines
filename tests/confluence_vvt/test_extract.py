@@ -28,9 +28,9 @@ def test_get_page_data_by_id() -> None:
     page_ids = list(islice(fetch_all_vvt_pages_ids(), 5))
 
     response = list(get_page_data_by_id(page_ids))
-
-    assert len(page_ids) == len(response)
-    assert response[0].identifier == page_ids[0]
+    assert str(response[0].id) == page_ids[1]
+    assert str(response[1].id) == page_ids[2]
+    assert str(response[2].id) == page_ids[3]
 
 
 def test_fetch_all_data_page_ids_mocked(
@@ -91,7 +91,7 @@ def test_fetch_all_pages_data_mocked(
 
     monkeypatch.setattr(
         ConfluenceVvtConnector,
-        "__init__",
+        "get_page_by_id",
         lambda self: setattr(self, "session", session),
     )
     all_pages_data = list(get_page_data_by_id([str(expected["identifier"])]))

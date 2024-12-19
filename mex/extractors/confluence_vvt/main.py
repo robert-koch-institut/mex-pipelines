@@ -15,8 +15,6 @@ from mex.common.types import MergedOrganizationalUnitIdentifier, MergedPersonIde
 from mex.extractors.confluence_vvt.extract import (
     extract_confluence_vvt_authors,
     fetch_all_vvt_pages_ids,
-    get_contact_from_page,
-    get_involved_persons_from_page,
     get_all_persons_from_all_pages,
     get_all_units_from_all_pages,
     get_page_data_by_id,
@@ -26,12 +24,12 @@ from mex.extractors.confluence_vvt.transform import (
     transform_confluence_vvt_activities_to_extracted_activities,
 )
 from mex.extractors.filters import filter_by_global_rules
+from mex.extractors.mapping.extract import extract_mapping_data
+from mex.extractors.mapping.transform import transform_mapping_data_to_model
 from mex.extractors.mapping.types import AnyMappingModel
 from mex.extractors.pipeline import asset, run_job_in_process
 from mex.extractors.settings import Settings
 from mex.extractors.sinks import load
-from mex.extractors.mapping.extract import extract_mapping_data
-from mex.extractors.mapping.transform import transform_mapping_data_to_model
 
 
 @asset(group_name="confluence_vvt")
@@ -78,7 +76,7 @@ def extracted_confluence_vvt_person_ids_by_query_string(
     confluence_vvt_pages: list[ConfluenceVvtPage],
     extracted_organizational_units: list[ExtractedOrganizationalUnit],
     extracted_primary_source_ldap: ExtractedPrimarySource,
-    activity_mapping,
+    activity_mapping: AnyMappingModel,
 ) -> dict[str, list[MergedPersonIdentifier]]:
     """Return mapping from query string to person IDs.
 
@@ -114,7 +112,6 @@ def extracted_confluence_vvt_activities(
     activity_mapping: AnyMappingModel,
 ) -> list[ExtractedActivity]:
     """Transform and load Confluence VVT activities."""
-
     mex_activities = list(
         transform_confluence_vvt_activities_to_extracted_activities(
             confluence_vvt_pages,

@@ -8,7 +8,6 @@ from mex.common.ldap.transform import analyse_person_string
 from mex.common.logging import watch
 from mex.extractors.confluence_vvt.connector import ConfluenceVvtConnector
 from mex.extractors.confluence_vvt.models import ConfluenceVvtPage
-from mex.extractors.confluence_vvt.parse_html import parse_data_html_page
 from mex.extractors.mapping.types import AnyMappingModel
 from mex.extractors.settings import Settings
 
@@ -53,6 +52,14 @@ def fetch_all_vvt_pages_ids() -> Generator[str, None, None]:
 def get_page_data_by_id(
     page_ids: Iterable[str],
 ) -> Generator[ConfluenceVvtPage, None, None]:
+    """Get confluence page data by its id.
+
+    Args:
+        page_ids: list of confluence page ids
+
+    Returns:
+        Generator of ConfluenceVvtPage
+    """
     connector = ConfluenceVvtConnector.get()
     for page_id in page_ids:
         page_data = connector.get_page_by_id(page_id)
@@ -67,7 +74,7 @@ def extract_confluence_vvt_authors(
     """Extract LDAP persons with their query string for confluence-vvt authors.
 
     Args:
-        confluence_vvt_sources: confluence-vvt sources
+        authors: list of authors
 
     Returns:
         Generator for LDAP persons with query
@@ -95,6 +102,15 @@ def get_contact_from_page(
     page: ConfluenceVvtPage,
     activity_mapping: AnyMappingModel,
 ) -> list[str]:
+    """Get contact from confluence page.
+
+    Args:
+        page: confluence-vvt page
+        activity_mapping: activity mapping for confluence-vvt
+
+    Returns:
+        list of contacts
+    """
     contact = page.tables[0].get_value_by_heading(
         activity_mapping.contact[0].fieldInPrimarySource
     )
@@ -105,16 +121,24 @@ def get_involved_persons_from_page(
     page: ConfluenceVvtPage,
     activity_mapping: AnyMappingModel,
 ) -> list[str]:
+    """Get involved persons from confluence page.
+
+    Args:
+        page: confluence-vvt page
+        activity_mapping: activity mapping for confluence-vvt
+
+    Returns:
+        list of involved persons
+    """
     all_persons = []
     for person in activity_mapping.involvedPerson:
-        # page.tables[0].get_value_by_heading(person.fieldInPrimarySource)
         for p in (
             page.tables[0]
             .get_value_by_heading(person.fieldInPrimarySource)
             .cells[0]
             .get_texts()
         ):
-            all_persons.append(p)
+            all_persons.append(p)  # noqa: PERF402
 
     return all_persons
 
@@ -122,6 +146,15 @@ def get_involved_persons_from_page(
 def get_all_persons_from_all_pages(
     pages: list[ConfluenceVvtPage], activity_mapping: AnyMappingModel
 ) -> list[str]:
+    """Get all persons from all confluence pages.
+
+    Args:
+        pages: confluence-vvt page
+        activity_mapping: activity mapping for confluence-vvt
+
+    Returns:
+        list of all persons on confluence page
+    """
     all_persons_on_page = []
     for page in pages:
         contacts = get_contact_from_page(page, activity_mapping)
@@ -136,6 +169,15 @@ def get_responsible_unit_from_page(
     page: ConfluenceVvtPage,
     activity_mapping: AnyMappingModel,
 ) -> list[str]:
+    """Get resposible unit from confluence page.
+
+    Args:
+        page: confluence-vvt page
+        activity_mapping: activity mapping for confluence-vvt
+
+    Returns:
+        list of resposible unit
+    """
     responsbile_units = page.tables[0].get_value_by_heading(
         activity_mapping.responsibleUnit[0].fieldInPrimarySource.split("|")[0].strip()
     )
@@ -146,21 +188,43 @@ def get_involved_units_from_page(
     page: ConfluenceVvtPage,
     activity_mapping: AnyMappingModel,
 ) -> list[str]:
+    """Get involved unit from confluence page.
+
+    Args:
+        page: confluence-vvt page
+        activity_mapping: activity mapping for confluence-vvt
+
+    Returns:
+        list of involved unit
+    """
     all_units = []
     for unit in activity_mapping.involvedUnit:
+        if (
+            unit == activity_mapping.involvedUnit[3]
+        ):  # skipping it because its always empty and breaks things
+            continue
         for p in (
             page.tables[0]
             .get_value_by_heading(unit.fieldInPrimarySource.split("|")[0].strip())
             .cells[1]
             .get_texts()
         ):
-            all_units.append(p)
+            all_units.append(p)  # noqa: PERF402
     return all_units
 
 
 def get_all_units_from_all_pages(
     pages: list[ConfluenceVvtPage], activity_mapping: AnyMappingModel
 ) -> list[str]:
+    """Get all units from all confluence pages.
+
+    Args:
+        pages: all confluence-vvt page
+        activity_mapping: activity mapping for confluence-vvt
+
+    Returns:
+        list of all units on a confuence page
+    """
     all_units_on_page = []
     for page in pages:
         responsible_units = get_responsible_unit_from_page(page, activity_mapping)
