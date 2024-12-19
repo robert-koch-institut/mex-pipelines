@@ -4,8 +4,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from mex.common.types import TemporalEntity
-from mex.common.wikidata.models.organization import WikidataOrganization
+from mex.common.types import MergedOrganizationIdentifier, TemporalEntity
 from mex.extractors.ff_projects.extract import (
     extract_ff_projects_organizations,
     extract_ff_projects_sources,
@@ -28,6 +27,7 @@ def test_extract_ff_projects_sources() -> None:
             "rki_az": "1364",
             "laufzeit_cells": (None, None),
             "projektleiter": "(Leitung) 1 Ficticious, Frieda / OE1?",
+            "rki_oe": "Department",
             "zuwendungs_oder_auftraggeber": "Sonstige",
             "lfd_nr": "17",
         },
@@ -37,10 +37,10 @@ def test_extract_ff_projects_sources() -> None:
             "thema_des_projekts": "Fully Specified Source",
             "rki_az": "1364",
             "laufzeit_cells": ("2018-01-01 00:00:00", "2019-09-01 00:00:00"),
-            "laufzeit_bis": TemporalEntity("2019-08-31T23:00:00Z"),
-            "laufzeit_von": TemporalEntity("2017-12-31T23:00:00Z"),
+            "laufzeit_bis": "2019-08-31T23:00:00Z",
+            "laufzeit_von": "2017-12-31T23:00:00Z",
             "projektleiter": "Dr Frieda Ficticious",
-            "rki_oe": "FG33",
+            "rki_oe": "Department",
             "zuwendungs_oder_auftraggeber": "Test-Institute",
             "lfd_nr": "18",
         },
@@ -111,10 +111,10 @@ def test_filter_out_duplicate_source_ids() -> None:
 @pytest.mark.usefixtures(
     "mocked_wikidata",
 )
-def test_extract_ff_projects_organizations(
-    wikidata_organization: WikidataOrganization,
-) -> None:
+def test_extract_ff_projects_organizations() -> None:
     organizations = extract_ff_projects_organizations(
         [next(extract_ff_projects_sources())]
     )
-    assert organizations["Apple"] == wikidata_organization
+    assert organizations["Apple"] == MergedOrganizationIdentifier(
+        "ga6xh6pgMwgq7DC7r6Wjqg"
+    )

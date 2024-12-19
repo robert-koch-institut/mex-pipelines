@@ -73,8 +73,8 @@ def meta_datatype() -> list[MetaDataType]:
 @pytest.fixture
 def meta_schema2type() -> list[MetaSchema2Type]:
     return [
-        MetaSchema2Type(id_schema=1, id_type=0),
-        MetaSchema2Type(id_schema=42, id_type=11),
+        MetaSchema2Type(id_schema=1, id_type=101),
+        MetaSchema2Type(id_schema=42, id_type=102),
     ]
 
 
@@ -2933,7 +2933,7 @@ def extracted_ifsg_resource_disease() -> list[ExtractedResource]:
     return [
         ExtractedResource(
             hadPrimarySource="fU5a2ZiWXu9ItMX7gYuuPv",
-            identifierInPrimarySource="Meta.Disease_101_1",
+            identifierInPrimarySource="101_10",
             accessPlatform=[],
             accessRestriction="https://mex.rki.de/item/access-restriction-2",
             accrualPeriodicity="https://mex.rki.de/item/frequency-17",

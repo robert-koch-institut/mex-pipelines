@@ -69,7 +69,7 @@ def transform_international_projects_source_to_extracted_activity(
     project_lead_rki_unit = []
     for unit in source.get_project_lead_rki_units():
         if unit == "ZIG-GS":
-            unit = "zig"
+            unit = "zig"  # noqa: PLW2901
         if found_unit := unit_stable_target_id_by_synonym.get(unit):
             project_lead_rki_unit.append(found_unit)
 
@@ -226,9 +226,8 @@ def get_theme_for_activity_or_topic(
                 )
 
     def get_theme_or_default(key: str | None) -> Theme:
-        if key:
-            if theme := themes_dict_from_mapping.get(key):
-                return theme
+        if key and (theme := themes_dict_from_mapping.get(key)):
+            return theme
         return default_theme_from_mapping
 
     theme_set = set()
@@ -259,7 +258,7 @@ def get_or_create_partner_organization(
     for partner_org in partner_organization:
         if wpo := extracted_organizations.get(partner_org):
             final_partner_organizations.append(wpo)
-        else:
+        elif partner_org not in ("None", "Not applicable"):
             extracted_organization = ExtractedOrganization(
                 officialName=[Text(value=partner_org)],
                 identifierInPrimarySource=partner_org,

@@ -129,6 +129,6 @@ def extracted_confluence_vvt_activities(
 
 
 @entrypoint(Settings)
-def run() -> None:
+def run() -> None:  # pragma: no cover
     """Run the confluence-vvt extractor job in-process."""
     run_job_in_process("confluence_vvt")

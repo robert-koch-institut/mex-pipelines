@@ -61,10 +61,11 @@ Pipelines can be run in a couple of different ways:
 - run `pdm run dagster job execute -m mex -j foo_system` using the asset group name
 """
 
-from collections.abc import Callable
 from typing import TYPE_CHECKING, Any, TypeVar
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Callable
+
     _AssetFn = TypeVar("_AssetFn")
 
     def asset(**_: Any) -> Callable[[_AssetFn], _AssetFn]:
@@ -76,4 +77,4 @@ else:
 
 from mex.extractors.pipeline.base import load_job_definitions, run_job_in_process
 
-__all__ = ("asset", "run_job_in_process", "load_job_definitions")
+__all__ = ("asset", "load_job_definitions", "run_job_in_process")

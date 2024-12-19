@@ -19,6 +19,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [0.23.0] - 2024-12-18
+
+### Changes
+
+- extractors now use wikidata helper function
+- BREAKING: rename artificial provider function `extracted_data` to `extracted_items`
+- prefer concrete unions over base classes for merged and extracted item typing
+- update mex-common to 0.45.0 and mex-model to 3.4.0
+
+### Fixed
+
+- fix coverage and linting issues
+
+## [0.22.0] - 2024-12-10
+
+### Changes
+
+- wrap up ifsg model v3 update
+- wrap up seq-repo model v3 update
+
+## [0.21.0] - 2024-11-19
+
+### Added
+
+- convenience / helper functions for wikidata and primary source
+
+### Changes
+
+- make datscha ignore organizations with name "None"
+- update mex-common to 0.41 and mex-model to 3.2
+
+### Fixed
+
+- fix a bunch of linting errors and remove ignored ruff codes
+
 ## [0.20.0] - 2024-11-11
 
 ### Added
@@ -27,7 +62,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes
 
-- improve pubilishing pipeline: logging, Backend connector, allow-list
+- improve publishing pipeline: logging, Backend connector, allow-list
 
 ### Removed
 
@@ -46,7 +81,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - BREAKING: refactor package structure from `mex.foo` to `mex.extractors.foo`
 - BREAKING: Mapping extractors now returns Mapping models instead of nested dictionaries
-- model v3 update: artificial, international-projects, seqrepo, synopse, blueant, sumo,
+- model v3 update: artificial, international-projects, seq-repo, synopse, blueant, sumo,
   biospecimen, odk, datscha-web, confluence-vvt, grippeweb, voxco, ifsg
 
 ### Fixed

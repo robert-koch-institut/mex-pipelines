@@ -101,6 +101,10 @@ def test_transform_seq_repo_resource_to_extracted_resource(
         ],
         "contributingUnit": [str(unit_stable_target_ids_by_synonym["FG99"])],
         "created": YearMonthDay("2023-08-07"),
+        "description": [
+            {"language": TextLanguage.DE, "value": "Testbeschreibung"},
+            {"language": TextLanguage.EN, "value": "test description"},
+        ],
         "instrumentToolOrApparatus": [{"value": "TEST"}],
         "keyword": [
             {

@@ -56,7 +56,7 @@ class DatschaWebConnector(HTTPConnector):
         )
         item_urls = parse_item_urls_from_overview_html(response.text, self.url)
         if items_found := len(item_urls) >= 999:
-            # TODO we need to implement pagination if we ever run into this.
+            # TODO(ND): we need to implement pagination if we ever run into this.
             raise MExError(f"Found more items than I am able to handle: {items_found}")
         return item_urls
 
