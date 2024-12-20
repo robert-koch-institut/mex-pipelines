@@ -100,6 +100,6 @@ def transform_rdmo_sources_to_extracted_activities(
             start=start,
             title=title,
             theme="https://mex.rki.de/item/theme-1",
-            # TODO: resolve contributor, units and funding organization
+            # TODO(ND): resolve contributor, units and funding organization
             website=None,
         )

@@ -1,3 +1,4 @@
+import contextlib
 import re
 from itertools import zip_longest
 from typing import Any, cast
@@ -170,7 +171,7 @@ def get_clean_current_row_all_cols_data(
 def get_interne_vorgangsnummer_from_all_rows_data(
     intnmr_dict: Any | None | list[str],
 ) -> list[str] | Any:
-    """Get Interne Vorgangsnummer from the table extracted data.
+    """Get Interne Vorgangsnummer from the extracted table.
 
     Args:
         intnmr_dict: Extracted dict or list of Interne Vorgangsnummer
@@ -216,10 +217,8 @@ def get_interne_vorgangsnummer_from_title(
     )
 
     for item in unwanted_elements:
-        try:
+        with contextlib.suppress(ValueError):
             interne_vorgangsnummers.remove(item)
-        except ValueError:
-            pass
 
     return [x for x in interne_vorgangsnummers if x]  # clean empty strings
 

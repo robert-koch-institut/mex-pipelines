@@ -33,30 +33,33 @@ def test_extract_cc1_data_model_nokeda() -> None:
         element_label="Name des EDIS",
         element_label_en="Name of EDIS",
     )
-    extracted_data = list(extract_cc1_data_model_nokeda())
-    assert len(extracted_data) == 3
-    assert extracted_data[0] == expected
+    extracted = list(extract_cc1_data_model_nokeda())
+    assert len(extracted) == 3
+    assert extracted[0] == expected
 
 
 def test_extract_cc1_data_valuesets() -> None:
     expected = Cc1DataValuesets(
         category_label_de="Herzstillstand (nicht traumatisch)",
+        category_label_en="Cardiac arrest (non-traumatic)",
         sheet_name="nokeda_cedis",
     )
-    extracted_data = list(extract_cc1_data_valuesets())
-    assert len(extracted_data) == 6
-    assert extracted_data[0] == expected
+    extracted = list(extract_cc1_data_valuesets())
+    assert len(extracted) == 6
+    assert extracted[0] == expected
 
 
 def test_extract_cc2_aux_mapping(
     cc2_aux_model: Iterable[Cc2AuxModel],
 ) -> None:
     expected = Cc2AuxMapping(
-        variable_name_column=["0", "1", "2"], sheet_name="nokeda_age21"
+        sheet_name="nokeda_age21",
+        column_name="aux_age21_min",
+        variable_name_column=["0", "1", "2"],
     )
-    extracted_data = list(extract_cc2_aux_mapping(cc2_aux_model))
-    assert len(extracted_data) == 2
-    assert extracted_data[0] == expected
+    extracted = list(extract_cc2_aux_mapping(cc2_aux_model))
+    assert len(extracted) == 2
+    assert extracted[0] == expected
 
 
 def test_extract_cc2_aux_model() -> None:
@@ -67,16 +70,16 @@ def test_extract_cc2_aux_model() -> None:
         in_database_static=True,
         variable_name="aux_age21_min",
     )
-    extracted_data = list(extract_cc2_aux_model())
-    assert len(extracted_data) == 2
-    assert extracted_data[0] == expected
+    extracted = list(extract_cc2_aux_model())
+    assert len(extracted) == 2
+    assert extracted[0] == expected
 
 
 def test_extract_cc2_aux_valuesets() -> None:
     expected = Cc2AuxValuesets(label_de="Kardiovaskulär", label_en="Cardiovascular")
-    extracted_data = list(extract_cc2_aux_valuesets())
-    assert len(extracted_data) == 3
-    assert extracted_data[0] == expected
+    extracted = list(extract_cc2_aux_valuesets())
+    assert len(extracted) == 3
+    assert extracted[0] == expected
 
 
 def test_extract_cc2_feat_projection() -> None:
@@ -88,9 +91,9 @@ def test_extract_cc2_feat_projection() -> None:
         feature_name_de="Respiratorisches Syncytial-Virus, spezifisch",
         feature_description="specific RSV-ICD-10 codes",
     )
-    extracted_data = list(extract_cc2_feat_projection())
-    assert len(extracted_data) == 3
-    assert extracted_data[0] == expected
+    extracted = list(extract_cc2_feat_projection())
+    assert len(extracted) == 3
+    assert extracted[0] == expected
 
 
 @pytest.mark.usefixtures("mocked_ldap")
