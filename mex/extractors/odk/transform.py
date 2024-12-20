@@ -152,7 +152,6 @@ def transform_odk_data_to_extracted_variables(
 
     Args:
         extracted_resources_odk: extracted mex resources
-        odk_table_groups: dictionary of odk groups by group name
         odk_raw_data: raw data extracted from Excel files
         extracted_primary_source_odk: odk primary source
 
