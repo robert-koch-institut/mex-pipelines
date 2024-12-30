@@ -15,6 +15,7 @@ from mex.extractors.confluence_vvt.extract import (
     get_page_data_by_id,
 )
 from tests.confluence_vvt.conftest import TEST_DATA_DIR
+from mex.extractors.confluence_vvt import extract
 
 
 @pytest.mark.integration
@@ -62,7 +63,6 @@ def test_fetch_all_data_page_ids_mocked(
     assert page_ids == expected
 
 
-@pytest.mark.usefixtures("mocked_confluence_vvt_detailed_page_data")
 def test_fetch_all_pages_data_mocked(
     monkeypatch: MonkeyPatch, detail_page_data_json: dict[str, Any]
 ) -> None:
@@ -93,6 +93,13 @@ def test_fetch_all_pages_data_mocked(
         ConfluenceVvtConnector,
         "__init__",
         lambda self: setattr(self, "session", session),
+    )
+
+    breakpoint()
+    monkeypatch.setattr(
+        extract,
+        "get_page_data_by_id",
+        detail_page_data_json,
     )
     all_pages_data = list(get_page_data_by_id([str(expected["identifier"])]))
 
