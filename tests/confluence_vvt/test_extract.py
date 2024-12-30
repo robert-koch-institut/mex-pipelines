@@ -9,13 +9,13 @@ import requests
 from pytest import MonkeyPatch
 from requests.models import Response
 
+from mex.extractors.confluence_vvt import extract
 from mex.extractors.confluence_vvt.connector import ConfluenceVvtConnector
 from mex.extractors.confluence_vvt.extract import (
     fetch_all_vvt_pages_ids,
     get_page_data_by_id,
 )
 from tests.confluence_vvt.conftest import TEST_DATA_DIR
-from mex.extractors.confluence_vvt import extract
 
 
 @pytest.mark.integration
