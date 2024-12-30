@@ -146,7 +146,7 @@ def get_involved_persons_from_page(
 def get_all_persons_from_all_pages(
     pages: list[ConfluenceVvtPage], activity_mapping: AnyMappingModel
 ) -> list[str]:
-    """Get all persons from all confluence pages.
+    """Get a list of all persons from all confluence pages.
 
     Args:
         pages: confluence-vvt page
@@ -215,7 +215,7 @@ def get_involved_units_from_page(
 def get_all_units_from_all_pages(
     pages: list[ConfluenceVvtPage], activity_mapping: AnyMappingModel
 ) -> list[str]:
-    """Get all units from all confluence pages.
+    """Get a list of all units from all confluence pages.
 
     Args:
         pages: all confluence-vvt page
