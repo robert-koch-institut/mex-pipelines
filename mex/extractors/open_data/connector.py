@@ -27,7 +27,7 @@ class OpenDataConnector(HTTPConnector):
             Generator for parent resources
         """
         parents_base_url = "api/communities/robertkochinstitut/records?"
-        total_records = self.request("GET", f"{parents_base_url}size=1")["hits"][
+        total_records = self.request("GET", parents_base_url, {"size": 1})["hits"][
             "total"
         ]
 
@@ -36,8 +36,7 @@ class OpenDataConnector(HTTPConnector):
 
         for page in range(1, amount_pages + 1):
             response = self.request(
-                "GET",
-                f"{parents_base_url}size={limit}&page={page}",
+                "GET", parents_base_url, {"size": limit, "page": page}
             )
 
             for item in response["hits"]["hits"]:
@@ -61,7 +60,7 @@ class OpenDataConnector(HTTPConnector):
         """
         versions_base_url = f"api/records/{resource_id}/versions?"
 
-        total_records = self.request("GET", f"{versions_base_url}size=1")["hits"][
+        total_records = self.request("GET", versions_base_url, {"size": 1})["hits"][
             "total"
         ]
 
@@ -71,7 +70,8 @@ class OpenDataConnector(HTTPConnector):
         for page in range(1, amount_pages + 1):
             response = self.request(
                 "GET",
-                f"{versions_base_url}size={limit}&page={page}",
+                versions_base_url,
+                {"size": limit, "page": page},
             )
 
             for item in response["hits"]["hits"]:
@@ -88,7 +88,9 @@ class OpenDataConnector(HTTPConnector):
         """
         versions_base_url = f"api/records/{resource_id}/versions?"
 
-        oldest_record = self.request("GET", f"{versions_base_url}size=1&sort=oldest")
+        oldest_record = self.request(
+            "GET", versions_base_url, {"size": 1, "sort": "oldest"}
+        )
 
         item = oldest_record["hits"]["hits"][0]
 

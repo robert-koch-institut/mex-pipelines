@@ -25,6 +25,6 @@ def open_data_resource_versions() -> list[OpenDataResourceVersion]:
 
 
 @entrypoint(Settings)
-def run() -> None:
+def run() -> None:  # pragma: no cover
     """Run the odk extractor job in-process."""
     run_job_in_process("open_data")
