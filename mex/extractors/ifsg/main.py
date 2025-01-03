@@ -279,6 +279,6 @@ def extracted_ifsg_variable(
 
 
 @entrypoint(Settings)
-def run() -> None:
+def run() -> None:  # pragma: no cover
     """Run the IFSG extractor job in-process."""
     run_job_in_process("ifsg")

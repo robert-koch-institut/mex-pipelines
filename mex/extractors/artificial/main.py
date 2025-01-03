@@ -56,6 +56,6 @@ def artificial_data(factories: Faker, identities: IdentityMap) -> None:
 
 
 @entrypoint(Settings)
-def run() -> None:
+def run() -> None:  # pragma: no cover
     """Run the artificial data job in-process."""
     run_job_in_process("artificial")

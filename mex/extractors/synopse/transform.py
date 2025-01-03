@@ -669,7 +669,7 @@ def transform_synopse_project_to_activity(
                 url=PureWindowsPath(path_line).as_uri(), title="\n".join(title_lines)
             )
         except ValueError:
-            pass  # TODO: handle relative paths
+            pass  # TODO(HS): handle relative paths
     involved_units = [
         merged_id
         for unit in (synopse_project.interne_partner or "").split(",")

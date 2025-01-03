@@ -95,6 +95,6 @@ def extracted_biospecimen_resources(
 
 
 @entrypoint(Settings)
-def run() -> None:
+def run() -> None:  # pragma: no cover
     """Run the biospecimen extractor job in-process."""
     run_job_in_process("biospecimen")
