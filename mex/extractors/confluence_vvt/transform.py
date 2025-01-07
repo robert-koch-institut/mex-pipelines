@@ -126,7 +126,7 @@ def transform_confluence_vvt_activities_to_extracted_activities(
         List of ExtractedActivity
     """
     extracted_activities = []
-
+    # TODO(eh): log and skipped failed pages
     for page in pages:
         extracted_activity = transform_confluence_vvt_page_to_extracted_activity(
             page,

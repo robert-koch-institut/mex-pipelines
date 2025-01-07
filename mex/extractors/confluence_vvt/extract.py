@@ -171,21 +171,25 @@ def get_responsible_unit_from_page(
     page: ConfluenceVvtPage,
     confluence_vvt_activity_mapping: AnyMappingModel,
 ) -> list[str]:
-    """Get resposible unit from confluence page.
+    """Get responsible unit from confluence page.
 
     Args:
         page: confluence-vvt page
         confluence_vvt_activity_mapping: activity mapping for confluence-vvt
 
     Returns:
-        list of resposible unit
+        list of responsible unit
     """
-    responsbile_units = page.tables[0].get_value_row_by_heading(
+    responsible_units = page.tables[0].get_value_row_by_heading(
         confluence_vvt_activity_mapping.responsibleUnit[0]
         .fieldInPrimarySource.split("|")[0]
         .strip()
     )
-    return responsbile_units.cells[1].get_texts()
+    return [
+        unit.strip()
+        for text in responsible_units.cells[1].get_texts()
+        for unit in text.split(",")
+    ]
 
 
 def get_involved_units_from_page(
@@ -201,18 +205,20 @@ def get_involved_units_from_page(
     Returns:
         list of involved unit
     """
-    all_units = []
-    for unit in confluence_vvt_activity_mapping.involvedUnit:
-        if unit == confluence_vvt_activity_mapping.involvedUnit[3]:
+    all_units: list[str] = []
+    for involved_unit in confluence_vvt_activity_mapping.involvedUnit:
+        if involved_unit == confluence_vvt_activity_mapping.involvedUnit[3]:
             # skipping it because its always empty and breaks things
             continue
-        for p in (
+        for text in (
             page.tables[0]
-            .get_value_row_by_heading(unit.fieldInPrimarySource.split("|")[0].strip())
+            .get_value_row_by_heading(
+                involved_unit.fieldInPrimarySource.split("|")[0].strip()
+            )
             .cells[1]
             .get_texts()
         ):
-            all_units.append(p)  # noqa: PERF402
+            all_units.extend(unit.strip() for unit in text.split(","))
     return all_units
 
 
