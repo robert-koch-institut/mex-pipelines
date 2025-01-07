@@ -60,7 +60,7 @@ def extracted_primary_source_confluence_vvt(
 
 
 @asset(group_name="confluence_vvt")
-def activity_mapping() -> AnyMappingModel:
+def confluence_vvt_activity_mapping() -> AnyMappingModel:
     """Return activity mapping."""
     settings = Settings.get()
     return transform_mapping_data_to_model(
@@ -76,15 +76,17 @@ def extracted_confluence_vvt_person_ids_by_query_string(
     confluence_vvt_pages: list[ConfluenceVvtPage],
     extracted_organizational_units: list[ExtractedOrganizationalUnit],
     extracted_primary_source_ldap: ExtractedPrimarySource,
-    activity_mapping: AnyMappingModel,
+    confluence_vvt_activity_mapping: AnyMappingModel,
 ) -> dict[str, list[MergedPersonIdentifier]]:
     """Return mapping from query string to person IDs.
 
     Transforms and loads Confluence VVT persons along the way.
     """
-    contacts = get_all_persons_from_all_pages(confluence_vvt_pages, activity_mapping)
+    contacts = get_all_persons_from_all_pages(
+        confluence_vvt_pages, confluence_vvt_activity_mapping
+    )
     involved_persons = get_all_units_from_all_pages(
-        confluence_vvt_pages, activity_mapping
+        confluence_vvt_pages, confluence_vvt_activity_mapping
     )
 
     ldap_authors = extract_confluence_vvt_authors(contacts + involved_persons)
@@ -109,14 +111,14 @@ def extracted_confluence_vvt_activities(
     ],
     extracted_primary_source_confluence_vvt: ExtractedPrimarySource,
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
-    activity_mapping: AnyMappingModel,
+    confluence_vvt_activity_mapping: AnyMappingModel,
 ) -> list[ExtractedActivity]:
     """Transform and load Confluence VVT activities."""
     mex_activities = list(
         transform_confluence_vvt_activities_to_extracted_activities(
             confluence_vvt_pages,
             extracted_primary_source_confluence_vvt,
-            activity_mapping,
+            confluence_vvt_activity_mapping,
             extracted_confluence_vvt_person_ids_by_query_string,
             unit_stable_target_ids_by_synonym,
         )

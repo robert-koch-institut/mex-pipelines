@@ -100,38 +100,38 @@ def extract_confluence_vvt_authors(
 
 def get_contact_from_page(
     page: ConfluenceVvtPage,
-    activity_mapping: AnyMappingModel,
+    confluence_vvt_activity_mapping: AnyMappingModel,
 ) -> list[str]:
     """Get contact from confluence page.
 
     Args:
         page: confluence-vvt page
-        activity_mapping: activity mapping for confluence-vvt
+        confluence_vvt_activity_mapping: activity mapping for confluence-vvt
 
     Returns:
         list of contacts
     """
     contact = page.tables[0].get_value_row_by_heading(
-        activity_mapping.contact[0].fieldInPrimarySource
+        confluence_vvt_activity_mapping.contact[0].fieldInPrimarySource
     )
     return contact.cells[0].get_texts()
 
 
 def get_involved_persons_from_page(
     page: ConfluenceVvtPage,
-    activity_mapping: AnyMappingModel,
+    confluence_vvt_activity_mapping: AnyMappingModel,
 ) -> list[str]:
     """Get involved persons from confluence page.
 
     Args:
         page: confluence-vvt page
-        activity_mapping: activity mapping for confluence-vvt
+        confluence_vvt_activity_mapping: activity mapping for confluence-vvt
 
     Returns:
         list of involved persons
     """
     all_persons = []
-    for person in activity_mapping.involvedPerson:
+    for person in confluence_vvt_activity_mapping.involvedPerson:
         for p in (
             page.tables[0]
             .get_value_row_by_heading(person.fieldInPrimarySource)
@@ -144,21 +144,23 @@ def get_involved_persons_from_page(
 
 
 def get_all_persons_from_all_pages(
-    pages: list[ConfluenceVvtPage], activity_mapping: AnyMappingModel
+    pages: list[ConfluenceVvtPage], confluence_vvt_activity_mapping: AnyMappingModel
 ) -> list[str]:
     """Get a list of all persons from all confluence pages.
 
     Args:
         pages: confluence-vvt page
-        activity_mapping: activity mapping for confluence-vvt
+        confluence_vvt_activity_mapping: activity mapping for confluence-vvt
 
     Returns:
         list of all persons on confluence page
     """
     all_persons_on_page = []
     for page in pages:
-        contacts = get_contact_from_page(page, activity_mapping)
-        involved_persons = get_involved_persons_from_page(page, activity_mapping)
+        contacts = get_contact_from_page(page, confluence_vvt_activity_mapping)
+        involved_persons = get_involved_persons_from_page(
+            page, confluence_vvt_activity_mapping
+        )
         all_persons_on_page.extend(contacts)
         all_persons_on_page.extend(involved_persons)
 
@@ -167,39 +169,41 @@ def get_all_persons_from_all_pages(
 
 def get_responsible_unit_from_page(
     page: ConfluenceVvtPage,
-    activity_mapping: AnyMappingModel,
+    confluence_vvt_activity_mapping: AnyMappingModel,
 ) -> list[str]:
     """Get resposible unit from confluence page.
 
     Args:
         page: confluence-vvt page
-        activity_mapping: activity mapping for confluence-vvt
+        confluence_vvt_activity_mapping: activity mapping for confluence-vvt
 
     Returns:
         list of resposible unit
     """
     responsbile_units = page.tables[0].get_value_row_by_heading(
-        activity_mapping.responsibleUnit[0].fieldInPrimarySource.split("|")[0].strip()
+        confluence_vvt_activity_mapping.responsibleUnit[0]
+        .fieldInPrimarySource.split("|")[0]
+        .strip()
     )
     return responsbile_units.cells[1].get_texts()
 
 
 def get_involved_units_from_page(
     page: ConfluenceVvtPage,
-    activity_mapping: AnyMappingModel,
+    confluence_vvt_activity_mapping: AnyMappingModel,
 ) -> list[str]:
     """Get involved unit from confluence page.
 
     Args:
         page: confluence-vvt page
-        activity_mapping: activity mapping for confluence-vvt
+        confluence_vvt_activity_mapping: activity mapping for confluence-vvt
 
     Returns:
         list of involved unit
     """
     all_units = []
-    for unit in activity_mapping.involvedUnit:
-        if unit == activity_mapping.involvedUnit[3]:
+    for unit in confluence_vvt_activity_mapping.involvedUnit:
+        if unit == confluence_vvt_activity_mapping.involvedUnit[3]:
             # skipping it because its always empty and breaks things
             continue
         for p in (
@@ -213,21 +217,25 @@ def get_involved_units_from_page(
 
 
 def get_all_units_from_all_pages(
-    pages: list[ConfluenceVvtPage], activity_mapping: AnyMappingModel
+    pages: list[ConfluenceVvtPage], confluence_vvt_activity_mapping: AnyMappingModel
 ) -> list[str]:
     """Get a list of all units from all confluence pages.
 
     Args:
         pages: all confluence-vvt page
-        activity_mapping: activity mapping for confluence-vvt
+        confluence_vvt_activity_mapping: activity mapping for confluence-vvt
 
     Returns:
         list of all units on a confuence page
     """
     all_units_on_page = []
     for page in pages:
-        responsible_units = get_responsible_unit_from_page(page, activity_mapping)
-        involved_units = get_involved_units_from_page(page, activity_mapping)
+        responsible_units = get_responsible_unit_from_page(
+            page, confluence_vvt_activity_mapping
+        )
+        involved_units = get_involved_units_from_page(
+            page, confluence_vvt_activity_mapping
+        )
         all_units_on_page.extend(responsible_units)
         all_units_on_page.extend(involved_units)
 
