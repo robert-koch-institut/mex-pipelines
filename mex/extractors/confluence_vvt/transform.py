@@ -1,5 +1,8 @@
 from collections.abc import Iterable
 
+from pydantic import ValidationError
+
+from mex.common.logging import logger
 from mex.common.models import ExtractedActivity, ExtractedPrimarySource
 from mex.common.types import (
     ActivityType,
@@ -126,16 +129,17 @@ def transform_confluence_vvt_activities_to_extracted_activities(
         List of ExtractedActivity
     """
     extracted_activities = []
-    # TODO(eh): log and skipped failed pages
     for page in pages:
-        extracted_activity = transform_confluence_vvt_page_to_extracted_activity(
-            page,
-            extracted_primary_source,
-            confluence_vvt_activity_mapping,
-            merged_ids_by_query_string,
-            unit_merged_ids_by_synonym,
-        )
-        if extracted_activity:
-            extracted_activities.append(extracted_activity)
-
+        try:
+            extracted_activity = transform_confluence_vvt_page_to_extracted_activity(
+                page,
+                extracted_primary_source,
+                confluence_vvt_activity_mapping,
+                merged_ids_by_query_string,
+                unit_merged_ids_by_synonym,
+            )
+            if extracted_activity:
+                extracted_activities.append(extracted_activity)
+        except ValidationError as error:
+            logger.info(f"failed on page {page.id} with {error}")
     return extracted_activities
