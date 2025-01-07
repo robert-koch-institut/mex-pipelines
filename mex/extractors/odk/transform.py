@@ -169,7 +169,7 @@ def transform_odk_data_to_extracted_variables(
         ]
         value_set: list[str] = []
         for row_index, type_row in enumerate(file.type_survey):
-            if type_row in ["begin_group", "end_group", "note"]:
+            if type_row in ["begin_group", "end_group", "begin_repeat"]:
                 data_type = None
             elif "select_" in str(type_row):
                 data_type = "integer"
