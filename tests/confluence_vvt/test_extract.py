@@ -95,7 +95,6 @@ def test_fetch_all_pages_data_mocked(
         lambda self: setattr(self, "session", session),
     )
 
-    breakpoint()
     monkeypatch.setattr(
         extract,
         "get_page_data_by_id",

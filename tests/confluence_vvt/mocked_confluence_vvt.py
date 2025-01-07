@@ -5,10 +5,10 @@ from pytest import MonkeyPatch
 
 from mex.extractors.confluence_vvt import main
 from mex.extractors.confluence_vvt.models import (
-    ConfluenceVvtPage,
-    ConfluenceVvtTable,
-    ConfluenceVvtRow,
     ConfluenceVvtHeading,
+    ConfluenceVvtPage,
+    ConfluenceVvtRow,
+    ConfluenceVvtTable,
     ConfluenceVvtValue,
 )
 

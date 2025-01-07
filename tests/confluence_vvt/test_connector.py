@@ -9,6 +9,7 @@ from mex.extractors.confluence_vvt.connector import ConfluenceVvtConnector
 from mex.extractors.confluence_vvt.extract import fetch_all_vvt_pages_ids
 from mex.extractors.confluence_vvt.models import (
     ConfluenceVvtHeading,
+    ConfluenceVvtPage,
     ConfluenceVvtValue,
 )
 
@@ -91,7 +92,6 @@ def test_get_page_by_id() -> None:
     page_data = connector.get_page_by_id("89780861")
     assert len(page_data.model_dump()) == 2
 
-    # extract
     result = {}
     for table in page_data.tables:
         complete_row_with_values = []
@@ -103,27 +103,25 @@ def test_get_page_by_id() -> None:
                     complete_row_with_values.append(cells_text)
                     continue
                 if isinstance(cell, ConfluenceVvtValue):
-                    breakpoint()
                     complete_row_with_values[k] = {
                         **complete_row_with_values[k],
                         "values": cell.texts,
                     }
-                    # cells_text["values"] = cell.texts
-                    # complete_row_with_values[k] = complete_row_with_values[k].update(
-                    #     {"values": cell.texts}
-                    # )
-                    # complete_row_with_values.append(cells_text)
+                    cells_text["values"] = cell.texts
+                    complete_row_with_values[k] = complete_row_with_values[k].update(
+                        {"values": cell.texts}
+                    )
+                    complete_row_with_values.append(cells_text)
                     continue
             result[f"heading_value_pair_row_{i}"] = complete_row_with_values
             if (i + 1) % 2 == 0:
                 complete_row_with_values.clear()
-    breakpoint()
-
-    # start by mapping rows to values below. do it row loop here.
+    # TODO(eh): start by mapping rows to values below. do it row loop here.
 
     all_pages_ids = fetch_all_vvt_pages_ids()
-    # for page_id in all_pages_ids:
-    #     pagedata = connector.get_page_by_id(page_id)
+    for page_id in all_pages_ids:
+        pagedata = connector.get_page_by_id(page_id)
+        assert isinstance(pagedata, ConfluenceVvtPage)
 
 
 nested_dict = {

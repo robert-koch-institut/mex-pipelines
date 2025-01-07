@@ -1,8 +1,10 @@
 from urllib.parse import urljoin
+
 from bs4 import BeautifulSoup
+
 from mex.common.connector import HTTPConnector
-from mex.extractors.settings import Settings
 from mex.extractors.confluence_vvt.models import ConfluenceVvtPage
+from mex.extractors.settings import Settings
 
 
 class ConfluenceVvtConnector(HTTPConnector):
@@ -61,9 +63,10 @@ class ConfluenceVvtConnector(HTTPConnector):
         for table in soup.find_all("table", {"class": "confluenceTable"}):
             rows = []
             for row in table.find_all("tr"):
-                cells = []
-                for header in row.find_all("th"):
-                    cells.append({"text": header.get_text().strip() or None})
+                cells = [
+                    {"text": header.get_text().strip() or None}
+                    for header in row.find_all("th")
+                ]
                 for value in row.find_all("td"):
                     texts = [
                         text

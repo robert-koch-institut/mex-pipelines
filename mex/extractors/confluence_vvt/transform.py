@@ -45,7 +45,7 @@ def transform_confluence_vvt_page_to_extracted_activity(
 
     abstract = "\n".join(
         page.tables[0]
-        .get_value_by_heading(activity_mapping.abstract[0].fieldInPrimarySource)
+        .get_value_row_by_heading(activity_mapping.abstract[0].fieldInPrimarySource)
         .cells[0]
         .get_texts()
     )

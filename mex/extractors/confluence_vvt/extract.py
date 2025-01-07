@@ -111,7 +111,7 @@ def get_contact_from_page(
     Returns:
         list of contacts
     """
-    contact = page.tables[0].get_value_by_heading(
+    contact = page.tables[0].get_value_row_by_heading(
         activity_mapping.contact[0].fieldInPrimarySource
     )
     return contact.cells[0].get_texts()
@@ -134,7 +134,7 @@ def get_involved_persons_from_page(
     for person in activity_mapping.involvedPerson:
         for p in (
             page.tables[0]
-            .get_value_by_heading(person.fieldInPrimarySource)
+            .get_value_row_by_heading(person.fieldInPrimarySource)
             .cells[0]
             .get_texts()
         ):
@@ -178,7 +178,7 @@ def get_responsible_unit_from_page(
     Returns:
         list of resposible unit
     """
-    responsbile_units = page.tables[0].get_value_by_heading(
+    responsbile_units = page.tables[0].get_value_row_by_heading(
         activity_mapping.responsibleUnit[0].fieldInPrimarySource.split("|")[0].strip()
     )
     return responsbile_units.cells[1].get_texts()
@@ -204,7 +204,7 @@ def get_involved_units_from_page(
             continue
         for p in (
             page.tables[0]
-            .get_value_by_heading(unit.fieldInPrimarySource.split("|")[0].strip())
+            .get_value_row_by_heading(unit.fieldInPrimarySource.split("|")[0].strip())
             .cells[1]
             .get_texts()
         ):

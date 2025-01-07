@@ -7,9 +7,8 @@ import pytest
 import requests
 from pytest import MonkeyPatch
 from requests.models import Response
-from mex.common.models import ExtractedActivity, ExtractedPrimarySource
 
-from mex.common.models import ExtractedPrimarySource
+from mex.common.models import ExtractedActivity, ExtractedPrimarySource
 from mex.common.organigram.extract import (
     extract_organigram_units,
     get_unit_merged_ids_by_synonyms,
@@ -23,7 +22,6 @@ from mex.extractors.mapping.extract import extract_mapping_data
 from mex.extractors.mapping.transform import transform_mapping_data_to_model
 from mex.extractors.mapping.types import AnyMappingModel
 from mex.extractors.settings import Settings
-
 
 TEST_DATA_DIR = Path(__file__).parent / "test_data"
 
