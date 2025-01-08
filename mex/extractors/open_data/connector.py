@@ -16,6 +16,7 @@ class OpenDataConnector(HTTPConnector):
         """Set url of the host."""
         settings = Settings.get()
         self.url = settings.open_data.url
+        self.community_rki = settings.open_data.community_rki
 
     def get_parent_resources(self) -> Generator[OpenDataParentResource, None, None]:
         """Load parent resources by querying the Zenodo API.
@@ -26,7 +27,7 @@ class OpenDataConnector(HTTPConnector):
         Returns:
             Generator for parent resources
         """
-        parents_base_url = "api/communities/robertkochinstitut/records?"
+        parents_base_url = f"api/communities/{self.community_rki}/records?"
         total_records = self.request("GET", parents_base_url, {"size": 1})["hits"][
             "total"
         ]

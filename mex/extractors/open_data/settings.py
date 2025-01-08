@@ -7,3 +7,6 @@ class OpenDataSettings(BaseModel):
     """Zenodo settings submodel definition for the Open Data extractor."""
 
     url: str = Field("https://zenodo", description="Zenodo instance URL")
+    community_rki: str = Field(
+        "robertkochinstitut", description="Zenodo communitiy of rki"
+    )
