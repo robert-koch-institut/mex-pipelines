@@ -12,7 +12,7 @@ from mex.extractors.open_data.models.source import (
 def extract_parent_resources() -> Generator[OpenDataParentResource, None, None]:
     """Load Open Data resources by querying the Zenodo API.
 
-    Get all resources of  Zenodo community 'robertkochinstitut'.
+    Get all resources of the configured Zenodo community.
     These are called 'parent resources'.
 
     Returns:
