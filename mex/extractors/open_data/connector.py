@@ -22,7 +22,7 @@ class OpenDataConnector(HTTPConnector):
         """Load parent resources by querying the Zenodo API.
 
         Gets the parent resources (~ latest version) of all the resources of the
-        Zenodo communitiy "robertkochinstitut".
+        configured Zenodo community.
 
         Returns:
             Generator for parent resources
