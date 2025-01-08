@@ -175,19 +175,16 @@ def transform_odk_data_to_extracted_variables(
                 data_type = "integer"
             else:
                 data_type = str(type_row)
-            identifier_in_primary_source = str(file.name_survey[row_index])
+            name = str(file.name_survey[row_index])
+            if name == "nan":
+                continue
+            identifier_in_primary_source = name
             description = [
                 str(label_column[row_index])
                 for label_column in file.label_survey.values()
             ]
-            label = str(file.name_survey[row_index])
-            value_set = [
-                f"{file.name_choices[row_choices]}, "
-                f"{file.label_choices['label::English (en)'][row_choices]}"
-                for row_choices, file_name in enumerate(file.name_choices)
-                if file_name == file.name_survey[row_index]
-            ]
-            value_set.append(str(file.name_survey[row_index]))
+            label = name
+            value_set = get_value_set(name, file)
             extracted_variables.append(
                 ExtractedVariable(
                     dataType=data_type,
@@ -202,12 +199,12 @@ def transform_odk_data_to_extracted_variables(
     return extracted_variables
 
 
-def get_value_set(type_cell: str, choice_sheet: ODKData) -> list[str]:
+def get_value_set(type_cell: str, file: ODKData) -> list[str]:
     """Get value sets for types cells that start with select_one or multiple_one.
 
     Args:
         type_cell: one type cell
-        choice_sheet: choice sheet corresponding to type cell
+        file: choice sheet corresponding to type cell
 
     Returns:
         list of value sets matched to type cell
@@ -215,14 +212,15 @@ def get_value_set(type_cell: str, choice_sheet: ODKData) -> list[str]:
     value_set_survey = (
         type_cell.removeprefix("select_one").removeprefix("select_multiple").strip()
     )
-    label_choices = choice_sheet.label_choices
-    list_name = choice_sheet.list_name_choices
-    value_set_choices = [value_set_survey]
+    label_choices = file.label_choices
+    list_name = file.list_name_choices
+    names = file.name_choices
+    value_set_choices = []
     for i, list_name_row in enumerate(list_name):
         if list_name_row == value_set_survey:
             for label_column in label_choices.values():
-                label_value = label_column[i]
-                if isinstance(label_value, str):
-                    value_set_choices.append(label_value)
+                label_value = str(label_column[i])
+                name = str(names[i])
+                value_set_choices.append(f"{name}, {label_value}")
 
     return value_set_choices
