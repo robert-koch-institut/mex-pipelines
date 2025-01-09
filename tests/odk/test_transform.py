@@ -135,8 +135,6 @@ def test_transform_odk_data_to_extracted_variables(
         "dataType": "start",
         "label": [{"value": "start"}],
         "usedIn": [str(extracted_resources_odk[0].stableTargetId)],
-        "description": [{"value": "nan"}, {"value": "nan"}],
-        "valueSet": ["start"],
     }
     assert extracted_variables[0].model_dump(exclude_defaults=True) == expected
     expected = {
@@ -149,7 +147,6 @@ def test_transform_odk_data_to_extracted_variables(
             {"value": "Store username of interviewer.", "language": TextLanguage.EN},
             {"value": "Store username of interviewer.", "language": TextLanguage.EN},
         ],
-        "valueSet": ["username"],
         "identifier": Joker(),
         "stableTargetId": Joker(),
     }
