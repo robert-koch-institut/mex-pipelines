@@ -1,12 +1,11 @@
 import pytest
 from numpy import nan
 
-from mex.common.models import (
-    ExtractedResource,
-)
+from mex.common.models import ExtractedActivity, ExtractedResource
 from mex.common.types import (
     AccessRestriction,
     Language,
+    Link,
     MergedOrganizationalUnitIdentifier,
     MergedOrganizationIdentifier,
     Text,
@@ -14,6 +13,77 @@ from mex.common.types import (
 from mex.extractors.mapping.transform import transform_mapping_data_to_models
 from mex.extractors.mapping.types import AnyMappingModel
 from mex.extractors.odk.model import ODKData
+
+
+@pytest.fixture
+def extracted_international_projects_activities() -> list[ExtractedActivity]:
+    return [
+        ExtractedActivity(
+            hadPrimarySource="fSwk5o6nXHVMdFuPHH0hRk",
+            identifierInPrimarySource="0000-1000",
+            contact=["bFQoRhcVH5DHUU", "bFQoRhcVH5DHUL"],
+            responsibleUnit=["bFQoRhcVH5DHUL"],
+            title="This is a test project full title",
+            activityType=[
+                "https://mex.rki.de/item/activity-type-3",
+                "https://mex.rki.de/item/activity-type-1",
+            ],
+            alternativeTitle="testAAbr",
+            end="2021-12-31",
+            externalAssociate=["bFQoRhcVH5DHU8"],
+            funderOrCommissioner=["bFQoRhcVH5DHU8"],
+            involvedPerson=["bFQoRhcVH5DHUU"],
+            involvedUnit=["bFQoRhcVH5DHUL"],
+            shortName="testAAbr",
+            start="2021-07-27",
+            theme=["https://mex.rki.de/item/theme-37"],
+            website=[],
+        ),
+        ExtractedActivity(
+            hadPrimarySource="fSwk5o6nXHVMdFuPHH0hRk",
+            identifierInPrimarySource="0000-1001",
+            contact=["bFQoRhcVH5DHUU", "bFQoRhcVH5DHUL"],
+            responsibleUnit=["bFQoRhcVH5DHUL"],
+            title="This is a test project full title 2",
+            activityType=[
+                "https://mex.rki.de/item/activity-type-3",
+                "https://mex.rki.de/item/activity-type-1",
+            ],
+            alternativeTitle="testAAbr2",
+            end="2025-12-31",
+            funderOrCommissioner=["bFQoRhcVH5DHU8"],
+            fundingProgram=["GHPP2"],
+            involvedPerson=["bFQoRhcVH5DHUU"],
+            shortName="testAAbr2",
+            start="2023-01-01",
+            theme=[
+                "https://mex.rki.de/item/theme-37",
+            ],
+        ),
+        ExtractedActivity(
+            hadPrimarySource="fSwk5o6nXHVMdFuPHH0hRk",
+            identifierInPrimarySource="0000-1002",
+            contact=["bFQoRhcVH5DHUU", "bFQoRhcVH5DHUL"],
+            responsibleUnit=["bFQoRhcVH5DHUL"],
+            title="This is a test project full title 4",
+            activityType=[
+                "https://mex.rki.de/item/activity-type-3",
+                "https://mex.rki.de/item/activity-type-1",
+            ],
+            alternativeTitle="testAAbr3",
+            end="2022-12-31",
+            funderOrCommissioner=["bFQoRhcVH5DHU8"],
+            fundingProgram=["None"],
+            involvedPerson=["bFQoRhcVH5DHUU"],
+            involvedUnit=["bFQoRhcVH5DHUL"],
+            shortName="testAAbr3",
+            start="2021-08-01",
+            theme=[
+                "https://mex.rki.de/item/theme-37",
+            ],
+            website=[Link(language=None, title=None, url="None")],
+        ),
+    ]
 
 
 @pytest.fixture

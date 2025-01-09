@@ -1,4 +1,5 @@
 from mex.common.models import (
+    ExtractedActivity,
     ExtractedOrganization,
     ExtractedPrimarySource,
     ExtractedResource,
@@ -17,6 +18,7 @@ def transform_odk_resources_to_mex_resources(
     odk_resource_mappings: list[AnyMappingModel],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     external_partner_and_publisher_by_label: dict[str, MergedOrganizationIdentifier],
+    extracted_international_projects_activities: list[ExtractedActivity],
     extracted_primary_source_mex: ExtractedPrimarySource,
 ) -> tuple[dict[str, ExtractedResource], list[str]]:
     """Transform odk resources to mex resources.
@@ -26,11 +28,17 @@ def transform_odk_resources_to_mex_resources(
         unit_stable_target_ids_by_synonym: dict of OrganizationalUnitIds
         extracted_primary_source_international_projects: primary source
         external_partner_and_publisher_by_label: dict of wikidata OrganizationIDs
+        extracted_international_projects_activities: list of extracted international
+                                                     projects activitiess
         extracted_primary_source_mex: mex primary source
 
     Returns:
         tuple of list of mex resources and list of resources which are part of another
     """
+    international_projects_stable_target_id_by_identifier_in_primary_source = {
+        activity.identifierInPrimarySource: activity.stableTargetId
+        for activity in extracted_international_projects_activities
+    }
     resources: dict[str, ExtractedResource] = {}
     is_part_of_list: list[str] = []
     for resource in odk_resource_mappings:
@@ -62,6 +70,11 @@ def transform_odk_resources_to_mex_resources(
         size_of_data_basis = None
         if resource.sizeOfDataBasis:
             size_of_data_basis = resource.sizeOfDataBasis[0].mappingRules[0].setValues
+        was_generated_by = (
+            international_projects_stable_target_id_by_identifier_in_primary_source[
+                resource.wasGeneratedBy[0].mappingRules[0].forValues[0]
+            ]
+        )
         external_partner: list[MergedOrganizationIdentifier] = []
         for partner in resource.externalPartner[0].mappingRules[0].forValues:
             if partner in external_partner_and_publisher_by_label:
@@ -117,6 +130,7 @@ def transform_odk_resources_to_mex_resources(
             unitInCharge=unit_stable_target_ids_by_synonym[
                 resource.unitInCharge[0].mappingRules[0].forValues[0]
             ],
+            wasGeneratedBy=was_generated_by,
         )
     return (resources, is_part_of_list)
 

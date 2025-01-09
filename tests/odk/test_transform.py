@@ -1,4 +1,8 @@
-from mex.common.models import ExtractedPrimarySource, ExtractedResource
+from mex.common.models import (
+    ExtractedActivity,
+    ExtractedPrimarySource,
+    ExtractedResource,
+)
 from mex.common.testing import Joker
 from mex.common.types import (
     MergedOrganizationalUnitIdentifier,
@@ -17,12 +21,20 @@ def test_transform_odk_resources_to_mex_resources(
     odk_resource_mappings: list[AnyMappingModel],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     external_partner_and_publisher_by_label: dict[str, MergedOrganizationIdentifier],
+    extracted_international_projects_activities: list[ExtractedActivity],
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
 ) -> None:
+    international_project_stable_target_id = next(
+        filter(
+            lambda x: x.identifierInPrimarySource == "0000-1000",
+            extracted_international_projects_activities,
+        )
+    ).stableTargetId
     resources, is_part_of = transform_odk_resources_to_mex_resources(
         odk_resource_mappings,
         unit_stable_target_ids_by_synonym,
         external_partner_and_publisher_by_label,
+        extracted_international_projects_activities,
         extracted_primary_sources["mex"],
     )
     expected = {
@@ -91,6 +103,7 @@ def test_transform_odk_resources_to_mex_resources(
             {"value": "erat", "language": TextLanguage.DE},
         ],
         "unitInCharge": [str(unit_stable_target_ids_by_synonym["C1"])],
+        "wasGeneratedBy": str(international_project_stable_target_id),
     }
     assert resources["test_raw_data"].model_dump(exclude_defaults=True) == expected
     assert is_part_of == []
@@ -99,6 +112,7 @@ def test_transform_odk_resources_to_mex_resources(
             odk_resource_mappings,
             unit_stable_target_ids_by_synonym,
             {},
+            extracted_international_projects_activities,
             extracted_primary_sources["mex"],
         )
     )
