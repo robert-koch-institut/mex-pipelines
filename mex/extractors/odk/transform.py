@@ -182,9 +182,10 @@ def transform_odk_data_to_extracted_variables(
             description = [
                 str(label_column[row_index])
                 for label_column in file.label_survey.values()
+                if str(label_column[row_index]) != "nan"
             ]
             label = name
-            value_set = get_value_set(name, file)
+            value_set = get_value_set(str(file.type_survey[row_index]), file)
             extracted_variables.append(
                 ExtractedVariable(
                     dataType=data_type,
@@ -221,6 +222,9 @@ def get_value_set(type_cell: str, file: ODKData) -> list[str]:
             for label_column in label_choices.values():
                 label_value = str(label_column[i])
                 name = str(names[i])
-                value_set_choices.append(f"{name}, {label_value}")
+                if label_value == "nan":
+                    value_set_choices.append(name)
+                else:
+                    value_set_choices.append(f"{name}, {label_value}")
 
     return value_set_choices
