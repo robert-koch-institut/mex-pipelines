@@ -9,7 +9,6 @@ import requests
 from pytest import MonkeyPatch
 from requests.models import Response
 
-from mex.extractors.confluence_vvt import extract
 from mex.extractors.confluence_vvt.connector import ConfluenceVvtConnector
 from mex.extractors.confluence_vvt.extract import (
     fetch_all_vvt_pages_ids,
@@ -66,28 +65,14 @@ def test_fetch_all_data_page_ids_mocked(
 def test_fetch_all_pages_data_mocked(
     monkeypatch: MonkeyPatch, detail_page_data_json: dict[str, Any]
 ) -> None:
-    expected = {
-        "abstract": "test description, test test test, test zwecke des vorhabens",
-        "contact": ["Test Verantwortliche 1"],
-        "identifier": "123456",
-        "identifier_in_primary_source": ["001-002"],
-        "involved_person": [
-            "Test Verantwortliche 1",
-            "test ggfs vertreter",
-            "Test mitarbeitende 1",
-        ],
-        "involved_unit": ["Test OE 1", "FG99", "test OE 1"],
-        "responsible_unit": ["Test OE 1"],
-        "theme": "https://mex.rki.de/item/theme-1",
-        "title": "Test Title",
-    }
-
     response = Mock(spec=Response, status_code=200)
     response.json.return_value = detail_page_data_json
+    page_label = Mock(spec=Response, status_code=200)
+    page_label.json.return_value = {"results": [{"name": "vvt"}]}
 
     # mocking create_session function
     session = MagicMock(spec=requests.Session)
-    session.get = MagicMock(side_effect=[response])
+    session.get = MagicMock(side_effect=(content for content in [page_label, response]))
 
     monkeypatch.setattr(
         ConfluenceVvtConnector,
@@ -95,12 +80,10 @@ def test_fetch_all_pages_data_mocked(
         lambda self: setattr(self, "session", session),
     )
 
-    monkeypatch.setattr(
-        extract,
-        "get_page_data_by_id",
-        detail_page_data_json,
-    )
-    all_pages_data = list(get_page_data_by_id([str(expected["identifier"])]))
+    all_pages_data = list(get_page_data_by_id(["123457"]))
 
     assert len(all_pages_data) == 1
-    assert all_pages_data[0].model_dump(exclude_none=True) == expected
+    all_pages_data_dict = all_pages_data[0].model_dump(exclude_none=True)
+    assert all_pages_data_dict["id"] == 123457
+    assert all_pages_data_dict["title"] == "Test Title"
+    assert len(all_pages_data_dict["tables"]) == 2

@@ -95,7 +95,6 @@ def confluence_vvt_sources_dict() -> dict[str, ConfluenceVvtPage]:
                                 ConfluenceVvtValue(texts=["Musterman, Max", "max"]),
                                 ConfluenceVvtValue(texts=["FG99"]),
                                 ConfluenceVvtValue(texts=["C1"]),
-                                ConfluenceVvtValue(texts=[""]),
                             ]
                         ),
                         ConfluenceVvtRow(
@@ -115,7 +114,6 @@ def confluence_vvt_sources_dict() -> dict[str, ConfluenceVvtPage]:
                                 ),
                                 ConfluenceVvtValue(texts=["C1"]),
                                 ConfluenceVvtValue(texts=["FG99"]),
-                                ConfluenceVvtValue(texts=[""]),
                             ]
                         ),
                         ConfluenceVvtRow(
@@ -141,12 +139,6 @@ def confluence_vvt_sources_dict() -> dict[str, ConfluenceVvtPage]:
                                     ]
                                 ),
                                 ConfluenceVvtValue(texts=["FG99", "C1"]),
-                                ConfluenceVvtValue(
-                                    texts=[
-                                        "",
-                                        "",
-                                    ]
-                                ),
                             ]
                         ),
                         ConfluenceVvtRow(
@@ -286,7 +278,6 @@ def confluence_vvt_sources_dict() -> dict[str, ConfluenceVvtPage]:
                                 ConfluenceVvtValue(texts=["Musterman, Max", "max"]),
                                 ConfluenceVvtValue(texts=["FG99"]),
                                 ConfluenceVvtValue(texts=["C1"]),
-                                ConfluenceVvtValue(texts=[""]),
                             ]
                         ),
                         ConfluenceVvtRow(
@@ -306,7 +297,6 @@ def confluence_vvt_sources_dict() -> dict[str, ConfluenceVvtPage]:
                                 ),
                                 ConfluenceVvtValue(texts=["C1"]),
                                 ConfluenceVvtValue(texts=["FG99"]),
-                                ConfluenceVvtValue(texts=[""]),
                             ]
                         ),
                         ConfluenceVvtRow(
@@ -332,12 +322,6 @@ def confluence_vvt_sources_dict() -> dict[str, ConfluenceVvtPage]:
                                     ]
                                 ),
                                 ConfluenceVvtValue(texts=["FG99", "C1"]),
-                                ConfluenceVvtValue(
-                                    texts=[
-                                        "",
-                                        "",
-                                    ]
-                                ),
                             ]
                         ),
                         ConfluenceVvtRow(
