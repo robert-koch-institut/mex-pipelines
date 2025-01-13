@@ -29,7 +29,7 @@ def transform_odk_resources_to_mex_resources(
         extracted_primary_source_international_projects: primary source
         external_partner_and_publisher_by_label: dict of wikidata OrganizationIDs
         extracted_international_projects_activities: list of extracted international
-                                                     projects activitiess
+                                                     projects activities
         extracted_primary_source_mex: mex primary source
 
     Returns:
