@@ -10,7 +10,7 @@ from mex.extractors.confluence_vvt.extract import fetch_all_vvt_pages_ids
 
 
 @pytest.fixture
-def mocked_confluence_vvt(monkeypatch: MonkeyPatch) -> MagicMock:
+def mocked_confluence_vvt_session(monkeypatch: MonkeyPatch) -> MagicMock:
     """Mock the ConfluenceVvt session with a MagicMock session and return that."""
     mocked_session = MagicMock(spec=requests.Session)
     mocked_session.request = MagicMock(
@@ -36,7 +36,7 @@ def test_initialization() -> None:
 
 
 def test_initialization_mocked_auth_fail(
-    mocked_confluence_vvt: requests.Session,
+    mocked_confluence_vvt_session: requests.Session,
 ) -> None:
     error_message = {
         "statusCode": 401,
@@ -53,7 +53,7 @@ def test_initialization_mocked_auth_fail(
     mocked_response = Mock(spec=requests.Response)
     mocked_response.status_code = 401
     mocked_response.json = MagicMock(return_value=error_message)
-    mocked_confluence_vvt.request = MagicMock(return_value=mocked_response)
+    mocked_confluence_vvt_session.request = MagicMock(return_value=mocked_response)
 
     connector = ConfluenceVvtConnector.get()
 
@@ -63,7 +63,7 @@ def test_initialization_mocked_auth_fail(
 
 
 def test_initialization_mocked_server_error(
-    mocked_confluence_vvt: requests.Session,
+    mocked_confluence_vvt_session: requests.Session,
 ) -> None:
     error_message = {
         "statusCode": 500,
@@ -72,7 +72,7 @@ def test_initialization_mocked_server_error(
     mocked_response = Mock(spec=requests.Response)
     mocked_response.status_code = 500
     mocked_response.json = MagicMock(return_value=error_message)
-    mocked_confluence_vvt.request = MagicMock(return_value=mocked_response)
+    mocked_confluence_vvt_session.request = MagicMock(return_value=mocked_response)
 
     connector = ConfluenceVvtConnector.get()
 
