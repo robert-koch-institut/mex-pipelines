@@ -130,17 +130,16 @@ def get_involved_persons_from_page(
     Returns:
         list of involved persons
     """
-    all_persons = []
-    for person in confluence_vvt_activity_mapping.involvedPerson:
-        for p in (
+    return [
+        person_text
+        for person in confluence_vvt_activity_mapping.involvedPerson
+        for person_text in (
             page.tables[0]
             .get_value_row_by_heading(person.fieldInPrimarySource)
             .cells[0]
             .get_texts()
-        ):
-            all_persons.append(p)  # noqa: PERF402
-
-    return all_persons
+        )
+    ]
 
 
 def get_all_persons_from_all_pages(
