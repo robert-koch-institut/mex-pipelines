@@ -49,11 +49,11 @@ def test_extract_odk_raw_data() -> None:
                 "Yes",
                 "No",
                 "Don't know",
-                "Refused to answer",
+                nan,
                 nan,
                 "Head of household",
                 "Wife, husband, partner",
-                "Son or daughter",
+                nan,
             ],
         },
         "label_survey": {

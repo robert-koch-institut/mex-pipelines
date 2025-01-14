@@ -146,9 +146,15 @@ def test_transform_odk_data_to_extracted_variables(
         "hadPrimarySource": str(extracted_primary_sources["odk"].stableTargetId),
         "identifierInPrimarySource": "start",
         "stableTargetId": Joker(),
-        "dataType": "start",
+        "dataType": "yes_no",
         "label": [{"value": "start"}],
         "usedIn": [str(extracted_resources_odk[0].stableTargetId)],
+        "valueSet": [
+            "yes_no, Yes",
+            "yes_no",
+            "yes_no, No",
+            "yes_no",
+        ],
     }
     assert extracted_variables[0].model_dump(exclude_defaults=True) == expected
     expected = {
