@@ -342,7 +342,7 @@ def test_transform_synopse_data_to_mex_resources(
     extracted_activity: ExtractedActivity,
     extracted_access_platforms: list[ExtractedAccessPlatform],
     extracted_organization: list[ExtractedOrganization],
-    synopse_resource_extended_data_use: AnyMappingModel,
+    synopse_resource: AnyMappingModel,
 ) -> None:
     unit_merged_ids_by_synonym = {"C1": Identifier.generate(seed=234)}
     access_platform_by_identifier_in_primary_source = {
@@ -421,7 +421,7 @@ def test_transform_synopse_data_to_mex_resources(
             extracted_primary_sources["report-server"],
             unit_merged_ids_by_synonym,
             extracted_organization[0],
-            synopse_resource_extended_data_use,
+            synopse_resource,
         )
     )
     assert len(resources) == 1

@@ -98,14 +98,8 @@ def transform_overviews_to_resource_lookup(
     }
     resource_ids_by_synopse_id: dict[str, list[MergedResourceIdentifier]] = {}
     for study in study_overviews:
-        if (
-            resource_id := resource_id_by_identifier_in_platform.get(
-                f"{study.studien_id}-{study.ds_typ_id}-{study.titel_datenset}"
-            )
-        ) or (
-            resource_id := resource_id_by_identifier_in_platform.get(
-                f"{study.studien_id}-extended-data-use"
-            )
+        if resource_id := resource_id_by_identifier_in_platform.get(
+            f"{study.studien_id}-{study.ds_typ_id}-{study.titel_datenset}"
         ):
             resource_ids = resource_ids_by_synopse_id.setdefault(study.synopse_id, [])
             resource_ids.append(MergedResourceIdentifier(resource_id))
@@ -257,7 +251,7 @@ def transform_synopse_data_to_mex_resources(
         extracted_primary_source: Extracted report server platform
         unit_merged_ids_by_synonym: Map from unit acronyms and labels to their merged ID
         extracted_organization: extracted organization
-        synopse_resource: resource extended data use default values
+        synopse_resource: resource default values
 
     Returns:
         Generator for extracted resources
