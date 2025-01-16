@@ -444,22 +444,29 @@ def test_transform_synopse_projects_to_mex_activities(
     expected_activity = {
         "abstract": [{"value": synopse_project.beschreibung_der_studie}],
         "activityType": ["https://mex.rki.de/item/activity-type-6"],
-        "contact": [extracted_person.stableTargetId],
+        "contact": [str(extracted_person.stableTargetId)],
         "documentation": [
             {
                 "url": "file:///Z:/Projekte/Dokumentation",
                 "title": "- Fragebogen\n- Labor",
             }
         ],
-        "end": [TemporalEntity(synopse_project.projektende)],
-        "hadPrimarySource": extracted_primary_sources["report-server"].stableTargetId,
+        "end": [str(TemporalEntity(synopse_project.projektende))],
+        "hadPrimarySource": str(
+            extracted_primary_sources["report-server"].stableTargetId
+        ),
         "identifier": Joker(),
         "identifierInPrimarySource": synopse_project.studien_id,
-        "involvedPerson": [Identifier.generate(seed=12)],
-        "responsibleUnit": [Identifier.generate(seed=13)],
-        "shortName": [{"value": "BBCCDD_00"}],
+        "involvedPerson": [str(Identifier.generate(seed=12))],
+        "responsibleUnit": [str(Identifier.generate(seed=13))],
+        "shortName": [
+            {
+                "value": "BBCCDD_00",
+                "language": TextLanguage.DE,
+            }
+        ],
         "stableTargetId": Joker(),
-        "start": [TemporalEntity(synopse_project.projektbeginn)],
+        "start": [str(TemporalEntity(synopse_project.projektbeginn))],
         "succeeds": Joker(),
         "theme": ["https://mex.rki.de/item/theme-36"],
         "title": [{"language": TextLanguage.DE, "value": "Studie zu Lorem und Ipsum"}],

@@ -496,12 +496,17 @@ def transform_synopse_project_to_activity(
             pass  # TODO(HS): handle relative paths
     involved_units = [
         merged_id
-        for unit in (synopse_project.interne_partner or "").split(",")
+        for unit in (synopse_project.interne_partner or "").split(" ,")
         if (merged_id := unit_merged_ids_by_synonym.get(unit.strip()))
     ]
-    responsible_unit = unit_merged_ids_by_synonym.get(
-        synopse_project.verantwortliche_oe or ""
-    ) or unit_merged_ids_by_synonym.get("FG21")
+
+    if synopse_project.verantwortliche_oe:
+        responsible_unit = [
+            unit_merged_ids_by_synonym.get(synonym)
+            for synonym in synopse_project.verantwortliche_oe.split(" ,")
+        ]
+    else:
+        responsible_unit = [unit_merged_ids_by_synonym.get("FG21")]
     contact = [
         contact_merged_ids_by_emails[email]
         for email in synopse_project.get_contacts()
@@ -544,7 +549,12 @@ def transform_synopse_project_to_activity(
         ]
     else:
         funder_or_commissioner = []
-    involved_person = contributor_merged_ids_by_name[synopse_project.beitragende]
+    involved_person = []
+    if synopse_project.beitragende:
+        involved_person = [
+            contributor_merged_ids_by_name[name]
+            for name in synopse_project.beitragende.split(" ,")
+        ] or []
     theme = (
         synopse_activity.theme[0].mappingRules[0].setValues
         if synopse_project.studien_id
@@ -568,7 +578,9 @@ def transform_synopse_project_to_activity(
         involvedPerson=involved_person,
         involvedUnit=involved_units,
         responsibleUnit=responsible_unit,
-        shortName=synopse_project.akronym_des_studientitels,
+        shortName=Text(
+            value=synopse_project.akronym_des_studientitels, language=TextLanguage.DE
+        ),
         start=(
             TemporalEntity(synopse_project.projektbeginn)
             if synopse_project.projektbeginn
