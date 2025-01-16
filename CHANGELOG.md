@@ -8,11 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- extractor for Open Data
 
 ### Changes
-
-- wrap up sumo model v3 update
 
 ### Deprecated
 
@@ -21,6 +18,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 ### Security
+
+## [0.24.0] - 2025-01-15
+
+### Added
+- extractor for Open Data
+
+### Changes
+
+- wrap up sumo model v3 update
 
 ## [0.23.0] - 2024-12-18
 
