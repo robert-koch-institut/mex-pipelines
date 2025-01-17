@@ -40,8 +40,6 @@ def transform_grippeweb_resource_mappings_to_extracted_resources(
             extracted grippeweb organizations dict
         extracted_mex_functional_units_grippeweb:
             extracted grippeweb mex functional accounts
-        extracted_confluence_vvt_activities:
-            extracted confluence vvt activities
 
     Returns:
         grippeweb resources by identifierInPrimarySource
