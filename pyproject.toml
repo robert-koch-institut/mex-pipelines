@@ -13,7 +13,7 @@ dependencies = [
     "dagster-webserver>=1,<2",
     "dagster>=1,<2",
     "faker>=33,<34",
-    "mex-common @ git+https://github.com/robert-koch-institut/mex-common.git@0.45.0",
+    "mex-common @ git+https://github.com/robert-koch-institut/mex-common.git@0.46.0",
     "numpy>=2,<3",
     "openpyxl>=3,<4",
     "pandas>=2,<3",
@@ -152,6 +152,15 @@ ignore = [
 select = ["ALL"]
 
 [tool.ruff.lint.per-file-ignores]
+"mex/extractors/logging.py" = [
+    "A005",     # Allow custom logging module to shadow standard-library
+]
+"mex/extractors/types.py" = [
+    "A005",     # Allow custom types module to shadow standard-library
+]
+"mex/extractors/mapping/types.py" = [
+    "A005",     # Allow custom mapping types module to shadow standard-library
+]
 "docs/**" = [
     "INP001",   # Docs folder does not need to be a package
 ]
