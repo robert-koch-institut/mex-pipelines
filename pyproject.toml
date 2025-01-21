@@ -32,7 +32,7 @@ optional-dependencies.dev = [
     "pytest-random-order>=1,<2",
     "pytest-xdist>=3,<4",
     "pytest>=8,<9",
-    "ruff>=0.7,<1",
+    "ruff>=0.9,<1",
     "sphinx>=8,<9",
     "types-beautifulsoup4>=4,<5",
     "types-pytz>=2024,<2025",
@@ -126,53 +126,53 @@ docstring-code-format = true
 
 [tool.ruff.lint]
 ignore = [
-    "AIR",    # Disable airflow specific rules (we are not using airflow)
-    "ANN",    # Disable all annotations checks (handled by mypy)
-    "COM",    # Disable flake8-commas checks (let ruff format handle that)
-    "CPY",    # Disable copyright notice checks (we have LICENSE files)
-    "D100",   # Allow missing module docstring (for brevity and speed)
-    "D104",   # Allow missing package docstring (for brevity and speed)
-    "D203",   # Disallow blank line before class docstring (inverse of D211)
-    "D213",   # Disallow multi-line docstring starting at second line (inverse of D212)
-    "D406",   # Allow section name ending with newline (google style compat)
-    "D407",   # Allow missing dashed underline after section (google style compat)
-    "D413",   # Allow missing blank line after last section (google style compat)
-    "DJ",     # Disable django specific checks (we are not using django)
-    "FBT",    # Disable boolean type hint checks (for more flexibility)
-    "FIX",    # Allow committing with open TODOs (don't punish committers)
-    "ISC001", # Disable checks for implicitly concatenated strings (formatter compat)
-    "N805",   # Allow first argument of a method to be non-self (pydantic compat)
-    "N815",   # Allow mixedCase variables in class scope (model compat)
-    "PTH123", # Allow using builtin open method (simpler than pathlib)
-    "RUF012", # Allow mutable class attributes (pydantic compat)
-    "SIM108", # Allow explicit if-else instead of ternary (easier to read)
-    "TD003",  # Allow TODOs without ticket link (don't punish TODO writers)
-    "TRY003", # Allow long exception message at the raise site (for pydantic)
+    "AIR",     # Disable airflow specific rules (we are not using airflow)
+    "ANN",     # Disable all annotations checks (handled by mypy)
+    "COM",     # Disable flake8-commas checks (let ruff format handle that)
+    "CPY",     # Disable copyright notice checks (we have LICENSE files)
+    "D100",    # Allow missing module docstring (for brevity and speed)
+    "D104",    # Allow missing package docstring (for brevity and speed)
+    "D203",    # Disallow blank line before class docstring (inverse of D211)
+    "D213",    # Disallow multi-line docstring starting at second line (inverse of D212)
+    "D406",    # Allow section name ending with newline (google style compat)
+    "D407",    # Allow missing dashed underline after section (google style compat)
+    "D413",    # Allow missing blank line after last section (google style compat)
+    "DJ",      # Disable django specific checks (we are not using django)
+    "FBT",     # Disable boolean type hint checks (for more flexibility)
+    "FIX",     # Allow committing with open TODOs (don't punish committers)
+    "ISC001",  # Disable checks for implicitly concatenated strings (formatter compat)
+    "N805",    # Allow first argument of a method to be non-self (pydantic compat)
+    "N815",    # Allow mixedCase variables in class scope (model compat)
+    "PTH123",  # Allow using builtin open method (simpler than pathlib)
+    "RUF012",  # Allow mutable class attributes (pydantic compat)
+    "SIM108",  # Allow explicit if-else instead of ternary (easier to read)
+    "TD003",   # Allow TODOs without ticket link (don't punish TODO writers)
+    "TRY003",  # Allow long exception message at the raise site (for pydantic)
 ]
 select = ["ALL"]
 
 [tool.ruff.lint.per-file-ignores]
 "docs/**" = [
-    "INP001", # Docs folder does not need to be a package
+    "INP001",   # Docs folder does not need to be a package
 ]
 "scripts/**" = [
-    "INP001", # Scripts folder does not need to be a package
+    "INP001",   # Scripts folder does not need to be a package
 ]
 "tests/**" = [
-    "ARG005",  # Allow unused lambda arguments for mocking
-    "D101",    # Allow missing docstring in public class
-    "D102",    # Allow missing docstring in public method
-    "D103",    # Allow missing docstring in public function
-    "D107",    # Allow missing docstring in `__init__`
-    "E501",    # Allow longer lines with test data
-    "ISC",     # Allow implicitly concatenated strings
-    "N807",    # Allow mocking `__init__`
-    "PLR0915", # Allow functions with many statements
-    "PLR2004", # Allow comparing with static values
-    "PT004",   # Allow public fixtures without returns
-    "PT013",   # Allow more flexible pytest imports
-    "S101",    # Allow use of `assert` in tests
-    "SLF",     # Allow private member access
+    "ARG005",   # Allow unused lambda arguments for mocking
+    "D101",     # Allow missing docstring in public class
+    "D102",     # Allow missing docstring in public method
+    "D103",     # Allow missing docstring in public function
+    "D107",     # Allow missing docstring in `__init__`
+    "E501",     # Allow longer lines with test data
+    "ISC",      # Allow implicitly concatenated strings
+    "N807",     # Allow mocking `__init__`
+    "PLR0915",  # Allow functions with many statements
+    "PLR2004",  # Allow comparing with static values
+    "PT004",    # Allow public fixtures without returns
+    "PT013",    # Allow more flexible pytest imports
+    "S101",     # Allow use of `assert` in tests
+    "SLF",      # Allow private member access
 ]
 "mex/extractors/biospecimen/**" = ["PD003", "PLR0913", "PTH207"]
 "mex/extractors/blueant/**" = ["PLR0913", "PLR2004"]
