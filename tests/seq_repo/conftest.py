@@ -463,9 +463,9 @@ def seq_repo_source_resolved_project_coordinators() -> list[LDAPPersonWithQuery]
 
 
 @pytest.fixture
-def project_coordinators_merged_ids_by_query_string() -> (
-    dict[str, list[MergedPersonIdentifier]]
-):
+def project_coordinators_merged_ids_by_query_string() -> dict[
+    str, list[MergedPersonIdentifier]
+]:
     """Get project coordinators merged ids."""
     return {
         "mustermann": [MergedPersonIdentifier("e0Rxxm9WvnMqPLZ44UduNx")],
@@ -476,9 +476,9 @@ def project_coordinators_merged_ids_by_query_string() -> (
 
 
 @pytest.fixture
-def unit_stable_target_ids_by_synonym() -> (
-    dict[str, MergedOrganizationalUnitIdentifier]
-):
+def unit_stable_target_ids_by_synonym() -> dict[
+    str, MergedOrganizationalUnitIdentifier
+]:
     """Extract the dummy units and return them grouped by synonyms."""
     return {
         "child-unit": MergedOrganizationalUnitIdentifier("g2AinFG4E6n8H1ZMuaBW6o"),

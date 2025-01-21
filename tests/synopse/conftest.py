@@ -208,9 +208,9 @@ def synopse_variables_by_thema(
 
 
 @pytest.fixture
-def synopse_variables_extended_data_use_raw() -> (
-    list[dict[str, str | int | float | None]]
-):
+def synopse_variables_extended_data_use_raw() -> list[
+    dict[str, str | int | float | None]
+]:
     """Return a list of dicts in the required format for Synopse Variables."""
     return [
         {  # variable not in synopse_overviews
@@ -363,9 +363,9 @@ def synopse_study(synopse_studies: list[SynopseStudy]) -> SynopseStudy:
 
 
 @pytest.fixture
-def synopse_organization_ids_by_query_string() -> (
-    dict[str, MergedOrganizationIdentifier]
-):
+def synopse_organization_ids_by_query_string() -> dict[
+    str, MergedOrganizationIdentifier
+]:
     """Return merged organizations id by org name."""
     organization_id = MergedOrganizationIdentifier.generate(seed=44)
     return {"Test-Institute": organization_id}

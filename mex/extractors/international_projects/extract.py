@@ -25,9 +25,9 @@ from mex.extractors.wikidata.helpers import (
 
 
 @watch
-def extract_international_projects_sources() -> (
-    Generator[InternationalProjectsSource, None, None]
-):
+def extract_international_projects_sources() -> Generator[
+    InternationalProjectsSource, None, None
+]:
     """Extract international projects sources by loading data from MS-Excel file.
 
     Returns:

@@ -124,7 +124,7 @@ def filter_and_log_ff_projects_source(
         log_filter(
             identifier_in_primary_source,
             primary_source_id,
-            f'RKI- OE [{source.rki_oe.replace("/", ",")}] are all not valid units',
+            f"RKI- OE [{source.rki_oe.replace('/', ',')}] are all not valid units",
         )
         return False
 
