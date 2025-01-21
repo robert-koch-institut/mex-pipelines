@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes
 
+- set dockerfile base to bullseye
+
 ### Deprecated
 
 ### Removed
@@ -22,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.24.0] - 2025-01-15
 
 ### Added
+
 - extractor for Open Data
 
 ### Changes
