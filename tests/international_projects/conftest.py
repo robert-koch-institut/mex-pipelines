@@ -90,8 +90,7 @@ def international_projects_mapping_activity() -> AnyMappingModel:
                             "forValues": [
                                 "Crisis management",
                                 "Capacity building including trainings",
-                                "Supporting global governance structures and "
-                                "processes",
+                                "Supporting global governance structures and processes",
                                 "Conducting research",
                             ],
                             "rule": "If field is either empty or has another value, "
