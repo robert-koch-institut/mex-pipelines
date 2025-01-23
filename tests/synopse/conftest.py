@@ -312,9 +312,9 @@ def synopse_study(synopse_studies: list[SynopseStudy]) -> SynopseStudy:
 
 
 @pytest.fixture
-def synopse_organization_ids_by_query_string() -> (
-    dict[str, MergedOrganizationIdentifier]
-):
+def synopse_organization_ids_by_query_string() -> dict[
+    str, MergedOrganizationIdentifier
+]:
     """Return merged organizations id by org name."""
     organization_id = MergedOrganizationIdentifier.generate(seed=44)
     return {"Test-Institute": organization_id}

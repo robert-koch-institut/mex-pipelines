@@ -32,9 +32,9 @@ def unit_stable_target_ids_by_synonym() -> dict[str, Identifier]:
 
 
 @pytest.fixture
-def organizations_stable_target_ids_by_query_string() -> (
-    dict[str, MergedOrganizationIdentifier]
-):
+def organizations_stable_target_ids_by_query_string() -> dict[
+    str, MergedOrganizationIdentifier
+]:
     return {
         "Fancy Fake Firm & CoKG": Identifier("ID000000000077"),
         "FG99": Identifier("ID000000000884"),

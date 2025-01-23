@@ -99,8 +99,7 @@ def parse_unit_loz(bs4_object: BeautifulSoup) -> tuple[str, list[str]]:
     table = bs4_object.find("table", {"id": "loz"})
     if not isinstance(table, Tag):
         raise MExError(
-            f"Missing table with ID 'loz' in single item html.\n"
-            f"{bs4_object.prettify()}"
+            f"Missing table with ID 'loz' in single item html.\n{bs4_object.prettify()}"
         )
     column_headers = table.find_all("th")
     key = str(column_headers[0].string)

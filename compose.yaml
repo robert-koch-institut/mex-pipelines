@@ -6,7 +6,7 @@ services:
     environment:
       - DAGSTER_HOME=/app/work
       - MEX_WORK_DIR=/app/work
-    entrypoint: ["dagster-daemon", "run", "--module-name", "mex"]
+    entrypoint: ["dagster-daemon", "run", "--module-name", "mex.extractors"]
     volumes:
       - work:/app/work:rw
   dagster-webserver:
@@ -17,7 +17,7 @@ services:
     environment:
       - DAGSTER_HOME=/app/work
       - MEX_WORK_DIR=/app/work
-    entrypoint: ["dagster-webserver", "--host", "0.0.0.0", "--module-name", "mex"]
+    entrypoint: ["dagster-webserver", "--host", "0.0.0.0", "--module-name", "mex.extractors"]
     expose:
       - 3000
     volumes:

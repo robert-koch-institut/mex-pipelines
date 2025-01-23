@@ -24,9 +24,9 @@ def extracted_mex_functional_units_voxco() -> dict[str, MergedContactPointIdenti
 
 
 @pytest.fixture
-def unit_stable_target_ids_by_synonym() -> (
-    dict[str, MergedOrganizationalUnitIdentifier]
-):
+def unit_stable_target_ids_by_synonym() -> dict[
+    str, MergedOrganizationalUnitIdentifier
+]:
     """Mock unit stable target ids."""
     return {"C1": MergedOrganizationalUnitIdentifier.generate(seed=44)}
 
@@ -47,9 +47,9 @@ def extracted_mex_persons_voxco() -> list[ExtractedPerson]:
 
 
 @pytest.fixture
-def organization_stable_target_id_by_query_voxco() -> (
-    dict[str, MergedOrganizationIdentifier]
-):
+def organization_stable_target_id_by_query_voxco() -> dict[
+    str, MergedOrganizationIdentifier
+]:
     return {"Robert Koch-Institut": MergedOrganizationIdentifier.generate(42)}
 
 

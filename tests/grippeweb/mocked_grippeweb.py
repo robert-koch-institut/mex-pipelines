@@ -34,16 +34,16 @@ ModelT = TypeVar("ModelT", bound=BaseModel)
 
 
 @pytest.fixture
-def extracted_mex_functional_units_grippeweb() -> (
-    dict[str, MergedContactPointIdentifier]
-):
+def extracted_mex_functional_units_grippeweb() -> dict[
+    str, MergedContactPointIdentifier
+]:
     return {"contactc@rki.de": MergedContactPointIdentifier.generate(42)}
 
 
 @pytest.fixture
-def unit_stable_target_ids_by_synonym() -> (
-    dict[str, MergedOrganizationalUnitIdentifier]
-):
+def unit_stable_target_ids_by_synonym() -> dict[
+    str, MergedOrganizationalUnitIdentifier
+]:
     """Mock unit stable target ids."""
     return {"C1": MergedOrganizationalUnitIdentifier.generate(seed=44)}
 
@@ -64,9 +64,9 @@ def extracted_mex_persons_grippeweb() -> list[ExtractedPerson]:
 
 
 @pytest.fixture
-def grippeweb_organization_ids_by_query_string() -> (
-    dict[str, MergedOrganizationIdentifier]
-):
+def grippeweb_organization_ids_by_query_string() -> dict[
+    str, MergedOrganizationIdentifier
+]:
     return {"Robert Koch-Institut": MergedOrganizationIdentifier.generate(42)}
 
 

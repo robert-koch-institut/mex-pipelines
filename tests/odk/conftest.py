@@ -86,9 +86,9 @@ def extracted_international_projects_activities() -> list[ExtractedActivity]:
 
 
 @pytest.fixture
-def unit_stable_target_ids_by_synonym() -> (
-    dict[str, MergedOrganizationalUnitIdentifier]
-):
+def unit_stable_target_ids_by_synonym() -> dict[
+    str, MergedOrganizationalUnitIdentifier
+]:
     """Mock unit stable target ids."""
     return {"C1": MergedOrganizationalUnitIdentifier.generate(seed=44)}
 
@@ -566,9 +566,9 @@ def odk_resource_mappings() -> list[AnyMappingModel]:
 
 
 @pytest.fixture
-def external_partner_and_publisher_by_label() -> (
-    dict[str, MergedOrganizationIdentifier]
-):
+def external_partner_and_publisher_by_label() -> dict[
+    str, MergedOrganizationIdentifier
+]:
     """Mocked external partner and publisher dict for OrganizationIDs."""
     return {
         "invidunt": MergedOrganizationIdentifier.generate(42),

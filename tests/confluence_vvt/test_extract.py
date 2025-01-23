@@ -11,26 +11,26 @@ from requests.models import Response
 
 from mex.extractors.confluence_vvt.connector import ConfluenceVvtConnector
 from mex.extractors.confluence_vvt.extract import (
-    fetch_all_data_page_ids,
-    fetch_all_pages_data,
+    fetch_all_vvt_pages_ids,
+    get_page_data_by_id,
 )
 from tests.confluence_vvt.conftest import TEST_DATA_DIR
 
 
 @pytest.mark.integration
-def test_fetch_all_data_page_ids() -> None:
-    page_ids = list(fetch_all_data_page_ids())
+def test_fetch_all_vvt_pages_ids() -> None:
+    page_ids = list(fetch_all_vvt_pages_ids())
     assert all(re.match(r"\d+", id_) for id_ in page_ids)
 
 
 @pytest.mark.integration
-def test_fetch_all_pages_data() -> None:
-    page_ids = list(islice(fetch_all_data_page_ids(), 5))
+def test_get_page_data_by_id() -> None:
+    page_ids = list(islice(fetch_all_vvt_pages_ids(), 5))
 
-    response = list(fetch_all_pages_data(page_ids))
-
-    assert len(page_ids) == len(response)
-    assert response[0].identifier == page_ids[0]
+    response = list(get_page_data_by_id(page_ids))
+    assert str(response[0].id) == page_ids[1]
+    assert str(response[1].id) == page_ids[2]
+    assert str(response[2].id) == page_ids[3]
 
 
 def test_fetch_all_data_page_ids_mocked(
@@ -55,46 +55,35 @@ def test_fetch_all_data_page_ids_mocked(
         lambda self: setattr(self, "session", session),
     )
 
-    page_ids = list(fetch_all_data_page_ids())
+    page_ids = list(fetch_all_vvt_pages_ids())
 
     expected = ["0101010101", "0202020202", "0303030303", "0404040404"]
 
     assert page_ids == expected
 
 
-@pytest.mark.usefixtures("mocked_confluence_vvt_detailed_page_data")
 def test_fetch_all_pages_data_mocked(
     monkeypatch: MonkeyPatch, detail_page_data_json: dict[str, Any]
 ) -> None:
-    expected = {
-        "abstract": "test description, test test test, test zwecke des vorhabens",
-        "contact": ["Test Verantwortliche 1"],
-        "identifier": "123456",
-        "identifier_in_primary_source": ["001-002"],
-        "involved_person": [
-            "Test Verantwortliche 1",
-            "test ggfs vertreter",
-            "Test mitarbeitende 1",
-        ],
-        "involved_unit": ["Test OE 1", "FG99", "test OE 1"],
-        "responsible_unit": ["Test OE 1"],
-        "theme": "https://mex.rki.de/item/theme-1",
-        "title": "Test Title",
-    }
-
     response = Mock(spec=Response, status_code=200)
     response.json.return_value = detail_page_data_json
+    page_label = Mock(spec=Response, status_code=200)
+    page_label.json.return_value = {"results": [{"name": "vvt"}]}
 
     # mocking create_session function
     session = MagicMock(spec=requests.Session)
-    session.get = MagicMock(side_effect=[response])
+    session.get = MagicMock(side_effect=(content for content in [page_label, response]))
 
     monkeypatch.setattr(
         ConfluenceVvtConnector,
         "__init__",
         lambda self: setattr(self, "session", session),
     )
-    all_pages_data = list(fetch_all_pages_data([str(expected["identifier"])]))
+
+    all_pages_data = list(get_page_data_by_id(["123457"]))
 
     assert len(all_pages_data) == 1
-    assert all_pages_data[0].model_dump(exclude_none=True) == expected
+    all_pages_data_dict = all_pages_data[0].model_dump(exclude_none=True)
+    assert all_pages_data_dict["id"] == 123457
+    assert all_pages_data_dict["title"] == "Test Title"
+    assert len(all_pages_data_dict["tables"]) == 2
