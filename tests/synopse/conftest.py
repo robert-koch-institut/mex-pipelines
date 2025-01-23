@@ -99,7 +99,7 @@ def synopse_variables_raw() -> list[dict[str, str | int | float | None]]:
             "textbox21": "Angeborene Fehlbildung",
             "textbox24": "KHEfehlb",
             "textbox11": "Text",
-            "IntVar": False,
+            "IntVar": True,
             "KeepVarname": False,
         },
         {  # var 2, missing var label, valInstrument
@@ -115,7 +115,7 @@ def synopse_variables_raw() -> list[dict[str, str | int | float | None]]:
             "textbox21": None,
             "textbox24": "KHEfiebB",
             "textbox11": "Zahl",
-            "IntVar": False,
+            "IntVar": True,
             "KeepVarname": False,
         },
         {  # var 3, no auspraegung

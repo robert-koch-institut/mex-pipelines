@@ -39,7 +39,10 @@ from mex.extractors.synopse.extract import (
     extract_synopse_resource_contact,
     extract_variables,
 )
-from mex.extractors.synopse.filter import filter_and_log_access_platforms
+from mex.extractors.synopse.filter import (
+    filter_and_log_access_platforms,
+    filter_and_log_synopse_variables,
+)
 from mex.extractors.synopse.models.project import SynopseProject
 from mex.extractors.synopse.models.study import SynopseStudy
 from mex.extractors.synopse.models.study_overview import SynopseStudyOverview
@@ -81,9 +84,13 @@ def synopse_study_overviews() -> list[SynopseStudyOverview]:
 
 
 @asset(group_name="synopse")
-def synopse_variables() -> list[SynopseVariable]:
+def synopse_variables(
+    extracted_primary_source_report_server: ExtractedPrimarySource,
+) -> list[SynopseVariable]:
     """Extract variables from Synopse."""
-    return list(extract_variables())
+    return filter_and_log_synopse_variables(
+        extract_variables(), extracted_primary_source_report_server
+    )
 
 
 @asset(group_name="synopse")
