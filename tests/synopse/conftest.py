@@ -329,6 +329,7 @@ def synopse_projects() -> list[SynopseProject]:
             anschlussprojekt="BBCCDD",
             beitragende="Carla Contact",
             beschreibung_der_studie="BBCCDD-Basiserhebung am RKI.",
+            externe_partner="Testpartner",
             project_studientitel="Studie zu Lorem und Ipsum",
             kontakt=["info@rki.de"],
             projektbeginn=1999,
@@ -339,7 +340,7 @@ def synopse_projects() -> list[SynopseProject]:
             projektende=2000,
             studien_id="12345",
             studienart_studientyp="Monitoring-Studie",
-            verantwortliche_oe="FG 99",
+            verantwortliche_oe="C1",
         ),
         SynopseProject(
             akronym_des_studientitels="BBCCDD",
@@ -355,7 +356,7 @@ def synopse_projects() -> list[SynopseProject]:
             projektende=2000,
             studien_id="12346",
             studienart_studientyp="Monitoring-Studie",
-            verantwortliche_oe="FG 99",
+            verantwortliche_oe="C1",
         ),
     ]
 

@@ -18,6 +18,7 @@ from mex.common.types import (
     Identifier,
     Link,
     MergedActivityIdentifier,
+    MergedContactPointIdentifier,
     MergedOrganizationalUnitIdentifier,
     MergedOrganizationIdentifier,
     MergedResourceIdentifier,
@@ -238,6 +239,7 @@ def transform_synopse_data_to_mex_resources(
     unit_merged_ids_by_synonym: dict[str, Identifier],
     extracted_organization: ExtractedOrganization,
     synopse_resource: AnyMappingModel,
+    contact_merged_id_by_query_string: dict[str, MergedContactPointIdentifier],
 ) -> Generator[ExtractedResource, None, None]:
     """Transform Synopse Studies to MEx resources.
 
@@ -252,6 +254,7 @@ def transform_synopse_data_to_mex_resources(
         unit_merged_ids_by_synonym: Map from unit acronyms and labels to their merged ID
         extracted_organization: extracted organization
         synopse_resource: resource default values
+        contact_merged_id_by_query_string: contact person lookup by email
 
     Returns:
         Generator for extracted resources
@@ -259,6 +262,9 @@ def transform_synopse_data_to_mex_resources(
     extracted_activities_by_study_ids = {
         a.identifierInPrimarySource: a for a in extracted_activities
     }
+    contact = contact_merged_id_by_query_string[
+        synopse_resource.contact[0].mappingRules[0].forValues[0]
+    ]
     unit_in_charge = unit_merged_ids_by_synonym[
         synopse_resource.unitInCharge[0].mappingRules[0].forValues[0]
     ]
@@ -273,8 +279,16 @@ def transform_synopse_data_to_mex_resources(
     description_by_study_id: dict[str, str | None] = {}
     documentation_by_study_id: dict[str, Link | None] = {}
     identifier_in_primary_source_by_study_id: dict[str, str] = {}
-    keyword_text_by_study_id: dict[str, list[Text]] = {}
     title_by_study_id: dict[str, Text] = {}
+    rights_by_ds_typ_id = {
+        rule.forValues: rule.setValues
+        for rule in synopse_resource.rights[0].mappingRules
+    }
+    verantwortliche_oe_by_studien_id = {
+        projekt.studien_id: projekt.verantwortliche_oe
+        for projekt in synopse_projects
+        if projekt.verantwortliche_oe
+    }
     for study in synopse_studies_gens[0]:
         created_by_study_id[study.studien_id] = study.erstellungs_datum
         description_by_study_id[study.studien_id] = study.beschreibung
@@ -299,12 +313,11 @@ def transform_synopse_data_to_mex_resources(
             keywords_plain.extend(
                 {re.sub(r"\s\(\d+\)", "", var.unterthema) for var in synopse_variables}
             )
-        keyword_text = [
+        keyword = [
             Text(value=word, language=TextLanguage.DE) for word in keywords_plain
         ]
-        keyword_text_by_study_id[study.studien_id] = keyword_text
         identifier_in_primary_source_by_study_id[study.studien_id] = (
-            f"{study.studien_id}-{study.ds_typ_id}-{study.titel_datenset}"
+            f"{study.studien_id}-{study.titel_datenset}-{study.ds_typ_id}"
         )
         title_by_study_id[study.studien_id] = Text(
             value=study.titel_datenset, language=TextLanguage("de")
@@ -327,21 +340,23 @@ def transform_synopse_data_to_mex_resources(
         if documentation_by_study_id:
             documentation = documentation_by_study_id[study.studien_id]
         extracted_activity = extracted_activities_by_study_ids.get(study.studien_id)
+        rights = rights_by_ds_typ_id.get(study.ds_typ_id, [])
         theme = (
             synopse_resource.theme[0].mappingRules[0].setValues
             if study.studien_id in synopse_resource.theme[0].mappingRules[0].forValues
             else synopse_resource.theme[0].mappingRules[1].setValues
         )
+        unit_in_charge = unit_merged_ids_by_synonym[
+            verantwortliche_oe_by_studien_id[study.studien_id]
+        ]
         yield ExtractedResource(
             accessPlatform=access_platform,
             accessRestriction=synopse_resource.accessRestriction[0]
             .mappingRules[0]
             .setValues,
-            contact=unit_in_charge,
+            contact=contact,
             contributingUnit=(
-                extracted_activity.involvedUnit + extracted_activity.responsibleUnit
-                if extracted_activity
-                else None
+                extracted_activity.involvedUnit if extracted_activity else None
             ),
             contributor=(
                 extracted_activity.involvedPerson if extracted_activity else None
@@ -357,7 +372,7 @@ def transform_synopse_data_to_mex_resources(
             identifierInPrimarySource=identifier_in_primary_source_by_study_id[
                 study.studien_id
             ],
-            keyword=keyword_text_by_study_id[study.studien_id],
+            keyword=keyword,
             language=synopse_resource.language[0].mappingRules[0].setValues,
             publisher=[extracted_organization.stableTargetId],
             resourceCreationMethod=synopse_resource.resourceCreationMethod[0]
@@ -366,11 +381,10 @@ def transform_synopse_data_to_mex_resources(
             resourceTypeGeneral=synopse_resource.resourceTypeGeneral[0]
             .mappingRules[0]
             .setValues,
-            resourceTypeSpecific=synopse_studien_art_typ_by_study_ids.get(
-                study.studien_id
-            )
-            or [],
-            rights=synopse_resource.rights[0].mappingRules[0].setValues,
+            resourceTypeSpecific=[
+                synopse_studien_art_typ_by_study_ids.get(study.studien_id)
+            ],
+            rights=rights,
             spatial=synopse_resource.spatial[0].mappingRules[0].setValues,
             temporal=(
                 " - ".join(

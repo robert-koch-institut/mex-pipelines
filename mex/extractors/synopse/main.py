@@ -3,7 +3,10 @@ from itertools import chain, groupby, tee
 from mex.common.cli import entrypoint
 from mex.common.ldap.extract import get_merged_ids_by_query_string
 from mex.common.ldap.models.person import LDAPPersonWithQuery
-from mex.common.ldap.transform import transform_ldap_persons_with_query_to_mex_persons
+from mex.common.ldap.transform import (
+    transform_ldap_actors_to_mex_contact_points,
+    transform_ldap_persons_with_query_to_mex_persons,
+)
 from mex.common.models import (
     ExtractedAccessPlatform,
     ExtractedActivity,
@@ -33,6 +36,7 @@ from mex.extractors.synopse.extract import (
     extract_study_overviews,
     extract_synopse_organizations,
     extract_synopse_project_contributors,
+    extract_synopse_resource_contact,
     extract_variables,
 )
 from mex.extractors.synopse.filter import filter_and_log_access_platforms
@@ -163,6 +167,7 @@ def extracted_synopse_resource_stable_target_ids_by_synopse_id(
     extracted_synopse_activities: list[ExtractedActivity],
     extracted_organization_rki: ExtractedOrganization,
     extracted_primary_source_report_server: ExtractedPrimarySource,
+    extracted_primary_source_ldap: ExtractedPrimarySource,
 ) -> dict[str, list[MergedResourceIdentifier]]:
     """Get lookup from synopse_id to extracted resource stable target id.
 
@@ -173,6 +178,14 @@ def extracted_synopse_resource_stable_target_ids_by_synopse_id(
         extract_mapping_data(settings.synopse.mapping_path / "resource.yaml"),
         ExtractedResource,
     )
+    synopse_resource_contact = extract_synopse_resource_contact(synopse_resource)
+    contact_merged_id_by_query_string = {
+        contact_point.email[0]: contact_point.stableTargetId
+        for contact_point in transform_ldap_actors_to_mex_contact_points(
+            [synopse_resource_contact],
+            extracted_primary_source_ldap,
+        )
+    }
     transformed_study_data_resources = transform_synopse_data_to_mex_resources(
         synopse_studies,
         synopse_projects,
@@ -183,6 +196,7 @@ def extracted_synopse_resource_stable_target_ids_by_synopse_id(
         unit_stable_target_ids_by_synonym,
         extracted_organization_rki,
         synopse_resource,
+        contact_merged_id_by_query_string,
     )
     transformed_study_data_resource_gens = tee(transformed_study_data_resources, 2)
     load(transformed_study_data_resource_gens[0])

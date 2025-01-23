@@ -17,7 +17,6 @@ from mex.common.types import (
     MergedOrganizationIdentifier,
     TemporalEntity,
     TextLanguage,
-    Year,
 )
 from mex.extractors.mapping.types import AnyMappingModel
 from mex.extractors.synopse.models.project import SynopseProject
@@ -357,11 +356,9 @@ def test_transform_synopse_data_to_mex_resources(
             )
         ],
         "accessRestriction": "https://mex.rki.de/item/access-restriction-2",
-        "contact": [str(Identifier.generate(seed=234))],
-        "contributingUnit": extracted_activity.involvedUnit
-        + extracted_activity.responsibleUnit,
-        "contributor": extracted_activity.involvedPerson,
-        "created": Year("2022"),
+        "contact": [str(Identifier.generate(seed=235))],
+        "contributor": [str(extracted_activity.involvedPerson[0])],
+        "created": "2022",
         "description": [
             {"language": TextLanguage.DE, "value": "ein heikles Unterfangen."}
         ],
@@ -377,7 +374,7 @@ def test_transform_synopse_data_to_mex_resources(
         ],
         "hasPersonalData": "https://mex.rki.de/item/personal-data-1",
         "identifier": Joker(),
-        "identifierInPrimarySource": ("12345-17-Titel"),
+        "identifierInPrimarySource": ("12345-Titel-17"),
         "keyword": [
             {"language": TextLanguage.DE, "value": "Alkohol"},
             {"language": TextLanguage.DE, "value": "Alter und Geschlecht"},
@@ -396,12 +393,6 @@ def test_transform_synopse_data_to_mex_resources(
                 "language": TextLanguage.EN,
                 "value": "Monitoring-Studie",
             },
-        ],
-        "rights": [
-            {
-                "value": "Gesundheitsdaten",
-                "language": TextLanguage.DE,
-            }
         ],
         "spatial": [{"language": TextLanguage.DE, "value": "Deutschland"}],
         "stableTargetId": Joker(),
@@ -422,6 +413,7 @@ def test_transform_synopse_data_to_mex_resources(
             unit_merged_ids_by_synonym,
             extracted_organization[0],
             synopse_resource,
+            {"C1": [Identifier.generate(seed=235)]},
         )
     )
     assert len(resources) == 1
@@ -439,7 +431,7 @@ def test_transform_synopse_projects_to_mex_activities(
     synopse_project = synopse_projects[0]
     contact_merged_ids_by_emails = {"info@rki.de": extracted_person.stableTargetId}
     contributor_merged_ids_by_name = {"Carla Contact": Identifier.generate(seed=12)}
-    unit_merged_ids_by_synonym = {"FG 99": Identifier.generate(seed=13)}
+    unit_merged_ids_by_synonym = {"C1": Identifier.generate(seed=13)}
 
     expected_activity = {
         "abstract": [{"value": synopse_project.beschreibung_der_studie}],
@@ -452,6 +444,9 @@ def test_transform_synopse_projects_to_mex_activities(
             }
         ],
         "end": [str(TemporalEntity(synopse_project.projektende))],
+        "externalAssociate": [
+            "bWt8MuXvqsiYEDpjwYIT2S",
+        ],
         "hadPrimarySource": str(
             extracted_primary_sources["report-server"].stableTargetId
         ),
