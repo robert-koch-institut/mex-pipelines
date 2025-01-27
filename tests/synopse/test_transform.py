@@ -109,7 +109,7 @@ def test_transform_overviews_to_resource_lookup() -> None:
     study_resources = [
         ExtractedResource(
             title="Found in overview",
-            identifierInPrimarySource="studie1-17-set1",
+            identifierInPrimarySource="studie1-set1-17",
             hadPrimarySource=Identifier.generate(),
             accessRestriction=AccessRestriction["OPEN"],
             contact=[Identifier.generate()],
@@ -118,7 +118,7 @@ def test_transform_overviews_to_resource_lookup() -> None:
         ),
         ExtractedResource(
             title="Found in overview too",
-            identifierInPrimarySource="studie1-18-set2",
+            identifierInPrimarySource="studie1-set2-18",
             hadPrimarySource=Identifier.generate(),
             accessRestriction=AccessRestriction["OPEN"],
             contact=[Identifier.generate()],
@@ -150,11 +150,11 @@ def test_transform_synopse_variables_to_mex_variable_groups(
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
     resource_ids_by_synopse_id: dict[str, Identifier],
 ) -> None:
-    studie_id = 12345
-    resource_id = resource_ids_by_synopse_id[str(studie_id)]
     expected_variable_group = {
-        "containedBy": resource_id,
-        "hadPrimarySource": extracted_primary_sources["report-server"].stableTargetId,
+        "containedBy": ["bFQoRhcVH5DHU6"],
+        "hadPrimarySource": str(
+            extracted_primary_sources["report-server"].stableTargetId
+        ),
         "identifier": Joker(),
         "identifierInPrimarySource": "Gesundheiten (1101)",
         "label": [{"language": TextLanguage.DE, "value": "Gesundheiten"}],
@@ -201,7 +201,7 @@ def test_transform_synopse_variables_belonging_to_same_variable_group_to_mex_var
         "identifierInPrimarySource": "1",
         "label": [dict(language=TextLanguage("de"), value="Angeborene Fehlbildung")],
         "stableTargetId": Joker(),
-        "usedIn": [str(rid) for rid in resource_ids_by_synopse_id["1"]],
+        "usedIn": [str(rid) for rid in resource_ids_by_synopse_id["3"]],
         "valueSet": ["Nicht erhoben", "Weiß nicht"],
     }
     expected_variable_two = {  # var 2, missing var label

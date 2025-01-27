@@ -34,7 +34,6 @@ from mex.extractors.synopse.models.study import SynopseStudy
 from mex.extractors.synopse.models.study_overview import SynopseStudyOverview
 from mex.extractors.synopse.models.variable import SynopseVariable
 from mex.extractors.synopse.transform import (
-    transform_overviews_to_resource_lookup,
     transform_synopse_variables_to_mex_variable_groups,
 )
 
@@ -523,14 +522,15 @@ def synopse_overviews() -> list[SynopseStudyOverview]:
 
 
 @pytest.fixture
-def resource_ids_by_synopse_id(
-    extracted_resources: list[ExtractedResource],
-    synopse_overviews: list[SynopseStudyOverview],
-) -> dict[str, list[MergedResourceIdentifier]]:
+def resource_ids_by_synopse_id() -> dict[str, list[MergedResourceIdentifier]]:
     """Return a lookup from study ID to list of resource IDs."""
-    return transform_overviews_to_resource_lookup(
-        synopse_overviews, extracted_resources
-    )
+    return {
+        "1": [MergedResourceIdentifier.generate(seed=42)],
+        "2": [MergedResourceIdentifier.generate(seed=43)],
+        "3": [MergedResourceIdentifier.generate(seed=42)],
+        "4": [MergedResourceIdentifier.generate(seed=42)],
+        "5": [MergedResourceIdentifier.generate(seed=45)],
+    }
 
 
 @pytest.fixture

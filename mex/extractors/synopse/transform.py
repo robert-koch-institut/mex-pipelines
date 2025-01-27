@@ -100,7 +100,7 @@ def transform_overviews_to_resource_lookup(
     resource_ids_by_synopse_id: dict[str, list[MergedResourceIdentifier]] = {}
     for study in study_overviews:
         if resource_id := resource_id_by_identifier_in_platform.get(
-            f"{study.studien_id}-{study.ds_typ_id}-{study.titel_datenset}"
+            f"{study.studien_id}-{study.titel_datenset}-{study.ds_typ_id}"
         ):
             resource_ids = resource_ids_by_synopse_id.setdefault(study.synopse_id, [])
             resource_ids.append(MergedResourceIdentifier(resource_id))
