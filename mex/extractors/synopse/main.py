@@ -94,10 +94,10 @@ def synopse_variables(
 
 
 @asset(group_name="synopse")
-def synopse_variables_use_by_study_id(
+def synopse_variables_by_study_id(
     synopse_variables: list[SynopseVariable],
 ) -> dict[int, list[SynopseVariable]]:
-    """Convert Synopse data to synopse_variables_use_by_study_id."""
+    """Convert Synopse data to synopse_variables_by_study_id."""
     sorted_variables = sorted(synopse_variables, key=lambda v: v.studie_id)
     return {
         studie_id: list(variables)
@@ -106,10 +106,10 @@ def synopse_variables_use_by_study_id(
 
 
 @asset(group_name="synopse")
-def synopse_variables_use_by_thema(
+def synopse_variables_by_thema(
     synopse_variables: list[SynopseVariable],
 ) -> dict[str, list[SynopseVariable]]:
-    """Convert Synopse data to synopse_variables_use_by_thema."""
+    """Convert Synopse data to synopse_variables_by_thema."""
     sorted_variables = sorted(
         synopse_variables, key=lambda v: v.thema_und_fragebogenausschnitt
     )
@@ -168,7 +168,7 @@ def extracted_synopse_resource_stable_target_ids_by_synopse_id(
     synopse_projects: list[SynopseProject],
     synopse_studies: list[SynopseStudy],
     synopse_study_overviews: list[SynopseStudyOverview],
-    synopse_variables_use_by_study_id: dict[int, list[SynopseVariable]],
+    synopse_variables_by_study_id: dict[int, list[SynopseVariable]],
     unit_stable_target_ids_by_synonym: dict[str, MergedOrganizationalUnitIdentifier],
     extracted_synopse_access_platforms: list[ExtractedAccessPlatform],
     extracted_synopse_activities: list[ExtractedActivity],
@@ -196,7 +196,7 @@ def extracted_synopse_resource_stable_target_ids_by_synopse_id(
     transformed_study_data_resources = transform_synopse_data_to_mex_resources(
         synopse_studies,
         synopse_projects,
-        synopse_variables_use_by_study_id,
+        synopse_variables_by_study_id,
         extracted_synopse_activities,
         extracted_synopse_access_platforms,
         extracted_primary_source_report_server,
@@ -276,7 +276,7 @@ def extracted_synopse_activities(
 
 @asset(group_name="synopse")
 def extracted_synopse_variable_groups(
-    synopse_variables_use_by_thema: dict[str, list[SynopseVariable]],
+    synopse_variables_by_thema: dict[str, list[SynopseVariable]],
     extracted_primary_source_report_server: ExtractedPrimarySource,
     extracted_synopse_resource_stable_target_ids_by_synopse_id: dict[
         str, list[MergedResourceIdentifier]
@@ -285,7 +285,7 @@ def extracted_synopse_variable_groups(
     """Transforms Synopse data to extracted variable groups and load result."""
     transformed_variable_groups = list(
         transform_synopse_variables_to_mex_variable_groups(
-            synopse_variables_use_by_thema,
+            synopse_variables_by_thema,
             extracted_primary_source_report_server,
             extracted_synopse_resource_stable_target_ids_by_synopse_id,
         )
@@ -296,7 +296,7 @@ def extracted_synopse_variable_groups(
 
 @asset(group_name="synopse")
 def extracted_synopse_variables(
-    synopse_variables_use_by_thema: dict[str, list[SynopseVariable]],
+    synopse_variables_by_thema: dict[str, list[SynopseVariable]],
     extracted_primary_source_report_server: ExtractedPrimarySource,
     extracted_synopse_variable_groups: list[ExtractedVariableGroup],
     extracted_synopse_resource_stable_target_ids_by_synopse_id: dict[
@@ -305,7 +305,7 @@ def extracted_synopse_variables(
 ) -> None:
     """Transforms Synopse data to extracted variables and load result."""
     extracted_variables = transform_synopse_variables_to_mex_variables(
-        synopse_variables_use_by_thema,
+        synopse_variables_by_thema,
         extracted_synopse_variable_groups,
         extracted_synopse_resource_stable_target_ids_by_synopse_id,
         extracted_primary_source_report_server,

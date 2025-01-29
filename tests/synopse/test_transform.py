@@ -430,7 +430,7 @@ def test_transform_synopse_projects_to_mex_activities(
 ) -> None:
     synopse_project = synopse_projects[0]
     contact_merged_ids_by_emails = {"info@rki.de": extracted_person.stableTargetId}
-    contributor_merged_ids_by_name = {"Carla Contact": Identifier.generate(seed=12)}
+    contributor_merged_ids_by_name = {"Carla Contact": [Identifier.generate(seed=12)]}
     unit_merged_ids_by_synonym = {"C1": Identifier.generate(seed=13)}
 
     expected_activity = {

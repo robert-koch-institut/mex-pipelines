@@ -141,7 +141,9 @@ resourceTypeSpecific:
 rights:
   - fieldInPrimarySource: n/a
     mappingRules:
-      - setValues:
+      - forValues:
+          - "17"
+        setValues:
         - language: de
           value: "Gesundheitsdaten"
 spatial:

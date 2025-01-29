@@ -791,7 +791,7 @@ def synopse_resource() -> AnyMappingModel:
                     "examplesInPrimarySource": None,
                     "mappingRules": [
                         {
-                            "forValues": None,
+                            "forValues": ["17"],
                             "setValues": [
                                 {
                                     "value": "Gesundheitsdaten",
