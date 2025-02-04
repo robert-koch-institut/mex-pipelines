@@ -34,7 +34,6 @@ from mex.extractors.synopse.models.study import SynopseStudy
 from mex.extractors.synopse.models.study_overview import SynopseStudyOverview
 from mex.extractors.synopse.models.variable import SynopseVariable
 from mex.extractors.synopse.transform import (
-    transform_overviews_to_resource_lookup,
     transform_synopse_variables_to_mex_variable_groups,
 )
 
@@ -99,7 +98,7 @@ def synopse_variables_raw() -> list[dict[str, str | int | float | None]]:
             "textbox21": "Angeborene Fehlbildung",
             "textbox24": "KHEfehlb",
             "textbox11": "Text",
-            "IntVar": False,
+            "IntVar": True,
             "KeepVarname": False,
         },
         {  # var 2, missing var label, valInstrument
@@ -115,7 +114,7 @@ def synopse_variables_raw() -> list[dict[str, str | int | float | None]]:
             "textbox21": None,
             "textbox24": "KHEfiebB",
             "textbox11": "Zahl",
-            "IntVar": False,
+            "IntVar": True,
             "KeepVarname": False,
         },
         {  # var 3, no auspraegung
@@ -203,57 +202,6 @@ def synopse_variables_by_thema(
         thema: list(variables)
         for thema, variables in groupby(
             synopse_variables, key=lambda v: v.thema_und_fragebogenausschnitt
-        )
-    }
-
-
-@pytest.fixture
-def synopse_variables_extended_data_use_raw() -> list[
-    dict[str, str | int | float | None]
-]:
-    """Return a list of dicts in the required format for Synopse Variables."""
-    return [
-        {  # variable not in synopse_overviews
-            "textbox49": None,
-            "Originalfrage": None,
-            "StudieID1": "STUDY1",
-            "StudieID2": 12345,
-            "SymopseID": 12345678901111,
-            "textbox51": None,
-            "textbox5": "Gesundheiten (1101)",
-            "textbox2": "Krankheiten allgemein (110100)",
-            "valInstrument": None,
-            "textbox21": "no auspraegung",
-            "textbox24": "no_auspraegung",
-            "IntVar": True,
-            "KeepVarname": True,
-        }
-    ]
-
-
-@pytest.fixture
-def synopse_variables_extended_data_use(
-    synopse_variables_extended_data_use_raw: list[dict[str, str | int]],
-) -> list[SynopseVariable]:
-    """Return a list Synopse Variables."""
-    return [
-        SynopseVariable.model_validate(v)
-        for v in synopse_variables_extended_data_use_raw
-    ]
-
-
-@pytest.fixture
-def synopse_variables_extended_data_use_by_study_id(
-    synopse_variables_extended_data_use: list[SynopseVariable],
-) -> dict[int, list[SynopseVariable]]:
-    """Return a mapping from synopse studie id to the variables with this studie id."""
-    synopse_variables_extended_data_use = sorted(
-        synopse_variables_extended_data_use, key=lambda v: v.studie_id
-    )
-    return {
-        studie_id: list(variables)
-        for studie_id, variables in groupby(
-            synopse_variables_extended_data_use, key=lambda v: v.studie_id
         )
     }
 
@@ -380,6 +328,7 @@ def synopse_projects() -> list[SynopseProject]:
             anschlussprojekt="BBCCDD",
             beitragende="Carla Contact",
             beschreibung_der_studie="BBCCDD-Basiserhebung am RKI.",
+            externe_partner="Testpartner",
             project_studientitel="Studie zu Lorem und Ipsum",
             kontakt=["info@rki.de"],
             projektbeginn=1999,
@@ -390,7 +339,7 @@ def synopse_projects() -> list[SynopseProject]:
             projektende=2000,
             studien_id="12345",
             studienart_studientyp="Monitoring-Studie",
-            verantwortliche_oe="FG 99",
+            verantwortliche_oe="C1",
         ),
         SynopseProject(
             akronym_des_studientitels="BBCCDD",
@@ -406,7 +355,7 @@ def synopse_projects() -> list[SynopseProject]:
             projektende=2000,
             studien_id="12346",
             studienart_studientyp="Monitoring-Studie",
-            verantwortliche_oe="FG 99",
+            verantwortliche_oe="C1",
         ),
     ]
 
@@ -573,14 +522,15 @@ def synopse_overviews() -> list[SynopseStudyOverview]:
 
 
 @pytest.fixture
-def resource_ids_by_synopse_id(
-    extracted_resources: list[ExtractedResource],
-    synopse_overviews: list[SynopseStudyOverview],
-) -> dict[str, list[MergedResourceIdentifier]]:
+def resource_ids_by_synopse_id() -> dict[str, list[MergedResourceIdentifier]]:
     """Return a lookup from study ID to list of resource IDs."""
-    return transform_overviews_to_resource_lookup(
-        synopse_overviews, extracted_resources
-    )
+    return {
+        "1": [MergedResourceIdentifier.generate(seed=42)],
+        "2": [MergedResourceIdentifier.generate(seed=43)],
+        "3": [MergedResourceIdentifier.generate(seed=42)],
+        "4": [MergedResourceIdentifier.generate(seed=42)],
+        "5": [MergedResourceIdentifier.generate(seed=45)],
+    }
 
 
 @pytest.fixture
@@ -694,190 +644,8 @@ def synopse_activity() -> AnyMappingModel:
 
 
 @pytest.fixture
-def synopse_resource_extended_data_use() -> AnyMappingModel:
-    """Return a mapping model with resource extended data use default values."""
-    return transform_mapping_data_to_model(
-        {
-            "hadPrimarySource": [],
-            "identifierInPrimarySource": [],
-            "title": [],
-            "accessRestriction": [
-                {
-                    "fieldInPrimarySource": "Zugangsbeschraenkung",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": ["restriktiv"],
-                    "mappingRules": [
-                        {
-                            "forValues": ["restriktiv"],
-                            "setValues": [AccessRestriction["RESTRICTED"]],
-                            "rule": None,
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "hasPersonalData": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": None,
-                            "setValues": [PersonalData["PERSONAL_DATA"]],
-                            "rule": None,
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "contact": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": ["C1"],
-                            "setValues": None,
-                            "rule": "Use value",
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "theme": [
-                {
-                    "fieldInPrimarySource": "StudienID",
-                    "locationInPrimarySource": "projekt_und_studienverwaltung.csv",
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": ["7202001", "7202002", "7202003", "7202004"],
-                            "setValues": [
-                                Theme[
-                                    "NON_COMMUNICABLE_DISEASES_AND_HEALTH_SURVEILLANCE"
-                                ]
-                            ],
-                            "rule": None,
-                        },
-                        {
-                            "forValues": None,
-                            "setValues": [
-                                Theme["INFECTIOUS_DISEASES_AND_EPIDEMIOLOGY"]
-                            ],
-                            "rule": "For",
-                        },
-                    ],
-                    "comment": None,
-                }
-            ],
-            "unitInCharge": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": ["C1"],
-                            "setValues": None,
-                            "rule": "Use value",
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "language": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": None,
-                            "setValues": [Language["GERMAN"]],
-                            "rule": None,
-                        }
-                    ],
-                    "comment": "Deutsch",
-                }
-            ],
-            "qualityInformation": [],
-            "resourceCreationMethod": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": None,
-                            "setValues": [
-                                ResourceCreationMethod["STUDIES_SURVEYS_AND_INTERVIEWS"]
-                            ],
-                            "rule": None,
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "resourceTypeGeneral": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": None,
-                            "setValues": [ResourceTypeGeneral["DATA_COLLECTION"]],
-                            "rule": None,
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "rights": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": None,
-                            "setValues": [
-                                {
-                                    "value": "Gesundheitsdaten",
-                                    "language": "de",
-                                }
-                            ],
-                            "rule": None,
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-            "spatial": [
-                {
-                    "fieldInPrimarySource": "n/a",
-                    "locationInPrimarySource": None,
-                    "examplesInPrimarySource": None,
-                    "mappingRules": [
-                        {
-                            "forValues": None,
-                            "setValues": [{"value": "Deutschland", "language": "de"}],
-                            "rule": None,
-                        }
-                    ],
-                    "comment": None,
-                }
-            ],
-        },
-        ExtractedResource,
-    )
-
-
-@pytest.fixture
 def synopse_resource() -> AnyMappingModel:
-    """Return a mapping model with resource extended data use default values."""
+    """Return a mapping model with resource default values."""
     return transform_mapping_data_to_model(
         {
             "hadPrimarySource": [],
@@ -1023,7 +791,7 @@ def synopse_resource() -> AnyMappingModel:
                     "examplesInPrimarySource": None,
                     "mappingRules": [
                         {
-                            "forValues": None,
+                            "forValues": ["17"],
                             "setValues": [
                                 {
                                     "value": "Gesundheitsdaten",

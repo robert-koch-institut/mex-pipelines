@@ -1,10 +1,14 @@
+from uuid import UUID
+
 import pytest
 
+from mex.extractors.mapping.types import AnyMappingModel
 from mex.extractors.synopse.extract import (
     extract_projects,
     extract_study_data,
     extract_study_overviews,
     extract_synopse_project_contributors,
+    extract_synopse_resource_contact,
     extract_variables,
 )
 from mex.extractors.synopse.models.project import SynopseProject
@@ -98,6 +102,19 @@ def test_extract_synopse_project_contributors(synopse_project: SynopseProject) -
     )
     assert len(persons) == 1
     assert persons[0].person.displayName == "Resolved, Roland"
+
+
+@pytest.mark.usefixtures("mocked_ldap")
+def test_extract_synopse_resource_contact(
+    synopse_resource: AnyMappingModel,
+) -> None:
+    actor = extract_synopse_resource_contact(synopse_resource)
+    expected = {
+        "sAMAccountName": "ContactC",
+        "objectGUID": UUID("00000000-0000-4000-8000-000000000004"),
+        "mail": ["email@email.de", "contactc@rki.de"],
+    }
+    assert actor.model_dump(exclude_none=True) == expected
 
 
 def test_extract_study_overviews() -> None:

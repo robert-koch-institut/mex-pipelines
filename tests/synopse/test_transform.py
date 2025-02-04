@@ -13,13 +13,10 @@ from mex.common.testing import Joker
 from mex.common.types import (
     AccessRestriction,
     Identifier,
-    Link,
     MergedOrganizationalUnitIdentifier,
     MergedOrganizationIdentifier,
     TemporalEntity,
-    Text,
     TextLanguage,
-    Year,
 )
 from mex.extractors.mapping.types import AnyMappingModel
 from mex.extractors.synopse.models.project import SynopseProject
@@ -27,10 +24,7 @@ from mex.extractors.synopse.models.study import SynopseStudy
 from mex.extractors.synopse.models.study_overview import SynopseStudyOverview
 from mex.extractors.synopse.models.variable import SynopseVariable
 from mex.extractors.synopse.transform import (
-    split_off_extended_data_use_variables,
     transform_overviews_to_resource_lookup,
-    transform_synopse_data_extended_data_use_to_mex_resources,
-    transform_synopse_data_regular_to_mex_resources,
     transform_synopse_data_to_mex_resources,
     transform_synopse_projects_to_mex_activities,
     transform_synopse_studies_into_access_platforms,
@@ -38,73 +32,6 @@ from mex.extractors.synopse.transform import (
     transform_synopse_variables_to_mex_variable_groups,
     transform_synopse_variables_to_mex_variables,
 )
-
-
-def test_split_off_extended_data_use_variables(
-    synopse_variables: list[SynopseVariable],
-    synopse_overviews: list[SynopseStudyOverview],
-) -> None:
-    expected_variable_count = len(synopse_variables)
-    synopse_variables.append(
-        SynopseVariable.model_validate(
-            {  # variable not in synopse_overviews
-                "textbox49": None,
-                "Originalfrage": None,
-                "StudieID1": "STUDY1",
-                "StudieID2": 12345,
-                "SymopseID": 12345678901111,
-                "textbox51": None,
-                "textbox5": "Gesundheiten (1101)",
-                "textbox2": "Krankheiten allgemein (110100)",
-                "valInstrument": None,
-                "textbox21": "no auspraegung",
-                "textbox24": "no_auspraegung",
-                "IntVar": True,
-                "KeepVarname": True,
-            }
-        )
-    )
-    expected_regular = {
-        "auspraegungen": "-97",
-        "datentyp": "Zahl",
-        "int_var": False,
-        "keep_varname": False,
-        "studie_id": 12345,
-        "studie": "STUDY1",
-        "synopse_id": "1",
-        "text_dt": "Nicht erhoben",
-        "thema_und_fragebogenausschnitt": "Krankheiten (1101)",
-        "unterthema": "Krankheiten allgemein (110100)",
-        "val_instrument": "Health Questionnaire , Frage 18",
-        "varlabel": "Angeborene Fehlbildung",
-        "varname": "KHEfehlb",
-    }
-    expected_extended_data_use = {
-        "int_var": True,
-        "keep_varname": True,
-        "studie_id": 12345,
-        "studie": "STUDY1",
-        "synopse_id": "12345678901111",
-        "thema_und_fragebogenausschnitt": "Gesundheiten (1101)",
-        "unterthema": "Krankheiten allgemein (110100)",
-        "varlabel": "no auspraegung",
-        "varname": "no_auspraegung",
-    }
-    (
-        variables_regular,
-        variables_extended_data_use,
-    ) = split_off_extended_data_use_variables(
-        synopse_variables,
-        synopse_overviews,
-    )
-    list_regular = list(variables_regular)
-    list_extended_data_use = list(variables_extended_data_use)
-    assert len(list_regular) == expected_variable_count
-    assert list_regular[0].model_dump(exclude_defaults=True) == expected_regular
-    assert (
-        list_extended_data_use[0].model_dump(exclude_defaults=True)
-        == expected_extended_data_use
-    )
 
 
 @pytest.mark.usefixtures("mocked_wikidata")
@@ -182,7 +109,7 @@ def test_transform_overviews_to_resource_lookup() -> None:
     study_resources = [
         ExtractedResource(
             title="Found in overview",
-            identifierInPrimarySource="studie1-17-set1",
+            identifierInPrimarySource="studie1-set1-17",
             hadPrimarySource=Identifier.generate(),
             accessRestriction=AccessRestriction["OPEN"],
             contact=[Identifier.generate()],
@@ -191,7 +118,7 @@ def test_transform_overviews_to_resource_lookup() -> None:
         ),
         ExtractedResource(
             title="Found in overview too",
-            identifierInPrimarySource="studie1-18-set2",
+            identifierInPrimarySource="studie1-set2-18",
             hadPrimarySource=Identifier.generate(),
             accessRestriction=AccessRestriction["OPEN"],
             contact=[Identifier.generate()],
@@ -223,11 +150,11 @@ def test_transform_synopse_variables_to_mex_variable_groups(
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
     resource_ids_by_synopse_id: dict[str, Identifier],
 ) -> None:
-    studie_id = 12345
-    resource_id = resource_ids_by_synopse_id[str(studie_id)]
     expected_variable_group = {
-        "containedBy": resource_id,
-        "hadPrimarySource": extracted_primary_sources["report-server"].stableTargetId,
+        "containedBy": ["bFQoRhcVH5DHU6"],
+        "hadPrimarySource": str(
+            extracted_primary_sources["report-server"].stableTargetId
+        ),
         "identifier": Joker(),
         "identifierInPrimarySource": "Gesundheiten (1101)",
         "label": [{"language": TextLanguage.DE, "value": "Gesundheiten"}],
@@ -274,7 +201,7 @@ def test_transform_synopse_variables_belonging_to_same_variable_group_to_mex_var
         "identifierInPrimarySource": "1",
         "label": [dict(language=TextLanguage("de"), value="Angeborene Fehlbildung")],
         "stableTargetId": Joker(),
-        "usedIn": [str(rid) for rid in resource_ids_by_synopse_id["1"]],
+        "usedIn": [str(rid) for rid in resource_ids_by_synopse_id["3"]],
         "valueSet": ["Nicht erhoben", "Weiß nicht"],
     }
     expected_variable_two = {  # var 2, missing var label
@@ -410,122 +337,11 @@ def test_transform_synopse_data_to_mex_resources(
     extracted_primary_sources: dict[str, ExtractedPrimarySource],
     synopse_project: SynopseProject,
     synopse_studies: list[SynopseStudy],
-    extracted_activity: ExtractedActivity,
-    extracted_access_platforms: list[ExtractedAccessPlatform],
-    created_by_study_id: dict[str, str | None],
-    description_by_study_id: dict[str, str | None],
-    documentation_by_study_id: dict[str, Link | None],
-    keyword_text_by_study_id: dict[str, list[Text]],
-    extracted_organization: list[ExtractedOrganization],
-    synopse_resource_extended_data_use: AnyMappingModel,
-) -> None:
-    unit_merged_ids_by_synonym = {"C1": Identifier.generate(seed=234)}
-    access_platform_by_identifier_in_primary_source = {
-        p.identifierInPrimarySource: p for p in extracted_access_platforms
-    }
-    identifier_in_primary_source_by_studien_id = {
-        synopse_studies[
-            0
-        ].studien_id: f"{synopse_studies[0].studien_id}-{synopse_studies[0].ds_typ_id}-"
-        f"{synopse_studies[0].titel_datenset}"
-    }
-    expected_resource = {
-        "accessPlatform": [
-            str(
-                access_platform_by_identifier_in_primary_source[
-                    synopse_studies[0].plattform_adresse
-                ].stableTargetId
-            )
-        ],
-        "accessRestriction": "https://mex.rki.de/item/access-restriction-2",
-        "contact": [str(Identifier.generate(seed=234))],
-        "contributingUnit": extracted_activity.involvedUnit
-        + extracted_activity.responsibleUnit,
-        "contributor": extracted_activity.involvedPerson,
-        "created": Year(synopse_studies[0].erstellungs_datum),
-        "description": [
-            {"language": TextLanguage.DE, "value": synopse_studies[0].beschreibung}
-        ],
-        "documentation": [{"url": "Z:\\foo\\bar"}],
-        "hadPrimarySource": str(
-            extracted_primary_sources["report-server"].stableTargetId
-        ),
-        "hasLegalBasis": [
-            {
-                "language": TextLanguage.DE,
-                "value": "Niemand darf irgendwas.",
-            },
-        ],
-        "hasPersonalData": "https://mex.rki.de/item/personal-data-1",
-        "identifier": Joker(),
-        "identifierInPrimarySource": (
-            identifier_in_primary_source_by_studien_id[synopse_studies[0].studien_id]
-        ),
-        "keyword": [
-            {
-                "language": TextLanguage.DE,
-                "value": "Alkohol, Alter und Geschlecht, Drogen",
-            }
-        ],
-        "language": ["https://mex.rki.de/item/language-1"],
-        "publisher": [str(extracted_organization[0].stableTargetId)],
-        "resourceCreationMethod": [
-            "https://mex.rki.de/item/resource-creation-method-2",
-        ],
-        "resourceTypeGeneral": ["https://mex.rki.de/item/resource-type-general-13"],
-        "resourceTypeSpecific": [
-            {
-                "language": TextLanguage.EN,
-                "value": "Monitoring-Studie",
-            },
-        ],
-        "rights": [{"language": TextLanguage.DE, "value": "Gesundheitsdaten"}],
-        "spatial": [{"language": TextLanguage.DE, "value": "Deutschland"}],
-        "stableTargetId": Joker(),
-        "temporal": "2000 - 2013",
-        "theme": ["https://mex.rki.de/item/theme-11"],
-        "title": [
-            {"language": TextLanguage.DE, "value": synopse_studies[0].titel_datenset}
-        ],
-        "unitInCharge": [str(Identifier.generate(seed=234))],
-        "wasGeneratedBy": str(extracted_activity.stableTargetId),
-    }
-
-    resources = list(
-        transform_synopse_data_to_mex_resources(
-            [synopse_studies[0]],
-            [synopse_project],
-            [extracted_activity],
-            extracted_access_platforms,
-            extracted_primary_sources["report-server"],
-            unit_merged_ids_by_synonym,
-            extracted_organization[0],
-            created_by_study_id,
-            description_by_study_id,
-            documentation_by_study_id,
-            keyword_text_by_study_id,
-            synopse_resource_extended_data_use,
-            identifier_in_primary_source_by_studien_id,
-            {
-                synopse_studies[0].studien_id: Text(
-                    language=TextLanguage.DE, value=synopse_studies[0].titel_datenset
-                )
-            },
-        )
-    )
-    assert len(resources) == 1
-    assert resources[0].model_dump(exclude_defaults=True) == expected_resource
-
-
-def test_transform_synopse_data_regular_to_mex_resources(
-    extracted_primary_sources: dict[str, ExtractedPrimarySource],
-    synopse_project: SynopseProject,
-    synopse_studies: list[SynopseStudy],
     synopse_variables_by_study_id: dict[int, list[SynopseVariable]],
     extracted_activity: ExtractedActivity,
     extracted_access_platforms: list[ExtractedAccessPlatform],
     extracted_organization: list[ExtractedOrganization],
-    synopse_resource_extended_data_use: AnyMappingModel,
+    synopse_resource: AnyMappingModel,
 ) -> None:
     unit_merged_ids_by_synonym = {"C1": Identifier.generate(seed=234)}
     access_platform_by_identifier_in_primary_source = {
@@ -540,11 +356,9 @@ def test_transform_synopse_data_regular_to_mex_resources(
             )
         ],
         "accessRestriction": "https://mex.rki.de/item/access-restriction-2",
-        "contact": [str(Identifier.generate(seed=234))],
-        "contributingUnit": extracted_activity.involvedUnit
-        + extracted_activity.responsibleUnit,
-        "contributor": extracted_activity.involvedPerson,
-        "created": Year("2022"),
+        "contact": [str(Identifier.generate(seed=235))],
+        "contributor": [str(extracted_activity.involvedPerson[0])],
+        "created": "2022",
         "description": [
             {"language": TextLanguage.DE, "value": "ein heikles Unterfangen."}
         ],
@@ -560,7 +374,7 @@ def test_transform_synopse_data_regular_to_mex_resources(
         ],
         "hasPersonalData": "https://mex.rki.de/item/personal-data-1",
         "identifier": Joker(),
-        "identifierInPrimarySource": ("12345-17-Titel"),
+        "identifierInPrimarySource": ("12345-Titel-17"),
         "keyword": [
             {"language": TextLanguage.DE, "value": "Alkohol"},
             {"language": TextLanguage.DE, "value": "Alter und Geschlecht"},
@@ -580,12 +394,6 @@ def test_transform_synopse_data_regular_to_mex_resources(
                 "value": "Monitoring-Studie",
             },
         ],
-        "rights": [
-            {
-                "value": "Gesundheitsdaten",
-                "language": TextLanguage.DE,
-            }
-        ],
         "spatial": [{"language": TextLanguage.DE, "value": "Deutschland"}],
         "stableTargetId": Joker(),
         "temporal": "2000 - 2013",
@@ -595,7 +403,7 @@ def test_transform_synopse_data_regular_to_mex_resources(
         "wasGeneratedBy": str(extracted_activity.stableTargetId),
     }
     resources = list(
-        transform_synopse_data_regular_to_mex_resources(
+        transform_synopse_data_to_mex_resources(
             [synopse_studies[0]],
             [synopse_project],
             synopse_variables_by_study_id,
@@ -604,91 +412,8 @@ def test_transform_synopse_data_regular_to_mex_resources(
             extracted_primary_sources["report-server"],
             unit_merged_ids_by_synonym,
             extracted_organization[0],
-            synopse_resource_extended_data_use,
-        )
-    )
-    assert len(resources) == 1
-    assert resources[0].model_dump(exclude_defaults=True) == expected_resource
-
-
-def test_transform_synopse_data_extended_data_use_to_mex_resources(
-    extracted_primary_sources: dict[str, ExtractedPrimarySource],
-    synopse_project: SynopseProject,
-    synopse_studies: list[SynopseStudy],
-    synopse_variables_extended_data_use_by_study_id: dict[int, list[SynopseVariable]],
-    extracted_activity: ExtractedActivity,
-    extracted_access_platforms: list[ExtractedAccessPlatform],
-    extracted_organization: list[ExtractedOrganization],
-    synopse_resource: AnyMappingModel,
-) -> None:
-    unit_merged_ids_by_synonym = {"C1": Identifier.generate(seed=234)}
-    access_platform_by_identifier_in_primary_source = {
-        p.identifierInPrimarySource: p for p in extracted_access_platforms
-    }
-    expected_resource = {
-        "accessPlatform": [
-            str(
-                access_platform_by_identifier_in_primary_source[
-                    synopse_studies[0].plattform_adresse
-                ].stableTargetId
-            )
-        ],
-        "accessRestriction": "https://mex.rki.de/item/access-restriction-2",
-        "contact": [str(Identifier.generate(seed=234))],
-        "contributingUnit": extracted_activity.involvedUnit
-        + extracted_activity.responsibleUnit,
-        "contributor": extracted_activity.involvedPerson,
-        "hadPrimarySource": str(
-            extracted_primary_sources["report-server"].stableTargetId
-        ),
-        "hasLegalBasis": [
-            {
-                "language": TextLanguage.DE,
-                "value": "Niemand darf irgendwas.",
-            },
-        ],
-        "hasPersonalData": "https://mex.rki.de/item/personal-data-1",
-        "identifier": Joker(),
-        "identifierInPrimarySource": ("12345-extended-data-use"),
-        "keyword": [{"language": TextLanguage.DE, "value": "Krankheiten allgemein"}],
-        "language": ["https://mex.rki.de/item/language-1"],
-        "publisher": [str(extracted_organization[0].stableTargetId)],
-        # TODO(HS): add MergedOrganizationIdentifier of Robert Koch-Institut
-        "resourceCreationMethod": [
-            "https://mex.rki.de/item/resource-creation-method-2",
-        ],
-        "resourceTypeGeneral": ["https://mex.rki.de/item/resource-type-general-13"],
-        "resourceTypeSpecific": [
-            {
-                "language": TextLanguage.EN,
-                "value": "Monitoring-Studie",
-            },
-        ],
-        "rights": [
-            {
-                "value": "Gesundheitsdaten",
-                "language": TextLanguage.DE,
-            }
-        ],
-        "spatial": [{"language": TextLanguage.DE, "value": "Deutschland"}],
-        "stableTargetId": Joker(),
-        "temporal": "2000 - 2013",
-        "theme": ["https://mex.rki.de/item/theme-11"],
-        "title": [{"language": "de", "value": "Studie123: Erweiterte Datennutzung"}],
-        "unitInCharge": [str(Identifier.generate(seed=234))],
-        "wasGeneratedBy": str(extracted_activity.stableTargetId),
-    }
-    resources = list(
-        transform_synopse_data_extended_data_use_to_mex_resources(
-            [synopse_studies[0]],
-            [synopse_project],
-            synopse_variables_extended_data_use_by_study_id,
-            [extracted_activity],
-            extracted_access_platforms,
-            extracted_primary_sources["report-server"],
-            unit_merged_ids_by_synonym,
-            extracted_organization[0],
             synopse_resource,
+            {"C1": [Identifier.generate(seed=235)]},
         )
     )
     assert len(resources) == 1
@@ -705,28 +430,38 @@ def test_transform_synopse_projects_to_mex_activities(
 ) -> None:
     synopse_project = synopse_projects[0]
     contact_merged_ids_by_emails = {"info@rki.de": extracted_person.stableTargetId}
-    contributor_merged_ids_by_name = {"Carla Contact": Identifier.generate(seed=12)}
-    unit_merged_ids_by_synonym = {"FG 99": Identifier.generate(seed=13)}
+    contributor_merged_ids_by_name = {"Carla Contact": [Identifier.generate(seed=12)]}
+    unit_merged_ids_by_synonym = {"C1": Identifier.generate(seed=13)}
 
     expected_activity = {
         "abstract": [{"value": synopse_project.beschreibung_der_studie}],
         "activityType": ["https://mex.rki.de/item/activity-type-6"],
-        "contact": [extracted_person.stableTargetId],
+        "contact": [str(extracted_person.stableTargetId)],
         "documentation": [
             {
                 "url": "file:///Z:/Projekte/Dokumentation",
                 "title": "- Fragebogen\n- Labor",
             }
         ],
-        "end": [TemporalEntity(synopse_project.projektende)],
-        "hadPrimarySource": extracted_primary_sources["report-server"].stableTargetId,
+        "end": [str(TemporalEntity(synopse_project.projektende))],
+        "externalAssociate": [
+            "bWt8MuXvqsiYEDpjwYIT2S",
+        ],
+        "hadPrimarySource": str(
+            extracted_primary_sources["report-server"].stableTargetId
+        ),
         "identifier": Joker(),
         "identifierInPrimarySource": synopse_project.studien_id,
-        "involvedPerson": [Identifier.generate(seed=12)],
-        "responsibleUnit": [Identifier.generate(seed=13)],
-        "shortName": [{"value": "BBCCDD_00"}],
+        "involvedPerson": [str(Identifier.generate(seed=12))],
+        "responsibleUnit": [str(Identifier.generate(seed=13))],
+        "shortName": [
+            {
+                "value": "BBCCDD_00",
+                "language": TextLanguage.DE,
+            }
+        ],
         "stableTargetId": Joker(),
-        "start": [TemporalEntity(synopse_project.projektbeginn)],
+        "start": [str(TemporalEntity(synopse_project.projektbeginn))],
         "succeeds": Joker(),
         "theme": ["https://mex.rki.de/item/theme-36"],
         "title": [{"language": TextLanguage.DE, "value": "Studie zu Lorem und Ipsum"}],
