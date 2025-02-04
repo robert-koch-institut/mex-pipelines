@@ -62,11 +62,17 @@ def transform_synopse_studies_into_access_platforms(
             landing_page = Link(url=PureWindowsPath(plattform_adresse).as_uri())
         except ValueError:
             landing_page = Link(url=plattform_adresse)
+        if "S:" in plattform_adresse:
+            contact = unit_merged_ids_by_synonym[
+                synopse_access_platform.contact[0].mappingRules[0].forValues[0]
+            ]
+        elif "https://" in plattform_adresse:
+            contact = unit_merged_ids_by_synonym[
+                synopse_access_platform.contact[0].mappingRules[1].forValues[0]
+            ]
 
         yield ExtractedAccessPlatform(
-            contact=unit_merged_ids_by_synonym[
-                synopse_access_platform.contact[0].mappingRules[0].forValues[0]
-            ],
+            contact=contact,
             hadPrimarySource=extracted_primary_source.stableTargetId,
             identifierInPrimarySource=plattform_adresse,
             landingPage=landing_page,
@@ -468,8 +474,6 @@ def transform_synopse_projects_to_mex_activities(
             synopse_activity,
             synopse_organization_ids_by_query_string,
         )
-        if not activity:
-            continue
         if anschlussprojekt:
             anschlussprojekt_by_activity_stable_target_id[activity.stableTargetId] = (
                 anschlussprojekt
@@ -501,7 +505,7 @@ def transform_synopse_project_to_activity(
     unit_merged_ids_by_synonym: dict[str, Identifier],
     synopse_activity: AnyMappingModel,
     synopse_organization_ids_by_query_string: dict[str, MergedOrganizationIdentifier],
-) -> ExtractedActivity | None:
+) -> ExtractedActivity:
     """Transform a synopse project into a MEx activity.
 
     Args:
@@ -532,7 +536,10 @@ def transform_synopse_project_to_activity(
         if (merged_id := unit_merged_ids_by_synonym.get(unit.strip()))
     ]
 
-    if synopse_project.verantwortliche_oe:
+    if synopse_project.verantwortliche_oe and any(
+        unit in synopse_project.verantwortliche_oe.split(" ,")
+        for unit in unit_merged_ids_by_synonym
+    ):
         responsible_unit = [
             unit_merged_ids_by_synonym[synonym]
             for synonym in synopse_project.verantwortliche_oe.split(" ,")
