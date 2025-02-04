@@ -81,7 +81,7 @@ def transform_confluence_vvt_page_to_extracted_activity(
         page, confluence_vvt_activity_mapping
     )
     for unit in responsible_unit_strings:
-        if "ZV" in unit:
+        if "ZV" in unit:  # stopgap: MX-1786
             return None
     responsible_unit_merged_ids = list(
         {
